@@ -93,9 +93,9 @@ function ModalDialog(props) {
 
   const [testSteps, settestSteps] = useState(testStepsData);
 
-  const submitHandler = (event, addFormDataHandler) => {
+  const submitHandler = (event) => {
     event.preventDefault();
-    console.log("testSteps");
+    console.log('Test Step');
     // const addFormData = addFormDataHandler;
 
     // const newTestStep = {
@@ -113,21 +113,25 @@ function ModalDialog(props) {
       <Button variant="success" onClick={initModalOne}>
         Add
       </Button>
-      <form onSubmit={submitHandler}>
+      <form onSubmit={submitHandler} id="myForm">
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>
             <Modal.Title>Feed Data to Test</Modal.Title>
           </Modal.Header>
-          <Modal.Body>{inputFieldArrayModalOne}</Modal.Body>
+          <Modal.Body>
+            {inputFieldArrayModalOne}      
+          </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={TerminateModalOne}>
               Close
             </Button>
-            <Button variant="dark" onClick={NextStep}>
+            <Button  form="myForm" type="submit" variant="dark" onClick={NextStep}>
               {btnValue}
             </Button>
           </Modal.Footer>
+          
         </Modal>
+        </form>
 
         <Modal show={toggleTwoModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalTwo}>
@@ -139,7 +143,7 @@ function ModalDialog(props) {
               Close
             </Button>
             <Button 
-              type="submit"
+              
               variant="dark"
               onClick={TerminateModalTwo}
             >
@@ -147,7 +151,7 @@ function ModalDialog(props) {
             </Button>
           </Modal.Footer>
         </Modal>
-      </form>
+      
     </>
   );
 }

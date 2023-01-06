@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import ModalDialog from "./components/PopUpWindow";
-import Table from "./components/Table";
+//import Table from "./components/Table";
 import { Button } from "react-bootstrap";
 
 const PropsForChainPopUp = {
@@ -16,7 +16,7 @@ const PropsForChainPopUp = {
 function App() {
   return (
     <div className="App">
-      <Table></Table>
+      {/* <Table></Table> */}
       {/* <form onSubmit={print}>
       <Button type="submit">Submit</Button>
       </form> */}
