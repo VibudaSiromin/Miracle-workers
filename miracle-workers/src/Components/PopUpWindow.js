@@ -24,7 +24,6 @@ function ModalDialog(props) {
     for (let i = 0; i < props.noFields[0]; i++) {
       inputFieldArrayModalOne.push(
         <PopUpInputField
-          key={props.title[i]}
           title={props.title[i]}
           inputType="text"
           onSaveAddFormData={addFormDataHandler}
@@ -116,7 +115,7 @@ function ModalDialog(props) {
     };
      const newTestSteps = [...testSteps, newTestStep];
 
-    // settestSteps(newTestSteps);
+     settestSteps(newTestSteps);
     props.saveNewData(newTestSteps);
   };
 

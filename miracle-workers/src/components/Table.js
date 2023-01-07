@@ -11,8 +11,6 @@ const Table = () => {
     const updateTestSteps=(tableData) => {
       const newTableData=[...tableData];
       settestSteps(newTableData);
-      console.log(testSteps);
-      console.log(tableData);
     }
     
     // const testStepsData = [
@@ -98,6 +96,9 @@ const Table = () => {
             {testSteps.map((testStep) => (
               <Raw testStep={testStep}/>
             ))}
+            {
+
+            }
           </tbody>
         </table>
       </div>
