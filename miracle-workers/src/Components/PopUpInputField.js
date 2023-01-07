@@ -3,7 +3,7 @@ import { useState } from "react";
 const PopUpInputField = (props) => {
 
     const [addFormData, setaddFormData] = useState({
-        group: "",
+        group:"",
         instruction: "",
         command: "",
         locator: "",
@@ -15,6 +15,7 @@ const PopUpInputField = (props) => {
         comment: "",
       });
 
+      
     const inputHandler = (event) => {
 
         event.preventDefault();
@@ -24,10 +25,10 @@ const PopUpInputField = (props) => {
     
         const newFormData = { ...addFormData };
         newFormData[fieldName] = fieldValue;
-        
-        setaddFormData(newFormData);
-        props.onSaveAddFormData(addFormData);
-        console.log(addFormData);
+        console.log(newFormData);
+        // setaddFormData(newFormData);
+        props.onSaveAddFormData(newFormData);
+        // console.log(addFormData);
       };
     return(
         <div className="form-group">
