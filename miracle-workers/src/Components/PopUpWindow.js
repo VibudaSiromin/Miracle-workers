@@ -14,19 +14,101 @@ function ModalDialog(props) {
   let inputFieldArrayModalTwo = [];
   let btnValue;
 
-  const [formData,setformData]=useState('');
+  const [formData, setformData] = useState("");
+  
+  const testStepsData = ["", "", ""];
+  const testStepsData2 = ["", "", "", "", "", "", ""];
+
+  // const [addFormData, setaddFormData] = useState({
+  //     group:"",
+  //     instruction: "",
+  //     command: "",
+  //     locator: "",
+  //     locatorParameter: "",
+  //     data: "",
+  //     swapResult: "",
+  //     branchSelection: "",
+  //     action: "",
+  //     comment: "",
+  //   });
 
   let addFormDataHandler = (addFormData) => {
     setformData(addFormData);
+  };
+
+  const inputHandler = (name, value) => {
+    console.log(name, value);
+    switch (name) {
+      case "group":
+        testStepsData[0] = value;
+        break;
+      case "instruction":
+        testStepsData[1] = value;
+        break;
+      case "command":
+        testStepsData[2] = value;
+        break;
+    }
+    // const newTestStep = {
+
+    // };
+    console.log(testStepsData);
+  };
+
+  const inputHandler2 = (name, value) => {
+    console.log(name, value);
+    switch (name) {
+      case "locator":
+        testStepsData2[0] = value;
+        break;
+      case "locatorParameter":
+        testStepsData2[1] = value;
+        break;
+      case "data":
+        testStepsData2[2] = value;
+        break;
+      case "swapResult":
+        testStepsData2[3] = value;
+        break;
+      case "branchSelection":
+        testStepsData2[4] = value;
+        break;
+      case "action":
+        testStepsData2[5] = value;
+        break;
+      case "comment":
+        testStepsData2[6] = value;
+        break;
+    }
+    // const newTestStep = {
+
+    // };
+    console.log(testStepsData2);
+    
+    const final = [
+      testStepsData[0],
+      testStepsData[1],
+      testStepsData[2],
+      testStepsData2[0],
+      testStepsData2[1],
+      testStepsData2[2],
+      testStepsData2[3],
+      testStepsData2[4],
+      testStepsData2[5],
+      testStepsData2[6],
+    ];
+    console.log(final);
   };
 
   const myLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
       inputFieldArrayModalOne.push(
         <PopUpInputField
+          id={i}
           title={props.title[i]}
           inputType="text"
           onSaveAddFormData={addFormDataHandler}
+          onDataChange={inputHandler}
         ></PopUpInputField>
       );
       console.log("Bye");
@@ -37,15 +119,30 @@ function ModalDialog(props) {
         console.log("Hi");
         inputFieldArrayModalTwo.push(
           <PopUpInputField
+            id={props.noFields[0] + i}
             title={props.title[props.noFields[0] + i]}
             inputType="text"
             onSaveAddFormData={addFormDataHandler}
+            onDataChange2={inputHandler2}
           ></PopUpInputField>
         );
       }
     }
 
-  
+    // const inputHandler = (event) => {
+
+    //     event.preventDefault();
+
+    //     const fieldName = event.target.getAttribute("name");
+    //     const fieldValue = event.target.value;
+
+    //     const newFormData = { ...addFormData };
+    //     newFormData[fieldName] = fieldValue;
+    //     console.log(newFormData);
+    //     // setaddFormData(newFormData);
+    //     props.onSaveAddFormData(newFormData);
+    //     // console.log(addFormData);
+    //   };
   };
   myLoop();
   const initModalOne = () => {
@@ -79,26 +176,11 @@ function ModalDialog(props) {
   };
   ApplyBtnValue();
 
-  const testStepsData = [
-    {
-      group: "",
-      instruction: "",
-      command: "",
-      locator: "",
-      locatorParameter: "",
-      data: "",
-      swapResult: "",
-      branchSelection: "",
-      action: "",
-      comment: "",
-    },
-  ];
-
-   const [testSteps, settestSteps] = useState(testStepsData);
+  const [testSteps, settestSteps] = useState(testStepsData);
 
   const submitHandler = (event) => {
     event.preventDefault();
-    console.log('Test Step');
+    console.log("Test Step");
     const addFormData = formData;
     console.log(addFormData);
     const newTestStep = {
@@ -113,9 +195,9 @@ function ModalDialog(props) {
       action: addFormData.action,
       comment: addFormData.comment,
     };
-     const newTestSteps = [...testSteps, newTestStep];
+    const newTestSteps = [...testSteps, newTestStep];
 
-     settestSteps(newTestSteps);
+    settestSteps(newTestSteps);
     props.saveNewData(newTestSteps);
   };
 
@@ -129,9 +211,7 @@ function ModalDialog(props) {
           <Modal.Header closeButton onClick={TerminateModalOne}>
             <Modal.Title>Feed Data to Test</Modal.Title>
           </Modal.Header>
-          <Modal.Body>
-            {inputFieldArrayModalOne}      
-          </Modal.Body>
+          <Modal.Body>{inputFieldArrayModalOne}</Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={TerminateModalOne}>
               Close
@@ -140,30 +220,28 @@ function ModalDialog(props) {
               {btnValue}
             </Button>
           </Modal.Footer>
-          
         </Modal>
-        </form>
+      </form>
 
-        <Modal show={toggleTwoModal} tabIndex="-1">
-          <Modal.Header closeButton onClick={TerminateModalTwo}>
-            <Modal.Title>Feed Data to Test</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>{inputFieldArrayModalTwo}</Modal.Body>
-          <Modal.Footer>
-            <Button variant="danger" onClick={TerminateModalTwo}>
-              Close
-            </Button>
-            <Button 
-              form="myForm" 
-              type="submit" 
-              variant="dark"
-              onClick={TerminateModalTwo}
-            >
-              Finish
-            </Button>
-          </Modal.Footer>
-        </Modal>
-      
+      <Modal show={toggleTwoModal} tabIndex="-1">
+        <Modal.Header closeButton onClick={TerminateModalTwo}>
+          <Modal.Title>Feed Data to Test</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>{inputFieldArrayModalTwo}</Modal.Body>
+        <Modal.Footer>
+          <Button variant="danger" onClick={TerminateModalTwo}>
+            Close
+          </Button>
+          <Button
+            form="myForm"
+            type="submit"
+            variant="dark"
+            onClick={TerminateModalTwo}
+          >
+            Finish
+          </Button>
+        </Modal.Footer>
+      </Modal>
     </>
   );
 }
