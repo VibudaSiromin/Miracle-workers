@@ -20,6 +20,12 @@ const Table = () => {
     console.log(indexOfRaw);
   }
 
+  const deleteHandler=(index) => {
+    const tableDataAfterDelete=[...testSteps]
+    tableDataAfterDelete.splice(index,1);
+    settestSteps(tableDataAfterDelete);
+  }
+
   // const testStepsData = [
   //     {
   //       group: "",
@@ -102,7 +108,7 @@ const Table = () => {
           <thead></thead>
           <tbody>
             {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} index={index}   isEditButtonClicked={editHandler}/>
+                  <Raw testStep={testStep} index={index}   isEditButtonClicked={editHandler} onDelete={deleteHandler}/>
             ))}
           </tbody>
         </table>

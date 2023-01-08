@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Button } from "react-bootstrap";
 
-const Raw = ({ testStep,index,isEditButtonClicked}) => {
+const Raw = ({ testStep,index,isEditButtonClicked,onDelete}) => {
 
 
   const editHandler = () => {
@@ -21,7 +21,10 @@ const Raw = ({ testStep,index,isEditButtonClicked}) => {
       <td>{testStep.action}</td>
       <td>{testStep.comment}</td>
       <td> <Button variant="success" onClick={editHandler}>
-        edit
+        Edit
+      </Button></td>
+      <td> <Button variant="danger" onClick={() => {onDelete(index)}}>
+        Delete
       </Button></td>
     </tr>
   );
