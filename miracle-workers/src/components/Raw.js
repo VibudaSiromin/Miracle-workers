@@ -1,6 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import {Button } from "react-bootstrap";
 
-const Raw = ({ testStep }) => {
+const Raw = ({ testStep,index,isEditButtonClicked}) => {
+
+
+  const editHandler = () => {
+    isEditButtonClicked(index)
+  };
+
   return (
     <tr>
       <td>{testStep.group}</td>
@@ -13,6 +20,9 @@ const Raw = ({ testStep }) => {
       <td>{testStep.branchSelection}</td>
       <td>{testStep.action}</td>
       <td>{testStep.comment}</td>
+      <td> <Button variant="success" onClick={editHandler}>
+        edit
+      </Button></td>
     </tr>
   );
 };
