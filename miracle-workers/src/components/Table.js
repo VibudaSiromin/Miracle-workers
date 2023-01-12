@@ -2,6 +2,7 @@ import React from "react";
 import Raw from "./Raw";
 import { useState } from "react";
 import ModalDialog from "./PopUpWindow";
+import './Table.css'
 
 const Table = () => {
   let count = false;
@@ -14,11 +15,7 @@ const Table = () => {
     settestSteps(newTableData);
   };
 
-  const editHandler=(index) => {
-    count=true;
-    indexOfRaw=index;
-    console.log(indexOfRaw);
-  }
+  
 
   const deleteHandler=(index) => {
     const tableDataAfterDelete=[...testSteps]
@@ -26,60 +23,6 @@ const Table = () => {
     settestSteps(tableDataAfterDelete);
   }
 
-  // const testStepsData = [
-  //     {
-  //       group: "",
-  //       instruction: "",
-  //       command: "",
-  //       locator: "",
-  //       locatorParameter: "",
-  //       data: "",
-  //       swapResult: "",
-  //       branchSelection: "",
-  //       action: "",
-  //       comment: "",
-  //     },
-  //   ];
-
-  //   const [addFormData, setaddFormData] = useState({
-  //     group: "",
-  //     instruction: "",
-  //     command: "",
-  //     locator: "",
-  //     locatorParameter: "",
-  //     data: "",
-  //     swapResult: "",
-  //     branchSelection: "",
-  //     action: "",
-  //     comment: "",
-  //   });
-
-  //   const inputHandler = (event) => {
-  //     event.preventDefault();
-
-  //     const fieldName = event.target.getAttribute("name");
-  //     const fieldValue = event.target.value;
-
-  //     const newFormData = { ...addFormData };
-  //     newFormData[fieldName] = fieldValue;
-
-  //     setaddFormData(newFormData);
-  //   };
-  //   const [testSteps, settestSteps] = useState(testStepsData);
-
-  //   const submitHandler = (event) => {
-  //     event.preventDefault();
-  //     console.log('fr')
-  //     const newTestStep = {
-  //       group: addFormData.group,
-  //       instruction: addFormData.instruction,
-  //       command: addFormData.command,
-  //     };
-  //     const newTestSteps = [...testSteps, newTestStep];
-
-  //     settestSteps(newTestSteps);
-  //     // console.log(testSteps);
-  // }
   return (
     <div className="App">
       <div>
@@ -104,37 +47,29 @@ const Table = () => {
         ></ModalDialog>
       </div>
       <div className="w-100">
-        <table className="table table-bordered">
-          <thead></thead>
+        <table className="table table-bordered text-center">
+          <thead>
+          <tr>
+              <th>Group</th>
+              <th>Instruction</th>
+              <th>Command</th>
+              <th>Locator</th>
+              <th>LocatorParameter</th>
+              <th>Data</th>
+              <th>SwapResult</th>
+              <th>Branch Selection</th>
+              <th>Action</th>
+              <th>Comment</th>
+              
+            </tr>
+          </thead>
           <tbody>
             {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} index={index}   isEditButtonClicked={editHandler} onDelete={deleteHandler}/>
+                  <Raw testStep={testStep} index={index}   onDelete={deleteHandler}/>
             ))}
           </tbody>
         </table>
       </div>
-
-      {/* <form onSubmit={submitHandler}>
-        <input
-          type="text"
-          name="group"
-          placeholder="Enter group"
-          onChange={inputHandler}
-        />
-        <input
-          type="text"
-          name="instruction"
-          placeholder="Enter instruction"
-          onChange={inputHandler}
-        />
-        <input
-          type="text"
-          name="command"
-          placeholder="Enter command"
-          onChange={inputHandler}
-        />
-        <button type="submit">Submit</button>
-      </form> */}
     </div>
   );
 };

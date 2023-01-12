@@ -4,10 +4,6 @@ import {Button } from "react-bootstrap";
 const Raw = ({ testStep,index,isEditButtonClicked,onDelete}) => {
 
 
-  const editHandler = () => {
-    isEditButtonClicked(index)
-  };
-
   return (
     <tr>
       <td>{testStep.group}</td>
@@ -20,7 +16,7 @@ const Raw = ({ testStep,index,isEditButtonClicked,onDelete}) => {
       <td>{testStep.branchSelection}</td>
       <td>{testStep.action}</td>
       <td>{testStep.comment}</td>
-      <td> <Button variant="success" onClick={editHandler}>
+      <td> <Button variant="success">
         Edit
       </Button></td>
       <td> <Button variant="danger" onClick={() => {onDelete(index)}}>

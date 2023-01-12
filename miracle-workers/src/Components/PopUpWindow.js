@@ -3,38 +3,20 @@ import { Modal, Button } from "react-bootstrap";
 import PopUpInputField from "./PopUpInputField";
 import { useState } from "react";
 
-// let isShow=false;
-//let countRepetition=0;
+
 function ModalDialog(props) {
-  //const [isShow, invokeModal] = React.useState(false);
   const [toggleOneModal, setToggleOneModal] = React.useState(false);
-  //let [countRepetition,setCountRepetition]=React.useState(0);
   const [toggleTwoModal, setToggleTwoModal] = React.useState(false);
+  const [modalOneDataSet,setModalOneDataSet]=React.useState({});
+  const [modalTwoDataSet,setModalTwoDataSet]=React.useState({});
+
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
 
-  const [formData, setformData] = useState("");
-  
   const testStepsData = {};
-  const testStepsData2 = ["", "", "", "", "", "", ""];
+  const testStepsData2 = {};
 
-  // const [addFormData, setaddFormData] = useState({
-  //     group:"",
-  //     instruction: "",
-  //     command: "",
-  //     locator: "",
-  //     locatorParameter: "",
-  //     data: "",
-  //     swapResult: "",
-  //     branchSelection: "",
-  //     action: "",
-  //     comment: "",
-  //   });
-
-  let addFormDataHandler = (addFormData) => {
-    setformData(addFormData);
-  };
 
   const inputHandler = (name, value) => {
     console.log(name, value);
@@ -49,55 +31,46 @@ function ModalDialog(props) {
         testStepsData[name] = value;
         break;
     }
-    // const newTestStep = {
-
-    // };
+  
     console.log(testStepsData);
   };
 
+  const heHe={
+            locator:'1',
+            locatorParameter:'2',
+            data:'3',
+            swapResult:'4',
+            branchSelection:'5',
+            action:'6',
+            comment:'7',
+  }
   const inputHandler2 = (name, value) => {
     console.log(name, value);
     switch (name) {
       case "locator":
-        testStepsData2[0] = value;
+        testStepsData2[name] = value;
         break;
       case "locatorParameter":
-        testStepsData2[1] = value;
+        testStepsData2[name] = value;
         break;
       case "data":
-        testStepsData2[2] = value;
+        testStepsData2[name] = value;
         break;
       case "swapResult":
-        testStepsData2[3] = value;
+        testStepsData2[name] = value;
         break;
       case "branchSelection":
-        testStepsData2[4] = value;
+        testStepsData2[name] = value;
         break;
       case "action":
-        testStepsData2[5] = value;
+        testStepsData2[name] = value;
         break;
       case "comment":
-        testStepsData2[6] = value;
+        testStepsData2[name] = value;
         break;
     }
-    // const newTestStep = {
-
-    // };
+  
     console.log(testStepsData2);
-    
-    const final = [
-      testStepsData[0],
-      testStepsData[1],
-      testStepsData[2],
-      testStepsData2[0],
-      testStepsData2[1],
-      testStepsData2[2],
-      testStepsData2[3],
-      testStepsData2[4],
-      testStepsData2[5],
-      testStepsData2[6],
-    ];
-    console.log(final);
   };
 
   const myLoop = () => {
@@ -107,7 +80,7 @@ function ModalDialog(props) {
           id={i}
           title={props.title[i]}
           inputType="text"
-          onSaveAddFormData={addFormDataHandler}
+          //onSaveAddFormData={addFormDataHandler}
           onDataChange={inputHandler}
         ></PopUpInputField>
       );
@@ -122,7 +95,7 @@ function ModalDialog(props) {
             id={props.noFields[0] + i}
             title={props.title[props.noFields[0] + i]}
             inputType="text"
-            onSaveAddFormData={addFormDataHandler}
+            //onSaveAddFormData={addFormDataHandler}
             onDataChange2={inputHandler2}
           ></PopUpInputField>
         );
@@ -130,22 +103,7 @@ function ModalDialog(props) {
     }
 
   };
-
   
-    // const inputHandler = (event) => {
-
-    //     event.preventDefault();
-
-    //     const fieldName = event.target.getAttribute("name");
-    //     const fieldValue = event.target.value;
-
-    //     const newFormData = { ...addFormData };
-    //     newFormData[fieldName] = fieldValue;
-    //     console.log(newFormData);
-    //     // setaddFormData(newFormData);
-    //     props.onSaveAddFormData(newFormData);
-    //     // console.log(addFormData);
-    //   };
 
   myLoop();
   const initModalOne = () => {
@@ -158,10 +116,13 @@ function ModalDialog(props) {
     return setToggleTwoModal(true);
   };
   const TerminateModalTwo = () => {
+    console.log(testStepsData2)
+    setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
     return setToggleTwoModal(false);
   };
 
   const NextStep = () => {
+    setModalOneDataSet(testStepsData);
     TerminateModalOne();
     if (props.enableChainPopUps) {
       setTimeout(() => {
@@ -179,30 +140,27 @@ function ModalDialog(props) {
   };
   ApplyBtnValue();
 
-  // const [testSteps, settestSteps] = useState();
-
-  const submitHandler = (event) => {
+  const submitHandlerOne = (event) => {
     event.preventDefault();
+    if(props.enableChainPopUps===false){
     console.log("Test Step");
     // const addFormData = testStepsData;
-    console.log(testStepsData);
-    // const newTestStep = {
-    //   group: addFormData.group,
-    //   instruction: addFormData.instruction,
-    //   command: addFormData.command,
-    //   locator: addFormData.locator,
-    //   locatorParameter: addFormData.locatorParameter,
-    //   data: addFormData.data,
-    //   swapResult: addFormData.swapResult,
-    //   branchSelection: addFormData.branchSelection,
-    //   action: addFormData.action,
-    //   comment: addFormData.comment,
-    // };
-    // const newTestSteps = [...testSteps, newTestStep];
-    // console.log(newTestSteps);
-    // settestSteps(newTestSteps);
-    props.saveNewData(testStepsData);
+    console.log(modalOneDataSet);
+    props.saveNewData(modalOneDataSet);
     TerminateModalOne();
+    }
+  };
+
+  const submitHandlerTwo = (event) => {
+    event.preventDefault();
+    if(props.enableChainPopUps===true){
+      console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx');
+    console.log("Test Step");
+    // const addFormData = testStepsData;
+    console.log(modalTwoDataSet);
+    props.saveNewData(modalTwoDataSet);
+    TerminateModalOne();
+    }
   };
 
   return (
@@ -210,7 +168,7 @@ function ModalDialog(props) {
       <Button variant="success" onClick={initModalOne}>
         Add
       </Button>
-      <form onSubmit={submitHandler} id="myForm">
+      <form onSubmit={submitHandlerOne} id="myFormOne">
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>
             <Modal.Title>Feed Data to Test</Modal.Title>
@@ -220,13 +178,14 @@ function ModalDialog(props) {
             <Button variant="danger" onClick={TerminateModalOne}>
               Close
             </Button>
-            <Button variant="dark" /*onClick={NextStep}*/ form="myForm" type="submit">
+            <Button variant="dark" onClick={NextStep} form="myFormOne" type="submit">
               {btnValue}
             </Button>
           </Modal.Footer>
         </Modal>
       </form>
 
+      <form onSubmit={submitHandlerTwo} id="myFormTwo">
       <Modal show={toggleTwoModal} tabIndex="-1">
         <Modal.Header closeButton onClick={TerminateModalTwo}>
           <Modal.Title>Feed Data to Test</Modal.Title>
@@ -237,7 +196,7 @@ function ModalDialog(props) {
             Close
           </Button>
           <Button
-            form="myForm"
+            form="myFormTwo"
             type="submit"
             variant="dark"
             onClick={TerminateModalTwo}
@@ -246,6 +205,7 @@ function ModalDialog(props) {
           </Button>
         </Modal.Footer>
       </Modal>
+      </form>
     </>
   );
 }
