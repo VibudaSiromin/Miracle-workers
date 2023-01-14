@@ -4,6 +4,7 @@ import ModalDialog from "./components/PopUpWindow";
 import Table from "./components/Table";
 import { Button } from "react-bootstrap";
 import OutputJSON from './components/OutputJSON';
+// import Launcher from "./components/Launcher";
 
 const PropsForChainPopUp = {
   enableChainPopUps: true,
@@ -15,7 +16,7 @@ function App() {
   return (
     <div className="App">
       <Table></Table>
-      <OutputJSON></OutputJSON>
+
     </div>
   );
 }

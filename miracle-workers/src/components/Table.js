@@ -3,6 +3,8 @@ import Raw from "./Raw";
 import { useState } from "react";
 import ModalDialog from "./PopUpWindow";
 import './Table.css'
+import { Button } from "react-bootstrap";
+import { saveAs } from 'file-saver';
 
 const Table = () => {
   let count = false;
@@ -15,7 +17,11 @@ const Table = () => {
     settestSteps(newTableData);
   };
 
-  
+  const jsonHandler=() => {
+    // console.log(testSteps);
+    const json = JSON.stringify(testSteps);
+    saveAs(new Blob([json], { type: 'application/json;charset=utf-8' }), 'file.json');
+  }
 
   const deleteHandler=(index) => {
     const tableDataAfterDelete=[...testSteps]
@@ -70,6 +76,9 @@ const Table = () => {
           </tbody>
         </table>
       </div>
+      <Button onClick={jsonHandler}>
+              Generate JSON
+      </Button>
     </div>
   );
 };
