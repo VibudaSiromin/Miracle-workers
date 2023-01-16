@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import PopUpInputField from "./PopUpInputField";
+import PopUpSelection from "./PopUpSelection";
 import { useState } from "react";
 
 
@@ -35,15 +36,6 @@ function ModalDialog(props) {
     console.log(testStepsData);
   };
 
-  const heHe={
-            locator:'1',
-            locatorParameter:'2',
-            data:'3',
-            swapResult:'4',
-            branchSelection:'5',
-            action:'6',
-            comment:'7',
-  }
   const inputHandler2 = (name, value) => {
     console.log(name, value);
     switch (name) {
@@ -75,30 +67,49 @@ function ModalDialog(props) {
 
   const myLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
-      inputFieldArrayModalOne.push(
-        <PopUpInputField
-          id={i}
-          title={props.title[i]}
-          inputType="text"
-          //onSaveAddFormData={addFormDataHandler}
-          onDataChange={inputHandler}
-        ></PopUpInputField>
-      );
-      console.log("Bye");
+      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action'){
+        inputFieldArrayModalOne.push(
+          <PopUpInputField
+            id={i}
+            title={props.title[i]}
+            inputType="text"
+            onDataChange={inputHandler}
+          ></PopUpInputField>
+        );
+        console.log("Bye");
+      }else{
+        inputFieldArrayModalOne.push(
+            <PopUpSelection
+            id={i}
+            title={props.title[i]}
+            ></PopUpSelection>
+        );
+      }
+      
     }
     if (props.enableChainPopUps) {
       console.log("hello koola");
       for (let i = 0; i < props.noFields[1]; i++) {
-        console.log("Hi");
-        inputFieldArrayModalTwo.push(
-          <PopUpInputField
-            id={props.noFields[0] + i}
-            title={props.title[props.noFields[0] + i]}
-            inputType="text"
-            //onSaveAddFormData={addFormDataHandler}
-            onDataChange2={inputHandler2}
-          ></PopUpInputField>
-        );
+          if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
+            console.log("Hi");
+            inputFieldArrayModalTwo.push(
+              <PopUpInputField
+                id={props.noFields[0] + i}
+                title={props.title[props.noFields[0] + i]}
+                inputType="text"
+                //onSaveAddFormData={addFormDataHandler}
+                onDataChange2={inputHandler2}
+              ></PopUpInputField>
+            );
+          }else{
+            inputFieldArrayModalTwo.push(
+              <PopUpSelection
+              id={props.noFields[0] + i}
+              title={props.title[props.noFields[0] + i]}
+              ></PopUpSelection>
+            );
+          }
+   
       }
     }
 
