@@ -5,8 +5,9 @@ import PopUpSelection from "./PopUpSelection";
 import { forwardRef,useImperativeHandle,useState } from "react";
 
 
-function ModalDialog(props,ref) {
-  const [toggleOneModal, setToggleOneModal]  = React.useState(false);
+function EditModalDialog(props,ref) {
+
+  const [toggleOneModal, setToggleOneModal]  = React.useState(true);
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
@@ -234,4 +235,4 @@ function ModalDialog(props,ref) {
     </>
   );
 }
-export default forwardRef(ModalDialog);
+export default forwardRef(EditModalDialog);

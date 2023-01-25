@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import {Button } from "react-bootstrap";
+import EditModalDialog from "./EditPopUpWindow";
 
-const Raw = ({ testStep,index,isEditButtonClicked,onDelete}) => {
+const Raw = ({ testStep,index,isEditButtonClicked,onDelete,onEdit}) => {
 
 
   return (
@@ -16,7 +17,7 @@ const Raw = ({ testStep,index,isEditButtonClicked,onDelete}) => {
       <td>{testStep.branchSelection}</td>
       <td>{testStep.action}</td>
       <td>{testStep.comment}</td>
-      <td> <Button variant="success">
+      <td> <Button variant="success" onClick={() => {}}>
         Edit
       </Button></td>
       <td> <Button variant="danger" onClick={() => {onDelete(index)}}>
