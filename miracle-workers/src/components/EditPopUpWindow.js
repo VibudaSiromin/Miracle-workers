@@ -7,11 +7,13 @@ import { forwardRef,useImperativeHandle,useState } from "react";
 
 function EditModalDialog(props,ref) {
 
-  const [toggleOneModal, setToggleOneModal]  = React.useState(true);
+  const [toggleOneModal, setToggleOneModal]  = React.useState(props.showState);
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [editStatus,setEditStatus] = React.useState('false');
+
+  console.log(props.raw);
 
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
@@ -191,9 +193,9 @@ function EditModalDialog(props,ref) {
 
   return (
     <>
-      <Button variant="success" onClick={initModalOne}>
+      {/* <Button variant="success" onClick={initModalOne}>
         Add
-      </Button>
+      </Button> */}
       <form onSubmit={submitHandlerOne} id="myFormOne">
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>
