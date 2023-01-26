@@ -7,12 +7,14 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "bootstrap": "^5.3.0-alpha1",
+    "file": "^0.2.2",
     "file-saver": "^2.0.5",
     "file-server": "^2.2.1",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",
     "react-scripts": "5.0.1",
+    "saver": "^0.1.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

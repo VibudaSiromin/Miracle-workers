@@ -1,8 +1,6 @@
 import { useState } from "react";
 
 const PopUpInputField = (props) => {
-    
-    let value="";
 
     const inputHandler=(event) => {
       const fieldName = event.target.getAttribute("name");
@@ -14,11 +12,6 @@ const PopUpInputField = (props) => {
       }else{
         props.onDataChange2(fieldName,fieldValue);
       }
-    }
-
-    if(props.editStatus===true){
-        console.log('Edit status is true');
-        //value=props.editTestStep;
     }
 
     return(

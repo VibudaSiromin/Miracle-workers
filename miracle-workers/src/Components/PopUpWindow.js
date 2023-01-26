@@ -22,12 +22,12 @@ function ModalDialog(props,ref) {
   const testStepsData = {};
   const testStepsData2 = {};
 
-  useImperativeHandle(ref,()=> ({
-    log(){
-      initModalOne();
-      setEditStatus(true);
-    }
-  }));
+  // useImperativeHandle(ref,()=> ({
+  //   log(){
+  //     initModalOne();
+  //     setEditStatus(true);
+  //   }
+  // }));
 
   const inputHandler = (name, value) => {
     console.log(name, value);
@@ -186,6 +186,7 @@ function ModalDialog(props,ref) {
     props.saveNewData(modalTwoDataSet);
     TerminateModalOne();
     }
+
   };
 
   return (

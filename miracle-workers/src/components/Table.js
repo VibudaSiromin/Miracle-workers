@@ -10,7 +10,7 @@ const Table = () => {
   let count = false;
   let indexOfRaw;
   const [testSteps, settestSteps] = useState([]);
-  const modalRef=useRef();
+  //const modalRef=useRef();
   
   const updateTestSteps = (tableData) => {
     const newTableData = [...testSteps,tableData];
@@ -18,12 +18,12 @@ const Table = () => {
     settestSteps(newTableData);
   };
 
-  const editHandler = (index) => {
-    console.log("Hello");
-    console.log(index);
-    indexOfRaw=index;
-    modalRef.current.log();
-  }
+  // const editHandler = (index) => {
+  //   console.log("Hello");
+  //   console.log(index);
+  //   indexOfRaw=index;
+  //   modalRef.current.log();
+  // }
 
   const jsonHandler=() => {
     // console.log(testSteps);
@@ -42,7 +42,7 @@ const Table = () => {
     <div className="App">
       <div>
         <ModalDialog
-          ref={modalRef}
+          //ref={modalRef}
           enableChainPopUps={true}
           editTestStep={testSteps[indexOfRaw]}
           title={[
@@ -82,7 +82,7 @@ const Table = () => {
           </thead>
           <tbody>
             {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} index={index} onDelete={deleteHandler} onEdit={editHandler}/>
+                  <Raw testStep={testStep} index={index} onDelete={deleteHandler} />
             ))}
           </tbody>
         </table>

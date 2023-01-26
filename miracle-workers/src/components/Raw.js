@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useRef,useState } from "react";
 import { Button } from "react-bootstrap";
 import EditModalDialog from "./EditPopUpWindow";
 
 const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
 
-  const[show,setShow]=useState(false);
-  const editHandler = (trueOrFalse) => {
-    setShow(trueOrFalse);
+  const modalRef=useRef();
+
+  const editHandler = () => {
+    console.log('Captian Price');
+    modalRef.current.log();
     console.log(testStep);
   };
 
@@ -14,6 +16,7 @@ const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
     <>
       <EditModalDialog
         enableChainPopUps={true}
+        ref={modalRef}
         title={[
           "group",
           "instruction",
@@ -28,7 +31,6 @@ const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
         ]}
         noFields={[3, 7]}
         rawNumber={null}
-        showState={show} 
         raw={testStep} 
         // onCloseClick={editHandler} 
         // onEdit={dataHandler} 
@@ -47,7 +49,7 @@ const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
         <td>{testStep.comment}</td>
         <td>
           {" "}
-          <Button variant="success" onClick={()=>editHandler(true)}>
+          <Button variant="success" onClick={()=>editHandler()}>
             Edit
           </Button>
         </td>

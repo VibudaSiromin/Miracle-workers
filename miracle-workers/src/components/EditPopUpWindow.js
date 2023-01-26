@@ -1,36 +1,44 @@
 import React from "react";
 import { Modal, Button } from "react-bootstrap";
-import PopUpInputField from "./PopUpInputField";
-import PopUpSelection from "./PopUpSelection";
-import { forwardRef,useImperativeHandle,useState } from "react";
+import EditPopUpInputField from "./EditPopUpInputField";
+import EditPopUpSelection from "./EditPopUpSelection";
+import { forwardRef,useImperativeHandle,useState} from "react";
 
 
 function EditModalDialog(props,ref) {
 
-  const [toggleOneModal, setToggleOneModal]  = React.useState(props.showState);
+  const [toggleOneModal, setToggleOneModal]  = React.useState(false);
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
-  const [editStatus,setEditStatus] = React.useState('false');
+  //const [editStatus,setEditStatus] = React.useState('false');
 
+  
   console.log(props.raw);
-
+  console.log("Ghost "+props.showState);
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
-  const getEditTestStep=props.editTestStep;
-  console.log('car car car');
-  console.log(getEditTestStep);
+  // const getEditTestStep=props.editTestStep;
+  // console.log('car car car');
+  // console.log(getEditTestStep);
 
   const testStepsData = {};
   const testStepsData2 = {};
 
   useImperativeHandle(ref,()=> ({
     log(){
+      console.log('Roach');
       initModalOne();
-      setEditStatus(true);
     }
   }));
+
+  // useImperativeHandle(ref,()=> ({
+  //   log(){
+  //     initModalOne();
+  //     setEditStatus(true);
+  //   }
+  // }));
 
   const inputHandler = (name, value) => {
     console.log(name, value);
@@ -82,25 +90,25 @@ function EditModalDialog(props,ref) {
     for (let i = 0; i < props.noFields[0]; i++) {
       if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action'){
         inputFieldArrayModalOne.push(
-          <PopUpInputField
+          <EditPopUpInputField
             id={i}
-            editStatus={editStatus}
-            editTestStep={getEditTestStep}
+            //editStatus={editStatus}
+            editTestStep={props.raw[props.title[i]]}
             title={props.title[i]}
             inputType="text"
             onDataChange={inputHandler}
-          ></PopUpInputField>
+          ></EditPopUpInputField>
         );
         console.log("Bye");
       }else{
          inputFieldArrayModalOne.push(
-             <PopUpSelection
+             <EditPopUpSelection
              id={i}
-             editStatus={editStatus}
-             //editTestStep={props.editTestStep[props.title[i]]}
+             //editStatus={editStatus}
+             editTestStep={props.raw[props.title[i]]}
              title={props.title[i]}
              onDataChange={inputHandler}
-             ></PopUpSelection>
+             ></EditPopUpSelection>
          );
       }
       
@@ -111,25 +119,25 @@ function EditModalDialog(props,ref) {
           if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
             console.log("Hi");
             inputFieldArrayModalTwo.push(
-              <PopUpInputField
+              <EditPopUpInputField
                 id={props.noFields[0] + i}
-                editStatus={editStatus}
-                //editTestStep={props.editTestStep[props.title[props.noFields[0] + i]]}
+                //editStatus={editStatus}
+                editTestStep={props.raw[props.title[props.noFields[0] + i]]}
                 title={props.title[props.noFields[0] + i]}
                 inputType="text"
                 //onSaveAddFormData={addFormDataHandler}
                 onDataChange2={inputHandler2}
-              ></PopUpInputField>
+              ></EditPopUpInputField>
             );
           }else{
              inputFieldArrayModalTwo.push(
-               <PopUpSelection
+               <EditPopUpSelection
                id={props.noFields[0] + i}
-               editStatus={editStatus}
-               //editTestStep={props.editTestStep[props.title[props.noFields[0] + i]]}
+               //editStatus={editStatus}
+               editTestStep={props.raw[props.title[props.noFields[0] + i]]}
                title={props.title[props.noFields[0] + i]}
                onDataChange2={inputHandler2}
-               ></PopUpSelection>
+               ></EditPopUpSelection>
             );
           }
    
@@ -165,6 +173,8 @@ function EditModalDialog(props,ref) {
       }, 400);
     }
   };
+  console.log(modalOneDataSet);
+  console.log('Samantha'+ modalOneDataSet);
 
   const ApplyBtnValue = () => {
     if (props.enableChainPopUps) {
@@ -190,6 +200,8 @@ function EditModalDialog(props,ref) {
     TerminateModalOne();
     }
   };
+
+  console.log('GAZ'+toggleOneModal);
 
   return (
     <>
