@@ -35,10 +35,29 @@ const Table = () => {
   }
 
   const deleteHandler=(index) => {
-    const tableDataAfterDelete=[...testSteps]
+    const tableDataAfterDelete=[...testSteps];
     console.log('Aiyo delete una');
     tableDataAfterDelete.splice(index,1);
     settestSteps(tableDataAfterDelete);
+  }
+
+  const arrowClickHandler=(upOrDown,rawIndex) => {
+    const presentData=[...testSteps];
+    const dataAfterArrowClick=[...testSteps];
+    const numOfRaws=testSteps.length;
+    console.log(numOfRaws);
+    if(upOrDown===0 && rawIndex!==0){
+      // console.log("move up",rawIndex,testStep);
+      dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+      dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+      settestSteps(dataAfterArrowClick);
+    }
+    if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
+      // console.log("move down",rawIndex,testStep);
+      dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
+      dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+      settestSteps(dataAfterArrowClick);
+    }   
   }
 
   return (
@@ -83,7 +102,7 @@ const Table = () => {
           </thead>
           <tbody>
             {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler}/>
+                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler}/>
             ))}
           </tbody>
         </table>

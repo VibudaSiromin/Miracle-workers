@@ -2,8 +2,10 @@ import React, { useRef,useState } from "react";
 import { Button } from "react-bootstrap";
 import { propTypes } from "react-bootstrap/esm/Image";
 import EditModalDialog from "./EditPopUpWindow";
+import {MdArrowDropUp,MdArrowDropDown} from 'react-icons/md';
+import './Raw.css';
 
-const Raw = ({ testStep, rawIndex, onDelete, onEdit }) => {
+const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick }) => {
 
   const modalRef=useRef();
   const editButtonHandler = () => {
@@ -19,6 +21,17 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit }) => {
     console.log('Index in raw hihi'+rawIndex);
     //console.log('Index in raw props'+myindex);
     onEdit(editedTableData,rawIndex);
+  }
+
+  const moveUpDownHandler=(upOrDown) => {
+    if(upOrDown===0){
+      // console.log("move up",rawIndex);
+      onArrowClick(upOrDown,rawIndex);
+
+    }else{
+      // console.log("move down",rawIndex);
+      onArrowClick(upOrDown,rawIndex);
+    }
   }
 
   return (
@@ -55,6 +68,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit }) => {
         <td>{testStep.branchSelection}</td>
         <td>{testStep.action}</td>
         <td>{testStep.comment}</td>
+        <td><MdArrowDropUp onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown onClick={()=>moveUpDownHandler(1)}/></td>
         <td>
           {" "}
           <Button variant="success" onClick={()=>editButtonHandler()}>
