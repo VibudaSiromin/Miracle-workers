@@ -9,8 +9,9 @@ const PopUpSelection = (props) => {
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
     console.log('GG ');
     let options=[];
-    const [fieldName,setFieldName]=useState(' ');
+    const [fieldName,setFieldName]=useState(props.title);
     const [fieldValue,setFieldValue]=useState(props.editTestStep);
+    const [changeState,setChangeState]=useState(false);
     //console.log(options);
     const InsertDataToSelection = () => {
         if(props.title==='instruction'){
@@ -55,7 +56,7 @@ const PopUpSelection = (props) => {
     const inputHandler=(event) => {
         setFieldValue(event.target.value);
         setFieldName(event.target.getAttribute("name"));
-        //setFieldData(fieldValue);
+        setChangeState(true);
         console.log(fieldName);
         console.log(fieldValue);
         console.log('sam');
@@ -71,6 +72,14 @@ const PopUpSelection = (props) => {
          }
     },[fieldValue]);
 
+    if(changeState===false){
+        console.log('Giya giya 2');
+        if(props.id<=2){
+          props.onDataChange(fieldName,fieldValue);
+        }else{
+          props.onDataChange2(fieldName,fieldValue);
+        }
+      }
 
     return(
         <div className="form-group">

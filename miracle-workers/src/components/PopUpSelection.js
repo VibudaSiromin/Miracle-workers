@@ -8,7 +8,6 @@ const PopUpSelection = (props) => {
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
     console.log('GG ');
     let options=[];
-    //console.log(options);
     const InsertDataToSelection = () => {
         if(props.title==='instruction'){
             for (let i = 0; i<instructionSet.length; i++) {

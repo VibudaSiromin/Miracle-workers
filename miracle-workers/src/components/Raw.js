@@ -1,16 +1,25 @@
 import React, { useRef,useState } from "react";
 import { Button } from "react-bootstrap";
+import { propTypes } from "react-bootstrap/esm/Image";
 import EditModalDialog from "./EditPopUpWindow";
 
-const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
+const Raw = ({ testStep, rawIndex, onDelete, onEdit }) => {
 
   const modalRef=useRef();
-
-  const editHandler = () => {
+  const editButtonHandler = () => {
     console.log('Captian Price');
     modalRef.current.log();
     console.log(testStep);
   };
+
+  console.log("raw eliye index"+rawIndex);
+
+  const onEditHandler = (editedTableData) => {
+    console.log('PVT.Miller');
+    console.log('Index in raw hihi'+rawIndex);
+    //console.log('Index in raw props'+myindex);
+    onEdit(editedTableData,rawIndex);
+  }
 
   return (
     <>
@@ -32,9 +41,8 @@ const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
         noFields={[3, 7]}
         rawNumber={null}
         raw={testStep} 
-        // onCloseClick={editHandler} 
-        // onEdit={dataHandler} 
-        index={index}
+        index={rawIndex}
+        onEdit={onEditHandler}
       ></EditModalDialog>
       <tr>
         <td>{testStep.group}</td>
@@ -49,7 +57,7 @@ const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
         <td>{testStep.comment}</td>
         <td>
           {" "}
-          <Button variant="success" onClick={()=>editHandler()}>
+          <Button variant="success" onClick={()=>editButtonHandler()}>
             Edit
           </Button>
         </td>
@@ -58,7 +66,7 @@ const Raw = ({ testStep, index, isEditButtonClicked, onDelete, onEdit }) => {
           <Button
             variant="danger"
             onClick={() => {
-              onDelete(index);
+              onDelete(rawIndex);
             }}
           >
             Delete

@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import EditPopUpInputField from "./EditPopUpInputField";
 import EditPopUpSelection from "./EditPopUpSelection";
-import { forwardRef,useImperativeHandle,useState} from "react";
+import { forwardRef,useImperativeHandle, useEffect,useRef} from "react";
 
 
 function EditModalDialog(props,ref) {
@@ -10,18 +10,14 @@ function EditModalDialog(props,ref) {
   const [toggleOneModal, setToggleOneModal]  = React.useState(false);
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
-  const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
-  //const [editStatus,setEditStatus] = React.useState('false');
-
+  const [modalTwoDataSet,setModalTwoDataSet] = React.useState(props.raw);
+  
   
   console.log(props.raw);
   console.log("Ghost "+props.showState);
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
-  // const getEditTestStep=props.editTestStep;
-  // console.log('car car car');
-  // console.log(getEditTestStep);
 
   const testStepsData = {};
   const testStepsData2 = {};
@@ -33,12 +29,6 @@ function EditModalDialog(props,ref) {
     }
   }));
 
-  // useImperativeHandle(ref,()=> ({
-  //   log(){
-  //     initModalOne();
-  //     setEditStatus(true);
-  //   }
-  // }));
 
   const inputHandler = (name, value) => {
     console.log(name, value);
@@ -92,7 +82,6 @@ function EditModalDialog(props,ref) {
         inputFieldArrayModalOne.push(
           <EditPopUpInputField
             id={i}
-            //editStatus={editStatus}
             editTestStep={props.raw[props.title[i]]}
             title={props.title[i]}
             inputType="text"
@@ -104,7 +93,6 @@ function EditModalDialog(props,ref) {
          inputFieldArrayModalOne.push(
              <EditPopUpSelection
              id={i}
-             //editStatus={editStatus}
              editTestStep={props.raw[props.title[i]]}
              title={props.title[i]}
              onDataChange={inputHandler}
@@ -113,6 +101,8 @@ function EditModalDialog(props,ref) {
       }
       
     }
+
+    
     if (props.enableChainPopUps) {
       console.log("hello koola");
       for (let i = 0; i < props.noFields[1]; i++) {
@@ -121,11 +111,9 @@ function EditModalDialog(props,ref) {
             inputFieldArrayModalTwo.push(
               <EditPopUpInputField
                 id={props.noFields[0] + i}
-                //editStatus={editStatus}
                 editTestStep={props.raw[props.title[props.noFields[0] + i]]}
                 title={props.title[props.noFields[0] + i]}
                 inputType="text"
-                //onSaveAddFormData={addFormDataHandler}
                 onDataChange2={inputHandler2}
               ></EditPopUpInputField>
             );
@@ -133,7 +121,6 @@ function EditModalDialog(props,ref) {
              inputFieldArrayModalTwo.push(
                <EditPopUpSelection
                id={props.noFields[0] + i}
-               //editStatus={editStatus}
                editTestStep={props.raw[props.title[props.noFields[0] + i]]}
                title={props.title[props.noFields[0] + i]}
                onDataChange2={inputHandler2}
@@ -159,13 +146,16 @@ function EditModalDialog(props,ref) {
     return setToggleTwoModal(true);
   };
   const TerminateModalTwo = () => {
-    console.log(testStepsData2)
     setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
+    console.log("Piyal");
+    console.log(modalTwoDataSet);
     return setToggleTwoModal(false);
   };
 
   const NextStep = () => {
     setModalOneDataSet(testStepsData);
+    console.log(modalOneDataSet);
+    console.log('Samantha');
     TerminateModalOne();
     if (props.enableChainPopUps) {
       setTimeout(() => {
@@ -173,8 +163,7 @@ function EditModalDialog(props,ref) {
       }, 400);
     }
   };
-  console.log(modalOneDataSet);
-  console.log('Samantha'+ modalOneDataSet);
+  
 
   const ApplyBtnValue = () => {
     if (props.enableChainPopUps) {
@@ -187,28 +176,35 @@ function EditModalDialog(props,ref) {
 
   const submitHandlerOne = (event) => {
     event.preventDefault();
+    console.log('Prison Break');
     if(props.enableChainPopUps===false){
-    props.saveNewData(modalOneDataSet);
-    TerminateModalOne();
+      props.onEdit(modalOneDataSet);
+      TerminateModalOne();
     }
   };
 
   const submitHandlerTwo = (event) => {
     event.preventDefault();
+    console.log('breaking bad');
     if(props.enableChainPopUps===true){
-    props.saveNewData(modalTwoDataSet);
-    TerminateModalOne();
+      TerminateModalOne();
     }
   };
+
+  useEffect(()=>{
+    console.log('santha santha');
+    props.onEdit(modalTwoDataSet);
+    console.log("Sia ");
+    console.log(modalTwoDataSet);
+     
+},[modalTwoDataSet]);
+
 
   console.log('GAZ'+toggleOneModal);
 
   return (
     <>
-      {/* <Button variant="success" onClick={initModalOne}>
-        Add
-      </Button> */}
-      <form onSubmit={submitHandlerOne} id="myFormOne">
+      <form onSubmit={submitHandlerOne} id="myEditedFormOne">
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>
             <Modal.Title>Feed Data to Test</Modal.Title>
@@ -218,14 +214,14 @@ function EditModalDialog(props,ref) {
             <Button variant="danger" onClick={TerminateModalOne}>
               Close
             </Button>
-            <Button variant="dark" onClick={NextStep} form="myFormOne" type="submit">
+            <Button variant="dark" onClick={NextStep} form="myEditedFormOne" type="submit">
               {btnValue}
             </Button>
           </Modal.Footer>
         </Modal>
       </form>
 
-      <form onSubmit={submitHandlerTwo} id="myFormTwo">
+      <form onSubmit={submitHandlerTwo} id="myEditedFormTwo">
       <Modal show={toggleTwoModal} tabIndex="-1">
         <Modal.Header closeButton onClick={TerminateModalTwo}>
           <Modal.Title>Feed Data to Test</Modal.Title>
@@ -236,7 +232,7 @@ function EditModalDialog(props,ref) {
             Close
           </Button>
           <Button
-            form="myFormTwo"
+            form="myEditedFormTwo"
             type="submit"
             variant="dark"
             onClick={TerminateModalTwo}

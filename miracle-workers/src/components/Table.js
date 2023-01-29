@@ -5,6 +5,7 @@ import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
+import Card from "./Card"
 
 const Table = () => {
   let count = false;
@@ -18,12 +19,14 @@ const Table = () => {
     settestSteps(newTableData);
   };
 
-  // const editHandler = (index) => {
-  //   console.log("Hello");
-  //   console.log(index);
-  //   indexOfRaw=index;
-  //   modalRef.current.log();
-  // }
+   const editHandler = (editedTableData,index) => {
+     const applyEditedData=[...testSteps]
+     applyEditedData[index]=editedTableData;
+     settestSteps(applyEditedData);
+     console.log("Hello");
+     console.log("index in table "+index);
+
+   }
 
   const jsonHandler=() => {
     // console.log(testSteps);
@@ -42,7 +45,6 @@ const Table = () => {
     <div className="App">
       <div>
         <ModalDialog
-          //ref={modalRef}
           enableChainPopUps={true}
           editTestStep={testSteps[indexOfRaw]}
           title={[
@@ -59,12 +61,11 @@ const Table = () => {
           ]}
           noFields={[3, 7]}
           saveNewData={updateTestSteps}
-          isEditButtonClicked={count}
           rawNumber={null}
         ></ModalDialog>
       </div>
       <div className="w-100">
-        <table className="table table-bordered text-center">
+        <table className="table table-dark table-bordered text-center table-striped">
           <thead>
           <tr>
               <th>Group</th>
@@ -82,7 +83,7 @@ const Table = () => {
           </thead>
           <tbody>
             {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} index={index} onDelete={deleteHandler} />
+                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler}/>
             ))}
           </tbody>
         </table>
@@ -90,6 +91,7 @@ const Table = () => {
       <Button onClick={jsonHandler}>
               Generate JSON
       </Button>
+      
     </div>
   );
 };

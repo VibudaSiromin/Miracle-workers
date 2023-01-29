@@ -1,23 +1,17 @@
 import { useState,useEffect } from "react";
 
 const PopUpInputField = (props) => {
-    const [fieldName,setFieldName]=useState(' ');
+    const [fieldName,setFieldName]=useState(props.title);
     const [fieldValue,setFieldValue]=useState(props.editTestStep);
+    const [changeState,setChangeState]=useState(false);
 
     console.log('Griggs');
-    //let fieldName;
     const inputHandler=(event) => {
       setFieldValue(event.target.value);
       setFieldName(event.target.getAttribute("name"));
-      //fieldName = event.target.getAttribute("name");
-      //const fieldValue = event.target.value;
+      setChangeState(true);
       console.log(fieldName);
       console.log('Miller'+fieldName);
-      // if(props.id<=2){
-      //   props.onDataChange(fieldName,fieldData);
-      // }else{
-      //   props.onDataChange2(fieldName,fieldData);
-      // }
     }
 
     useEffect(()=>{
@@ -29,6 +23,15 @@ const PopUpInputField = (props) => {
            props.onDataChange2(fieldName,fieldValue);
          }
     },[fieldValue]);
+
+    if(changeState===false){
+      console.log('Giya giya 1');
+      if(props.id<=2){
+        props.onDataChange(fieldName,fieldValue);
+      }else{
+        props.onDataChange2(fieldName,fieldValue);
+      }
+    }
 
     return(
         <div className="form-group">

@@ -4,6 +4,7 @@ import ModalDialog from "./components/PopUpWindow";
 import Table from "./components/Table";
 import { Button } from "react-bootstrap";
 import OutputJSON from './components/OutputJSON';
+import Card from './components/Card';
 // import Launcher from "./components/Launcher";
 
 const PropsForChainPopUp = {
@@ -16,7 +17,7 @@ function App() {
   return (
     <div className="App">
       <Table></Table>
-
+      {/* <Card></Card> */}
     </div>
   );
 }
