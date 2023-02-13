@@ -68,7 +68,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick }) => {
         <td>{testStep.branchSelection}</td>
         <td>{testStep.action}</td>
         <td>{testStep.comment}</td>
-        <td><MdArrowDropUp onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown onClick={()=>moveUpDownHandler(1)}/></td>
+        <td><MdArrowDropUp size="30px" color="#00FF00" onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown size="30px" color="#00FF00" onClick={()=>moveUpDownHandler(1)}/></td>
         <td>
           {" "}
           <Button variant="success" onClick={()=>editButtonHandler()}>
