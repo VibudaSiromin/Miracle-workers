@@ -1,9 +1,17 @@
 import React from 'react';
 import './SettingsItem.css';
 
-const SettingsItem = ({title}) => {
+const SettingsItem = ({title,symbol}) => {
+
   return (
-    <div className='setting'>{title}</div>
+    <div className='setting'>
+      <div>
+      {title}
+      </div>
+      <div className='symbol'>  
+        {symbol}   
+      </div>
+    </div>
   )
 }
 

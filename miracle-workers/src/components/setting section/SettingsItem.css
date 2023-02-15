@@ -8,3 +8,12 @@
   box-shadow: 0px 3.35938px 3.35938px rgba(0, 0, 0, 0.25);
   border-radius: 16.7969px;
 }
+
+symbol {
+  position: absolute;
+  left: 57.63%;
+  right: 38.65%;
+  top: 25%;
+  bottom: 69.73%;
+  background: #ffffff;
+}
