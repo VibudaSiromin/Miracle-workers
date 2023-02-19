@@ -6,21 +6,32 @@ import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
 import Card from "./Card"
+import './TableV1.css' 
 
-const Table = () => {
+const Table = (props) => {
   let count = false;
   let indexOfRaw;
+  let tableFields=[];
   const [testSteps, settestSteps] = useState([]);
   //const modalRef=useRef();
   
   const updateTestSteps = (tableData) => {
+    console.log('liquid death');
+    const newTableData = [...testSteps,tableData];
+    console.log(newTableData);
+    settestSteps(newTableData);
+  };
+
+  const updateGeneralData = (tableData) => {
+    console.log('Glock');
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
     settestSteps(newTableData);
   };
 
    const editHandler = (editedTableData,index) => {
-     const applyEditedData=[...testSteps]
+     const applyEditedData=[...testSteps];
+     console.log('Oxford',editedTableData,'index is ',index);
      applyEditedData[index]=editedTableData;
      settestSteps(applyEditedData);
      console.log("Hello");
@@ -60,49 +71,47 @@ const Table = () => {
     }   
   }
 
+  if(props.title.length!==0){
+    console.log('Ajina Motto');
+    for(let i=0;i<props.title.length;i++){
+      tableFields.push(<th>{props.title[i]}</th>);
+    }
+  }
+
+  console.log('Willson',props.purpose);
+
   return (
     <div className="App">
       <div>
         <ModalDialog
-          enableChainPopUps={true}
+          enableChainPopUps={props.enableChainPopUps}//false
           editTestStep={testSteps[indexOfRaw]}
-          title={[
-            "group",
-            "instruction",
-            "command",
-            "locator",
-            "locatorParameter",
-            "data",
-            "swapResult",
-            "branchSelection",
-            "action",
-            "comment",
-          ]}
-          noFields={[3, 7]}
+          title={props.title}
+          noFields={props.noFields}
           saveNewData={updateTestSteps}
+          saveNewGeneralData={updateGeneralData}
+          generalPurpose={props.generalPurpose}
           rawNumber={null}
+          addingFields={false}
+          buttonValue="Add"
+          purpose="fillData"
+          formID={["myFormTwoPart1", "myFormTwoPart2"]}
         ></ModalDialog>
       </div>
-      <div className="w-100">
+      <div className="version-01">
         <table className="table table-dark table-bordered text-center table-striped">
           <thead>
           <tr>
-              <th>Group</th>
-              <th>Instruction</th>
-              <th>Command</th>
-              <th>Locator</th>
-              <th>LocatorParameter</th>
-              <th>Data</th>
-              <th>SwapResult</th>
-              <th>Branch Selection</th>
-              <th>Action</th>
-              <th>Comment</th>
+              <th></th>
+              <th></th>
+              <th></th>
+              {tableFields}
               
             </tr>
           </thead>
           <tbody>
             {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler}/>
+                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler} title={props.title} generalPurpose={props.generalPurpose} enableChainPopUps={props.enableChainPopUps}/>
             ))}
           </tbody>
         </table>

@@ -1,0 +1,23 @@
+.version-01{
+    width:calc(100vw-50px);
+    margin: 0 50px 0 50px;
+    /* width:800px; */
+    /* width:80%; */
+    overflow: scroll;
+    height: 400px;
+}
+
+.version-01 table thead th{
+    position: sticky; 
+    top: 0; 
+    z-index: 1;
+    background-color: #00BB83;
+    max-width:80px;
+    min-width:80px;
+}
+
+.version-01 table tbody td{
+    z-index: 1;
+    max-width:80;
+    min-width:80px;
+}

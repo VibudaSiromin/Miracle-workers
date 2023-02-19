@@ -10,17 +10,19 @@ function ModalDialog(props,ref) {
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
+  const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [editStatus,setEditStatus] = React.useState('false');
 
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
   const getEditTestStep=props.editTestStep;
-  console.log('car car car');
-  console.log(getEditTestStep);
+  // console.log('car car car');
+  // console.log(getEditTestStep);
 
   const testStepsData = {};
   const testStepsData2 = {};
+  const generalPurposeInputData={};
 
   // useImperativeHandle(ref,()=> ({
   //   log(){
@@ -75,27 +77,41 @@ function ModalDialog(props,ref) {
     console.log(testStepsData2);
   };
 
+  const inputHandler3 = (name,value) => {
+      console.log('inputHandler3: '+name,value);
+      generalPurposeInputData[name]=value;
+      console.log('inputHandler3:',props.purpose);
+  }
+
   const myLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
-      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action'){
+      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action' && props.generalPurpose===false){
         inputFieldArrayModalOne.push(
           <PopUpInputField
             id={i}
-            editStatus={editStatus}
-            editTestStep={getEditTestStep}
             title={props.title[i]}
             inputType="text"
+            generalPurpose={props.generalPurpose}
             onDataChange={inputHandler}
           ></PopUpInputField>
         );
-        console.log("Bye");
-      }else{
+      }else if(props.generalPurpose===true){//section for all general purpose data inputs such as data section,login,locator section ect...
+        inputFieldArrayModalOne.push(
+          <PopUpInputField
+            id={i}
+            title={props.title[i]}
+            inputType="text"
+            generalPurpose={props.generalPurpose}
+            onDataChange={inputHandler3}
+          ></PopUpInputField>
+        ); 
+        
+      }else if(props.generalPurpose===false){
          inputFieldArrayModalOne.push(
              <PopUpSelection
              id={i}
-             editStatus={editStatus}
-             //editTestStep={props.editTestStep[props.title[i]]}
              title={props.title[i]}
+             generalPurpose={props.generalPurpose}
              onDataChange={inputHandler}
              ></PopUpSelection>
          );
@@ -103,18 +119,14 @@ function ModalDialog(props,ref) {
       
     }
     if (props.enableChainPopUps) {
-      console.log("hello koola");
       for (let i = 0; i < props.noFields[1]; i++) {
           if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
-            console.log("Hi");
             inputFieldArrayModalTwo.push(
               <PopUpInputField
                 id={props.noFields[0] + i}
-                editStatus={editStatus}
-                //editTestStep={props.editTestStep[props.title[props.noFields[0] + i]]}
                 title={props.title[props.noFields[0] + i]}
                 inputType="text"
-                //onSaveAddFormData={addFormDataHandler}
+                generalPurpose={props.generalPurpose}
                 onDataChange2={inputHandler2}
               ></PopUpInputField>
             );
@@ -122,9 +134,8 @@ function ModalDialog(props,ref) {
              inputFieldArrayModalTwo.push(
                <PopUpSelection
                id={props.noFields[0] + i}
-               editStatus={editStatus}
-               //editTestStep={props.editTestStep[props.title[props.noFields[0] + i]]}
                title={props.title[props.noFields[0] + i]}
+               generalPurpose={props.generalPurpose}
                onDataChange2={inputHandler2}
                ></PopUpSelection>
             );
@@ -154,7 +165,13 @@ function ModalDialog(props,ref) {
   };
 
   const NextStep = () => {
-    setModalOneDataSet(testStepsData);
+    if(props.generalPurpose===false){
+      setModalOneDataSet(testStepsData);
+    }
+    if(props.generalPurpose===true){
+      console.log('Next step',props.purpose);
+      setModalOneGeneralDataSet(generalPurposeInputData);
+    }
     TerminateModalOne();
     if (props.enableChainPopUps) {
       setTimeout(() => {
@@ -173,9 +190,25 @@ function ModalDialog(props,ref) {
   ApplyBtnValue();
 
   const submitHandlerOne = (event) => {
+    console.log('Submit Handler one',props.purpose);
     event.preventDefault();
     if(props.enableChainPopUps===false){
-    props.saveNewData(modalOneDataSet);
+        if(props.generalPurpose===false){
+          props.saveNewData(modalOneDataSet);
+        }
+        if(props.generalPurpose===true){
+          console.log('pihibiya');
+          if(props.purpose==='fillData'){
+            console.log('fillData AX1');
+            props.saveNewGeneralData(modalOneGeneralDataSet);
+          }
+          if(props.purpose==='addHeading'){
+            console.log('heading hornet');
+            props.saveNewHeadingData(modalOneGeneralDataSet);
+          }          
+        }
+        
+
     TerminateModalOne();
     }
   };
@@ -192,9 +225,9 @@ function ModalDialog(props,ref) {
   return (
     <>
       <Button variant="success" onClick={initModalOne}>
-        Add
+        {props.buttonValue}
       </Button>
-      <form onSubmit={submitHandlerOne} id="myFormOne">
+      <form onSubmit={submitHandlerOne} id={props.formID[0]}>
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>
             <Modal.Title>Feed Data to Test</Modal.Title>
@@ -204,14 +237,14 @@ function ModalDialog(props,ref) {
             <Button variant="danger" onClick={TerminateModalOne}>
               Close
             </Button>
-            <Button variant="dark" onClick={NextStep} form="myFormOne" type="submit">
+            <Button variant="dark" onClick={NextStep} form={props.formID[0]} type="submit">
               {btnValue}
             </Button>
           </Modal.Footer>
         </Modal>
       </form>
 
-      <form onSubmit={submitHandlerTwo} id="myFormTwo">
+      <form onSubmit={submitHandlerTwo} id={props.formID[1]}>
       <Modal show={toggleTwoModal} tabIndex="-1">
         <Modal.Header closeButton onClick={TerminateModalTwo}>
           <Modal.Title>Feed Data to Test</Modal.Title>
@@ -222,7 +255,7 @@ function ModalDialog(props,ref) {
             Close
           </Button>
           <Button
-            form="myFormTwo"
+            form={props.formID[1]}
             type="submit"
             variant="dark"
             onClick={TerminateModalTwo}
