@@ -1,5 +1,6 @@
 import React from 'react';
 import './SettingsItem.css';
+import {Box} from '@material-ui/core'
 
 const SettingsItem = ({title,symbol}) => {
 

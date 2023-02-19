@@ -110,7 +110,6 @@ const Table = () => {
       <Button onClick={jsonHandler}>
               Generate JSON
       </Button>
-      
     </div>
   );
 };

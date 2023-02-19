@@ -1,16 +1,20 @@
-import React from 'react'
-import {HiPencil} from 'react-icons/hi';
-import {MdOutlineDeleteForever} from 'react-icons/md';
-import './SettingItemRaw.css';
+import React from "react";
+import { HiPencil } from "react-icons/hi";
+import { MdOutlineDeleteForever } from "react-icons/md";
+import "./SettingItemRaw.css";
 
-const SettingItemRaw = ({rawData}) => {
+const SettingItemRaw = ({ rawData,id }) => {
+
+  const editHandler=() => {
+    console.log(id)
+  }
   return (
-    <div className='raw'>
-        {rawData}
-        <HiPencil/>
-        <MdOutlineDeleteForever/>
-    </div>
-  )
-}
+      <div className="raw">
+        <span>{rawData}</span>
+        <HiPencil onClick={editHandler}/>
+        <MdOutlineDeleteForever />
+      </div>
+  );
+};
 
-export default SettingItemRaw
+export default SettingItemRaw;
