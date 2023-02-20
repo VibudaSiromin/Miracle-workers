@@ -8,7 +8,6 @@ import './Raw.css';
 const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPurpose,enableChainPopUps}) => {
 
   const tableDataArray=[];
-  //const tableDataArray=useRef([]);
 
   const modalRef=useRef();
   const editButtonHandler = () => {

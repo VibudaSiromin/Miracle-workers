@@ -6,6 +6,8 @@ import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
 import Card from "./Card"
+import {MdClose} from 'react-icons/md';
+import Box from '@mui/material/Box';
 import './TableV1.css' 
 
 const Table = (props) => {
@@ -13,7 +15,6 @@ const Table = (props) => {
   let indexOfRaw;
   let tableFields=[];
   const [testSteps, settestSteps] = useState([]);
-  //const modalRef=useRef();
   
   const updateTestSteps = (tableData) => {
     console.log('liquid death');
@@ -31,7 +32,6 @@ const Table = (props) => {
 
    const editHandler = (editedTableData,index) => {
      const applyEditedData=[...testSteps];
-     console.log('Oxford',editedTableData,'index is ',index);
      applyEditedData[index]=editedTableData;
      settestSteps(applyEditedData);
      console.log("Hello");
@@ -47,7 +47,6 @@ const Table = (props) => {
 
   const deleteHandler=(index) => {
     const tableDataAfterDelete=[...testSteps];
-    console.log('Aiyo delete una');
     tableDataAfterDelete.splice(index,1);
     settestSteps(tableDataAfterDelete);
   }
@@ -71,14 +70,37 @@ const Table = (props) => {
     }   
   }
 
-  if(props.title.length!==0){
-    console.log('Ajina Motto');
-    for(let i=0;i<props.title.length;i++){
-      tableFields.push(<th>{props.title[i]}</th>);
+  const removeHeading = (headingIndex) => {
+    const selectedHeading=props.title[headingIndex];
+    let editedTestSteps=[];
+    for(let i=0;i<testSteps.length;i++){
+      console.log('Removing');
+      const testStep=testSteps[i];
+      delete testStep[selectedHeading];
+      editedTestSteps.push(testStep);
     }
+    const headings=props.title;
+    headings.splice(headingIndex,1);
+    console.log('After removing headings: ',props.title);
+    console.log('cutter :: ',testSteps);
+    settestSteps(editedTestSteps);
   }
 
-  console.log('Willson',props.purpose);
+  if(props.title.length!==0){
+    console.log('Ajina Motto');
+    if(props.removeHeading===true){
+      props.title.map((heading,headingIndex)=>{
+        tableFields.push(<th>{heading}<MdClose onClick={()=>removeHeading(headingIndex)}></MdClose></th>);
+      });
+    }else{
+      for(let i=0;i<props.title.length;i++){
+        tableFields.push(<th>{props.title[i]}</th>);
+      }
+    }
+    
+  }
+
+  console.log('Willson');
 
   return (
     <div className="App">
@@ -99,11 +121,11 @@ const Table = (props) => {
         ></ModalDialog>
       </div>
       <div className="version-01">
-        <table className="table table-dark table-bordered text-center table-striped">
+        <table className="table table-hover table-dark text-center table-striped">
           <thead>
           <tr>
-              <th></th>
-              <th></th>
+              <th style={{width:"40px"}}></th>
+              <th style={{width:"40px"}}></th>
               <th></th>
               {tableFields}
               

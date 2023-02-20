@@ -2,6 +2,7 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import PopUpInputField from "./PopUpInputField";
 import PopUpSelection from "./PopUpSelection";
+import {MdTableRows} from 'react-icons/md';
 import { forwardRef,useImperativeHandle,useState } from "react";
 
 
@@ -225,6 +226,7 @@ function ModalDialog(props,ref) {
   return (
     <>
       <Button variant="success" onClick={initModalOne}>
+        <MdTableRows></MdTableRows>
         {props.buttonValue}
       </Button>
       <form onSubmit={submitHandlerOne} id={props.formID[0]}>

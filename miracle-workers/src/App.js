@@ -33,8 +33,8 @@ function App() {
     <div className="App">
       {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}
       {/* <Card></Card>*/}
-      {/* <Data generalPurpose={true}></Data> */}
-      <StickyHeadTable></StickyHeadTable>
+      <Data generalPurpose={true}></Data>
+      {/* <StickyHeadTable></StickyHeadTable> */}
       {/* <XMLSection></XMLSection> */}
     </div>
   );
