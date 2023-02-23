@@ -51,6 +51,42 @@
   }
 
   .file-uploader-container{
-    height: 16rem;
+    height: 13rem;
     width: 35rem;
+  }
+
+  .file-holder{
+    height: 3rem;
+    width: 32rem;
+    background-color:blueviolet;
+    display: flex;
+    align-items: center;
+    justify-content:space-between;
+    border-radius: 4px;
+  }
+
+  /* .fade-text-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  } */
+  .fade-text{
+    display: flex;
+    color: white;
+    width: 20rem;
+    margin-left: 10px;
+    -webkit-mask-image: linear-gradient(90deg, #000 80%, transparent);
+  }
+
+  .fade-text div{
+    width: 3rem;
+  }
+
+  .file-holder-icons-container{
+    display: flex;
+    height: 3rem;
+    width:5rem;
+    align-items: center;
+    justify-content:space-between;
+    margin-right: 10px;
   }
