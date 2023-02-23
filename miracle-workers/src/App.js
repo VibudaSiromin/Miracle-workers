@@ -6,7 +6,7 @@ import { Button } from "react-bootstrap";
 import OutputJSON from './components/OutputJSON';
 import Card from './components/Card';
 import Data from './pages/Data'
-import XMLSection from "./pages/Data(XML)";
+import ExcelSection from './pages/Data(Excel)'
 import StickyHeadTable from "./components/TableMUI";
 // import Launcher from "./components/Launcher";
 
@@ -33,9 +33,9 @@ function App() {
     <div className="App">
       {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}
       {/* <Card></Card>*/}
-      <Data generalPurpose={true}></Data>
+      {/* <Data generalPurpose={true} initialHeading={['head1','head2']}></Data> */}
       {/* <StickyHeadTable></StickyHeadTable> */}
-      {/* <XMLSection></XMLSection> */}
+      <ExcelSection></ExcelSection>
     </div>
   );
 }

@@ -5,14 +5,7 @@ import Heading from "../components/Heading";
 import Table from '../components/Table'
 
 const Data = (props) => {
-    //const title=[];
-    // const [title,setTitle]=useState([]);
     
-    // const addTitle = (addTitle) => {
-    //     const valueList=Object.values(addTitle);
-    //     const newTitle=[...title,valueList];
-    //     setTitle(newTitle);
-    // }
     const [title,getTitle]=useState([]);
     const heading = (getHeading) => {
         console.log('water bottle');
@@ -23,7 +16,7 @@ const Data = (props) => {
     return(
         <>
         {/* <Button variant="success" onClick={addTitle}>column</Button> */}
-        <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true}></Heading>
+        <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true} initialHeading={props.initialHeading}></Heading>
         {/* <Table title={title} generalPurpose={props.generalPurpose} noFields={[title.length]} enableChainPopUps={false}></Table> */}
         </>
     )

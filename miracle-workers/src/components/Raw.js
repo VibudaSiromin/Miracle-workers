@@ -61,18 +61,6 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
       <EditModalDialog
         enableChainPopUps={enableChainPopUps}
         ref={modalRef}
-        // title={[
-        //   "group",
-        //   "instruction",
-        //   "command",
-        //   "locator",
-        //   "locatorParameter",
-        //   "data",
-        //   "swapResult",
-        //   "branchSelection",
-        //   "action",
-        //   "comment",
-        // ]}
         title={title}
         noFields={[3, 7]}
         rawNumber={null}
@@ -90,7 +78,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
           {" "}
           <MdDeleteForever color="#FF291C" size="20px" onClick={()=>{onDelete(rawIndex)}}></MdDeleteForever>
         </td>
-        <td className="table-data"><MdArrowDropUp size="30px" color="#00FF00" onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown size="30px" color="#00FF00" onClick={()=>moveUpDownHandler(1)}/></td>
+        <td className="table-data"><MdArrowDropUp size="25px" color="#00FF00" onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown size="25px" color="#00FF00" onClick={()=>moveUpDownHandler(1)}/></td>
         {/* <td>{testStep.group}</td>
         <td>{testStep.instruction}</td>
         <td>{testStep.command}</td>

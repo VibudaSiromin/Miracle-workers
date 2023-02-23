@@ -1,6 +1,6 @@
 import React from "react";
 import Raw from "./Raw";
-import { useRef,useState } from "react";
+import { useEffect,useState } from "react";
 import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
@@ -15,9 +15,13 @@ const Table = (props) => {
   let indexOfRaw;
   let tableFields=[];
   const [testSteps, settestSteps] = useState([]);
+
+  useEffect(() => {
+    console.log('nissan ',props.initialData);
+    settestSteps(props.initialData);
+  }, [props.initialData]);
   
   const updateTestSteps = (tableData) => {
-    console.log('liquid death');
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
     settestSteps(newTableData);
@@ -26,7 +30,7 @@ const Table = (props) => {
   const updateGeneralData = (tableData) => {
     console.log('Glock');
     const newTableData = [...testSteps,tableData];
-    console.log(newTableData);
+    console.log('student ',newTableData);
     settestSteps(newTableData);
   };
 
@@ -79,8 +83,7 @@ const Table = (props) => {
       delete testStep[selectedHeading];
       editedTestSteps.push(testStep);
     }
-    const headings=props.title;
-    headings.splice(headingIndex,1);
+    props.dropHeading(headingIndex);
     console.log('After removing headings: ',props.title);
     console.log('cutter :: ',testSteps);
     settestSteps(editedTestSteps);
@@ -101,6 +104,7 @@ const Table = (props) => {
   }
 
   console.log('Willson');
+  console.log('No of feilds: ',props.noFields);
 
   return (
     <div className="App">
