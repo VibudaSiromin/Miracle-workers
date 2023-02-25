@@ -128,8 +128,8 @@ const Table = (props) => {
         <table className="table table-hover table-dark text-center table-striped">
           <thead>
           <tr>
-              <th style={{width:"40px"}}></th>
-              <th style={{width:"40px"}}></th>
+              <th></th>
+              <th></th>
               <th></th>
               {tableFields}
               

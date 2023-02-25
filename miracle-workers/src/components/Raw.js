@@ -79,16 +79,6 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
           <MdDeleteForever color="#FF291C" size="20px" onClick={()=>{onDelete(rawIndex)}}></MdDeleteForever>
         </td>
         <td className="table-data"><MdArrowDropUp size="25px" color="#00FF00" onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown size="25px" color="#00FF00" onClick={()=>moveUpDownHandler(1)}/></td>
-        {/* <td>{testStep.group}</td>
-        <td>{testStep.instruction}</td>
-        <td>{testStep.command}</td>
-        <td>{testStep.locator}</td>
-        <td>{testStep.locatorParameter}</td>
-        <td>{testStep.data}</td>
-        <td>{testStep.swapResult}</td>
-        <td>{testStep.branchSelection}</td>
-        <td>{testStep.action}</td>
-        <td>{testStep.comment}</td> */}
         {tableDataArray}
       </tr>
     </>

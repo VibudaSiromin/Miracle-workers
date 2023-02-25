@@ -13,6 +13,7 @@ const FileUploader = (props) => {
 	 // drag state
 	 const [dragActive, setDragActive] = useState(false);
 	 const [file,setFile]=useState(null);
+	 const [buttonStatus,setButtonStatus]=useState(false);
 	
 	 // ref
 	 const inputRef = React.useRef(null);
@@ -35,8 +36,8 @@ const FileUploader = (props) => {
 		if (event.dataTransfer.files && event.dataTransfer.files[0]) {
 		   //handleFiles(event.dataTransfer.files);
 		   const excelFile=event.dataTransfer.files[0];
-		   console.log('Drag eka Una!!! ',excelFile);
 		   const excelReader=new FileReader();
+		   setFile(excelFile);
 
 		   excelReader.onload=(event)=>{
 			//parse data
@@ -98,6 +99,7 @@ const FileUploader = (props) => {
     	 if (event.target.files && event.target.files[0]) {
 			   const excelFile=event.target.files[0];
 			   const excelReader=new FileReader();
+			   console.log('special ',event.target.files[1]);
 			   setFile(excelFile);	
 
 			   excelReader.onload=(event)=>{
@@ -128,8 +130,8 @@ const FileUploader = (props) => {
 
 	 const handleFiledeletion = () => {
 		setFile(null);
-		props.deleteFileHeaders();
-		props.deleteFileData();
+		props.deleteFileHeaders();//call fileHeadersDeleteHandler in Data(Excel).js
+		props.deleteFileData();//call fileDataDeleteHandler in Data(Excel).js
 	 }
 
 	 
@@ -138,6 +140,9 @@ const FileUploader = (props) => {
   	 const onButtonClick = () => {
     	 inputRef.current.click();
   	 };
+
+// Enable or disable the 'ADD' & 'COLUMN' buttons
+	 	 
 
 	if(file){
 		// console.log('sharp ',file.name);
