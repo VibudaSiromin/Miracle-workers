@@ -7,7 +7,7 @@ import OutputJSON from './components/OutputJSON';
 import Card from './components/Card';
 import Data from './pages/Data'
 import ExcelSection from './pages/Data(Excel)'
-import StickyHeadTable from "./components/TableMUI";
+
 // import Launcher from "./components/Launcher";
 
 const PropsForChainPopUp = {
