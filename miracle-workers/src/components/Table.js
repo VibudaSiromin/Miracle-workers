@@ -5,22 +5,30 @@ import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
-import Card from "./Card"
-import {MdClose} from 'react-icons/md';
-import Box from '@mui/material/Box';
+import {MdClose,MdNavigateNext,MdNavigateBefore} from 'react-icons/md';
+import { TbTableOff } from "react-icons/tb";
 import './TableV1.css' 
 
 const Table = (props) => {
-  let count = false;
   let indexOfRaw;
   let tableFields=[];
   const [testSteps, settestSteps] = useState([]);
+  const [page,setPage]=useState([0]);//pagination
+  const [nextButtonStatus,setNextButtonStatus]=useState(true);
+  const [prevButtonStatus,setPrevButtonStatus]=useState(false);
+  const [testStepsPerPage,setTestStepPerPage]=useState([]);
+  const [rowsPerPage,setRowsPerPage]=useState(5);
 
   useEffect(() => {
     console.log('nissan ',props.initialData);
-    settestSteps(props.initialData);
+    if(props.initialData!==undefined){
+      settestSteps(props.initialData);
+      setTestStepPerPage(props.initialData.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage));
+    }
+    
   }, [props.initialData]);
   
+
   const updateTestSteps = (tableData) => {
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
@@ -89,8 +97,45 @@ const Table = (props) => {
     settestSteps(editedTestSteps);
   }
 
+  //pagination
+
+  const next = () => {
+    setPage([page[0]+1]);  
+  }
+  const previous = () => {
+    setPage([page[0]-1]);
+  }
+
+  const rowsPerPageHandler =  (event) => {
+    setRowsPerPage(Number(event.target.value));
+    const currentPage=[0];
+    setPage([...currentPage]);
+  }
+  //change rows per page
+
+  useEffect(() => {
+    console.log('siiri ',rowsPerPage);
+    console.log('siiri XX ',page[0]);
+    console.log('jaguar ',testSteps)
+    setTestStepPerPage(testSteps.slice(page[0]*rowsPerPage,page[0]*rowsPerPage+rowsPerPage));
+    //console.log("Honda ",OnePageTestSteps);
+    if(testSteps.length<=page[0]*rowsPerPage+rowsPerPage && testSteps.length!==0){
+      console.log('marry');
+      setNextButtonStatus(false);
+    }else{
+      setNextButtonStatus(true);
+    }
+    if(page[0]===0){
+      setPrevButtonStatus(false);
+    }else{
+      setPrevButtonStatus(true);
+    }
+    console.log('bear ',page[0]);
+  }, [page,testSteps]);
+  
   if(props.title.length!==0){
     console.log('Ajina Motto');
+    tableFields.push(<th colSpan={3}>{"Action"}</th>)
     if(props.removeHeading===true){
       props.title.map((heading,headingIndex)=>{
         tableFields.push(<th>{heading}<MdClose onClick={()=>removeHeading(headingIndex)}></MdClose></th>);
@@ -100,11 +145,25 @@ const Table = (props) => {
         tableFields.push(<th>{props.title[i]}</th>);
       }
     }
-    
   }
+ //disable and enable styles for next and prev icons
 
-  console.log('Willson');
-  console.log('No of feilds: ',props.noFields);
+ const prevIconStyle = {
+  
+  opacity: prevButtonStatus ? 1 : 0.5,
+  pointerEvents: prevButtonStatus ? 'auto' : 'none',
+  color:"white",
+  
+};
+
+const nextIconStyle = {
+  opacity: nextButtonStatus ? 1 : 0.5,
+  pointerEvents: nextButtonStatus ? 'auto' : 'none',
+  color:"white",
+  
+};
+//className="table table-hover table-dark text-center table-striped"
+console.log('sun glass',testStepsPerPage );
 
   return (
     <div className="App">
@@ -125,27 +184,39 @@ const Table = (props) => {
         ></ModalDialog>
       </div>
       <div className="version-01">
-        <table className="table table-hover table-dark text-center table-striped">
+        <table id="data-Table">
           <thead>
           <tr>
-              <th></th>
-              <th></th>
-              <th></th>
               {tableFields}
-              
             </tr>
           </thead>
           <tbody>
-            {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler} title={props.title} generalPurpose={props.generalPurpose} enableChainPopUps={props.enableChainPopUps}/>
-            ))}
+            {props.title.length!==0 ?testStepsPerPage.map((testStep,index) => (
+                  <Raw testStep={testStep} rawIndex={page[0]*rowsPerPage+index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler} title={props.title} generalPurpose={props.generalPurpose} enableChainPopUps={props.enableChainPopUps}/>
+            )):<div className="container no-record-msg"><TbTableOff size="100px"></TbTableOff><h2>{"No Records Available!"}</h2></div>}
           </tbody>
         </table>
       </div>
+      <div className="container-1">
+            <div>
+              <label>Rows per page: </label>
+              <select value={rowsPerPage}  onChange={rowsPerPageHandler}>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+            <div>
+              {page[0]*rowsPerPage+1} - {testSteps.length<=page[0]*rowsPerPage+rowsPerPage ? testSteps.length:page[0]*rowsPerPage+rowsPerPage} of {testSteps.length}
+            </div>
+            <div>
+              <MdNavigateBefore onClick={previous} style={prevIconStyle} size="30px"></MdNavigateBefore>
+              <MdNavigateNext onClick={next} style={nextIconStyle} size="30px"></MdNavigateNext>
+            </div>
+      </div>
       <Button onClick={jsonHandler}>
               Generate JSON
-      </Button>
-      
+      </Button>     
     </div>
   );
 };
