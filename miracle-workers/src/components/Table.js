@@ -1,26 +1,49 @@
 import React from "react";
 import Raw from "./Raw";
-import { useRef,useState } from "react";
+import { useEffect,useState } from "react";
 import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
-import Card from "./Card"
+import {MdClose,MdNavigateNext,MdNavigateBefore} from 'react-icons/md';
+import { TbTableOff } from "react-icons/tb";
+import './TableV1.css' 
 
-const Table = () => {
-  let count = false;
+const Table = (props) => {
   let indexOfRaw;
+  let tableFields=[];
   const [testSteps, settestSteps] = useState([]);
-  //const modalRef=useRef();
+  const [page,setPage]=useState([0]);//pagination
+  const [nextButtonStatus,setNextButtonStatus]=useState(true);
+  const [prevButtonStatus,setPrevButtonStatus]=useState(false);
+  const [testStepsPerPage,setTestStepPerPage]=useState([]);
+  const [rowsPerPage,setRowsPerPage]=useState(5);
+
+  useEffect(() => {
+    console.log('nissan ',props.initialData);
+    if(props.initialData!==undefined){
+      settestSteps(props.initialData);
+      setTestStepPerPage(props.initialData.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage));
+    }
+    
+  }, [props.initialData]);
   
+
   const updateTestSteps = (tableData) => {
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
     settestSteps(newTableData);
   };
 
+  const updateGeneralData = (tableData) => {
+    console.log('Glock');
+    const newTableData = [...testSteps,tableData];
+    console.log('student ',newTableData);
+    settestSteps(newTableData);
+  };
+
    const editHandler = (editedTableData,index) => {
-     const applyEditedData=[...testSteps]
+     const applyEditedData=[...testSteps];
      applyEditedData[index]=editedTableData;
      settestSteps(applyEditedData);
      console.log("Hello");
@@ -36,7 +59,6 @@ const Table = () => {
 
   const deleteHandler=(index) => {
     const tableDataAfterDelete=[...testSteps];
-    console.log('Aiyo delete una');
     tableDataAfterDelete.splice(index,1);
     settestSteps(tableDataAfterDelete);
   }
@@ -60,57 +82,141 @@ const Table = () => {
     }   
   }
 
+  const removeHeading = (headingIndex) => {
+    const selectedHeading=props.title[headingIndex];
+    let editedTestSteps=[];
+    for(let i=0;i<testSteps.length;i++){
+      console.log('Removing');
+      const testStep=testSteps[i];
+      delete testStep[selectedHeading];
+      editedTestSteps.push(testStep);
+    }
+    props.dropHeading(headingIndex);
+    console.log('After removing headings: ',props.title);
+    console.log('cutter :: ',testSteps);
+    settestSteps(editedTestSteps);
+  }
+
+  //pagination
+
+  const next = () => {
+    setPage([page[0]+1]);  
+  }
+  const previous = () => {
+    setPage([page[0]-1]);
+  }
+
+  const rowsPerPageHandler =  (event) => {
+    setRowsPerPage(Number(event.target.value));
+    const currentPage=[0];
+    setPage([...currentPage]);
+  }
+  //change rows per page
+
+  useEffect(() => {
+    console.log('siiri ',rowsPerPage);
+    console.log('siiri XX ',page[0]);
+    console.log('jaguar ',testSteps)
+    setTestStepPerPage(testSteps.slice(page[0]*rowsPerPage,page[0]*rowsPerPage+rowsPerPage));
+    //console.log("Honda ",OnePageTestSteps);
+    if(testSteps.length<=page[0]*rowsPerPage+rowsPerPage && testSteps.length!==0){
+      console.log('marry');
+      setNextButtonStatus(false);
+    }else{
+      setNextButtonStatus(true);
+    }
+    if(page[0]===0){
+      setPrevButtonStatus(false);
+    }else{
+      setPrevButtonStatus(true);
+    }
+    console.log('bear ',page[0]);
+  }, [page,testSteps]);
+  
+  if(props.title.length!==0){
+    console.log('Ajina Motto');
+    tableFields.push(<th colSpan={3}>{"Action"}</th>)
+    if(props.removeHeading===true){
+      props.title.map((heading,headingIndex)=>{
+        tableFields.push(<th>{heading}<MdClose onClick={()=>removeHeading(headingIndex)}></MdClose></th>);
+      });
+    }else{
+      for(let i=0;i<props.title.length;i++){
+        tableFields.push(<th>{props.title[i]}</th>);
+      }
+    }
+  }
+ //disable and enable styles for next and prev icons
+
+ const prevIconStyle = {
+  
+  opacity: prevButtonStatus ? 1 : 0.5,
+  pointerEvents: prevButtonStatus ? 'auto' : 'none',
+  color:"white",
+  
+};
+
+const nextIconStyle = {
+  opacity: nextButtonStatus ? 1 : 0.5,
+  pointerEvents: nextButtonStatus ? 'auto' : 'none',
+  color:"white",
+  
+};
+//className="table table-hover table-dark text-center table-striped"
+console.log('sun glass',testStepsPerPage );
+
   return (
     <div className="App">
       <div>
         <ModalDialog
-          enableChainPopUps={true}
+          enableChainPopUps={props.enableChainPopUps}//false
           editTestStep={testSteps[indexOfRaw]}
-          title={[
-            "group",
-            "instruction",
-            "command",
-            "locator",
-            "locatorParameter",
-            "data",
-            "swapResult",
-            "branchSelection",
-            "action",
-            "comment",
-          ]}
-          noFields={[3, 7]}
+          title={props.title}
+          noFields={props.noFields}
           saveNewData={updateTestSteps}
+          saveNewGeneralData={updateGeneralData}
+          generalPurpose={props.generalPurpose}
           rawNumber={null}
+          addingFields={false}
+          buttonValue="Add"
+          purpose="fillData"
+          formID={["myFormTwoPart1", "myFormTwoPart2"]}
         ></ModalDialog>
       </div>
-      <div className="w-100">
-        <table className="table table-dark table-bordered text-center table-striped">
+      <div className="version-01">
+        <table id="data-Table">
           <thead>
           <tr>
-              <th>Group</th>
-              <th>Instruction</th>
-              <th>Command</th>
-              <th>Locator</th>
-              <th>LocatorParameter</th>
-              <th>Data</th>
-              <th>SwapResult</th>
-              <th>Branch Selection</th>
-              <th>Action</th>
-              <th>Comment</th>
-              
+              {tableFields}
             </tr>
           </thead>
           <tbody>
-            {testSteps.map((testStep,index) => (
-                  <Raw testStep={testStep} rawIndex={index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler}/>
-            ))}
+            {props.title.length!==0 ?testStepsPerPage.map((testStep,index) => (
+                  <Raw testStep={testStep} rawIndex={page[0]*rowsPerPage+index} onDelete={deleteHandler} onEdit={editHandler} onArrowClick={arrowClickHandler} title={props.title} generalPurpose={props.generalPurpose} enableChainPopUps={props.enableChainPopUps}/>
+            )):<div className="container no-record-msg"><TbTableOff size="100px"></TbTableOff><h2>{"No Records Available!"}</h2></div>}
           </tbody>
         </table>
       </div>
+      <div className="container-1">
+            <div>
+              <label>Rows per page: </label>
+              <select value={rowsPerPage}  onChange={rowsPerPageHandler}>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+              </select>
+            </div>
+            <div>
+              {page[0]*rowsPerPage+1} - {testSteps.length<=page[0]*rowsPerPage+rowsPerPage ? testSteps.length:page[0]*rowsPerPage+rowsPerPage} of {testSteps.length}
+            </div>
+            <div>
+              <MdNavigateBefore onClick={previous} style={prevIconStyle} size="30px"></MdNavigateBefore>
+              <MdNavigateNext onClick={next} style={nextIconStyle} size="30px"></MdNavigateNext>
+            </div>
+      </div>
       <Button onClick={jsonHandler}>
               Generate JSON
-      </Button>
-      
+      </Button>     
     </div>
   );
 };

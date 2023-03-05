@@ -5,6 +5,9 @@ import Table from "./components/Table";
 import { Button } from "react-bootstrap";
 import OutputJSON from './components/OutputJSON';
 import Card from './components/Card';
+import Data from './pages/Data'
+import ExcelSection from './pages/Data(Excel)'
+
 // import Launcher from "./components/Launcher";
 
 const PropsForChainPopUp = {
@@ -14,10 +17,26 @@ const PropsForChainPopUp = {
 };
 
 function App() {
+ const title=[
+    "group",
+    "instruction",
+    "command",
+    "locator",
+    "locatorParameter",
+    "data",
+    "swapResult",
+    "branchSelection",
+    "action",
+    "comment",
+  ]
   return (
     <div className="App">
-      <Table></Table>
-      {/* <Card></Card> */}
+      {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}
+      {/* <Card></Card>*/}
+      {/* <Data generalPurpose={true} initialHeading={[]}></Data> */}
+      {/* <StickyHeadTable></StickyHeadTable> */}
+      <ExcelSection></ExcelSection>
+      {/* <BasicTable></BasicTable> */}
     </div>
   );
 }

@@ -7,10 +7,15 @@ const PopUpInputField = (props) => {
       const fieldValue = event.target.value;
       console.log(fieldName);
       console.log(fieldValue);
-      if(props.id<=2){
+      console.log('Input id: '+ props.id);
+      console.log('generalPurpose: '+ props.generalPurpose);
+      if(props.id<=2 && props.generalPurpose===false){
         props.onDataChange(fieldName,fieldValue);
-      }else{
+      }else if(props.id>2 && props.generalPurpose===false){
         props.onDataChange2(fieldName,fieldValue);
+      }
+      if(props.generalPurpose===true){
+        props.onDataChange(fieldName,fieldValue);
       }
     }
 

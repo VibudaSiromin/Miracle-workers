@@ -11,7 +11,7 @@ function EditModalDialog(props,ref) {
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState(props.raw);
-  
+  const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   
   console.log(props.raw);
   console.log("Ghost "+props.showState);
@@ -21,6 +21,7 @@ function EditModalDialog(props,ref) {
 
   const testStepsData = {};
   const testStepsData2 = {};
+  const generalPurposeInputData={};
 
   useImperativeHandle(ref,()=> ({
     log(){
@@ -76,25 +77,44 @@ function EditModalDialog(props,ref) {
     console.log(testStepsData2);
   };
 
+  const inputHandler3 = (name,value) => {
+    generalPurposeInputData[name]=value;
+    console.log('inputHandler3 edit', generalPurposeInputData);
+  }
+
   const myLoop = () => {
-    for (let i = 0; i < props.noFields[0]; i++) {
-      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action'){
+    for (let i = 0; i < props.title.length; i++) {//This code should be refined!works fine for now
+      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action' && props.generalPurpose===false && i<props.noFields[0]){
         inputFieldArrayModalOne.push(
           <EditPopUpInputField
             id={i}
             editTestStep={props.raw[props.title[i]]}
             title={props.title[i]}
             inputType="text"
+            generalPurpose={props.generalPurpose}
             onDataChange={inputHandler}
           ></EditPopUpInputField>
         );
         console.log("Bye");
-      }else{
+      }else if(props.generalPurpose===true){//section for all general purpose data inputs such as data section,login,locator section ect...
+        inputFieldArrayModalOne.push(
+          <EditPopUpInputField
+            id={i}
+            editTestStep={props.raw[props.title[i]]}
+            title={props.title[i]}
+            inputType="text"
+            generalPurpose={props.generalPurpose}
+            onDataChange={inputHandler3}
+          ></EditPopUpInputField>
+        );  
+      }
+      else if(props.generalPurpose===false && i<props.noFields[0]){
          inputFieldArrayModalOne.push(
              <EditPopUpSelection
              id={i}
              editTestStep={props.raw[props.title[i]]}
              title={props.title[i]}
+             generalPurpose={props.generalPurpose}
              onDataChange={inputHandler}
              ></EditPopUpSelection>
          );
@@ -113,6 +133,7 @@ function EditModalDialog(props,ref) {
                 id={props.noFields[0] + i}
                 editTestStep={props.raw[props.title[props.noFields[0] + i]]}
                 title={props.title[props.noFields[0] + i]}
+                generalPurpose={props.generalPurpose}
                 inputType="text"
                 onDataChange2={inputHandler2}
               ></EditPopUpInputField>
@@ -122,6 +143,7 @@ function EditModalDialog(props,ref) {
                <EditPopUpSelection
                id={props.noFields[0] + i}
                editTestStep={props.raw[props.title[props.noFields[0] + i]]}
+               generalPurpose={props.generalPurpose}
                title={props.title[props.noFields[0] + i]}
                onDataChange2={inputHandler2}
                ></EditPopUpSelection>
@@ -153,7 +175,13 @@ function EditModalDialog(props,ref) {
   };
 
   const NextStep = () => {
-    setModalOneDataSet(testStepsData);
+    if(props.generalPurpose===false){
+      setModalOneDataSet(testStepsData);
+    }
+    if(props.generalPurpose===true){
+      setModalOneGeneralDataSet(generalPurposeInputData);
+      console.log('Go Live!!! ',generalPurposeInputData);
+    }
     console.log(modalOneDataSet);
     console.log('Samantha');
     TerminateModalOne();
@@ -178,7 +206,11 @@ function EditModalDialog(props,ref) {
     event.preventDefault();
     console.log('Prison Break');
     if(props.enableChainPopUps===false){
-      props.onEdit(modalOneDataSet);
+      if(props.generalPurpose===false){
+        console.log('University',modalOneDataSet);
+        props.onEdit(modalOneDataSet);
+      }
+      
       TerminateModalOne();
     }
   };
@@ -190,6 +222,13 @@ function EditModalDialog(props,ref) {
       TerminateModalOne();
     }
   };
+
+  useEffect(()=>{
+    if(props.enableChainPopUps===false && props.generalPurpose===true){
+      console.log('Ambewela',generalPurposeInputData);
+      props.onEdit(modalOneGeneralDataSet);
+    }
+},[modalOneGeneralDataSet]);
 
   useEffect(()=>{
     console.log('santha santha');
