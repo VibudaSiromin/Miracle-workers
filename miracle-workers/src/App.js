@@ -33,9 +33,10 @@ function App() {
     <div className="App">
       {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}
       {/* <Card></Card>*/}
-      {/* <Data generalPurpose={true} initialHeading={['head1','head2']}></Data> */}
+      {/* <Data generalPurpose={true} initialHeading={[]}></Data> */}
       {/* <StickyHeadTable></StickyHeadTable> */}
       <ExcelSection></ExcelSection>
+      {/* <BasicTable></BasicTable> */}
     </div>
   );
 }

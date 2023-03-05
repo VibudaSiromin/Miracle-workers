@@ -83,8 +83,8 @@ function EditModalDialog(props,ref) {
   }
 
   const myLoop = () => {
-    for (let i = 0; i < props.title.length; i++) {
-      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action' && props.generalPurpose===false){
+    for (let i = 0; i < props.title.length; i++) {//This code should be refined!works fine for now
+      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action' && props.generalPurpose===false && i<props.noFields[0]){
         inputFieldArrayModalOne.push(
           <EditPopUpInputField
             id={i}
@@ -108,7 +108,7 @@ function EditModalDialog(props,ref) {
           ></EditPopUpInputField>
         );  
       }
-      else if(props.generalPurpose===false){
+      else if(props.generalPurpose===false && i<props.noFields[0]){
          inputFieldArrayModalOne.push(
              <EditPopUpSelection
              id={i}

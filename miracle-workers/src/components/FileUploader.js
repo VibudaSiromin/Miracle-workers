@@ -152,7 +152,7 @@ const FileUploader = (props) => {
 				<form id="form-file-upload" onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
 						  <label id="label-file-upload" htmlFor="input-file-upload" className={dragActive ? "drag-active" : "" }>
 							<div>
-							<SiMicrosoftexcel size="50px"></SiMicrosoftexcel>
+							<SiMicrosoftexcel size="60px" color="white" opacity={0.5}></SiMicrosoftexcel>
 							<br/>
 							<br/>
 							  <p>File was successfully uploaded!</p>

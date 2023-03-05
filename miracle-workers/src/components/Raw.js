@@ -76,9 +76,9 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
         </td>
         <td className="table-data">
           {" "}
-          <MdDeleteForever color="#FF291C" size="20px" onClick={()=>{onDelete(rawIndex)}}></MdDeleteForever>
+          <MdDeleteForever color="#FF3131" size="20px" onClick={()=>{onDelete(rawIndex)}}></MdDeleteForever>
         </td>
-        <td className="table-data"><MdArrowDropUp size="25px" color="#00FF00" onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown size="25px" color="#00FF00" onClick={()=>moveUpDownHandler(1)}/></td>
+        <td className="table-data"><MdArrowDropUp size="25px" color="#39ff14" onClick={()=>moveUpDownHandler(0)}/><MdArrowDropDown size="25px" color="#39ff14" onClick={()=>moveUpDownHandler(1)}/></td>
         {tableDataArray}
       </tr>
     </>
