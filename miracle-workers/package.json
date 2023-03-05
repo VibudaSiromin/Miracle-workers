@@ -12,6 +12,7 @@
     "file": "^0.2.2",
     "file-saver": "^2.0.5",
     "file-server": "^2.2.1",
+    "mdb-react-ui-kit": "^5.1.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.0",
     "react-dom": "^18.2.0",

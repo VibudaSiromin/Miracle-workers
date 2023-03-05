@@ -33,6 +33,21 @@ function App() {
         <Route path="/settings/browsers" exact>
           <SettingsItemPage settingType="browsers"/>
         </Route>
+        <Route path="/settings/test-types" exact>
+          <SettingsItemPage settingType="test-types"/>
+        </Route>
+        <Route path="/settings/status" exact>
+          <SettingsItemPage settingType="status"/>
+        </Route>
+        <Route path="/settings/yes-no" exact>
+          <SettingsItemPage settingType="yes-no"/>
+        </Route>
+        <Route path="/settings/instructions" exact>
+          <SettingsItemPage settingType="instructions"/>
+        </Route>
+        <Route path="/settings/conditions" exact>
+          <SettingsItemPage settingType="conditions"/>
+        </Route>
         <Redirect to="/"/>
         </Switch>
       </div>

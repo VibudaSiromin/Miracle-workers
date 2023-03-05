@@ -7,91 +7,89 @@ import { GrStatusGood } from "react-icons/gr";
 import { TbCircle } from "react-icons/tb";
 import { RiFileSearchLine } from "react-icons/ri";
 import { MdOutlineIntegrationInstructions } from "react-icons/md";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import { Link } from "react-router-dom";
+import { Grid } from "@material-ui/core";
+
 const Settings = () => {
-  const commandHandler = (num) => {
-    if (num === 1) {
-      console.log("com");
-    }
-    if (num === 2) {
-      console.log("brow");
-    }
-    if (num === 3) {
-      console.log("brow");
-    }
-    if (num === 4) {
-      console.log("brow");
-    }
-    if (num === 5) {
-      console.log("brow");
-    }
-    if (num === 6) {
-      console.log("brow");
-    }
-    if (num === 7) {
-      console.log("brow");
-    }
-  };
+  // const commandHandler = (num) => {
+  //   if (num === 1) {
+  //     console.log("com");
+  //   }
+  //   if (num === 2) {
+  //     console.log("brow");
+  //   }
+  //   if (num === 3) {
+  //     console.log("brow");
+  //   }
+  //   if (num === 4) {
+  //     console.log("brow");
+  //   }
+  //   if (num === 5) {
+  //     console.log("brow");
+  //   }
+  //   if (num === 6) {
+  //     console.log("brow");
+  //   }
+  //   if (num === 7) {
+  //     console.log("brow");
+  //   }
+  // };
 
   return (
-    <Container>
-      <Row>
-        <Link to="/settings/commands">
-          <SettingsItem
-            title="Command"
-            symbol={<BsCommand size={42} onClick={() => commandHandler(1)} />}
-          />
-        </Link>
-        <Link to="/settings/browsers">
+    <Grid container spacing={5}>
+      <Grid item sm={4} xs={6}>
+        <SettingsItem
+          title="Command"
+          symbol={<BsCommand size={42}/>}
+        />
+      </Grid>
+
+      <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Browser"
           symbol={
             <MdOutlineOpenInBrowser
               size={42}
-              onClick={() => commandHandler(2)}
             />
           }
         />
-        </Link>
-        <Link>
+      </Grid>
+      <Grid item sm={4} xs={6}>
         <SettingsItem
-          title="Test Type"
-          symbol={<RiNumber2 size={42} onClick={() => commandHandler(3)} />}
+          title="TestType"
+          symbol={<RiNumber2 size={42}/>}
         />
-        </Link>
-
-      </Row>
-      <Row>
+      </Grid>
+      <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Status"
-          symbol={<TbCircle size={42} onClick={() => commandHandler(4)} />}
+          symbol={<TbCircle size={42}/>}
         />
+      </Grid>
+      <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Yes/No"
-          symbol={<GrStatusGood size={42} onClick={() => commandHandler(5)} />}
+          symbol={<GrStatusGood size={42}/>}
         />
+      </Grid>
+      <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Instruction"
           symbol={
             <MdOutlineIntegrationInstructions
               size={42}
-              onClick={() => commandHandler(6)}
-            />
+        />
           }
         />
-      </Row>
-      <Row>
+      </Grid>
+      <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Condition"
           symbol={
-            <RiFileSearchLine size={42} onClick={() => commandHandler(7)} />
+            <RiFileSearchLine size={42}/>
           }
         />
-      </Row>
-    </Container>
+      </Grid>
+    </Grid>
   );
 };
 
