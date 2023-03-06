@@ -23,7 +23,7 @@ const getConditionById=async(req,res,next)=>{
 }
 
 const deleteConditionById=async(req,res,next)=>{
-    const conditionId=req.params.conId;
+    const conditionId=req.params.conid;
     let condition;
     try{
         condition=await Condition.findById(conditionId);

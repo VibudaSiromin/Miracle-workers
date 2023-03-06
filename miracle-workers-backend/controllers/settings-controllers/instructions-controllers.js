@@ -1,6 +1,6 @@
 const Instruction=require('../../models/settings-models/instruction');
 
-const getAllInstruction=async(req,res,next)=>{
+const getAllInstructions=async(req,res,next)=>{
     let instructions;
     try{
         instructions=await Instruction.find();
@@ -12,7 +12,7 @@ const getAllInstruction=async(req,res,next)=>{
 }
 
 const getInstructionById=async(req,res,next)=>{
-    const instructionId=req.params.insID;
+    const instructionId=req.params.insid;
     let instruction;
     try{
         instruction=await Instruction.findById(instructionId); 
@@ -55,7 +55,7 @@ const createdInstruction=async(req,res,next)=>{
 
 }
 
-exports.getAllInstruction=getAllInstruction;
+exports.getAllInstructions=getAllInstructions;
 exports.getInstructionById=getInstructionById;
 exports.deleteInstructionId=deleteInstructionId;
 exports.createdInstruction=createdInstruction;

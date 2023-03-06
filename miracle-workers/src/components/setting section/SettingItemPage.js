@@ -129,7 +129,7 @@ const SettingItemPage = ({ settingType }) => {
               <span className="add">Add</span>
               </button>
           </div>
-            {arr.map((command) => (
+            {commandObject.map((command) => (
               <SettingItemRaw
                 rawData={command.name}
                 key={command.id}

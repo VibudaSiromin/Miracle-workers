@@ -40,6 +40,22 @@ const deleteBrowserById=async(req,res,next)=>{
     res.status(200).json({message:'Deleted setting Item'});
 }
 
+const createdBrowser=async(req,res,next)=>{
+    const {newValue}=req.body;
+    const createdBrowser=new Browser({
+        name:newValue
+    });
+
+    try{
+        await createdBrowser.save();
+    }catch(err){
+        console.log(err);
+    }
+    res.status(200).json({message:'Created setting Item'});
+
+}
+
 exports.getBrowserById=getBrowserById;
 exports.getAllBrowsers=getAllBrowsers;
 exports.deleteBrowserById=deleteBrowserById;
+exports.createdBrowser=createdBrowser;

@@ -55,7 +55,7 @@ const createdStatus=async(req,res,next)=>{
     res.status(200).json({message:'Created setting Item'});
 }
 
-exports.getCommandById=getCommandById;
+exports.getStatusById=getStatusById;
 exports.getAllStatus=getAllStatus;
 exports.deleteStatusById=deleteStatusById;
 exports.createdStatus=createdStatus;
