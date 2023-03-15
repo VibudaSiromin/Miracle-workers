@@ -97,6 +97,8 @@ function ModalDialog(props,ref) {
           ></PopUpInputField>
         );
       }else if(props.generalPurpose===true){//section for all general purpose data inputs such as data section,login,locator section ect...
+        console.log('jazz ',props.title);
+        console.log('jazz weke');
         inputFieldArrayModalOne.push(
           <PopUpInputField
             id={i}

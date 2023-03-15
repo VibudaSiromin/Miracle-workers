@@ -7,7 +7,7 @@ import OutputJSON from './components/OutputJSON';
 import Card from './components/Card';
 import Data from './pages/Data'
 import ExcelSection from './pages/Data(Excel)'
-import { BrowserRouter as Router, Route,Switch,Redirect } from "react-router-dom";
+import { BrowserRouter as Router, Navigate, Route,Routes } from "react-router-dom";
 import Locator from "./components/Locator-section/Locator";
 
 // import Launcher from "./components/Launcher";
@@ -40,15 +40,12 @@ function App() {
      
       {/* <BasicTable></BasicTable> */}
       <Router>
-        <Switch>
-        <Route path="/" exact>
-        <ExcelSection></ExcelSection>
-        </Route>
-        <Route path="/locators" exact>
-          <Locator/>
-        </Route>
-        <Redirect to="/"/>
-        </Switch>
+        <Routes>
+          <Route path="/" element={ <ExcelSection/>} exact>
+          </Route>
+          <Route path="/locators"  element={<Locator/>} exact>
+          </Route>
+        </Routes>
     </Router>
     </div>
   );
