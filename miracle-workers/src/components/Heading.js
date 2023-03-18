@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import Table from './Table'
+import Table from "./Table";
 import ModalDialog from './PopUpWindow';
 import {useState,useEffect} from 'react'
 
@@ -32,6 +32,7 @@ const Heading = (props) => {
     }
 
     console.log('Vision Flash');
+    console.log('asicc ',heading.length);
 
     return(
         <>
