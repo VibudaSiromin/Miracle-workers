@@ -32,7 +32,7 @@ const Heading = (props) => {
     }
 
     console.log('Vision Flash');
-    console.log('asicc ',heading.length);
+    console.log('asicc ',heading);
 
     return(
         <>
