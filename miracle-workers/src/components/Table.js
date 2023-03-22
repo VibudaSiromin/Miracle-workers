@@ -12,6 +12,13 @@ import './TableV1.css'
 const Table = (props) => {
   let indexOfRaw;
   let tableFields=[];
+  const [dashboradNavLinkId,setDashboradNavLinkId] =useState('link01');//new
+  const [testRecord,setTestRecord]=useState();//new
+  const [dataRecord,setDataRecord]=useState();//new
+  const [componentRecord,setComponentRecord]=useState();//new
+  const [locatorRecord,setLocatorRecord]=useState();//new
+  const [testSectionName,setTestSectionName]=useState([]);//new
+  const [testSection,setTestSection]=useState([]);//store whole data of test section(data of multiple test pages)
   const [testSteps, settestSteps] = useState([]);
   const [page,setPage]=useState([0]);//pagination
   const [nextButtonStatus,setNextButtonStatus]=useState(true);
@@ -28,8 +35,19 @@ const Table = (props) => {
     
   }, [props.initialData]);
   
+  //link01==>test
+  //link02==>data
+  //link03==>locator
+  //link04==>component
 
   const updateTestSteps = (tableData) => {
+    if(dashboradNavLinkId==='link01'){//new update adding 4 tunnels
+      const updatedTestSectionNames=[...testSectionName,['test01']];//add new test section names to existing names
+      setTestSectionName(updatedTestSectionNames);
+      const index=testSectionName.indexOf('test01');
+      setTestSection();
+
+    }
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
     settestSteps(newTableData);
