@@ -155,7 +155,7 @@ export const AppSidebarNav = () => {
           item.items.push({
             component: CNavItem,
             name: fieldValue,
-            to: '/buttons/buttons',
+            to: '/locator',
           })
         }
       }
