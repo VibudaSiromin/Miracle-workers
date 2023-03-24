@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "react-bootstrap";
-import Table from './Table'
+import Table from "./Table";
 import ModalDialog from './PopUpWindow';
 import {useState,useEffect} from 'react'
 
@@ -31,7 +31,6 @@ const Heading = (props) => {
       setHeading(slicingHeading);  
     }
 
-    console.log('Vision Flash');
 
     return(
         <>

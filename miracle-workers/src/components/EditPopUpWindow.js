@@ -25,7 +25,6 @@ function EditModalDialog(props,ref) {
 
   useImperativeHandle(ref,()=> ({
     log(){
-      console.log('Roach');
       initModalOne();
     }
   }));
@@ -95,7 +94,6 @@ function EditModalDialog(props,ref) {
             onDataChange={inputHandler}
           ></EditPopUpInputField>
         );
-        console.log("Bye");
       }else if(props.generalPurpose===true){//section for all general purpose data inputs such as data section,login,locator section ect...
         inputFieldArrayModalOne.push(
           <EditPopUpInputField
@@ -124,10 +122,8 @@ function EditModalDialog(props,ref) {
 
     
     if (props.enableChainPopUps) {
-      console.log("hello koola");
       for (let i = 0; i < props.noFields[1]; i++) {
           if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
-            console.log("Hi");
             inputFieldArrayModalTwo.push(
               <EditPopUpInputField
                 id={props.noFields[0] + i}
@@ -155,7 +151,6 @@ function EditModalDialog(props,ref) {
 
   };
   
-  console.log('eliye');
 
   myLoop();
   const initModalOne = () => {
@@ -169,7 +164,6 @@ function EditModalDialog(props,ref) {
   };
   const TerminateModalTwo = () => {
     setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
-    console.log("Piyal");
     console.log(modalTwoDataSet);
     return setToggleTwoModal(false);
   };
@@ -183,7 +177,6 @@ function EditModalDialog(props,ref) {
       console.log('Go Live!!! ',generalPurposeInputData);
     }
     console.log(modalOneDataSet);
-    console.log('Samantha');
     TerminateModalOne();
     if (props.enableChainPopUps) {
       setTimeout(() => {
@@ -204,7 +197,6 @@ function EditModalDialog(props,ref) {
 
   const submitHandlerOne = (event) => {
     event.preventDefault();
-    console.log('Prison Break');
     if(props.enableChainPopUps===false){
       if(props.generalPurpose===false){
         console.log('University',modalOneDataSet);
@@ -217,7 +209,6 @@ function EditModalDialog(props,ref) {
 
   const submitHandlerTwo = (event) => {
     event.preventDefault();
-    console.log('breaking bad');
     if(props.enableChainPopUps===true){
       TerminateModalOne();
     }
@@ -225,15 +216,12 @@ function EditModalDialog(props,ref) {
 
   useEffect(()=>{
     if(props.enableChainPopUps===false && props.generalPurpose===true){
-      console.log('Ambewela',generalPurposeInputData);
       props.onEdit(modalOneGeneralDataSet);
     }
 },[modalOneGeneralDataSet]);
 
   useEffect(()=>{
-    console.log('santha santha');
     props.onEdit(modalTwoDataSet);
-    console.log("Sia ");
     console.log(modalTwoDataSet);
      
 },[modalTwoDataSet]);

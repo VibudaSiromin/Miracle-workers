@@ -28,21 +28,17 @@ const ExcelSection = (props) => {
   }
   
   const fileDataDeleteHandler = () => {
-    console.log('Cinamon');
     fileData.splice(0,fileData.length);
     const emptyFileData=[...fileData]
     setFileData(emptyFileData);
   }
 
   const fileHeaderdeleteHandler = () => {
-    console.log('Garlic');
     fileHeaders.splice(0,fileHeaders.length)
     const emptyFileHeaders=[...fileHeaders]
-    console.log()
     setFileHeaders(emptyFileHeaders)
   }
 
-  console.log('MSI mchn');
 
 return(
         <>

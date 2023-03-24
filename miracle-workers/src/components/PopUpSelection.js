@@ -6,7 +6,6 @@ const PopUpSelection = (props) => {
     const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue'];
     const swapResultSet=['Yes','No'];
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
-    console.log('GG ');
     let options=[];
     const InsertDataToSelection = () => {
         if(props.title==='instruction'){
@@ -14,7 +13,6 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={instructionSet[i]}/>
                 );
-                console.log("Bye");
               }
               console.log(options);
         }else if(props.title==='command'){
@@ -22,7 +20,6 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={commandSet[i]}/>
                 );
-                console.log("brook");
               }
               console.log(options);
         }else if(props.title==='swapResult'){
@@ -30,7 +27,6 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={swapResultSet[i]}/>
                 );
-                console.log("brook");
               }
               console.log(options);
         }else if(props.title==='action'){
@@ -38,7 +34,6 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={actionSet[i]}/>
                 );
-                console.log("brook");
               }
               console.log(options);
         }
