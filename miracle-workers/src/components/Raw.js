@@ -11,16 +11,10 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
 
   const modalRef=useRef();
   const editButtonHandler = () => {
-    console.log('Captian Price');
     modalRef.current.log();
-    console.log(testStep);
   };
 
-  console.log("raw eliye index"+rawIndex);
-
   const onEditHandler = (editedTableData) => {
-    //console.log('Index in raw props'+myindex);
-    console.log('AUZI ',editedTableData,'Index ',rawIndex);
     onEdit(editedTableData,rawIndex);
   }
 
@@ -36,8 +30,6 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
   }
 
   //const arrayConvertor=Object.values(testStep);//convert testStep object to an array
-  console.log('menna mehe',testStep);
-
 
   for(let i=0;i<title.length;i++){
     let key=title[i];
@@ -51,10 +43,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
       )
     }
     
-    console.log('tableDataArray:' , tableDataArray);
   }
-
-  console.log('Flying machine',generalPurpose);
 
   return (
     <>

@@ -7,7 +7,6 @@ const PopUpSelection = (props) => {
     const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue'];
     const swapResultSet=['Yes','No'];
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
-    console.log('GG ');
     let options=[];
     const [fieldName,setFieldName]=useState(props.title);
     const [fieldValue,setFieldValue]=useState(props.editTestStep);
@@ -27,7 +26,7 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={commandSet[i]}/>
                 );
-                console.log("brook");
+                
               }
               console.log(options);
         }else if(props.title==='swapResult'){
@@ -35,7 +34,6 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={swapResultSet[i]}/>
                 );
-                console.log("brook");
               }
               console.log(options);
         }else if(props.title==='action'){
@@ -43,7 +41,6 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={actionSet[i]}/>
                 );
-                console.log("brook");
               }
               console.log(options);
         }
@@ -59,12 +56,9 @@ const PopUpSelection = (props) => {
         setChangeState(true);
         console.log(fieldName);
         console.log(fieldValue);
-        console.log('sam');
       }
 
       useEffect(()=>{
-        console.log("My data is"+ fieldValue);
-        console.log("Field name is "+fieldName);
          if(props.id<=2){
            props.onDataChange(fieldName,fieldValue);
          }else{
@@ -73,7 +67,6 @@ const PopUpSelection = (props) => {
     },[fieldValue]);
 
     if(changeState===false){
-        console.log('Giya giya 2');
         if(props.id<=2){
           props.onDataChange(fieldName,fieldValue);
         }else{

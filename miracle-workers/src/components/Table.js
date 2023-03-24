@@ -27,7 +27,6 @@ const Table = (props) => {
   const [rowsPerPage,setRowsPerPage]=useState(5);
 
   useEffect(() => {
-    console.log('nissan ',props.initialData);
     if(props.initialData!==undefined){
       settestSteps(props.initialData);
       setTestStepPerPage(props.initialData.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage));
@@ -54,9 +53,7 @@ const Table = (props) => {
   };
 
   const updateGeneralData = (tableData) => {
-    console.log('Glock');
     const newTableData = [...testSteps,tableData];
-    console.log('student ',newTableData);
     settestSteps(newTableData);
   };
 
@@ -64,13 +61,10 @@ const Table = (props) => {
      const applyEditedData=[...testSteps];
      applyEditedData[index]=editedTableData;
      settestSteps(applyEditedData);
-     console.log("Hello");
-     console.log("index in table "+index);
 
    }
 
   const jsonHandler=() => {
-    // console.log(testSteps);
     const json = JSON.stringify(testSteps);
     saveAs(new Blob([json], { type: 'application/json;charset=utf-8' }), 'file.json');
   }
@@ -104,14 +98,11 @@ const Table = (props) => {
     const selectedHeading=props.title[headingIndex];
     let editedTestSteps=[];
     for(let i=0;i<testSteps.length;i++){
-      console.log('Removing');
       const testStep=testSteps[i];
       delete testStep[selectedHeading];
       editedTestSteps.push(testStep);
     }
     props.dropHeading(headingIndex);
-    console.log('After removing headings: ',props.title);
-    console.log('cutter :: ',testSteps);
     settestSteps(editedTestSteps);
   }
 
@@ -132,13 +123,8 @@ const Table = (props) => {
   //change rows per page
 
   useEffect(() => {
-    console.log('siiri ',rowsPerPage);
-    console.log('siiri XX ',page[0]);
-    console.log('jaguar ',testSteps)
     setTestStepPerPage(testSteps.slice(page[0]*rowsPerPage,page[0]*rowsPerPage+rowsPerPage));
-    //console.log("Honda ",OnePageTestSteps);
     if(testSteps.length<=page[0]*rowsPerPage+rowsPerPage && testSteps.length!==0){
-      console.log('marry');
       setNextButtonStatus(false);
     }else{
       setNextButtonStatus(true);
@@ -148,11 +134,9 @@ const Table = (props) => {
     }else{
       setPrevButtonStatus(true);
     }
-    console.log('bear ',page[0]);
   }, [page,testSteps]);
   
   if(props.title.length!==0){
-    console.log('Ajina Motto');
     tableFields.push(<th colSpan={3}>{"Action"}</th>)
     if(props.removeHeading===true){
       props.title.map((heading,headingIndex)=>{
@@ -181,7 +165,6 @@ const nextIconStyle = {
   
 };
 //className="table table-hover table-dark text-center table-striped"
-console.log('sun glass',testStepsPerPage );
 
   return (
     <div className="App">

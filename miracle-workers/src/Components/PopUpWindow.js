@@ -18,9 +18,7 @@ function ModalDialog(props,ref) {
   let inputFieldArrayModalTwo = [];
   let btnValue;
   const getEditTestStep=props.editTestStep;
-  // console.log('car car car');
-  // console.log(getEditTestStep);
-
+  
   const testStepsData = {};
   const testStepsData2 = {};
   const generalPurposeInputData={};
@@ -147,7 +145,6 @@ function ModalDialog(props,ref) {
 
   };
   
-  console.log('eliye');
 
   myLoop();
   const initModalOne = () => {
@@ -191,20 +188,17 @@ function ModalDialog(props,ref) {
   ApplyBtnValue();
 
   const submitHandlerOne = (event) => {
-    console.log('Submit Handler one',props.purpose);
     event.preventDefault();
     if(props.enableChainPopUps===false){
         if(props.generalPurpose===false){
           props.saveNewData(modalOneDataSet);
         }
         if(props.generalPurpose===true){
-          console.log('pihibiya');
           if(props.purpose==='fillData'){
             console.log('fillData AX1');
             props.saveNewGeneralData(modalOneGeneralDataSet);
           }
           if(props.purpose==='addHeading'){
-            console.log('heading hornet');
             props.saveNewHeadingData(modalOneGeneralDataSet);
           }          
         }

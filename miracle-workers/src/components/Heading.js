@@ -31,8 +31,6 @@ const Heading = (props) => {
       setHeading(slicingHeading);  
     }
 
-    console.log('Vision Flash');
-    console.log('asicc ',heading);
 
     return(
         <>

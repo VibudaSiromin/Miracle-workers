@@ -8,9 +8,7 @@ const Data = (props) => {
     
     const [title,getTitle]=useState([]);
     const heading = (getHeading) => {
-        console.log('water bottle');
         getTitle(getHeading);
-        console.log('crown',title);
     }
 
     return(

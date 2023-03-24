@@ -56,6 +56,10 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 const TestSuites = React.lazy(() => import('./views/testSuites/testSuite'))
 //data manual
 const Data = React.lazy(() => import('./views/data/Data'))
+//data excel
+const DataExcel = React.lazy(() => import('./views/dataExcel/DataExcel'))
+//data junction
+const DataJunction=React.lazy(() => import('./views/dataJunction/DataJunction'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -103,7 +107,9 @@ const routes = [
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/testSuites', name: 'TestSuites', element: TestSuites },
-  { path: '/data' , name:'Data', element:Data}  
+  { path: '/data' , name:'Data', element:Data},
+  { path: '/dataJunction' , name:'DataJunction', element:DataJunction},
+  { path: '/dataExcel' , name:'DataExcel', element:DataExcel},  
 ]
 
 export default routes
