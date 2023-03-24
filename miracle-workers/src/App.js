@@ -9,7 +9,7 @@ import Data from './pages/Data'
 import ExcelSection from './pages/Data(Excel)'
 import React, { Component, Suspense } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
-import './scss/style.scss'
+import './scss/style.scss';
 
 const loading = (
   <div className="pt-3 text-center">
