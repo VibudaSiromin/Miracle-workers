@@ -3,6 +3,7 @@ const bodyParser =require('body-parser');
 const mongoose=require('mongoose');
 
 const settingRoutes=require('./routes/settings-routes/settings-routes');
+const locatorRoutes=require('./routes/locator-routes/locator-routes');
 
 const app=express();
 
@@ -19,6 +20,7 @@ app.use((req,res,next)=>{
 })
 
 app.use('/',settingRoutes);
+app.use('/',locatorRoutes);
 app.get('/',(req,res,next)=>{
     res.json({message:'Hi'});
 })

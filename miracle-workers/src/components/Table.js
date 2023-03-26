@@ -46,7 +46,6 @@ const Table = (props) => {
       setTestSectionName(updatedTestSectionNames);
       const index=testSectionName.indexOf('test01');
       setTestSection();
-
     }
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
@@ -150,7 +149,7 @@ const Table = (props) => {
     }
     console.log('bear ',page[0]);
   }, [page,testSteps]);
-  
+  // console.log("Boooo",props.title)
   if(props.title.length!==0){
     console.log('Ajina Motto');
     tableFields.push(<th colSpan={3}>{"Action"}</th>)
