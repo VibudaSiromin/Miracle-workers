@@ -10,6 +10,7 @@ import ExcelSection from './pages/Data(Excel)'
 import React, { Component, Suspense } from 'react'
 import { HashRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
+import { IndexContextProvider } from "./contexts/indexContext";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -38,6 +39,7 @@ function App() {
  
   return (
     <div className="App">
+      <IndexContextProvider>
        <HashRouter>
         <Suspense fallback={loading}>
           <Routes>
@@ -55,7 +57,7 @@ function App() {
       {/* <StickyHeadTable></StickyHeadTable> */}
       {/* <ExcelSection></ExcelSection> */}
       {/* <BasicTable></BasicTable> */}
-
+      </IndexContextProvider>
     </div>
   );
 }

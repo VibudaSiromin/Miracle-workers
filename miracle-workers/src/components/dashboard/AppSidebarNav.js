@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useContext} from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { GrAdd } from 'react-icons/gr'
@@ -6,8 +6,9 @@ import {AiFillFileAdd} from 'react-icons/ai';
 import './AppSidebarNav.css'
 import NameAssignModal from './NameAssignModal';
 import { useState,useRef } from 'react';
-import { CBadge } from '@coreui/react'
+import { CBadge, CNavLink } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import IndexContext from '../../contexts/indexContext';
 
 import {
   cilBell,
@@ -25,7 +26,8 @@ import {
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 export const AppSidebarNav = () => {
-  const [indexOfSection,setIndexOfSection]=useState();
+  const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
+  console.log("goooooooooooo",indexOfSection) 
   const [items,setItems]=useState(
     [
       {
@@ -47,7 +49,7 @@ export const AppSidebarNav = () => {
       {
         component: CNavGroup,
         name: 'Test Suite',
-        to: '/buttons',
+        to: '/testSuits',
         icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
         items: [],
       },
@@ -127,19 +129,23 @@ export const AppSidebarNav = () => {
       //add new pageName to test suite
       if(indexOfSection===2){
         if(item.name==='Test Suite'){
+          const index=item.items.length+1
           item.items.push({
+            id:index,
             component: CNavItem,
             name: fieldValue,
-            to: '/testSuites',
+            to: '/testSuites/'+index,
           })
         }
         
       }else if(indexOfSection===3){//add new pageName to Data Section
         if(item.name==='Data'){
+          const index=item.items.length+1
           item.items.push({
+            id:index,
             component: CNavItem,
             name: fieldValue,
-            to: '/data',
+            to: '/data/'+index,
           })
         }
       }else if(indexOfSection===4){//add new pageName to Component section
@@ -152,10 +158,11 @@ export const AppSidebarNav = () => {
         }
       }else if(indexOfSection===5){//add new pageName to Locator section
         if(item.name==='Locator'){
+          const index=item.items.length+1
           item.items.push({
             component: CNavItem,
             name: fieldValue,
-            to: '/locator',
+            to: '/locator/'+index,
           })
         }
       }
@@ -171,6 +178,7 @@ export const AppSidebarNav = () => {
 
   const modalRef=useRef();
   const initiateNameAssigner= (index) => {
+    console.log("goooooooooo",indexOfSection)
     setIndexOfSection(index);
     console.log('Warlord: ',index);
     modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
@@ -226,7 +234,7 @@ export const AppSidebarNav = () => {
         </Component>
         </div>
         <div className="add-btn">
-        < AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner(index)}></AiFillFileAdd>
+        <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner(index)}></AiFillFileAdd>
         </div>
       </div>
     )

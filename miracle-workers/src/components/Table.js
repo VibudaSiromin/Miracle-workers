@@ -1,13 +1,14 @@
 import React from "react";
 import Raw from "./Raw";
-import { useEffect,useState } from "react";
+import { useEffect,useState,useContext } from "react";
 import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
 import {MdClose,MdNavigateNext,MdNavigateBefore} from 'react-icons/md';
 import { TbTableOff } from "react-icons/tb";
-import './TableV1.css' 
+import './TableV1.css';
+import IndexContext from '../contexts/indexContext'
 
 const Table = (props) => {
   let indexOfRaw;
@@ -25,6 +26,7 @@ const Table = (props) => {
   const [prevButtonStatus,setPrevButtonStatus]=useState(false);
   const [testStepsPerPage,setTestStepPerPage]=useState([]);
   const [rowsPerPage,setRowsPerPage]=useState(5);
+  const {indexOfSection}=useContext(IndexContext);
 
   useEffect(() => {
     console.log('nissan ',props.initialData);
@@ -41,11 +43,12 @@ const Table = (props) => {
   //link04==>component
 
   const updateTestSteps = (tableData) => {
-    if(dashboradNavLinkId==='link01'){//new update adding 4 tunnels
-      const updatedTestSectionNames=[...testSectionName,['test01']];//add new test section names to existing names
-      setTestSectionName(updatedTestSectionNames);
-      const index=testSectionName.indexOf('test01');
-      setTestSection();
+    if(indexOfSection===2){//new update adding 4 tunnels
+      console.log('gooooooooo')
+      // const updatedTestSectionNames=[...testSectionName,['test01']];//add new test section names to existing names
+      // setTestSectionName(updatedTestSectionNames);
+      // const index=testSectionName.indexOf('test01');
+      // setTestSection();
     }
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);

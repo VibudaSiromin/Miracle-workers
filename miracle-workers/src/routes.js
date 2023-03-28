@@ -106,7 +106,7 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/testSuites', name: 'TestSuites', element: TestSuites },
   { path: '/data' , name:'Data', element:Data},  
-  { path: '/locator', name:'Locator', element:Locator}
+  { path: '/locator/:lid', name:'Locator', element:Locator}
 ]
 
 export default routes
