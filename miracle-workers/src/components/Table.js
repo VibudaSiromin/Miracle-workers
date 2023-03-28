@@ -45,7 +45,6 @@ const Table = (props) => {
       setTestSectionName(updatedTestSectionNames);
       const index=testSectionName.indexOf('test01');
       setTestSection();
-
     }
     const newTableData = [...testSteps,tableData];
     console.log(newTableData);
@@ -135,7 +134,7 @@ const Table = (props) => {
       setPrevButtonStatus(true);
     }
   }, [page,testSteps]);
-  
+  // console.log("Boooo",props.title)
   if(props.title.length!==0){
     tableFields.push(<th colSpan={3}>{"Action"}</th>)
     if(props.removeHeading===true){

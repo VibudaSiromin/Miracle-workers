@@ -133,7 +133,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
           item.items.push({
             component: CNavItem,
             name: fieldValue,
-            to: '/buttons/buttons',
+            to: '/locator',
           })
         }
       }
