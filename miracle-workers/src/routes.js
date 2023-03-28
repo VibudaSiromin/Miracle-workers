@@ -111,8 +111,8 @@ const routes = [
   { path: '/testSuites', name: 'TestSuites', element: TestSuites },
   { path: '/data' , name:'Data', element:Data},
   { path: '/dataJunction' , name:'DataJunction', element:DataJunction},
-  { path: '/dataExcel' , name:'DataExcel', element:DataExcel},,  
-  { path: '/locator', name:'Locator', element:Locator}
+  { path: '/dataExcel' , name:'DataExcel', element:DataExcel},  
+  { path: '/locator' , name:'Locator' , element:Locator}
 ]
 
 export default routes
