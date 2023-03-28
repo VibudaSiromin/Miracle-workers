@@ -9,8 +9,13 @@ import {MdClose,MdNavigateNext,MdNavigateBefore} from 'react-icons/md';
 import { TbTableOff } from "react-icons/tb";
 import './TableV1.css';
 import IndexContext from '../contexts/indexContext'
+import { useParams } from "react-router-dom";
 
 const Table = (props) => {
+
+  const {lid} =useParams();
+  console.log("hooooo",lid)
+
   let indexOfRaw;
   let tableFields=[];
   const [dashboradNavLinkId,setDashboradNavLinkId] =useState('link01');//new

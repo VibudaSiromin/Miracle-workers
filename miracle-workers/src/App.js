@@ -8,7 +8,7 @@ import Card from './components/Card';
 import Data from './pages/Data'
 import ExcelSection from './pages/Data(Excel)'
 import React, { Component, Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
 import { IndexContextProvider } from "./contexts/indexContext";
 
@@ -40,7 +40,7 @@ function App() {
   return (
     <div className="App">
       <IndexContextProvider>
-       <HashRouter>
+       <BrowserRouter>
         <Suspense fallback={loading}>
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />
@@ -50,7 +50,7 @@ function App() {
             <Route path="*" name="Home" element={<DefaultLayout />} />
           </Routes>
         </Suspense>
-      </HashRouter>
+      </BrowserRouter>
       {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}
       {/* <Card></Card>*/}
       {/* <Data generalPurpose={true} initialHeading={[]}></Data> */}

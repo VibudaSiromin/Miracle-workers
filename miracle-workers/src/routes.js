@@ -58,6 +58,8 @@ const TestSuites = React.lazy(() => import('./views/testSuites/testSuite'))
 const Data = React.lazy(() => import('./views/data/Data'))
 //locator
 const Locator=React.lazy(() => import('./views/locator/Locator'))
+//settings
+const Settings=React.lazy(() => import('./views/settings/settings'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -104,9 +106,10 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
-  { path: '/testSuites', name: 'TestSuites', element: TestSuites },
+  { path: '/testSuites/:tid', name: 'TestSuites', element: TestSuites },
   { path: '/data' , name:'Data', element:Data},  
-  { path: '/locator/:lid', name:'Locator', element:Locator}
+  { path: '/locator/:lid', name:'Locator', element:Locator},
+  { path: '/settings' , name:'Settings', element:Settings}
 ]
 
 export default routes

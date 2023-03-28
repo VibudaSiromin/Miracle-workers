@@ -74,12 +74,8 @@ export const AppSidebarNav = () => {
       {
         component: CNavItem,
         name: 'Setting',
-        to: '/widgets',
+        to: '/settings',
         icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
-        badge: {
-          color: 'info',
-          text: 'NEW',
-        },
       },
       // {
       //   component: CNavTitle,

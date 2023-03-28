@@ -18,7 +18,7 @@ const SettingsItem = ({ title, symbol }) => {
       break;
     default:
       const titleInLowerCase = title.toLowerCase();
-      url="settings/"+titleInLowerCase+"s";
+      url=titleInLowerCase+"s";
   }
   console.log(url)
 
