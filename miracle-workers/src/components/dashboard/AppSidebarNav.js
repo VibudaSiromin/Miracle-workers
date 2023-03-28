@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation,useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { GrAdd } from 'react-icons/gr'
 import {AiFillFileAdd} from 'react-icons/ai';
@@ -26,6 +26,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 export const AppSidebarNav = () => {
   const [indexOfSection,setIndexOfSection]=useState();
+  const navigate = useNavigate();
   const [items,setItems]=useState(
     [
       {
@@ -119,11 +120,20 @@ export const AppSidebarNav = () => {
     ]
   );
 
+
+  const waitForResponse = () => {
+      return new Promise.all((resolve,reject)=>{
+        setTimeout(()=>{
+          resolve();
+        }, 3000);
+  })
+  }
+
   //////////////////////////////
   //updating items
 
-  const pageNameHandler = (fieldValue) => {
-    const modifiedItems=items.map(item=>{
+  const pageNameHandler =(fieldValue) => {
+    const modifiedItems=items.map((item)=>{
       //add new pageName to test suite
       if(indexOfSection===2){
         if(item.name==='Test Suite'){
@@ -136,10 +146,11 @@ export const AppSidebarNav = () => {
         
       }else if(indexOfSection===3){//add new pageName to Data Section
         if(item.name==='Data'){
-          item.items.push({
+          navigate('/dataJunction');
+           item.items.push({
             component: CNavItem,
             name: fieldValue,
-            to: '/data',
+            to: '/dataJunction',
           })
         }
       }else if(indexOfSection===4){//add new pageName to Component section
@@ -246,3 +257,4 @@ export const AppSidebarNav = () => {
 AppSidebarNav.propTypes = {
   items: PropTypes.arrayOf(PropTypes.any).isRequired,
 }
+

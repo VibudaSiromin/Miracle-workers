@@ -99,7 +99,6 @@ const FileUploader = (props) => {
     	 if (event.target.files && event.target.files[0]) {
 			   const excelFile=event.target.files[0];
 			   const excelReader=new FileReader();
-			   console.log('special ',event.target.files[1]);
 			   setFile(excelFile);	
 
 			   excelReader.onload=(event)=>{

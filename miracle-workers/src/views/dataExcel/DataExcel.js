@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Heading from '../components/Heading';
-import FileUploader from '../components/FileUploader'
+import Heading from '../../components/Heading';
+import FileUploader from '../../components/FileUploader';
 
-const ExcelSection = (props) => {
+const DataExcel = (props) => {
   const [fileHeaders,setFileHeaders]=useState([]);
   const [fileData,setFileData]=useState([]);
 
@@ -57,4 +57,4 @@ return(
 );
 }
 
-export default ExcelSection;
+export default DataExcel;
