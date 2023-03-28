@@ -60,6 +60,20 @@ const Data = React.lazy(() => import('./views/data/Data'))
 const Locator=React.lazy(() => import('./views/locator/Locator'))
 //settings
 const Settings=React.lazy(() => import('./views/settings/settings'))
+//settings-browsers
+const Browsers=React.lazy(() => import('./views/settings/browsers'))
+//settings-commands
+const Commands=React.lazy(() => import('./views/settings/commands'))
+//settings-instructions
+const Instructions=React.lazy(() => import('./views/settings/instructions'))
+//settings-conditions
+const Conditions=React.lazy(() => import('./views/settings/conditions'))
+//settings-yesNo
+const YesNo=React.lazy(() => import('./views/settings/yesNo'))
+//settings-status
+const Status=React.lazy(() => import('./views/settings/status'))
+//settings-testTypes
+const TestTypes=React.lazy(() => import('./views/settings/testTypes'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -109,7 +123,14 @@ const routes = [
   { path: '/testSuites/:tid', name: 'TestSuites', element: TestSuites },
   { path: '/data' , name:'Data', element:Data},  
   { path: '/locator/:lid', name:'Locator', element:Locator},
-  { path: '/settings' , name:'Settings', element:Settings}
+  { path: '/settings' , name:'Settings', element:Settings},
+  { path: '/settings/browsers', name:'Browsers', element:Browsers},
+  { path: '/settings/commands', name:'Commands', element:Commands},
+  { path: '/settings/conditions', name:'Browsers', element:Conditions},
+  { path: '/settings/instructions', name:'Browsers', element:Instructions},
+  { path: '/settings/yes-no', name:'Browsers', element:YesNo},
+  { path: '/settings/test-types', name:'Browsers', element:TestTypes},
+  { path: '/settings/status', name:'Browsers', element:Status},
 ]
 
 export default routes
