@@ -8,6 +8,7 @@ import NameAssignModal from './NameAssignModal';
 import { useState,useRef } from 'react';
 import { CBadge } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import {configureStore} from 'redux'
 
 import {
   cilBell,
@@ -24,7 +25,9 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
-export const AppSidebarNav = () => {
+  let globleitems;
+
+ export const AppSidebarNav = () => {
   const [indexOfSection,setIndexOfSection]=useState();
   const navigate = useNavigate();
   const [items,setItems]=useState(
@@ -48,7 +51,7 @@ export const AppSidebarNav = () => {
       {
         component: CNavGroup,
         name: 'Test Suite',
-        to: '/buttons',
+        to: '/buttons/buttons',
         icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
         items: [],
       },
@@ -80,53 +83,16 @@ export const AppSidebarNav = () => {
           text: 'NEW',
         },
       },
-      // {
-      //   component: CNavTitle,
-      //   name: 'Extras',
-      // },
-      // {
-      //   component: CNavGroup,
-      //   name: 'Pages',
-      //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-      //   items: [
-      //     {
-      //       component: CNavItem,
-      //       name: 'Login',
-      //       to: '/login',
-      //     },
-      //     {
-      //       component: CNavItem,
-      //       name: 'Register',
-      //       to: '/register',
-      //     },
-      //     {
-      //       component: CNavItem,
-      //       name: 'Error 404',
-      //       to: '/404',
-      //     },
-      //     {
-      //       component: CNavItem,
-      //       name: 'Error 500',
-      //       to: '/500',
-      //     },
-      //   ],
-      // },
-      // {
-      //   component: CNavItem,
-      //   name: 'Docs',
-      //   href: 'https://coreui.io/react/docs/templates/installation/',
-      //   icon: <CIcon icon={cilDescription} customClassName="nav-icon" />,
-      // },
     ]
   );
 
 
   const waitForResponse = () => {
-      return new Promise.all((resolve,reject)=>{
-        setTimeout(()=>{
-          resolve();
-        }, 3000);
-  })
+  //   return new Promise.all((resolve,reject)=>{
+  //     setTimeout(()=>{
+  //         resolve();
+  //     }, 3000);
+  // });
   }
 
   //////////////////////////////
@@ -146,8 +112,9 @@ export const AppSidebarNav = () => {
         
       }else if(indexOfSection===3){//add new pageName to Data Section
         if(item.name==='Data'){
-          navigate('/dataJunction');
-           item.items.push({
+            navigate('/dataJunction');
+            globleitems=items;
+            item.items.push({
             component: CNavItem,
             name: fieldValue,
             to: '/dataJunction',
@@ -243,6 +210,8 @@ export const AppSidebarNav = () => {
     )
   }
 
+  console.log('SIM',globleitems);
+
   return (
     <>
     <React.Fragment>
@@ -258,3 +227,4 @@ AppSidebarNav.propTypes = {
   items: PropTypes.arrayOf(PropTypes.any).isRequired,
 }
 
+// export default AppSidebarNav;
