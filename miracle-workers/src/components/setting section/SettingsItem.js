@@ -8,17 +8,17 @@ const SettingsItem = ({ title, symbol }) => {
 
   switch(title){
     case "TestType":
-      url="settings/test-types";
+      url="test-types";
       break;
     case "Status":
-      url="settings/status";
+      url="status";
       break;
     case "Yes/No":
-      url="settings/yes-no";
+      url="yes-no";
       break;
     default:
       const titleInLowerCase = title.toLowerCase();
-      url="settings/"+titleInLowerCase+"s";
+      url=titleInLowerCase+"s";
   }
   console.log(url)
 

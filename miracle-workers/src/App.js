@@ -8,8 +8,9 @@ import Card from './components/Card';
 import Data from './pages/Data'
 import ExcelSection from './pages/Data(Excel)'
 import React, { Component, Suspense } from 'react'
-import { HashRouter, Route, Routes } from 'react-router-dom'
-import './scss/style.scss';
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import './scss/style.scss'
+import { IndexContextProvider } from "./contexts/indexContext";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -39,7 +40,8 @@ function App() {
  
   return (
     <div className="App">
-       <HashRouter>
+      <IndexContextProvider>
+       <BrowserRouter>
         <Suspense fallback={loading}>
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />
@@ -50,7 +52,7 @@ function App() {
             <Route path="*" name="Home" element={<DefaultLayout />} />
           </Routes>
         </Suspense>
-      </HashRouter>
+      </BrowserRouter>
       {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}
       {/* <Card cardTitle="Excel" backgroundColor="linear-gradient(180deg, rgba(78, 40, 140, 0.56) 0%, #030007 100%)"></Card>
       <Card cardTitle="Manually" backgroundColor="linear-gradient(180deg, rgba(119, 107, 139, 0.56) 0%, #010002 100%)"></Card> */}
@@ -58,7 +60,7 @@ function App() {
       {/* <StickyHeadTable></StickyHeadTable> */}
       {/* <ExcelSection></ExcelSection> */}
       {/* <BasicTable></BasicTable> */}
-
+      </IndexContextProvider>
     </div>
   );
 }

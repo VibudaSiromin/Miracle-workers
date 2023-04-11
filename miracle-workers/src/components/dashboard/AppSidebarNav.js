@@ -1,14 +1,16 @@
-import React from 'react'
+import React,{useContext,useEffect} from 'react'
 import { NavLink, useLocation,useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { GrAdd } from 'react-icons/gr'
+import { GrAdd, GrDashboard } from 'react-icons/gr'
 import {AiFillFileAdd} from 'react-icons/ai';
 import './AppSidebarNav.css'
 import NameAssignModal from './NameAssignModal';
 import { useState,useRef } from 'react';
-import { CBadge } from '@coreui/react'
+import { CBadge, CNavLink } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
-import {configureStore} from 'redux'
+import IndexContext from '../../contexts/indexContext';
+import {MdDeleteForever} from 'react-icons/md';
+import axios from 'axios';
 
 import {
   cilBell,
@@ -28,7 +30,27 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
   let globleitems;
 
  export const AppSidebarNav = () => {
-  const [indexOfSection,setIndexOfSection]=useState();
+  const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
+  const [locatorPageNames,setLocatorPageNames]=useState([])
+
+  const getLocatorPages=()=>{
+    axios
+    .get('http://localhost:5000/locators')
+    .then((res)=>{
+      setLocatorPageNames(res.data.locatorsPageNames);
+      console.log("rooooooo",res.data.locatorsPageNames)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  useEffect(() => {
+    getLocatorPages();
+  }, []);
+
+  console.log("Hoooo",locatorPageNames)
+
   const navigate = useNavigate();
   const [items,setItems]=useState(
     [
@@ -39,7 +61,6 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
         icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
         badge: {
           color: 'info',
-          text: 'NEW',
         },
       },
       {
@@ -51,7 +72,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
       {
         component: CNavGroup,
         name: 'Test Suite',
-        to: '/buttons/buttons',
+        to: '/testSuits',
         icon: <CIcon icon={cilCursor} customClassName="nav-icon" />,
         items: [],
       },
@@ -76,27 +97,28 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
       {
         component: CNavItem,
         name: 'Setting',
-        to: '/widgets',
+        to: '/settings',
         icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
-        badge: {
-          color: 'info',
-          text: 'NEW',
-        },
       },
     ]
   );
 
+  useEffect(()=>{
+    let newArray=[];
+    for(let i=0;i<locatorPageNames.length;i++){
+      newArray.push({
+        component: CNavItem,
+        name: locatorPageNames[i],
+        to: '/locator/'+locatorPageNames[i],        
+      })
+    }
+    let newItems=items;
+    newItems[5].items=newArray;
+    console.log("Hoooo",newItems)
+    setItems(newItems)
+  },[locatorPageNames])
 
-  const waitForResponse = () => {
-  //   return new Promise.all((resolve,reject)=>{
-  //     setTimeout(()=>{
-  //         resolve();
-  //     }, 3000);
-  // });
-  }
-
-  //////////////////////////////
-  //updating items
+  // updating items
 
   const pageNameHandler =(fieldValue) => {
     const modifiedItems=items.map((item)=>{
@@ -106,7 +128,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
           item.items.push({
             component: CNavItem,
             name: fieldValue,
-            to: '/testSuites',
+            to: '/testSuites/'+fieldValue,
           })
         }
         
@@ -130,25 +152,57 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
         }
       }else if(indexOfSection===5){//add new pageName to Locator section
         if(item.name==='Locator'){
-          item.items.push({
-            component: CNavItem,
-            name: fieldValue,
-            to: '/locator',
+          axios
+          .post('http://localhost:5000/locators',{pageName:fieldValue})
+          .then((res)=>{
+            getLocatorPages();
           })
+          .catch((err) => {
+            console.log(err);
+          });
+          // item.items.push({
+          //   component: CNavItem,
+          //   name: fieldValue,
+          //   to: '/locator/'+fieldValue,
+          // })
         }
       }
 
       return item;
     });
-
     setItems([...modifiedItems]);
-
   }
 
-  /////////////////////////////
+  const pagesDeleteHandler=(rest) => {
+    const {to}=rest
+    //secondChar is used to identify the type of section
+    const secondChar=to[1];
+    switch(secondChar){
+      case 't':
+
+      case 'l':
+        const lengthOfUrl=to.length
+        const pageName=to.slice(9,lengthOfUrl);
+        console.log("Yoooo",pageName);
+        const url='http://localhost:5000/locators/'+pageName
+        axios
+        .delete(url)
+        .then((res)=>{
+          getLocatorPages();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        break;
+      case 'd':
+
+      case 'c':
+    }
+  }
 
   const modalRef=useRef();
   const initiateNameAssigner= (index) => {
+    console.log("goooooooooo",indexOfSection)
     setIndexOfSection(index);
     console.log('Warlord: ',index);
     modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
@@ -182,9 +236,11 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
         {...rest}
       >
         {navLink(name, icon, badge)}
+        {(name!=="Dashboard")&&(name!="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
       </Component>
     )
   }
+  
   const navGroup = (item, index) => {
     const { component, name, icon, to, ...rest } = item
     const Component = component
@@ -204,7 +260,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
         </Component>
         </div>
         <div className="add-btn">
-        < AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner(index)}></AiFillFileAdd>
+        <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner(index)}></AiFillFileAdd>
         </div>
       </div>
     )

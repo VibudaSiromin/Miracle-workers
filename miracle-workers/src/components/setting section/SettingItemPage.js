@@ -47,6 +47,7 @@ const SettingItemPage = ({ settingType }) => {
   const [commandObject, setCommandObject] = useState([]);
 
   let url = "http://localhost:5000/settings/" + settingType;
+  console.log(url)
 
   const getData = () => {
     axios
