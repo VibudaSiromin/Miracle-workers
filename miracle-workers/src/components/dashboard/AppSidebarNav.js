@@ -1,7 +1,7 @@
-import React,{useContext} from 'react'
+import React,{useContext,useEffect} from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import PropTypes from 'prop-types'
-import { GrAdd } from 'react-icons/gr'
+import { GrAdd, GrDashboard } from 'react-icons/gr'
 import {AiFillFileAdd} from 'react-icons/ai';
 import './AppSidebarNav.css'
 import NameAssignModal from './NameAssignModal';
@@ -9,6 +9,8 @@ import { useState,useRef } from 'react';
 import { CBadge, CNavLink } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
+import {MdDeleteForever} from 'react-icons/md';
+import axios from 'axios';
 
 import {
   cilBell,
@@ -27,7 +29,26 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 export const AppSidebarNav = () => {
   const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
-  console.log("goooooooooooo",indexOfSection) 
+  const [locatorPageNames,setLocatorPageNames]=useState([])
+
+  const getLocatorPages=()=>{
+    axios
+    .get('http://localhost:5000/locators')
+    .then((res)=>{
+      setLocatorPageNames(res.data.locatorsPageNames);
+      console.log("rooooooo",res.data.locatorsPageNames)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+  useEffect(() => {
+    getLocatorPages();
+  }, []);
+
+  console.log("Hoooo",locatorPageNames)
+
   const [items,setItems]=useState(
     [
       {
@@ -37,7 +58,6 @@ export const AppSidebarNav = () => {
         icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
         badge: {
           color: 'info',
-          text: 'NEW',
         },
       },
       {
@@ -117,31 +137,41 @@ export const AppSidebarNav = () => {
     ]
   );
 
-  //////////////////////////////
-  //updating items
+  useEffect(()=>{
+    let newArray=[];
+    for(let i=0;i<locatorPageNames.length;i++){
+      newArray.push({
+        component: CNavItem,
+        name: locatorPageNames[i],
+        to: '/locator/'+locatorPageNames[i],        
+      })
+    }
+    let newItems=items;
+    newItems[5].items=newArray;
+    console.log("Hoooo",newItems)
+    setItems(newItems)
+  },[locatorPageNames])
+
+  // updating items
 
   const pageNameHandler = (fieldValue) => {
     const modifiedItems=items.map(item=>{
       //add new pageName to test suite
       if(indexOfSection===2){
         if(item.name==='Test Suite'){
-          const index=item.items.length+1
           item.items.push({
-            id:index,
             component: CNavItem,
             name: fieldValue,
-            to: '/testSuites/'+index,
+            to: '/testSuites/'+fieldValue,
           })
         }
         
       }else if(indexOfSection===3){//add new pageName to Data Section
         if(item.name==='Data'){
-          const index=item.items.length+1
           item.items.push({
-            id:index,
             component: CNavItem,
             name: fieldValue,
-            to: '/data/'+index,
+            to: '/data/'+fieldValue,
           })
         }
       }else if(indexOfSection===4){//add new pageName to Component section
@@ -154,23 +184,53 @@ export const AppSidebarNav = () => {
         }
       }else if(indexOfSection===5){//add new pageName to Locator section
         if(item.name==='Locator'){
-          const index=item.items.length+1
-          item.items.push({
-            component: CNavItem,
-            name: fieldValue,
-            to: '/locator/'+index,
+          axios
+          .post('http://localhost:5000/locators',{pageName:fieldValue})
+          .then((res)=>{
+            getLocatorPages();
           })
+          .catch((err) => {
+            console.log(err);
+          });
+          // item.items.push({
+          //   component: CNavItem,
+          //   name: fieldValue,
+          //   to: '/locator/'+fieldValue,
+          // })
         }
       }
 
       return item;
     });
-
     setItems([...modifiedItems]);
-
   }
 
-  /////////////////////////////
+  const pagesDeleteHandler=(rest) => {
+    const {to}=rest
+    //secondChar is used to identify the type of section
+    const secondChar=to[1];
+    switch(secondChar){
+      case 't':
+
+      case 'l':
+        const lengthOfUrl=to.length
+        const pageName=to.slice(9,lengthOfUrl);
+        console.log("Yoooo",pageName);
+        const url='http://localhost:5000/locators/'+pageName
+        axios
+        .delete(url)
+        .then((res)=>{
+          getLocatorPages();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        break;
+      case 'd':
+
+      case 'c':
+    }
+  }
 
   const modalRef=useRef();
   const initiateNameAssigner= (index) => {
@@ -208,9 +268,11 @@ export const AppSidebarNav = () => {
         {...rest}
       >
         {navLink(name, icon, badge)}
+        {(name!=="Dashboard")&&(name!="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
       </Component>
     )
   }
+  
   const navGroup = (item, index) => {
     const { component, name, icon, to, ...rest } = item
     const Component = component

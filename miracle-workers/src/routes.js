@@ -58,6 +58,8 @@ const TestSuites = React.lazy(() => import('./views/testSuites/testSuite'))
 const Data = React.lazy(() => import('./views/data/Data'))
 //locator
 const Locator=React.lazy(() => import('./views/locator/Locator'))
+//component
+const Component=React.lazy(() => import('./views/component/Component'))
 //settings
 const Settings=React.lazy(() => import('./views/settings/settings'))
 //settings-browsers
@@ -120,9 +122,10 @@ const routes = [
   { path: '/notifications/modals', name: 'Modals', element: Modals },
   { path: '/notifications/toasts', name: 'Toasts', element: Toasts },
   { path: '/widgets', name: 'Widgets', element: Widgets },
-  { path: '/testSuites/:tid', name: 'TestSuites', element: TestSuites },
-  { path: '/data' , name:'Data', element:Data},  
-  { path: '/locator/:lid', name:'Locator', element:Locator},
+  { path: '/testSuites/:tname', name: 'TestSuites', element: TestSuites },
+  { path: '/data/:dname' , name:'Data', element:Data},  
+  { path: '/locator/:lname', name:'Locator', element:Locator},
+  { path: '/component/:cname', name:'Component', element:Component},
   { path: '/settings' , name:'Settings', element:Settings},
   { path: '/settings/browsers', name:'Browsers', element:Browsers},
   { path: '/settings/commands', name:'Commands', element:Commands},

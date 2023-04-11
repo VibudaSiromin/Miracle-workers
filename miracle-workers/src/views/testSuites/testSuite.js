@@ -17,7 +17,7 @@ const testSuite = () => {
       ]
 
     return(
-        <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table>
+        <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="testSuites"></Table>
     )
 }
 
