@@ -54,13 +54,27 @@ const Table = (props) => {
     });    
   }
 
+  const getDataByPage=() => {
+    const url='http://localhost:5000/data/'+dname;
+    axios
+    .get(url)
+    .then((res)=>{
+      const data=res.data.data;
+      console.log("Yoooo",data)
+      settestSteps(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });    
+  }
+
   useEffect(()=>{
     getLocatorsByPage()
-  },[lname,props.callingFrom])
+  },[lname])
 
-  const editLocatorByPage=()=>{
-
-  }
+  useEffect(()=>{
+    getDataByPage()
+  },[dname])
 
   const updateTestSteps = (tableData) => {
     if(props.callingFrom=='testSuites'){
@@ -119,7 +133,7 @@ const Table = (props) => {
       const newTableData = [...testSteps,tableData];
       axios
       .post(url,{
-        editedLocator:newTableData
+        editedData:newTableData
       })
       .then((res)=>{
         settestSteps(newTableData);
@@ -143,6 +157,22 @@ const Table = (props) => {
       axios
       .post(url,{
         editedLocator:applyEditedData
+      })
+      .then((res)=>{
+        settestSteps(applyEditedData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    if(props.callingFrom=='data'){
+      const url='http://localhost:5000/data/'+dname
+      const applyEditedData=[...testSteps];
+      applyEditedData[index]=editedTableData;
+      console.log('Gooooo',url); 
+      axios
+      .post(url,{
+        editedData:applyEditedData
       })
       .then((res)=>{
         settestSteps(applyEditedData);
@@ -179,6 +209,21 @@ const Table = (props) => {
         console.log(err);
       });
     }
+    if(props.callingFrom=='data'){
+      const url='http://localhost:5000/data/'+dname
+      const tableDataAfterDelete=[...testSteps];
+      tableDataAfterDelete.splice(index,1);
+      axios
+      .post(url,{
+        editedData:tableDataAfterDelete
+      })
+      .then((res)=>{
+        settestSteps(tableDataAfterDelete);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
     // const tableDataAfterDelete=[...testSteps];
     // tableDataAfterDelete.splice(index,1);
     // settestSteps(tableDataAfterDelete);
@@ -197,6 +242,22 @@ const Table = (props) => {
         axios
         .post(url,{
           editedLocator:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+
+      if(props.callingFrom=='data'){
+        const url='http://localhost:5000/data/'+dname
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post(url,{
+          editedData:dataAfterArrowClick
         })
         .then((res)=>{
           settestSteps(dataAfterArrowClick);
@@ -225,6 +286,23 @@ const Table = (props) => {
           console.log(err);
         });
       }
+
+      if(props.callingFrom=='data'){
+        const url='http://localhost:5000/data/'+dname
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post(url,{
+          editedData:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+      
       // dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
       // dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
       // settestSteps(dataAfterArrowClick);

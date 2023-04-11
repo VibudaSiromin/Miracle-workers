@@ -32,6 +32,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
  export const AppSidebarNav = () => {
   const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
   const [locatorPageNames,setLocatorPageNames]=useState([])
+  const [dataPageNames,setDataPageNames]=useState([])
 
   const getLocatorPages=()=>{
     axios
@@ -45,8 +46,21 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
     });
   }
 
+  const getDataPages=()=>{
+    axios
+    .get('http://localhost:5000/data')
+    .then((res)=>{
+      setDataPageNames(res.data.dataPageNames);
+      console.log("rooooooo",res.data.dataPageNames)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
   useEffect(() => {
     getLocatorPages();
+    getDataPages();
   }, []);
 
   console.log("Hoooo",locatorPageNames)
@@ -118,6 +132,20 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
     setItems(newItems)
   },[locatorPageNames])
 
+  useEffect(()=>{
+    let newArray=[];
+    for(let i=0;i<dataPageNames.length;i++){
+      newArray.push({
+        component: CNavItem,
+        name: dataPageNames[i],
+        to: '/data/'+dataPageNames[i],        
+      })
+    }
+    let newItems=items;
+    newItems[5].items=newArray;
+    console.log("Hoooo",newItems)
+    setItems(newItems)
+  },[dataPageNames])
   // updating items
 
   const pageNameHandler =(fieldValue) => {
@@ -141,6 +169,15 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
             name: fieldValue,
             to: '/dataJunction',
           })
+          .catch((err) => {
+            console.log(err);
+          });
+        // if(item.name==='Data'){
+        //   item.items.push({
+        //     component: CNavItem,
+        //     name: fieldValue,
+        //     to: '/data/'+fieldValue,
+        //   })
         }
       }else if(indexOfSection===4){//add new pageName to Component section
         if(item.name==='Component'){
@@ -181,7 +218,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
       case 't':
 
       case 'l':
-        const lengthOfUrl=to.length
+        const lengthOfUrl=to.length;
         const pageName=to.slice(9,lengthOfUrl);
         console.log("Yoooo",pageName);
         const url='http://localhost:5000/locators/'+pageName
@@ -195,6 +232,19 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
         });
         break;
       case 'd':
+        lengthOfUrl=to.length;
+        pageName=to.slice(6,lengthOfUrl);
+        console.log("Yoooo",pageName);
+        url='http://localhost:5000/data/'+pageName
+        axios
+        .delete(url)
+        .then((res)=>{
+          getDataPages();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+        break;
 
       case 'c':
     }
