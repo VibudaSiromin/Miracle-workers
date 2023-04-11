@@ -4,6 +4,7 @@ const mongoose=require('mongoose');
 
 const settingRoutes=require('./routes/settings-routes/settings-routes');
 const locatorRoutes=require('./routes/locator-routes/locator-routes');
+const dataRoutes=require('./routes/data-routes/data-routes');
 
 const app=express();
 
@@ -21,6 +22,8 @@ app.use((req,res,next)=>{
 
 app.use('/',settingRoutes);
 app.use('/',locatorRoutes);
+app.use('/data/dataName',dataRoutes);
+
 app.get('/',(req,res,next)=>{
     res.json({message:'Hi'});
 })

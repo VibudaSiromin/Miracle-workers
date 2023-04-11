@@ -98,7 +98,7 @@ const Table = (props) => {
     let editedTestSteps=[];
     for(let i=0;i<testSteps.length;i++){
       const testStep=testSteps[i];
-      delete testStep[selectedHeading];
+      delete testStep[selectedHeading];//the 'delete' keyword is used to remove a property from an object.
       editedTestSteps.push(testStep);
     }
     props.dropHeading(headingIndex);

@@ -19,7 +19,7 @@ const Heading = (props) => {
 
     console.log('file headinggggxxx ',heading);
     const addHeading = (addTitle) => {
-        const valueList=Object.values(addTitle);
+        const valueList=Object.values(addTitle);//converts object values to array values
         const newTitle=[...heading,valueList];
         setHeading(newTitle);
         //props.heading(heading);
@@ -46,7 +46,7 @@ const Heading = (props) => {
           formID={["myFormOnePart1", "myFormOnePart2"]}  
         >
         </ModalDialog>
-        <Table title={heading} dropHeading={dropHeading} generalPurpose={props.generalPurpose} /*true*/ noFields={[heading.length]} enableChainPopUps={false} purpose="fillData" removeHeading={props.removeHeading} initialData={props.initialData}></Table>
+        <Table title={heading} dropHeading={dropHeading} generalPurpose={props.generalPurpose} /*true*/ noFields={[heading.length]} enableChainPopUps={false} purpose="fillData" removeHeading={props.removeHeading} /*true*/initialData={props.initialData}></Table>
         {/* initialData can be null array as well. */}
         <></>
         </>
