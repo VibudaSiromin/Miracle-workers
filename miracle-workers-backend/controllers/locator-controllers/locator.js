@@ -6,6 +6,8 @@ const { argv0 } = require('process');
 
 const dataFilePath=path.join(__dirname,'../../store/locator.json');
 
+
+//get locator sheet names 
 const getPageNames=async(req, res, next)=>{
   const locatorName=req.body.lname;
   let locatorFile;
@@ -28,7 +30,7 @@ const getLocatorByPage = async(req, res, next) => {
   try{
       const data = await fs.promises.readFile(dataFilePath);
       locatorFile = JSON.parse(data);
-    }catch{
+    }catch{ 
       console.log(err);
       res.status(500).json({ message: 'Error reading locator file' });
       return;
@@ -36,7 +38,8 @@ const getLocatorByPage = async(req, res, next) => {
     locatorPage=locatorFile.find(locator=>locator[0]===locatorPageName);
     arrayWithoutLocatorName=locatorPage.slice(1,locatorPage.length)
     res.json({ locators: arrayWithoutLocatorName});
-  };
+  };   
+
 
   const createLocatorByPage = async (req, res, next) => {
     let locatorFile;

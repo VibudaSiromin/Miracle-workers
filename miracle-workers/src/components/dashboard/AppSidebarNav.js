@@ -27,13 +27,16 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
-  let globleitems;
+let globleitems;
 
  export const AppSidebarNav = () => {
   const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
   const [locatorPageNames,setLocatorPageNames]=useState([])
   const [dataPageNames,setDataPageNames]=useState([])
 
+
+
+  
   const getLocatorPages=()=>{
     axios
     .get('http://localhost:5000/locators')
@@ -46,21 +49,22 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
     });
   }
 
-  const getDataPages=()=>{
-    axios
-    .get('http://localhost:5000/data')
-    .then((res)=>{
-      setDataPageNames(res.data.dataPageNames);
-      console.log("rooooooo",res.data.dataPageNames)
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-  }
+  // const getDataPages=()=>{
+  //   axios
+  //   .get('http://localhost:5000/data')
+  //   .then((res)=>{
+  //     setDataPageNames(res.data.dataPageNames);
+  //     console.log("rooooooo",res.data.dataPageNames)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // }
 
   useEffect(() => {
+    console.log('Normandy');
     getLocatorPages();
-    getDataPages();
+    // getDataPages();
   }, []);
 
   console.log("Hoooo",locatorPageNames)
@@ -118,6 +122,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
   );
 
   useEffect(()=>{
+    console.log('mass effect');
     let newArray=[];
     for(let i=0;i<locatorPageNames.length;i++){
       newArray.push({
@@ -128,24 +133,24 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
     }
     let newItems=items;
     newItems[5].items=newArray;
-    console.log("Hoooo",newItems)
-    setItems(newItems)
-  },[locatorPageNames])
+    console.log("space",newItems)
+    setItems([...newItems])
+  },[locatorPageNames])//when locatorPageName changes this useEffect hook will be triggered
 
-  useEffect(()=>{
-    let newArray=[];
-    for(let i=0;i<dataPageNames.length;i++){
-      newArray.push({
-        component: CNavItem,
-        name: dataPageNames[i],
-        to: '/data/'+dataPageNames[i],        
-      })
-    }
-    let newItems=items;
-    newItems[5].items=newArray;
-    console.log("Hoooo",newItems)
-    setItems(newItems)
-  },[dataPageNames])
+  // useEffect(()=>{
+  //   let newArray=[];
+  //   for(let i=0;i<dataPageNames.length;i++){
+  //     newArray.push({
+  //       component: CNavItem,
+  //       name: dataPageNames[i],
+  //       to: '/data/'+dataPageNames[i],        
+  //     })
+  //   }
+  //   let newItems=items;
+  //   newItems[5].items=newArray;
+  //   console.log("Hoooo",newItems)
+  //   setItems(newItems)
+  // },[dataPageNames])
   // updating items
 
   const pageNameHandler =(fieldValue) => {
@@ -169,9 +174,9 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
             name: fieldValue,
             to: '/dataJunction',
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          // .catch((err) => {
+          //   console.log(err);
+          // });
         // if(item.name==='Data'){
         //   item.items.push({
         //     component: CNavItem,
@@ -211,6 +216,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
   }
 
   const pagesDeleteHandler=(rest) => {
+    //'to' is an array of characters 
     const {to}=rest
     //secondChar is used to identify the type of section
     const secondChar=to[1];
@@ -231,20 +237,20 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
           console.log(err);
         });
         break;
-      case 'd':
-        lengthOfUrl=to.length;
-        pageName=to.slice(6,lengthOfUrl);
-        console.log("Yoooo",pageName);
-        url='http://localhost:5000/data/'+pageName
-        axios
-        .delete(url)
-        .then((res)=>{
-          getDataPages();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-        break;
+      // case 'd':
+      //   lengthOfUrl=to.length;
+      //   pageName=to.slice(6,lengthOfUrl);
+      //   console.log("Yoooo",pageName);
+      //   url='http://localhost:5000/data/'+pageName
+      //   axios
+      //   .delete(url)
+      //   .then((res)=>{
+      //     getDataPages();
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      //   break;
 
       case 'c':
     }
@@ -260,6 +266,8 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
   const location = useLocation()
   const navLink = (name, icon, badge) => {
+    console.log('sell',name);
+    console.log('In navLink',name)
     return (
       <>
         {icon && icon}
@@ -274,8 +282,11 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
   }
 
   const navItem = (item, index) => {
+    console.log('geeshock',index,item);
     const { component, name, badge, icon, ...rest } = item
     const Component = component
+    console.log('swiss',name);
+    console.log('In navItem',name) 
     return (
       <Component
         {...(rest.to &&
@@ -294,6 +305,7 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
   const navGroup = (item, index) => {
     const { component, name, icon, to, ...rest } = item
     const Component = component
+    console.log('In navGroup',name)
     return (
       <div className="Component">
         <div className="single-component">

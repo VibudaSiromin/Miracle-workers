@@ -10,7 +10,8 @@ import { TbTableOff } from "react-icons/tb";
 import './TableV1.css';
 import IndexContext from '../contexts/indexContext'
 import { useParams } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
+
 
 const Table = (props) => {
 
@@ -40,6 +41,9 @@ const Table = (props) => {
     
   }, [props.initialData]);
   
+  //get the all the data of specific locator sheet
+  //ex-:lname='45'
+  //trigger when click on locator sheet links
   const getLocatorsByPage=() => {
     const url='http://localhost:5000/locators/'+lname;
     axios
@@ -47,12 +51,14 @@ const Table = (props) => {
     .then((res)=>{
       const locators=res.data.locators;
       console.log("Yoooo",locators)
-      settestSteps(locators);
+      settestSteps(locators);//setTestStep from locator data
     })
     .catch((err) => {
       console.log(err);
     });    
   }
+
+  //get the all the data of specific data sheet
 
   const getDataByPage=() => {
     const url='http://localhost:5000/data/'+dname;
@@ -112,7 +118,9 @@ const Table = (props) => {
     // settestSteps(newTableData);
   };
 
+  //update when click on 'ADD' btn
   const updateGeneralData = (tableData) => {
+    //update specific locator sheet data by using lname
     if(props.callingFrom=='locator'){
       const url='http://localhost:5000/locators/'+lname
       const newTableData = [...testSteps,tableData];
@@ -148,6 +156,7 @@ const Table = (props) => {
     // settestSteps(newTableData);
   };
 
+  //edit when click on 'pen' btn
    const editHandler = (editedTableData,index) => {
     if(props.callingFrom=='locator'){
       const url='http://localhost:5000/locators/'+lname
