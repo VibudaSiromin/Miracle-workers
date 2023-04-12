@@ -1,11 +1,9 @@
 import React from "react";
 import Table from "../../components/Table";
-import Launcher from "../../components/launcher/launcher";
 
 const testSuite = () => {
 
     const title=[
-        "group",
         "instruction",
         "command",
         "locator",
@@ -18,11 +16,7 @@ const testSuite = () => {
       ]
 
     return(
-        <>
-            <Launcher/>
-            <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="testSuites"></Table>
-        </>
- 
+        <Table title={title} noFields={[2, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="component"></Table>
     )
 }
 
