@@ -4,20 +4,23 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { BiPlayCircle } from "react-icons/bi";
 import { Button } from 'react-bootstrap';
 import { Router, Route, Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux'
 
 const Card = (props) => {
+
+    const dispatch = useDispatch();
     
     const navigate=useNavigate();
 
     const listItemStyle={
-        //width:"18rem",
+        width:"18rem",
         height:"5rem",
         padding:"10px",
         fontSize:"50px",
         color:"white"
     }
     const iconStyle={
-        fontSize:"100px",
+        fontSize:props.symbolSize,
         color:"white"
     }
     const cardStyle={
@@ -29,27 +32,23 @@ const Card = (props) => {
 
     const dataSectionPathHandler = () => {
         if(props.cardTitle==="Excel"){
-            navigate('/dataExcel');
+            navigate('/dataJunction/dataExcel');
+            dispatch({ type: 'MY_FUNCTION_CALLED_EXCEL' });
         }else if(props.cardTitle==="Manually"){
-            navigate('/data');
+            navigate('/dataJunction/data');
+            dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
         }
     }
-
-    // document.addEventListener("DOMContentLoaded",function () {
-    //     console.log('sand man');
-    // });
-
-    
 
     console.log('sand man 2');
 
     return( 
             <Button className="card" style={cardStyle} value={props.cardTitle} onClick={dataSectionPathHandler}>
-                <div >
+                <div className="ul_container">
                     <ul className="list-group list-group-flush" >
-                        <li className="" style={listItemStyle}>{props.cardTitle}</li>
-                        <li className="" style={iconStyle}><SiMicrosoftexcel></SiMicrosoftexcel></li>
-                        <li className="" style={listItemStyle}><BiPlayCircle></BiPlayCircle></li>
+                         <li className="" style={listItemStyle}>{props.cardTitle}</li>
+                         <li className="" style={iconStyle}>{props.symbol}</li>
+                         <li className="" style={listItemStyle}><BiPlayCircle></BiPlayCircle></li>
                     </ul>
                 </div>
             </Button>

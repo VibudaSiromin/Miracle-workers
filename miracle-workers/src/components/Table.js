@@ -10,12 +10,14 @@ import { TbTableOff } from "react-icons/tb";
 import './TableV1.css';
 import IndexContext from '../contexts/indexContext'
 import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from "axios";
 
 
 const Table = (props) => {
 
   const {lname,tname,cname,dname} =useParams();
+  const location = useLocation();
   let indexOfRaw;
   let tableFields=[];
   const [dashboradNavLinkId,setDashboradNavLinkId] =useState('link01');//new
@@ -61,17 +63,22 @@ const Table = (props) => {
   //get the all the data of specific data sheet
 
   const getDataByPage=() => {
-    const url='http://localhost:5000/data/'+dname;
-    axios
-    .get(url)
-    .then((res)=>{
-      const data=res.data.data;
-      console.log("Yoooo",data)
-      settestSteps(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });    
+    const currentURL=location.pathname
+    if(currentURL==='/dataJunction/data/'+dname){
+      axios
+      .get('http://localhost:5000/dataJunction/data/'+dname,{
+        dataPageName:dname
+      })
+      .then((res)=>{
+        const data=res.data.getDataRecords;
+        console.log("Yoooo",data)
+        settestSteps(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });    
+    }
+    
   }
 
   useEffect(()=>{
@@ -121,34 +128,66 @@ const Table = (props) => {
   //update when click on 'ADD' btn
   const updateGeneralData = (tableData) => {
     //update specific locator sheet data by using lname
-    if(props.callingFrom=='locator'){
+    console.log('zuze');
+    if(props.callingFrom==='locator'){
       const url='http://localhost:5000/locators/'+lname
       const newTableData = [...testSteps,tableData];
+      settestSteps(newTableData);
       console.log('Gooooo',url); 
       axios
       .post(url,{
         editedLocator:newTableData
       })
       .then((res)=>{
-        settestSteps(newTableData);
+        
       })
       .catch((err) => {
         console.log(err);
       });
     }
-    if(props.callingFrom=='data'){
-      const url='http://localhost:5000/data/'+dname
-      const newTableData = [...testSteps,tableData];
-      axios
-      .post(url,{
-        editedData:newTableData
-      })
-      .then((res)=>{
-        settestSteps(newTableData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if(props.callingFrom==='data'){
+      const currentURL=location.pathname;//get current URL
+      console.log('myUL',currentURL)
+
+      if(currentURL==='/dataJunction/data/'+dname){
+        const newTableData = [...testSteps,tableData];
+        console.log('hello hell');
+        axios
+        .post('http://localhost:5000/dataJunction/data/'+dname,{
+          editedData:newTableData
+        })
+        .then((res)=>{
+          settestSteps(newTableData);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }else if(currentURL==='/dataJunction/dataExcel/'+dname){
+        const newTableData = [...testSteps,tableData];
+        axios
+        .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+          editedData:newTableData
+        })
+        .then((res)=>{
+          settestSteps(newTableData);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+
+      }
+      // const url='http://localhost:5000/dataJunction/'+dname
+      // const newTableData = [...testSteps,tableData];
+      // axios
+      // .post(url,{
+      //   editedData:newTableData
+      // })
+      // .then((res)=>{
+      //   settestSteps(newTableData);
+      // })
+      // .catch((err) => {
+      //   console.log(err);
+      // });
     }
     console.log('Glock');
     // const newTableData = [...testSteps,tableData];
@@ -158,6 +197,7 @@ const Table = (props) => {
 
   //edit when click on 'pen' btn
    const editHandler = (editedTableData,index) => {
+    console.log('F1')
     if(props.callingFrom=='locator'){
       const url='http://localhost:5000/locators/'+lname
       const applyEditedData=[...testSteps];
@@ -389,6 +429,8 @@ const nextIconStyle = {
   
 };
 //className="table table-hover table-dark text-center table-striped"
+
+console.log('hello world!!!!!');
 
   return (
     <div className="App">

@@ -1,7 +1,8 @@
+const { json } = require('body-parser');
 const fs = require('fs');
 const path = require('path');
 
-const dataFilePath =path.join(__dirname,'dataFile.json');
+const dataFilePath=path.join(__dirname,'../../store/data.json');
 // controller for fetching datasheets
 const getDataSheetByLinkName = (req,res,next)=>{
     const linkName=req.query.DataSheetName;
@@ -26,101 +27,246 @@ const getDataSheetByLinkName = (req,res,next)=>{
 
 //controller for creating dataSheets
 
-const createDataSheet = (req,res,next) => {
-    const {sectionName,linkName,dataRecord} =req.body;
-    console.log('SIA');
-    const newDataSheet = [linkName,...dataRecord];
+// const createDataSheet = (req,res,next) => {
+//     const {sectionName,linkName,dataRecord} =req.body;
+//     console.log('SIA');
+//     const newDataSheet = [linkName,...dataRecord];
 
-    fs.stat(dataFilePath,(err,stats)=>{
-        if (err) {
-            console.error(err);
-            return;
-          }
-          if (stats.size===0) {
-            const dataRecordArr=[newDataSheet]
-            fs.writeFile(dataFilePath, JSON.stringify(dataRecordArr), (err) => {
-                if (err) {
-                  console.error(err);
-                  return;
-                }
-                console.log('Data written to file');
-              });
-              res.status(201);
-              res.json(newDataSheet);
-          }else{
-            fs.readFile(dataFilePath, 'utf8', (err, data) => {
-                if (err) {
-                  console.error(err);
-                  return;
-                }
-                const dataSection = JSON.parse(data);
-                for(let i=0;i<dataSection.length;i++){
-                  if(linkName===dataSection[i][0]){
-                    dataSection[i]=newDataSheet;
+//     fs.stat(dataFilePath,(err,stats)=>{
+//         if (err) {
+//             console.error(err);
+//             return;
+//           }
+//           if (stats.size===0) {
+//             const dataRecordArr=[newDataSheet]
+//             fs.writeFile(dataFilePath, JSON.stringify(dataRecordArr), (err) => {
+//                 if (err) {
+//                   console.error(err);
+//                   return;
+//                 }
+//                 console.log('Data written to file');
+//               });
+//               res.status(201);
+//               res.json(newDataSheet);
+//           }else{
+//             fs.readFile(dataFilePath, 'utf8', (err, data) => {
+//                 if (err) {
+//                   console.error(err);
+//                   return;
+//                 }
+//                 const dataSection = JSON.parse(data);
+//                 for(let i=0;i<dataSection.length;i++){
+//                   if(linkName===dataSection[i][0]){
+//                     dataSection[i]=newDataSheet;
 
-                    fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
-                      if (err) {
-                        console.error(err);
-                        return;
-                      }
-                      console.log('Data written to file');
-                    });
-                    res.status(201);
-                    res.json(dataSection);
-                    return;
-                  }
-                }
-                dataSection.push(newDataSheet);
-                console.log('van',dataSection);
-                fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
-                    if (err) {
-                      console.error(err);
-                      return;
-                    }
-                    console.log('Data written to file');
-                  });
-                res.status(201);
-                res.json(dataSection);
+//                     fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
+//                       if (err) {
+//                         console.error(err);
+//                         return;
+//                       }
+//                       console.log('Data written to file');
+//                     });
+//                     res.status(201);
+//                     res.json(dataSection);
+//                     return;
+//                   }
+//                 }
+//                 dataSection.push(newDataSheet);
+//                 console.log('van',dataSection);
+//                 fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
+//                     if (err) {
+//                       console.error(err);
+//                       return;
+//                     }
+//                     console.log('Data written to file');
+//                   });
+//                 res.status(201);
+//                 res.json(dataSection);
         
-              });
-          }
-    })
+//               });
+//           }
+//     })
+// }
+
+///////////////
+
+//get data sheet names
+
+const getPageNames=async(req, res, next)=>{
+  let dataFile;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataFile = JSON.parse(data);
+    const pageNamesArray=dataFile.map(data=>data[0]);
+    console.log("WoW",pageNamesArray)
+    res.json({ dataPageNames: pageNamesArray });
+  }catch{
+    console.log(err);
+    res.status(500).json({ message: 'Error reading data file' });
+    return;
+  } 
 }
 
-const editDataSheet = (req,res,next) => {
-    const {sectionName,linkName,dataRecord} =req.body;
-    // const parsedplace =req.body;
-    const editedDataSheet = [linkName,...dataRecord];
+//////////////////////
 
-    fs.readFile(dataFilePath, 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
+const createDataSheetOne = async (req, res, next) => {
+  let dataFile;
+  console.log('KAHN Defender');
+  const dataPageName=req.body.pageName;
+  try{
+      const data = await fs.promises.readFile(dataFilePath);
+      dataFile = JSON.parse(data);
+      dataFile.push([dataPageName,[]]);
+      const newData=JSON.stringify(dataFile);
+        try{
+          await fs.promises.writeFile(dataFilePath,newData);
+          res.status(200).json({message:'Created locator Page'});
+        }catch(err){
+          console.log(err);
+          res.status(500).json({message:'Error occurred when creating data file'});
           return;
-        }
-        const dataSection = JSON.parse(data);
-        for(let i=0;i<dataSection.length;i++){
-            if(linkName===dataSection[i][0]){
-                dataSection[i]=editedDataSheet;
+        }    
+    }catch(err){
+      console.log(err);
+      res.status(500).json({ message: 'Error reading data file' });
+      return;
+    }
+  
+}
 
-                fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
-                    if (err) {
-                      console.error(err);
-                      return;
-                    }
-                    console.log('Data written to file');
-                  });
+///////////////
+
+const addHeadingsToData = async(req,res,next) =>{
+  const dataPageName=req.params.dname;
+  const newDataHeading=req.body.recentHeading;
+  console.log('Live Live',newDataHeading);
+
+  let dataSection;
+
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+      //allocate 2nd location of the data section for storing headings
+      dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
+      const newDataSection=JSON.stringify(dataSection);
+      try{
+        await fs.promises.writeFile(dataFilePath,newDataSection);
+        res.status(200).json({message:'Edited data headings'});
+
+      }catch(err){
+        console.log(err);
+        res.status(500).json({message:'Error occurred when adding data headings'});
+      }
+    
+
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading data section' });
+  }
+}
+
+const getHeadingsFromData = async(req,res,next) => {
+  const dataPageName=req.params.dname;
+  let dataSection;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+    const selectedDataSheetHeadings=dataSection[index][1];
+    const headingArray=selectedDataSheetHeadings.map((heading)=>{
+      return [heading]
+    });
+    res.status(200).json({getHeadings:headingArray});
+  }catch(err){
+    res.status(500).json({ message: 'Error reading data section' });
+  }
+}
+
+const getDataPageContent = async(req,res,next) => {
+  const dataPageName=req.params.dname;
+  let dataSection;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+    if(dataSection[index].length>2){
+      const dataRecords=dataSection[index];
+      dataRecords.splice(0,2);
+      res.status(200).json({getDataRecords:dataRecords})
+    }else if(dataSection[index].length<=2){
+      res.status(200).json({getDataRecords:[]})
+    }
+  }catch(err){
+      res.status(500).json({ message: 'Error reading data section' })
+  }
+}
+
+// const editDataSheet = (req,res,next) => {
+//     const {sectionName,linkName,dataRecord} =req.body;
+//     // const parsedplace =req.body;
+//     const editedDataSheet = [linkName,...dataRecord];
+
+//     fs.readFile(dataFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//           console.error(err);
+//           return;
+//         }
+//         const dataSection = JSON.parse(data);
+//         for(let i=0;i<dataSection.length;i++){
+//             if(linkName===dataSection[i][0]){
+//                 dataSection[i]=editedDataSheet;
+
+//                 fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
+//                     if (err) {
+//                       console.error(err);
+//                       return;
+//                     }
+//                     console.log('Data written to file');
+//                   });
         
-                res.status(200);
-                res.json(dataSection);
+//                 res.status(200);
+//                 res.json(dataSection);
 
-                return;
-            }
-        } 
+//                 return;
+//             }
+//         } 
 
-        // console.log(jsonData);
-      });
+//         // console.log(jsonData);
+//       });
 
     
+// }
+
+//edit data pages individually
+
+const editDataPage = async (req,res,next) => {
+  const dataPageName=req.params.dname;
+  const newDataContent=req.body.editedData;
+
+  console.log('my content',newDataContent);
+
+  let dataSection;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+
+    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+    const dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
+    const newDataPage=[dataPageName+"M",dataPage[1],...newDataContent];
+    dataSection[index]=newDataPage;
+    const newDataSection=JSON.stringify(dataSection);
+    try{
+      await fs.promises.writeFile(dataFilePath,newDataSection);
+      res.status(200).json({message:'Edited data content'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when creating data content'});
+    }
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading data section' });
+  }
 }
 
 const deleteDataSheet = (req,res,next) => {
@@ -152,6 +298,10 @@ const deleteDataSheet = (req,res,next) => {
 }
 
 exports.getDataSheetByLinkName=getDataSheetByLinkName;
-exports.createDataSheet=createDataSheet;
-exports.editDataSheet=editDataSheet;
 exports.deleteDataSheet=deleteDataSheet;
+exports.createDataSheetOne=createDataSheetOne;
+exports.getPageNames=getPageNames;
+exports.editDataPage=editDataPage;
+exports.addHeadingsToData=addHeadingsToData;
+exports.getHeadingsFromData=getHeadingsFromData;
+exports.getDataPageContent=getDataPageContent;

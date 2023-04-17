@@ -32,6 +32,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
   //const arrayConvertor=Object.values(testStep);//convert testStep object to an array
 
   for(let i=0;i<title.length;i++){
+    console.log('your test step:',testStep);
     let key=title[i];
     if(testStep[key]===undefined || testStep[key]===" "){
       tableDataArray.push(
@@ -61,7 +62,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
       <tr>
         <td className="table-data">
           {" "}
-          <MdModeEdit color="04D9FF" size="20px"  onClick={()=>editButtonHandler()}></MdModeEdit>
+          <MdModeEdit color="04D9FF" size="20px"  onClick={editButtonHandler}></MdModeEdit>
         </td>
         <td className="table-data">
           {" "}

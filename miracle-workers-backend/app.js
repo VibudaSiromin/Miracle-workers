@@ -20,9 +20,10 @@ app.use((req,res,next)=>{
     next();
 })
 
+app.use('/',dataRoutes);
 app.use('/',settingRoutes);
-app.use('/',locatorRoutes);
-app.use('/data/dataName',dataRoutes);
+// app.use('/',locatorRoutes);
+
 
 app.get('/',(req,res,next)=>{
     res.json({message:'Hi'});
@@ -34,4 +35,4 @@ mongoose
     })
     .catch(err =>{
         console.log(err);
-    });
+    }); 

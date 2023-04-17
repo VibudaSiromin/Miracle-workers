@@ -10,6 +10,7 @@ import { CBadge, CNavLink } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
 import {MdDeleteForever} from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import {
@@ -32,9 +33,8 @@ let globleitems;
  export const AppSidebarNav = () => {
   const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
   const [locatorPageNames,setLocatorPageNames]=useState([])
-  const [dataPageNames,setDataPageNames]=useState([])
-
-
+  const [dataPageNames,setDataPageNames]=useState([]);
+  const [dataPageName,setDataPageName]=useState(null);
 
   
   const getLocatorPages=()=>{
@@ -48,6 +48,24 @@ let globleitems;
       console.log(err);
     });
   }
+
+  const getDataPages = () => {
+    axios
+    .get('http://localhost:5000')
+    .then((res)=>{
+      setDataPageNames(res.data.dataPageNames);
+      console.log("rooooooo",res.data.dataPageNames)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  }
+
+  // const getDataPages = () => {
+  //   axios
+  //   .
+  // }
 
   // const getDataPages=()=>{
   //   axios
@@ -64,7 +82,7 @@ let globleitems;
   useEffect(() => {
     console.log('Normandy');
     getLocatorPages();
-    // getDataPages();
+    getDataPages();
   }, []);
 
   console.log("Hoooo",locatorPageNames)
@@ -137,6 +155,45 @@ let globleitems;
     setItems([...newItems])
   },[locatorPageNames])//when locatorPageName changes this useEffect hook will be triggered
 
+
+  //add data sheet names from the store
+
+  useEffect(()=>{
+    console.log('mass effect');
+    let newArray=[];
+    for(let i=0;i<dataPageNames.length;i++){
+      //routing path will be decided according to the last character of the page name
+      //if last character='E' => path = '/dataJunction/dataExcel'
+      //if last character='M' => path = '/dataJunction/data'
+      if(dataPageNames[i].charAt(dataPageNames[i].length-1)==="E"){
+        newArray.push({
+          component: CNavItem,
+          name: dataPageNames[i].slice(0,-1),
+          to: '/dataJunction/dataExcel/'+dataPageNames[i].slice(0,-1),        
+        })
+      }else if(dataPageNames[i].charAt(dataPageNames[i].length-1)==="M"){
+        newArray.push({
+          component: CNavItem,
+          name: dataPageNames[i].slice(0,-1),
+          to: '/dataJunction/data/'+dataPageNames[i].slice(0,-1),        
+        })
+      } 
+    }
+    let newItems=items;
+    newItems[3].items=newArray;
+    console.log("space",newItems) 
+    setItems([...newItems])
+  },[dataPageNames])
+
+
+
+
+
+
+
+
+
+
   // useEffect(()=>{
   //   let newArray=[];
   //   for(let i=0;i<dataPageNames.length;i++){
@@ -167,13 +224,14 @@ let globleitems;
         
       }else if(indexOfSection===3){//add new pageName to Data Section
         if(item.name==='Data'){
-            navigate('/dataJunction');
-            globleitems=items;
-            item.items.push({
-            component: CNavItem,
-            name: fieldValue,
-            to: '/dataJunction',
-          })
+          navigate('/dataJunction');
+          setDataPageName(fieldValue);
+          //   globleitems=items;
+          //   item.items.push({
+          //   component: CNavItem,
+          //   name: fieldValue,
+          //   to: '/dataJunction',
+          // })
           // .catch((err) => {
           //   console.log(err);
           // });
@@ -202,11 +260,6 @@ let globleitems;
           .catch((err) => {
             console.log(err);
           });
-          // item.items.push({
-          //   component: CNavItem,
-          //   name: fieldValue,
-          //   to: '/locator/'+fieldValue,
-          // })
         }
       }
 
@@ -214,6 +267,89 @@ let globleitems;
     });
     setItems([...modifiedItems]);
   }
+
+  ///////////////////////////
+
+  const addDataSheetBasedOnExcel = () => {
+    if(dataPageName!==null){
+      console.log('calling from Excel');
+      if(indexOfSection===3){//add new pageName to Data Section
+
+        axios
+          .post('http://localhost:5000/dataJunction/dataExcel',{pageName:dataPageName+"E"})
+          .then((res)=>{
+            getDataPages();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // const modifiedItems=items;
+        // modifiedItems[3].items.push({
+        //   component: CNavItem,
+        //   name: dataPageName,  
+        //   to: '/dataJunction/dataExcel',
+        // })
+        // setItems([...modifiedItems]);
+      }
+    }
+    
+  }; 
+
+  const addDataSheetBasedOnManual = () => {
+    if(dataPageName!==null){
+      console.log('calling from manual');
+      if(indexOfSection===3){//add new pageName to Data Section
+
+        axios
+        .post('http://localhost:5000/dataJunction/data',{pageName:dataPageName+"M"})
+        .then((res)=>{
+           getDataPages(); 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+        // const modifiedItems=items;
+        // modifiedItems[3].items.push({
+        //   component: CNavItem,
+        //   name: dataPageName,  
+        //   to: '/dataJunction/data',
+        // })
+        // setItems([...modifiedItems]);
+      }
+    }
+    
+  };
+
+  //const myFunctionCalled = useSelector((state) => state.addDataSheetName.myFunctionCalled);
+  //console.log('KDK',myFunctionCalled);
+  const calledFromExcel = useSelector((state) => state.addDataSheetName.myFunctionCalledExcel);
+  console.log('KDK',calledFromExcel);
+
+  const calledFromManual = useSelector((state) => state.addDataSheetName.myFunctionCalledManual);
+  console.log('KDK',calledFromManual);
+
+  const runningConditionForExcel=useSelector((state)=> state.addDataSheetName.initialRunningConditionForExcel);
+  console.log('JDM',runningConditionForExcel);
+
+  const runningConditionForManual=useSelector((state)=> state.addDataSheetName.initialRunningConditionForManual);
+  console.log('Nismo',runningConditionForManual);
+
+  useEffect(() => {
+    if(runningConditionForExcel){
+      addDataSheetBasedOnExcel();
+    }  
+  }, [calledFromExcel]);
+
+  useEffect(() => {
+    if(runningConditionForManual){
+      addDataSheetBasedOnManual();
+    }
+  }, [calledFromManual]);
+
+  //////////////////////////
+
 
   const pagesDeleteHandler=(rest) => {
     //'to' is an array of characters 
@@ -297,7 +433,7 @@ let globleitems;
         {...rest}
       >
         {navLink(name, icon, badge)}
-        {(name!=="Dashboard")&&(name!="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
+        {(name!=="Dashboard")&&(name!=="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
       </Component>
     )
   }
