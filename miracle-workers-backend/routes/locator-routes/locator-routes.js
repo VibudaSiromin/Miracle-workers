@@ -13,7 +13,7 @@ router.get('/locators',locatorControllers.getPageNames)
 
 //route for getting locators By Page
 
-router.get('/locators/:lname',locatorControllers.getLocatorByPage);
+router.get('/locators/:lname',locatorControllers.getLocatorByPage); 
 
 //route for deleting locator by ID
 

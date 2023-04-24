@@ -12,6 +12,9 @@ router.post('/dataJunction/data/:dname/addHeading',dataControllers.addHeadingsTo
 //route for getting datasheet headings from a selected data page
 router.get('/dataJunction/data/:dname/getHeading',dataControllers.getHeadingsFromData);
 
+//route for editing data records
+router.post('/dataJunction/data/:dname/editDataRecords',dataControllers.editDataRecords);
+
 //route for editing data page
 router.post('/dataJunction/data/:dname', dataControllers.editDataPage);
 
@@ -23,17 +26,8 @@ router.post('/dataJunction/dataExcel',dataControllers.createDataSheetOne);
 router.post('/dataJunction/data',dataControllers.createDataSheetOne);
 //route for editing a datasheet
 
-
-
 //route for getting all available data sheet
 
 router.get('/',dataControllers.getPageNames);
-
-
-// router.patch('/',dataControllers.editDataSheet);
-
-//route for deleting a datasheet
-
-// router.delete('/',dataControllers.deleteDataSheet);
 
 module.exports=router;

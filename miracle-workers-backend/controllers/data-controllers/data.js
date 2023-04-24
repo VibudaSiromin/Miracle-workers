@@ -4,26 +4,25 @@ const path = require('path');
 
 const dataFilePath=path.join(__dirname,'../../store/data.json');
 // controller for fetching datasheets
-const getDataSheetByLinkName = (req,res,next)=>{
-    const linkName=req.query.DataSheetName;
-    console.log('Mari',linkName);
-    fs.readFile(dataFilePath, 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        const DataSection = JSON.parse(data);//dataSection => whole data of the dataFile.json
-        const findDataSheet=DataSection.find((dataSheet)=>{//dataSheet => every data sheet has a unique name
-            if(dataSheet[0]===linkName){ 
-                return dataSheet
-            }
-        });
-        console.log(findDataSheet);
-        res.status(200)
-        .json(findDataSheet);
-      });
+// const getDataSheetByLinkName = (req,res,next)=>{
+//     const linkName=req.query.DataSheetName;
+//     fs.readFile(dataFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//           console.error(err);
+//           return;
+//         }
+//         const DataSection = JSON.parse(data);//dataSection => whole data of the dataFile.json
+//         const findDataSheet=DataSection.find((dataSheet)=>{//dataSheet => every data sheet has a unique name
+//             if(dataSheet[0]===linkName){ 
+//                 return dataSheet
+//             }
+//         });
+//         console.log(findDataSheet);
+//         res.status(200)
+//         .json(findDataSheet);
+//       });
    
-}
+// }
 
 //controller for creating dataSheets
 
@@ -93,6 +92,7 @@ const getDataSheetByLinkName = (req,res,next)=>{
 //get data sheet names
 
 const getPageNames=async(req, res, next)=>{
+  console.log('running getPageName');
   let dataFile;
   try{
     const data = await fs.promises.readFile(dataFilePath);
@@ -110,8 +110,8 @@ const getPageNames=async(req, res, next)=>{
 //////////////////////
 
 const createDataSheetOne = async (req, res, next) => {
+  console.log('running createDataSheetOne');
   let dataFile;
-  console.log('KAHN Defender');
   const dataPageName=req.body.pageName;
   try{
       const data = await fs.promises.readFile(dataFilePath);
@@ -119,6 +119,7 @@ const createDataSheetOne = async (req, res, next) => {
       dataFile.push([dataPageName,[]]);
       const newData=JSON.stringify(dataFile);
         try{
+          console.log('hava createDataSheetOne');
           await fs.promises.writeFile(dataFilePath,newData);
           res.status(200).json({message:'Created locator Page'});
         }catch(err){
@@ -137,9 +138,9 @@ const createDataSheetOne = async (req, res, next) => {
 ///////////////
 
 const addHeadingsToData = async(req,res,next) =>{
+  console.log('running addHeadingsToData');
   const dataPageName=req.params.dname;
   const newDataHeading=req.body.recentHeading;
-  console.log('Live Live',newDataHeading);
 
   let dataSection;
 
@@ -151,6 +152,7 @@ const addHeadingsToData = async(req,res,next) =>{
       dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
       const newDataSection=JSON.stringify(dataSection);
       try{
+        console.log('Ibba addHeadingsToData');
         await fs.promises.writeFile(dataFilePath,newDataSection);
         res.status(200).json({message:'Edited data headings'});
 
@@ -167,6 +169,7 @@ const addHeadingsToData = async(req,res,next) =>{
 }
 
 const getHeadingsFromData = async(req,res,next) => {
+  console.log('running getHeadingsFromData');
   const dataPageName=req.params.dname;
   let dataSection;
   try{
@@ -184,6 +187,7 @@ const getHeadingsFromData = async(req,res,next) => {
 }
 
 const getDataPageContent = async(req,res,next) => {
+  console.log('running getDataPageContent');
   const dataPageName=req.params.dname;
   let dataSection;
   try{
@@ -201,50 +205,41 @@ const getDataPageContent = async(req,res,next) => {
       res.status(500).json({ message: 'Error reading data section' })
   }
 }
+ 
+const editDataRecords = async(req,res,next) => {
+  console.log('running editDataRecords');
+  const dataPageName=req.params.dname;
+  const editedDataRecords=req.body.editedDataRecords;
+  let dataSection;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+    const dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
+    const newDataPage=[dataPageName+"M",dataPage[1],...editedDataRecords];
+    dataSection[index]=newDataPage;
+    const newDataSection=JSON.stringify(dataSection);
+    try{
+      console.log('walaha editDataRecords');
+      await fs.promises.writeFile(dataFilePath,newDataSection);
+      res.status(200).json({message:'Edited data records'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when writting data records'});
+    }
+  }catch(err){
+    console.log(err);
+    res.status(500).json({message:'Error reading data section'});
+  }
 
-// const editDataSheet = (req,res,next) => {
-//     const {sectionName,linkName,dataRecord} =req.body;
-//     // const parsedplace =req.body;
-//     const editedDataSheet = [linkName,...dataRecord];
-
-//     fs.readFile(dataFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//           console.error(err);
-//           return;
-//         }
-//         const dataSection = JSON.parse(data);
-//         for(let i=0;i<dataSection.length;i++){
-//             if(linkName===dataSection[i][0]){
-//                 dataSection[i]=editedDataSheet;
-
-//                 fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
-//                     if (err) {
-//                       console.error(err);
-//                       return;
-//                     }
-//                     console.log('Data written to file');
-//                   });
-        
-//                 res.status(200);
-//                 res.json(dataSection);
-
-//                 return;
-//             }
-//         } 
-
-//         // console.log(jsonData);
-//       });
-
-    
-// }
+}
 
 //edit data pages individually
 
 const editDataPage = async (req,res,next) => {
+  console.log('running editDataPage');
   const dataPageName=req.params.dname;
   const newDataContent=req.body.editedData;
-
-  console.log('my content',newDataContent);
 
   let dataSection;
   try{
@@ -257,6 +252,7 @@ const editDataPage = async (req,res,next) => {
     dataSection[index]=newDataPage;
     const newDataSection=JSON.stringify(dataSection);
     try{
+      console.log('balla editDataPage');
       await fs.promises.writeFile(dataFilePath,newDataSection);
       res.status(200).json({message:'Edited data content'});
     }catch(err){
@@ -269,39 +265,39 @@ const editDataPage = async (req,res,next) => {
   }
 }
 
-const deleteDataSheet = (req,res,next) => {
-    const deleteDataSheetName=req.query.dataSheetName;  
+// const deleteDataSheet = (req,res,next) => {
+//     const deleteDataSheetName=req.query.dataSheetName;  
 
-    fs.readFile(dataFilePath, 'utf8', (err, data) => {
-        if (err) {
-          console.error(err);
-          return;
-        }
-        const dataSection = JSON.parse(data);
-        for(let i=0;i<dataSection.length;i++){
-            if(dataSection[i][0]===deleteDataSheetName){
-               dataSection.splice(i,1);
-            }
-        }
-        fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
-            if (err) {
-              console.error(err);
-              return;
-            }
-            console.log('Data written to file');
-          });
-        res.status(200);
-        res.json(dataSection);
-      });
+//     fs.readFile(dataFilePath, 'utf8', (err, data) => {
+//         if (err) {
+//           console.error(err);
+//           return;
+//         }
+//         const dataSection = JSON.parse(data);
+//         for(let i=0;i<dataSection.length;i++){
+//             if(dataSection[i][0]===deleteDataSheetName){
+//                dataSection.splice(i,1);
+//             }
+//         }
+//         fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
+//             if (err) {
+//               console.error(err);
+//               return;
+//             }
+//             console.log('Data written to file');
+//           });
+//         res.status(200);
+//         res.json(dataSection);
+//       });
       
 
-}
+// }
 
-exports.getDataSheetByLinkName=getDataSheetByLinkName;
-exports.deleteDataSheet=deleteDataSheet;
+// exports.deleteDataSheet=deleteDataSheet;
 exports.createDataSheetOne=createDataSheetOne;
 exports.getPageNames=getPageNames;
 exports.editDataPage=editDataPage;
 exports.addHeadingsToData=addHeadingsToData;
 exports.getHeadingsFromData=getHeadingsFromData;
 exports.getDataPageContent=getDataPageContent;
+exports.editDataRecords=editDataRecords;

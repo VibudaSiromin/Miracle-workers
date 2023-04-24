@@ -90,7 +90,7 @@ const Table = (props) => {
   },[dname])
 
   const updateTestSteps = (tableData) => {
-    if(props.callingFrom=='testSuites'){
+    if(props.callingFrom==='testSuites'){
       const url='http://localhost:5000/locators/'+tname
       const newTableData = [...testSteps,tableData];
       console.log('Gooooo',url); 
@@ -105,7 +105,7 @@ const Table = (props) => {
         console.log(err);
       });
     }
-    if(props.callingFrom=='component'){
+    if(props.callingFrom==='component'){
       const url='http://localhost:5000/locators/'+cname
       const newTableData = [...testSteps,tableData];
       console.log('Gooooo',url); 
@@ -147,11 +147,12 @@ const Table = (props) => {
     }
     if(props.callingFrom==='data'){
       const currentURL=location.pathname;//get current URL
-      console.log('myUL',currentURL)
+      
 
       if(currentURL==='/dataJunction/data/'+dname){
         const newTableData = [...testSteps,tableData];
         console.log('hello hell');
+        console.log('examine updateGeneralData')
         axios
         .post('http://localhost:5000/dataJunction/data/'+dname,{
           editedData:newTableData
@@ -198,7 +199,7 @@ const Table = (props) => {
   //edit when click on 'pen' btn
    const editHandler = (editedTableData,index) => {
     console.log('F1')
-    if(props.callingFrom=='locator'){
+    if(props.callingFrom==='locator'){
       const url='http://localhost:5000/locators/'+lname
       const applyEditedData=[...testSteps];
       applyEditedData[index]=editedTableData;
@@ -214,21 +215,29 @@ const Table = (props) => {
         console.log(err);
       });
     }
-    if(props.callingFrom=='data'){
-      const url='http://localhost:5000/data/'+dname
+    if(props.callingFrom==='data'){
       const applyEditedData=[...testSteps];
       applyEditedData[index]=editedTableData;
-      console.log('Gooooo',url); 
-      axios
-      .post(url,{
-        editedData:applyEditedData
-      })
-      .then((res)=>{
-        settestSteps(applyEditedData);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      settestSteps(applyEditedData);
+      const currentURL=location.pathname;//get current URL
+      console.log('myUL',currentURL)
+      console.log('zeebra',editedTableData);
+      console.log('moose',applyEditedData);
+
+      if(currentURL==='/dataJunction/data/'+dname){
+        console.log('examine editHandler')
+        axios
+        .post('http://localhost:5000/dataJunction/data/'+dname,{
+          editedData:applyEditedData//************ */
+        })
+        .then((res)=>{
+
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+        
+      } 
     }
     //  const applyEditedData=[...testSteps];
     //  applyEditedData[index]=editedTableData;
@@ -243,7 +252,7 @@ const Table = (props) => {
   }
 
   const deleteHandler=(index) => {
-    if(props.callingFrom=='locator'){
+    if(props.callingFrom==='locator'){
       const url='http://localhost:5000/locators/'+lname
       const tableDataAfterDelete=[...testSteps];
       tableDataAfterDelete.splice(index,1);
@@ -258,20 +267,25 @@ const Table = (props) => {
         console.log(err);
       });
     }
-    if(props.callingFrom=='data'){
-      const url='http://localhost:5000/data/'+dname
+    if(props.callingFrom==='data'){
+      const currentURL=location.pathname;
       const tableDataAfterDelete=[...testSteps];
       tableDataAfterDelete.splice(index,1);
+      settestSteps(tableDataAfterDelete);
+      if(currentURL==='/dataJunction/data/'+dname){
+        console.log('examine deleteHandler')
       axios
-      .post(url,{
+      .post('http://localhost:5000/dataJunction/data/'+dname,{
         editedData:tableDataAfterDelete
       })
       .then((res)=>{
-        settestSteps(tableDataAfterDelete);
+        
       })
       .catch((err) => {
         console.log(err);
       });
+      }
+      
     }
     // const tableDataAfterDelete=[...testSteps];
     // tableDataAfterDelete.splice(index,1);
@@ -284,7 +298,7 @@ const Table = (props) => {
     const numOfRaws=testSteps.length;
     console.log(numOfRaws);
     if(upOrDown===0 && rawIndex!==0){
-      if(props.callingFrom=='locator'){
+      if(props.callingFrom==='locator'){
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
@@ -300,7 +314,7 @@ const Table = (props) => {
         });
       }
 
-      if(props.callingFrom=='data'){
+      if(props.callingFrom==='data'){
         const url='http://localhost:5000/data/'+dname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
@@ -320,7 +334,7 @@ const Table = (props) => {
       // settestSteps(dataAfterArrowClick);
     }
     if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
-      if(props.callingFrom=='locator'){
+      if(props.callingFrom==='locator'){
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
         dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
@@ -336,7 +350,7 @@ const Table = (props) => {
         });
       }
 
-      if(props.callingFrom=='data'){
+      if(props.callingFrom==='data'){
         const url='http://localhost:5000/data/'+dname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
