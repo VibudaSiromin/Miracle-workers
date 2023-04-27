@@ -41,31 +41,37 @@ const Table = (props) => {
   }, [props.initialData]);
   
   const getLocatorsByPage=() => {
-    const url='http://localhost:5000/locators/'+lname;
-    axios
-    .get(url)
-    .then((res)=>{
-      const locators=res.data.locators;
-      console.log("Yoooo",locators)
-      settestSteps(locators);
-    })
-    .catch((err) => {
-      console.log(err);
-    });    
+    if(lname){
+      const url='http://localhost:5000/locators/'+lname;
+      axios
+      .get(url)
+      .then((res)=>{
+        const locators=res.data.locators;
+        console.log("Yoooo",locators)
+        settestSteps(locators);
+      })
+      .catch((err) => {
+        console.log(err);
+      }); 
+    }
+       
   }
 
   const getDataByPage=() => {
-    const url='http://localhost:5000/data/'+dname;
-    axios
-    .get(url)
-    .then((res)=>{
-      const data=res.data.data;
-      console.log("Yoooo",data)
-      settestSteps(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });    
+    if(dname){
+      const url='http://localhost:5000/data/'+dname;
+      axios
+      .get(url)
+      .then((res)=>{
+        const data=res.data.data;
+        console.log("Yoooo",data)
+        settestSteps(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      }); 
+    }
+      
   }
 
   useEffect(()=>{
