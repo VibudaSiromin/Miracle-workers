@@ -1,0 +1,74 @@
+.outline {
+  box-sizing: border-box;
+  width: 578.65px;
+  height: 683.63px;
+  border: 4.19922px solid #04d9ff;
+  border-radius: 16.7969px;
+}
+
+.headerBox {
+  width: 577.81px;
+  height: 62.99px;
+  left: 269.59px;
+  top: 150.33px;
+
+  background: linear-gradient(180deg, #516183 0%, #000000 100%);
+  border-radius: 16.7969px 16.7969px 0px 0px;
+}
+
+.cross {
+  left: 57.91%;
+  right: 40.85%;
+  top: 19.82%;
+  bottom: 78.52%;
+  color: #ffffff;
+}
+
+.button {
+  width: 79.79px;
+  height: 24.36px;
+  background: #1eaecd;
+  border-radius: 16.7969px;
+  border: none;
+}
+
+.plus {
+  width: 14.47px;
+  height: 13.34px;
+  color: darkgrey;
+}
+
+.add {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 13.4375px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.settingType {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 13.4375px;
+  line-height: 16px;
+  text-align: center;
+  color: #ffffff;
+}
+
+.textWithLogo {
+  font-family: "Lato";
+  font-style: normal;
+  font-weight: 700;
+  font-size: 40.3125px;
+  line-height: 48px;
+  text-align: center;
+  color: rgba(36, 34, 34, 0.52);
+}
+
+.logo {
+  height: 167.96875px;
+  width: 155.37109375px;
+}

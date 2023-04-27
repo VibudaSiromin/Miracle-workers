@@ -1,15 +1,20 @@
 import React from "react";
 import Raw from "./Raw";
-import { useEffect,useState } from "react";
+import { useEffect,useState,useContext } from "react";
 import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
 import { saveAs } from 'file-saver';
 import {MdClose,MdNavigateNext,MdNavigateBefore} from 'react-icons/md';
 import { TbTableOff } from "react-icons/tb";
-import './TableV1.css' 
+import './TableV1.css';
+import IndexContext from '../contexts/indexContext'
+import { useParams } from "react-router-dom";
+import axios from 'axios';
 
 const Table = (props) => {
+
+  const {lname,tname,cname,dname} =useParams();
   let indexOfRaw;
   let tableFields=[];
   const [dashboradNavLinkId,setDashboradNavLinkId] =useState('link01');//new
@@ -25,6 +30,7 @@ const Table = (props) => {
   const [prevButtonStatus,setPrevButtonStatus]=useState(false);
   const [testStepsPerPage,setTestStepPerPage]=useState([]);
   const [rowsPerPage,setRowsPerPage]=useState(5);
+  const {indexOfSection}=useContext(IndexContext);
 
   useEffect(() => {
     if(props.initialData!==undefined){
@@ -34,34 +40,152 @@ const Table = (props) => {
     
   }, [props.initialData]);
   
-  //link01==>test
-  //link02==>data
-  //link03==>locator
-  //link04==>component
+  const getLocatorsByPage=() => {
+    const url='http://localhost:5000/locators/'+lname;
+    axios
+    .get(url)
+    .then((res)=>{
+      const locators=res.data.locators;
+      console.log("Yoooo",locators)
+      settestSteps(locators);
+    })
+    .catch((err) => {
+      console.log(err);
+    });    
+  }
+
+  const getDataByPage=() => {
+    const url='http://localhost:5000/data/'+dname;
+    axios
+    .get(url)
+    .then((res)=>{
+      const data=res.data.data;
+      console.log("Yoooo",data)
+      settestSteps(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });    
+  }
+
+  useEffect(()=>{
+    getLocatorsByPage()
+  },[lname])
+
+  useEffect(()=>{
+    getDataByPage()
+  },[dname])
 
   const updateTestSteps = (tableData) => {
-    if(dashboradNavLinkId==='link01'){//new update adding 4 tunnels
-      const updatedTestSectionNames=[...testSectionName,['test01']];//add new test section names to existing names
-      setTestSectionName(updatedTestSectionNames);
-      const index=testSectionName.indexOf('test01');
-      setTestSection();
-
+    if(props.callingFrom=='testSuites'){
+      const url='http://localhost:5000/locators/'+tname
+      const newTableData = [...testSteps,tableData];
+      console.log('Gooooo',url); 
+      axios
+      .post(url,{
+        editedLocator:newTableData
+      })
+      .then((res)=>{
+        settestSteps(newTableData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
-    const newTableData = [...testSteps,tableData];
-    console.log(newTableData);
-    settestSteps(newTableData);
+    if(props.callingFrom=='component'){
+      const url='http://localhost:5000/locators/'+cname
+      const newTableData = [...testSteps,tableData];
+      console.log('Gooooo',url); 
+      axios
+      .post(url,{
+        editedLocator:newTableData
+      })
+      .then((res)=>{
+        settestSteps(newTableData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    // const newTableData = [...testSteps,tableData];
+    // console.log(newTableData);
+    // settestSteps(newTableData);
   };
 
   const updateGeneralData = (tableData) => {
-    const newTableData = [...testSteps,tableData];
-    settestSteps(newTableData);
+    if(props.callingFrom=='locator'){
+      const url='http://localhost:5000/locators/'+lname
+      const newTableData = [...testSteps,tableData];
+      console.log('Gooooo',url); 
+      axios
+      .post(url,{
+        editedLocator:newTableData
+      })
+      .then((res)=>{
+        settestSteps(newTableData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    if(props.callingFrom=='data'){
+      const url='http://localhost:5000/data/'+dname
+      const newTableData = [...testSteps,tableData];
+      axios
+      .post(url,{
+        editedData:newTableData
+      })
+      .then((res)=>{
+        settestSteps(newTableData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    console.log('Glock');
+    // const newTableData = [...testSteps,tableData];
+    // console.log('student ',newTableData);
+    // settestSteps(newTableData);
   };
 
    const editHandler = (editedTableData,index) => {
-     const applyEditedData=[...testSteps];
-     applyEditedData[index]=editedTableData;
-     settestSteps(applyEditedData);
-
+    if(props.callingFrom=='locator'){
+      const url='http://localhost:5000/locators/'+lname
+      const applyEditedData=[...testSteps];
+      applyEditedData[index]=editedTableData;
+      console.log('Gooooo',url); 
+      axios
+      .post(url,{
+        editedLocator:applyEditedData
+      })
+      .then((res)=>{
+        settestSteps(applyEditedData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    if(props.callingFrom=='data'){
+      const url='http://localhost:5000/data/'+dname
+      const applyEditedData=[...testSteps];
+      applyEditedData[index]=editedTableData;
+      console.log('Gooooo',url); 
+      axios
+      .post(url,{
+        editedData:applyEditedData
+      })
+      .then((res)=>{
+        settestSteps(applyEditedData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    //  const applyEditedData=[...testSteps];
+    //  applyEditedData[index]=editedTableData;
+    //  settestSteps(applyEditedData);
+    //  console.log("Hello");
+    //  console.log("index in table "+index);
    }
 
   const jsonHandler=() => {
@@ -70,9 +194,39 @@ const Table = (props) => {
   }
 
   const deleteHandler=(index) => {
-    const tableDataAfterDelete=[...testSteps];
-    tableDataAfterDelete.splice(index,1);
-    settestSteps(tableDataAfterDelete);
+    if(props.callingFrom=='locator'){
+      const url='http://localhost:5000/locators/'+lname
+      const tableDataAfterDelete=[...testSteps];
+      tableDataAfterDelete.splice(index,1);
+      axios
+      .post(url,{
+        editedLocator:tableDataAfterDelete
+      })
+      .then((res)=>{
+        settestSteps(tableDataAfterDelete);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    if(props.callingFrom=='data'){
+      const url='http://localhost:5000/data/'+dname
+      const tableDataAfterDelete=[...testSteps];
+      tableDataAfterDelete.splice(index,1);
+      axios
+      .post(url,{
+        editedData:tableDataAfterDelete
+      })
+      .then((res)=>{
+        settestSteps(tableDataAfterDelete);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    }
+    // const tableDataAfterDelete=[...testSteps];
+    // tableDataAfterDelete.splice(index,1);
+    // settestSteps(tableDataAfterDelete);
   }
 
   const arrowClickHandler=(upOrDown,rawIndex) => {
@@ -81,16 +235,77 @@ const Table = (props) => {
     const numOfRaws=testSteps.length;
     console.log(numOfRaws);
     if(upOrDown===0 && rawIndex!==0){
-      // console.log("move up",rawIndex,testStep);
-      dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
-      dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-      settestSteps(dataAfterArrowClick);
+      if(props.callingFrom=='locator'){
+        const url='http://localhost:5000/locators/'+lname
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post(url,{
+          editedLocator:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+
+      if(props.callingFrom=='data'){
+        const url='http://localhost:5000/data/'+dname
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post(url,{
+          editedData:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+      // dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+      // dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+      // settestSteps(dataAfterArrowClick);
     }
     if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
-      // console.log("move down",rawIndex,testStep);
-      dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
-      dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
-      settestSteps(dataAfterArrowClick);
+      if(props.callingFrom=='locator'){
+        const url='http://localhost:5000/locators/'+lname
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
+        dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+        axios
+        .post(url,{
+          editedLocator:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+
+      if(props.callingFrom=='data'){
+        const url='http://localhost:5000/data/'+dname
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post(url,{
+          editedData:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+      }
+      
+      // dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
+      // dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+      // settestSteps(dataAfterArrowClick);
     }   
   }
 
@@ -135,7 +350,7 @@ const Table = (props) => {
       setPrevButtonStatus(true);
     }
   }, [page,testSteps]);
-  
+  // console.log("Boooo",props.title)
   if(props.title.length!==0){
     tableFields.push(<th colSpan={3}>{"Action"}</th>)
     if(props.removeHeading===true){
