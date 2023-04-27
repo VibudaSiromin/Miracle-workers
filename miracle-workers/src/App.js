@@ -5,7 +5,7 @@ import Table from "./components/Table";
 import { Button } from "react-bootstrap";
 import OutputJSON from './components/OutputJSON';
 import Card from './components/Card';
-// import Launcher from "./components/Launcher";
+import Launcher from "./components/launcher";
 
 const PropsForChainPopUp = {
   enableChainPopUps: true,
@@ -16,7 +16,8 @@ const PropsForChainPopUp = {
 function App() {
   return (
     <div className="App">
-      <Table></Table>
+      {/* <Table></Table> */}
+      <Launcher/>
       {/* <Card></Card> */}
     </div>
   );
