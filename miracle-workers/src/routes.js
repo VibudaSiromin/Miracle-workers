@@ -38,6 +38,7 @@ const DataExcel = React.lazy(() => import('./views/dataExcel/DataExcel'))
 //data junction
 const DataJunction=React.lazy(() => import('./views/dataJunction/DataJunction'))
 //locator 
+//locator
 const Locator=React.lazy(() => import('./views/locator/Locator'))
 //component
 // const Component=React.lazy(() => import('./views/component/Component'))

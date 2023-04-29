@@ -30,7 +30,8 @@ import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
 let globleitems;
 
- export const AppSidebarNav = () => {
+
+export const AppSidebarNav = () => {
   const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
   const [locatorPageNames,setLocatorPageNames]=useState([])
   const [dataPageNames,setDataPageNames]=useState([]);
@@ -235,6 +236,14 @@ let globleitems;
           // .catch((err) => {
           //   console.log(err);
           // });
+          axios
+          .post('http://localhost:5000/data',{pageName:fieldValue})
+          .then((res)=>{
+            getDataPages();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
         // if(item.name==='Data'){
         //   item.items.push({
         //     component: CNavItem,

@@ -68,16 +68,20 @@ const Table = (props) => {
   //ex-:lname='45'
   //trigger when click on locator sheet links
   const getLocatorsByPage=() => {
-    const url='http://localhost:5000/locators/'+lname;
-    axios
-    .get(url)
-    .then((res)=>{
-      const locators=res.data.locators;
-      settestSteps(locators);//setTestStep from locator data
-    })
-    .catch((err) => {
-      console.log(err);
-    });    
+    if(lname){
+      const url='http://localhost:5000/locators/'+lname;
+      axios
+      .get(url)
+      .then((res)=>{
+        const locators=res.data.locators;
+        console.log("Yoooo",locators)
+        settestSteps(locators);
+      })
+      .catch((err) => {
+        console.log(err);
+      }); 
+    }
+       
   }
 
   //get the all the data of specific data sheet
@@ -167,9 +171,7 @@ const Table = (props) => {
 
   //update when click on 'ADD' btn
   const updateGeneralData = (tableData) => {
-    //update specific locator sheet data by using lname
-    console.log('zuze');
-    if(props.callingFrom==='locator'){
+    if(props.callingFrom=='locator'){
       const url='http://localhost:5000/locators/'+lname
       const newTableData = [...testSteps,tableData];
       settestSteps(newTableData);
