@@ -1,6 +1,9 @@
 const { json } = require('body-parser');
 const fs = require('fs');
 const path = require('path');
+// import { useLocation } from "react-router-dom";
+
+// const location=useLocation();
 
 const dataFilePath=path.join(__dirname,'../../store/data.json');
 // controller for fetching datasheets
@@ -138,8 +141,8 @@ const createDataSheetOne = async (req, res, next) => {
 ///////////////
 
 const addHeadingsToData = async(req,res,next) =>{
-  console.log('running addHeadingsToData');
   const dataPageName=req.params.dname;
+  const type=req.body.type;
   const newDataHeading=req.body.recentHeading;
 
   let dataSection;
@@ -147,8 +150,17 @@ const addHeadingsToData = async(req,res,next) =>{
   try{
     const data = await fs.promises.readFile(dataFilePath);
     dataSection = JSON.parse(data);
-    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
-      //allocate 2nd location of the data section for storing headings
+    
+    let index;
+    if(type==="Mannual"){
+      console.log("Unicorn");
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+
+    }else if(type==="Excel"){
+      console.log("Bull");
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
+    }
+  
       dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
       const newDataSection=JSON.stringify(dataSection);
       try{
@@ -168,14 +180,71 @@ const addHeadingsToData = async(req,res,next) =>{
   }
 }
 
+const removeHeading = async(req,res,next) => {
+  const dataPageName=req.params.dname;
+  const type=req.body.type;
+  const currentHeading=req.body.currentHeading;
+
+  let dataSection;
+
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    
+    let index;
+    if(type==="Mannual"){
+      console.log("Unicorn");
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+
+    }else if(type==="Excel"){
+      console.log("Bull");
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
+    }
+    //dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
+    dataSection[index][1]=currentHeading;
+      const newDataSection=JSON.stringify(dataSection);
+      try{
+        await fs.promises.writeFile(dataFilePath,newDataSection);
+        res.status(200).json({message:'Removed data headings'});
+
+      }catch(err){
+        console.log(err);
+        res.status(500).json({message:'Error occurred when removing data headings'});
+      }
+
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading data section' });
+  }
+
+
+
+}
+
+//////////////******** */
+const addHeading= async(req,res,next)=>{
+  const pageName=req.query.dataPageName;
+  
+}
+
 const getHeadingsFromData = async(req,res,next) => {
   console.log('running getHeadingsFromData');
-  const dataPageName=req.params.dname;
+  const dataPageName=req.query.dataPageName;
+  console.log("Mapping",dataPageName);
+
   let dataSection;
   try{
     const data = await fs.promises.readFile(dataFilePath);
     dataSection = JSON.parse(data);
-    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+
+    let index;
+    if(dataPageName.charAt(dataPageName.length-1)==="M"){
+       index = dataSection.findIndex(data=>data[0]===dataPageName);
+    }else if(dataPageName.charAt(dataPageName.length-1)==="E"){
+       index = dataSection.findIndex(data=>data[0]===dataPageName);
+    }
+    
+    //const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
     const selectedDataSheetHeadings=dataSection[index][1];
     const headingArray=selectedDataSheetHeadings.map((heading)=>{
       return [heading]
@@ -188,12 +257,20 @@ const getHeadingsFromData = async(req,res,next) => {
 
 const getDataPageContent = async(req,res,next) => {
   console.log('running getDataPageContent');
-  const dataPageName=req.params.dname;
+  //const dataPageName=req.params.dname;
+  const dataPageName=req.query.dataPageName;
   let dataSection;
   try{
     const data = await fs.promises.readFile(dataFilePath);
     dataSection = JSON.parse(data);
-    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+
+    let index;
+    if(dataPageName.charAt(dataPageName.length-1)==="M"){
+       index = dataSection.findIndex(data=>data[0]===dataPageName);
+    }else if(dataPageName.charAt(dataPageName.length-1)==="E"){
+       index = dataSection.findIndex(data=>data[0]===dataPageName);
+    }
+    //const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
     if(dataSection[index].length>2){
       const dataRecords=dataSection[index];
       dataRecords.splice(0,2);
@@ -206,33 +283,6 @@ const getDataPageContent = async(req,res,next) => {
   }
 }
  
-const editDataRecords = async(req,res,next) => {
-  console.log('running editDataRecords');
-  const dataPageName=req.params.dname;
-  const editedDataRecords=req.body.editedDataRecords;
-  let dataSection;
-  try{
-    const data = await fs.promises.readFile(dataFilePath);
-    dataSection = JSON.parse(data);
-    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
-    const dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
-    const newDataPage=[dataPageName+"M",dataPage[1],...editedDataRecords];
-    dataSection[index]=newDataPage;
-    const newDataSection=JSON.stringify(dataSection);
-    try{
-      console.log('walaha editDataRecords');
-      await fs.promises.writeFile(dataFilePath,newDataSection);
-      res.status(200).json({message:'Edited data records'});
-    }catch(err){
-      console.log(err);
-      res.status(500).json({message:'Error occurred when writting data records'});
-    }
-  }catch(err){
-    console.log(err);
-    res.status(500).json({message:'Error reading data section'});
-  }
-
-}
 
 //edit data pages individually
 
@@ -240,15 +290,34 @@ const editDataPage = async (req,res,next) => {
   console.log('running editDataPage');
   const dataPageName=req.params.dname;
   const newDataContent=req.body.editedData;
+  const type=req.body.type;
+
+  console.log("dataPageName: ",dataPageName);
+  console.log("Type: ",type);
+  console.log("data content: ",newDataContent);
+
+  console.log()
 
   let dataSection;
   try{
     const data = await fs.promises.readFile(dataFilePath);
     dataSection = JSON.parse(data);
 
-    const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
-    const dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
-    const newDataPage=[dataPageName+"M",dataPage[1],...newDataContent];
+    let index;
+    let dataPage;
+    let newDataPage;
+    if(type==="Mannual"){
+      console.log("butterfly Effect");
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+      dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
+      newDataPage=[dataPageName+"M",dataPage[1],...newDataContent];
+    }else if(type==="Excel"){
+      console.log("mach");
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
+      dataPage=dataSection.find(data=>data[0]===dataPageName+"E");
+      newDataPage=[dataPageName+"E",dataPage[1],...newDataContent];
+    }
+    
     dataSection[index]=newDataPage;
     const newDataSection=JSON.stringify(dataSection);
     try{
@@ -300,4 +369,5 @@ exports.editDataPage=editDataPage;
 exports.addHeadingsToData=addHeadingsToData;
 exports.getHeadingsFromData=getHeadingsFromData;
 exports.getDataPageContent=getDataPageContent;
-exports.editDataRecords=editDataRecords;
+exports.addHeading=addHeading;
+exports.removeHeading=removeHeading;

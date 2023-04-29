@@ -34,14 +34,35 @@ const Table = (props) => {
   const [testStepsPerPage,setTestStepPerPage]=useState([]);
   const [rowsPerPage,setRowsPerPage]=useState(5);
   const {indexOfSection}=useContext(IndexContext);
+  const [isMount,setIsMount]=useState(false);
 
   useEffect(() => {
-    if(props.initialData!==undefined){
+    if(props.initialData!==undefined && isMount){
+      console.log('GTO',props.initialData);
       settestSteps(props.initialData);
+      const currentURL=location.pathname;
+      if(props.callingFrom==="data"){ 
+        if(currentURL==='/dataJunction/dataExcel/'+dname){
+          console.log("VEGA INO");
+          axios
+          .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+            editedData:props.initialData,
+            type:"Excel"
+          })
+          .then(()=>{
+
+          })
+          .catch((err)=>{
+            console.log(err);
+          })
+        }
+      }
       setTestStepPerPage(props.initialData.slice(page*rowsPerPage,page*rowsPerPage+rowsPerPage));
+    }else{
+      setIsMount(true);
     }
     
-  }, [props.initialData]);
+  }, [props.isInitialHeadingStored]);
   
   //get the all the data of specific locator sheet
   //ex-:lname='45'
@@ -52,7 +73,6 @@ const Table = (props) => {
     .get(url)
     .then((res)=>{
       const locators=res.data.locators;
-      console.log("Yoooo",locators)
       settestSteps(locators);//setTestStep from locator data
     })
     .catch((err) => {
@@ -67,16 +87,35 @@ const Table = (props) => {
     if(currentURL==='/dataJunction/data/'+dname){
       axios
       .get('http://localhost:5000/dataJunction/data/'+dname,{
-        dataPageName:dname
+        params:{
+          dataPageName:dname+"M"
+        }
+        //dataPageName:dname
       })
       .then((res)=>{
         const data=res.data.getDataRecords;
-        console.log("Yoooo",data)
         settestSteps(data);
       })
       .catch((err) => {
         console.log(err);
       });    
+    }
+    if(currentURL==='/dataJunction/dataExcel/'+dname){
+      console.log("Thunder");
+      axios
+      .get('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+        params:{
+          dataPageName:dname+"E"
+        }
+      })
+      .then((res)=>{
+        console.log("Lighting");
+        const data=res.data.getDataRecords;
+        settestSteps(data);
+      })
+      .catch((err)=>{
+        console.log(err);
+      });
     }
     
   }
@@ -93,6 +132,7 @@ const Table = (props) => {
     if(props.callingFrom==='testSuites'){
       const url='http://localhost:5000/locators/'+tname
       const newTableData = [...testSteps,tableData];
+      settestSteps(newTableData);
       console.log('Gooooo',url); 
       axios
       .post(url,{
@@ -148,14 +188,15 @@ const Table = (props) => {
     if(props.callingFrom==='data'){
       const currentURL=location.pathname;//get current URL
       
-
+      console.log('QQ9 9mm');
       if(currentURL==='/dataJunction/data/'+dname){
         const newTableData = [...testSteps,tableData];
         console.log('hello hell');
         console.log('examine updateGeneralData')
         axios
         .post('http://localhost:5000/dataJunction/data/'+dname,{
-          editedData:newTableData
+          editedData:newTableData,
+          type:"Mannual"
         })
         .then((res)=>{
           settestSteps(newTableData);
@@ -164,10 +205,13 @@ const Table = (props) => {
           console.log(err)
         })
       }else if(currentURL==='/dataJunction/dataExcel/'+dname){
+        console.log('Machine Gun');
         const newTableData = [...testSteps,tableData];
+        // settestSteps(newTableData);
         axios
         .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
-          editedData:newTableData
+          editedData:newTableData,
+          type:"Excel"
         })
         .then((res)=>{
           settestSteps(newTableData);
@@ -177,23 +221,10 @@ const Table = (props) => {
         })
 
       }
-      // const url='http://localhost:5000/dataJunction/'+dname
-      // const newTableData = [...testSteps,tableData];
-      // axios
-      // .post(url,{
-      //   editedData:newTableData
-      // })
-      // .then((res)=>{
-      //   settestSteps(newTableData);
-      // })
-      // .catch((err) => {
-      //   console.log(err);
-      // });
+      
     }
     console.log('Glock');
-    // const newTableData = [...testSteps,tableData];
-    // console.log('student ',newTableData);
-    // settestSteps(newTableData);
+   
   };
 
   //edit when click on 'pen' btn
@@ -228,7 +259,8 @@ const Table = (props) => {
         console.log('examine editHandler')
         axios
         .post('http://localhost:5000/dataJunction/data/'+dname,{
-          editedData:applyEditedData//************ */
+          editedData:applyEditedData,//************ */
+          type:"Mannual"
         })
         .then((res)=>{
 
@@ -237,13 +269,21 @@ const Table = (props) => {
           console.log(err);
         })
         
+      }else if(currentURL==='/dataJunction/dataExcel/',dname){
+        axios
+        .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+          editedData:applyEditedData,//************ */
+          type:"Excel"
+        })
+        .then((res)=>{
+
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
       } 
     }
-    //  const applyEditedData=[...testSteps];
-    //  applyEditedData[index]=editedTableData;
-    //  settestSteps(applyEditedData);
-    //  console.log("Hello");
-    //  console.log("index in table "+index);
+   
    }
 
   const jsonHandler=() => {
@@ -252,6 +292,7 @@ const Table = (props) => {
   }
 
   const deleteHandler=(index) => {
+    console.log("Running delete handler");
     if(props.callingFrom==='locator'){
       const url='http://localhost:5000/locators/'+lname
       const tableDataAfterDelete=[...testSteps];
@@ -276,7 +317,8 @@ const Table = (props) => {
         console.log('examine deleteHandler')
       axios
       .post('http://localhost:5000/dataJunction/data/'+dname,{
-        editedData:tableDataAfterDelete
+        editedData:tableDataAfterDelete,
+        type:"Mannual"
       })
       .then((res)=>{
         
@@ -284,15 +326,26 @@ const Table = (props) => {
       .catch((err) => {
         console.log(err);
       });
+      }else if(currentURL==='/dataJunction/dataExcel/'+dname){
+        axios
+        .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+          editedData:tableDataAfterDelete,
+          type:"Excel"
+        })
+        .then((res)=>{
+          console.log(res);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
       }
       
     }
-    // const tableDataAfterDelete=[...testSteps];
-    // tableDataAfterDelete.splice(index,1);
-    // settestSteps(tableDataAfterDelete);
+    
   }
 
   const arrowClickHandler=(upOrDown,rawIndex) => {
+    console.log("Running arrow click handler");
     const presentData=[...testSteps];
     const dataAfterArrowClick=[...testSteps];
     const numOfRaws=testSteps.length;
@@ -320,7 +373,8 @@ const Table = (props) => {
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
         axios
         .post(url,{
-          editedData:dataAfterArrowClick
+          editedData:dataAfterArrowClick,
+          type:"Mannual"
         })
         .then((res)=>{
           settestSteps(dataAfterArrowClick);
@@ -356,7 +410,8 @@ const Table = (props) => {
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
         axios
         .post(url,{
-          editedData:dataAfterArrowClick
+          editedData:dataAfterArrowClick,
+          type:"Mannual"
         })
         .then((res)=>{
           settestSteps(dataAfterArrowClick);
@@ -380,6 +435,7 @@ const Table = (props) => {
       delete testStep[selectedHeading];//the 'delete' keyword is used to remove a property from an object.
       editedTestSteps.push(testStep);
     }
+
     props.dropHeading(headingIndex);
     settestSteps(editedTestSteps);
   }

@@ -12,8 +12,8 @@ function EditModalDialog(props,ref) {
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState(props.raw);
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
-  const [isMountModalOneGeneralDataSet,setIsMountModalOneGeneralDataSet]=React.useState(false);
-  const [isMountModalTwoDataSet,setIsmountModalTwoDataSet]=React.useState(false);
+  const [isMountModalOneGeneralDataSet,setIsMountModalOneGeneralDataSet]=React.useState(false);//Use for handle the unexpected behaviour
+  const [isMountModalTwoDataSet,setIsmountModalTwoDataSet]=React.useState(false);//Use for handle the unexpected behaviour
 
   console.log(props.raw);
   console.log("Ghost "+props.showState);
