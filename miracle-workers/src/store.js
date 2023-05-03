@@ -11,6 +11,13 @@ const initialDataSheetState = {
   initialRunningConditionForManual:false
 }
 
+const initialTestSheetState = {
+  functionCalledJson: false,
+  functionCalledManual: false,
+  initialRunningConditionForJson:false,
+  initialRunningConditionForManual:false
+}
+
 const changeStateReducer = (state = initialSideBarState, { type, ...rest }) => {
   console.log('sirimath');
   switch (type) {
@@ -41,9 +48,30 @@ const addDataSheetNameReducer = (state = initialDataSheetState, action) => {
   }
 }
 
+const addTestSheetNameReducer = (state = initialTestSheetState, action) => {
+  console.log('nila kuru');
+  switch (action.type) {
+    case "FUNCTION_CALLED_JSON":
+      return {
+        ...state,
+        functionCalledJson: !state.functionCalledJson,
+        initialRunningConditionForJson:true
+      };
+    case "FUNCTION_CALLED_MANUAL":
+      return {
+        ...state,
+        functionCalledManual: !state.functionCalledManual,
+        initialRunningConditionForManual:true
+      };
+    default:
+      return state;
+  }
+}
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
-    addDataSheetName:addDataSheetNameReducer
+    addDataSheetName:addDataSheetNameReducer,
+    addTestSheetName:addTestSheetNameReducer
 })
 
 const store = createStore(rootReducer)

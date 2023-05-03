@@ -30,20 +30,50 @@ const Card = (props) => {
         background: props.backgroundColor
     }
 
-    const dataSectionPathHandler = () => {
-        if(props.cardTitle==="Excel"){
-            navigate('/dataJunction/dataExcel');
-            dispatch({ type: 'MY_FUNCTION_CALLED_EXCEL' });
-        }else if(props.cardTitle==="Manually"){
-            navigate('/dataJunction/data');
-            dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
+    const sectionPathHandler = () => {
+        if(props.sectionName==="data"){
+            if(props.cardTitle==="Excel"){
+                navigate('/dataJunction/dataExcel');
+                dispatch({ type: 'MY_FUNCTION_CALLED_EXCEL' });
+            }else if(props.cardTitle==="Manually"){
+                navigate('/dataJunction/data');
+                dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
+            }
+        }else if(props.sectionName==="test"){
+            if(props.cardTitle==="JSON"){
+                navigate('/testJunction/testJson');
+                dispatch({ type: 'FUNCTION_CALLED_JSON' });
+            }else if(props.cardTitle==="Manually"){
+                navigate('/testJunction/testManual');
+                dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
+            }
         }
     }
+
+    // const dataSectionPathHandler = () => {
+    //     if(props.cardTitle==="Excel"){
+    //         navigate('/dataJunction/dataExcel');
+    //         dispatch({ type: 'MY_FUNCTION_CALLED_EXCEL' });
+    //     }else if(props.cardTitle==="Manually"){
+    //         navigate('/dataJunction/data');
+    //         dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
+    //     }
+    // }
+
+    // const testSectionPathHandler = () => {
+    //     if(props.cardTitle==="JSON"){
+    //         navigate('/testJunction/testJson');
+    //         dispatch({ type: 'FUNCTION_CALLED_JSON' });
+    //     }else if(props.cardTitle==="Manually"){
+    //         navigate('/testJunction/testManual');
+    //         dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
+    //     }
+    // }
 
     console.log('sand man 2');
 
     return( 
-            <Button className="card" style={cardStyle} value={props.cardTitle} onClick={dataSectionPathHandler}>
+            <Button className="card" style={cardStyle} value={props.cardTitle} onClick={sectionPathHandler}>
                 <div className="ul_container">
                     <ul className="list-group list-group-flush" >
                          <li className="" style={listItemStyle}>{props.cardTitle}</li>

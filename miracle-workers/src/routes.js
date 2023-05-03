@@ -31,6 +31,8 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 //testSuites
 const TestSuites = React.lazy(() => import('./views/testSuites/testSuite'))
+//test junction
+const TestJunction=React.lazy(() => import('./views/testJunction/TestJunction'))
 //data manual
 const Data = React.lazy(() => import('./views/data/Data'))
 //data excel
@@ -79,6 +81,7 @@ const routes = [
   { path: '/widgets', name: 'Widgets', element: Widgets },
   { path: '/testSuites/:tname', name: 'TestSuites', element: TestSuites },
   { path: '/dataJunction/data/:dname' , name:'Data', element:Data},
+  { path: '/testJunction' , name:'TestJunction', element:TestJunction},
   { path: '/dataJunction' , name:'DataJunction', element:DataJunction},
   { path: '/dataJunction/dataExcel/:dname' , name:'DataExcel', element:DataExcel},  
   { path: '/locator/:lname' , name:'Locator' , element:Locator},

@@ -103,7 +103,7 @@ const getPageNames=async(req, res, next)=>{
     const pageNamesArray=dataFile.map(data=>data[0]);
     console.log("WoW",pageNamesArray)
     res.json({ dataPageNames: pageNamesArray });
-  }catch{
+  }catch(err){
     console.log(err);
     res.status(500).json({ message: 'Error reading data file' });
     return;

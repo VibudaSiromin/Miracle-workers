@@ -6,7 +6,7 @@ const settingRoutes=require('./routes/settings-routes/settings-routes');
 const locatorRoutes=require('./routes/locator-routes/locator-routes');
 const dataRoutes=require('./routes/data-routes/data-routes');
 const launcherRoutes=require('./routes/launcher-routes/launcher-routes');
-
+const testRoutes=require('./routes/test-routes/test-routes');
 
 const app=express();
 
@@ -26,6 +26,7 @@ app.use('/',dataRoutes);
 app.use('/',settingRoutes);
 app.use('/',locatorRoutes);
 app.use('/',launcherRoutes);
+app.use('/',testRoutes);
 app.get('/',(req,res,next)=>{
     res.json({message:'Hi'});
 })
