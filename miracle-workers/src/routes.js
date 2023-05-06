@@ -30,9 +30,13 @@ const Widgets = React.lazy(() => import('./views/widgets/Widgets'))
 
 
 //testSuites
-const TestSuites = React.lazy(() => import('./views/testSuites/testSuite'))
+const TestSuites = React.lazy(() => import('./views/testJson/TestJson'))
 //test junction
 const TestJunction=React.lazy(() => import('./views/testJunction/TestJunction'))
+//test json
+const TestJson=React.lazy(() => import('./views/testJson/TestJson'))
+//test manual
+const TestManual=React.lazy(() => import('./views/testManual/TestManual'))
 //data manual
 const Data = React.lazy(() => import('./views/data/Data'))
 //data excel
@@ -83,7 +87,8 @@ const routes = [
   { path: '/dataJunction/data/:dname' , name:'Data', element:Data},
   { path: '/testJunction' , name:'TestJunction', element:TestJunction},
   { path: '/dataJunction' , name:'DataJunction', element:DataJunction},
-  { path: '/dataJunction/dataExcel/:dname' , name:'DataExcel', element:DataExcel},  
+  { path: '/dataJunction/dataExcel/:dname' , name:'DataExcel', element:DataExcel},
+  { path: '/testJunction/testManual/:tname' , name:'TestManual', element:TestManual},  
   { path: '/locator/:lname' , name:'Locator' , element:Locator},
   { path: '/settings' , name:'Settings', element:Settings},
   { path: '/settings/browsers', name:'Browsers', element:Browsers},

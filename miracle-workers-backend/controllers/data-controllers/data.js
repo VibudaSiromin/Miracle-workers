@@ -95,13 +95,11 @@ const dataFilePath=path.join(__dirname,'../../store/data.json');
 //get data sheet names
 
 const getPageNames=async(req, res, next)=>{
-  console.log('running getPageName');
   let dataFile;
   try{
     const data = await fs.promises.readFile(dataFilePath);
     dataFile = JSON.parse(data);
     const pageNamesArray=dataFile.map(data=>data[0]);
-    console.log("WoW",pageNamesArray)
     res.json({ dataPageNames: pageNamesArray });
   }catch(err){
     console.log(err);
@@ -113,7 +111,6 @@ const getPageNames=async(req, res, next)=>{
 //////////////////////
 
 const createDataSheetOne = async (req, res, next) => {
-  console.log('running createDataSheetOne');
   let dataFile;
   const dataPageName=req.body.pageName;
   try{
@@ -122,9 +119,8 @@ const createDataSheetOne = async (req, res, next) => {
       dataFile.push([dataPageName,[]]);
       const newData=JSON.stringify(dataFile);
         try{
-          console.log('hava createDataSheetOne');
           await fs.promises.writeFile(dataFilePath,newData);
-          res.status(200).json({message:'Created locator Page'});
+          res.status(200).json({message:'Created data Page'});
         }catch(err){
           console.log(err);
           res.status(500).json({message:'Error occurred when creating data file'});
@@ -153,18 +149,15 @@ const addHeadingsToData = async(req,res,next) =>{
     
     let index;
     if(type==="Mannual"){
-      console.log("Unicorn");
       index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
 
     }else if(type==="Excel"){
-      console.log("Bull");
       index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
     }
   
       dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
       const newDataSection=JSON.stringify(dataSection);
       try{
-        console.log('Ibba addHeadingsToData');
         await fs.promises.writeFile(dataFilePath,newDataSection);
         res.status(200).json({message:'Edited data headings'});
 
@@ -193,11 +186,9 @@ const removeHeading = async(req,res,next) => {
     
     let index;
     if(type==="Mannual"){
-      console.log("Unicorn");
       index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
 
     }else if(type==="Excel"){
-      console.log("Bull");
       index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
     }
     //dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
@@ -228,9 +219,7 @@ const addHeading= async(req,res,next)=>{
 }
 
 const getHeadingsFromData = async(req,res,next) => {
-  console.log('running getHeadingsFromData');
   const dataPageName=req.query.dataPageName;
-  console.log("Mapping",dataPageName);
 
   let dataSection;
   try{
@@ -256,8 +245,6 @@ const getHeadingsFromData = async(req,res,next) => {
 }
 
 const getDataPageContent = async(req,res,next) => {
-  console.log('running getDataPageContent');
-  //const dataPageName=req.params.dname;
   const dataPageName=req.query.dataPageName;
   let dataSection;
   try{
@@ -287,16 +274,13 @@ const getDataPageContent = async(req,res,next) => {
 //edit data pages individually
 
 const editDataPage = async (req,res,next) => {
-  console.log('running editDataPage');
   const dataPageName=req.params.dname;
   const newDataContent=req.body.editedData;
   const type=req.body.type;
 
-  console.log("dataPageName: ",dataPageName);
-  console.log("Type: ",type);
-  console.log("data content: ",newDataContent);
-
-  console.log()
+  // console.log("dataPageName: ",dataPageName);
+  // console.log("Type: ",type);
+  // console.log("data content: ",newDataContent);
 
   let dataSection;
   try{
@@ -307,12 +291,10 @@ const editDataPage = async (req,res,next) => {
     let dataPage;
     let newDataPage;
     if(type==="Mannual"){
-      console.log("butterfly Effect");
       index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
       dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
       newDataPage=[dataPageName+"M",dataPage[1],...newDataContent];
     }else if(type==="Excel"){
-      console.log("mach");
       index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
       dataPage=dataSection.find(data=>data[0]===dataPageName+"E");
       newDataPage=[dataPageName+"E",dataPage[1],...newDataContent];
@@ -321,7 +303,6 @@ const editDataPage = async (req,res,next) => {
     dataSection[index]=newDataPage;
     const newDataSection=JSON.stringify(dataSection);
     try{
-      console.log('balla editDataPage');
       await fs.promises.writeFile(dataFilePath,newDataSection);
       res.status(200).json({message:'Edited data content'});
     }catch(err){

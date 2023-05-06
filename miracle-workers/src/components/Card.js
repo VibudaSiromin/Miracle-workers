@@ -4,10 +4,15 @@ import { SiMicrosoftexcel } from "react-icons/si";
 import { BiPlayCircle } from "react-icons/bi";
 import { Button } from 'react-bootstrap';
 import { Router, Route, Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
+//import { Connect } from 'react-redux';
+import { connect } from 'react-redux';
+
 
 const Card = (props) => {
 
+    const {lname,tname,cname,dname} =useParams();
     const dispatch = useDispatch();
     
     const navigate=useNavigate();
@@ -40,12 +45,18 @@ const Card = (props) => {
                 dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
             }
         }else if(props.sectionName==="test"){
+            console.log('Clicked on test');
             if(props.cardTitle==="JSON"){
+                console.log('Clicked on Json');
                 navigate('/testJunction/testJson');
                 dispatch({ type: 'FUNCTION_CALLED_JSON' });
             }else if(props.cardTitle==="Manually"){
-                navigate('/testJunction/testManual');
-                dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
+                console.log('Clicked on manual',props.testPageName);
+                navigate('/testJunction/testManual/'+props.testPageName);
+                setTimeout(()=>{
+                    dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
+                },1000);
+                
             }
         }
     }
@@ -69,8 +80,7 @@ const Card = (props) => {
     //         dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
     //     }
     // }
-
-    console.log('sand man 2');
+    //console.log("GRUNT",props.testPageName);
 
     return( 
             <Button className="card" style={cardStyle} value={props.cardTitle} onClick={sectionPathHandler}>
@@ -86,4 +96,18 @@ const Card = (props) => {
     );
 }
 
-export default Card;
+// const mapStateToProps = (state) => {
+//     console.log('bird',state.getTestSheetName.testPageName);
+//     return{
+//       testPageName: state.getTestSheetName.testPageName,
+//     }
+    
+//   };
+
+const mapStateToProps = (state) => {
+    return{
+        testPageName: state.getTestSheetName.testPageName
+    }
+  };
+
+export default connect(mapStateToProps)(Card);

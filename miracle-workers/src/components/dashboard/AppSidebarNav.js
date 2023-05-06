@@ -11,6 +11,7 @@ import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
 import {MdDeleteForever} from 'react-icons/md';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import {
@@ -38,6 +39,8 @@ export const AppSidebarNav = () => {
   const [dataPageName,setDataPageName]=useState(null);
   const [testPageNames,setTestPageNames]=useState([]);
   const [testPageName,setTestPageName]=useState(null);
+
+  const dispatch = useDispatch();
 
   
   const getLocatorPages=()=>{
@@ -68,10 +71,10 @@ export const AppSidebarNav = () => {
 
   const getTestPages = () => {
     axios
-    .get('http://localhost:5000')
+    .get('http://localhost:5000/testPages')
     .then((res)=>{
       setTestPageNames(res.data.testPageNames);
-      console.log("rooooooo",res.data.testPageNames)
+      console.log("141",res.data.testPageNames)
     })
     .catch((err) => {
       console.log(err);
@@ -204,6 +207,33 @@ export const AppSidebarNav = () => {
     setItems([...newItems])
   },[dataPageNames])
 
+
+  useEffect(()=>{
+    console.log('citadel');
+    let newArray=[];
+    for(let i=0;i<testPageNames.length;i++){
+      //routing path will be decided according to the last character of the page name
+      //if last character='J' => path = '/testJunction/testJson'
+      //if last character='M' => path = '/testJunction/testManual'
+      if(testPageNames[i].charAt(testPageNames[i].length-1)==="J"){
+        newArray.push({
+          component: CNavItem,
+          name: testPageNames[i].slice(0,-1),
+          to: '/testJunction/testJson/'+testPageNames[i].slice(0,-1),        
+        })
+      }else if(testPageNames[i].charAt(testPageNames[i].length-1)==="M"){
+        newArray.push({
+          component: CNavItem,
+          name: testPageNames[i].slice(0,-1),
+          to: '/testJunction/testManual/'+testPageNames[i].slice(0,-1),        
+        })
+      } 
+    }
+    let newItems=items;
+    newItems[2].items=newArray;
+    console.log("space",newItems) 
+    setItems([...newItems])
+  },[testPageNames])
 
 
 
@@ -354,7 +384,7 @@ export const AppSidebarNav = () => {
 
   const addTestSheetBasedOnJson = () => {
     if(testPageName!==null){
-      console.log('calling from Json');
+      console.log('calling from Json test');
       if(indexOfSection===2){//add new pageName to Data Section
 
         axios
@@ -365,6 +395,15 @@ export const AppSidebarNav = () => {
           .catch((err) => {
             console.log(err);
           });
+
+          // axios
+          // .post('http://localhost:5000/testJunction/testJson',{pageName:testPageName+"J"})
+          // .then((res)=>{
+          //   getTestPages();
+          // })
+          // .catch((err) => {
+          //   console.log(err);
+          // });
 
         // const modifiedItems=items;
         // modifiedItems[3].items.push({
@@ -379,7 +418,8 @@ export const AppSidebarNav = () => {
   }; 
 
   const addTestSheetBasedOnManual = () => {
-    if(dataPageName!==null){
+    console.log('Winnn');
+    if(testPageName!==null){
       console.log('calling from manual test');
       if(indexOfSection===2){//add new pageName to Data Section
 
@@ -406,6 +446,9 @@ export const AppSidebarNav = () => {
 
   //const myFunctionCalled = useSelector((state) => state.addDataSheetName.myFunctionCalled);
   //console.log('KDK',myFunctionCalled);
+
+  //for data section
+
   const calledFromExcel = useSelector((state) => state.addDataSheetName.myFunctionCalledExcel);
   console.log('KDK',calledFromExcel);
 
@@ -505,12 +548,12 @@ export const AppSidebarNav = () => {
     }
   }
 
-  const modalRef=useRef();
+  //const modalRef=useRef();
   const initiateNameAssigner= (index) => {
-    console.log("goooooooooo",indexOfSection)
     setIndexOfSection(index);
     console.log('Warlord: ',index);
-    modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
+    dispatch({type:'INITIATE_NAME_ASSIGNER'});
+    //modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
 }
 
   const location = useLocation()
@@ -585,7 +628,7 @@ export const AppSidebarNav = () => {
       {items &&
         items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
     </React.Fragment>
-    <NameAssignModal ref={modalRef} indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
+    <NameAssignModal /*ref={modalRef}*/ indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
     </>
   )
 }
