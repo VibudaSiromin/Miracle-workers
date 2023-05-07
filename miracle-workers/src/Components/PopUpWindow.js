@@ -5,7 +5,6 @@ import PopUpSelection from "./PopUpSelection";
 import {MdTableRows} from 'react-icons/md';
 import { forwardRef,useImperativeHandle,useState } from "react";
 
-
 function ModalDialog(props,ref) {
   const [toggleOneModal, setToggleOneModal]  = React.useState(false);
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
@@ -18,9 +17,7 @@ function ModalDialog(props,ref) {
   let inputFieldArrayModalTwo = [];
   let btnValue;
   const getEditTestStep=props.editTestStep;
-  // console.log('car car car');
-  // console.log(getEditTestStep);
-
+  
   const testStepsData = {};
   const testStepsData2 = {};
   const generalPurposeInputData={};
@@ -149,7 +146,6 @@ function ModalDialog(props,ref) {
 
   };
   
-  console.log('eliye');
 
   myLoop();
   const initModalOne = () => {
@@ -193,20 +189,18 @@ function ModalDialog(props,ref) {
   ApplyBtnValue();
 
   const submitHandlerOne = (event) => {
-    console.log('Submit Handler one',props.purpose);
     event.preventDefault();
     if(props.enableChainPopUps===false){
         if(props.generalPurpose===false){
           props.saveNewData(modalOneDataSet);
         }
         if(props.generalPurpose===true){
-          console.log('pihibiya');
           if(props.purpose==='fillData'){
             console.log('fillData AX1');
-            props.saveNewGeneralData(modalOneGeneralDataSet);
+            props.saveNewGeneralData(modalOneGeneralDataSet);// calling from heading component
           }
           if(props.purpose==='addHeading'){
-            console.log('heading hornet');
+            console.log('triple H')
             props.saveNewHeadingData(modalOneGeneralDataSet);
           }          
         }

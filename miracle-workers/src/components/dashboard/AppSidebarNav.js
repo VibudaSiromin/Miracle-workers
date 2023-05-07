@@ -1,5 +1,5 @@
 import React,{useContext,useEffect} from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { NavLink, useLocation,useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import { GrAdd, GrDashboard } from 'react-icons/gr'
 import {AiFillFileAdd} from 'react-icons/ai';
@@ -10,6 +10,7 @@ import { CBadge, CNavLink } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
 import {MdDeleteForever} from 'react-icons/md';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 import {
@@ -27,11 +28,16 @@ import {
 } from '@coreui/icons'
 import { CNavGroup, CNavItem, CNavTitle } from '@coreui/react'
 
+let globleitems;
+
+
 export const AppSidebarNav = () => {
   const {indexOfSection,setIndexOfSection}=useContext(IndexContext);
   const [locatorPageNames,setLocatorPageNames]=useState([])
-  const [dataPageNames,setDataPageNames]=useState([])
+  const [dataPageNames,setDataPageNames]=useState([]);
+  const [dataPageName,setDataPageName]=useState(null);
 
+  
   const getLocatorPages=()=>{
     axios
     .get('http://localhost:5000/locators')
@@ -44,9 +50,9 @@ export const AppSidebarNav = () => {
     });
   }
 
-  const getDataPages=()=>{
+  const getDataPages = () => {
     axios
-    .get('http://localhost:5000/data')
+    .get('http://localhost:5000')
     .then((res)=>{
       setDataPageNames(res.data.dataPageNames);
       console.log("rooooooo",res.data.dataPageNames)
@@ -54,15 +60,35 @@ export const AppSidebarNav = () => {
     .catch((err) => {
       console.log(err);
     });
+
   }
 
+  // const getDataPages = () => {
+  //   axios
+  //   .
+  // }
+
+  // const getDataPages=()=>{
+  //   axios
+  //   .get('http://localhost:5000/data')
+  //   .then((res)=>{
+  //     setDataPageNames(res.data.dataPageNames);
+  //     console.log("rooooooo",res.data.dataPageNames)
+  //   })
+  //   .catch((err) => {
+  //     console.log(err);
+  //   });
+  // }
+
   useEffect(() => {
+    console.log('Normandy');
     getLocatorPages();
     getDataPages();
   }, []);
 
   console.log("Hoooo",locatorPageNames)
 
+  const navigate = useNavigate();
   const [items,setItems]=useState(
     [
       {
@@ -115,6 +141,7 @@ export const AppSidebarNav = () => {
   );
 
   useEffect(()=>{
+    console.log('mass effect');
     let newArray=[];
     for(let i=0;i<locatorPageNames.length;i++){
       newArray.push({
@@ -125,28 +152,67 @@ export const AppSidebarNav = () => {
     }
     let newItems=items;
     newItems[5].items=newArray;
-    console.log("Hoooo",newItems)
-    setItems(newItems)
-  },[locatorPageNames])
+    console.log("space",newItems)
+    setItems([...newItems])
+  },[locatorPageNames])//when locatorPageName changes this useEffect hook will be triggered
+
+
+  //add data sheet names from the store
 
   useEffect(()=>{
+    console.log('mass effect');
     let newArray=[];
     for(let i=0;i<dataPageNames.length;i++){
-      newArray.push({
-        component: CNavItem,
-        name: dataPageNames[i],
-        to: '/data/'+dataPageNames[i],        
-      })
+      //routing path will be decided according to the last character of the page name
+      //if last character='E' => path = '/dataJunction/dataExcel'
+      //if last character='M' => path = '/dataJunction/data'
+      if(dataPageNames[i].charAt(dataPageNames[i].length-1)==="E"){
+        newArray.push({
+          component: CNavItem,
+          name: dataPageNames[i].slice(0,-1),
+          to: '/dataJunction/dataExcel/'+dataPageNames[i].slice(0,-1),        
+        })
+      }else if(dataPageNames[i].charAt(dataPageNames[i].length-1)==="M"){
+        newArray.push({
+          component: CNavItem,
+          name: dataPageNames[i].slice(0,-1),
+          to: '/dataJunction/data/'+dataPageNames[i].slice(0,-1),        
+        })
+      } 
     }
     let newItems=items;
-    newItems[5].items=newArray;
-    console.log("Hoooo",newItems)
-    setItems(newItems)
+    newItems[3].items=newArray;
+    console.log("space",newItems) 
+    setItems([...newItems])
   },[dataPageNames])
+
+
+
+
+
+
+
+
+
+
+  // useEffect(()=>{
+  //   let newArray=[];
+  //   for(let i=0;i<dataPageNames.length;i++){
+  //     newArray.push({
+  //       component: CNavItem,
+  //       name: dataPageNames[i],
+  //       to: '/data/'+dataPageNames[i],        
+  //     })
+  //   }
+  //   let newItems=items;
+  //   newItems[5].items=newArray;
+  //   console.log("Hoooo",newItems)
+  //   setItems(newItems)
+  // },[dataPageNames])
   // updating items
 
-  const pageNameHandler = (fieldValue) => {
-    const modifiedItems=items.map(item=>{
+  const pageNameHandler =(fieldValue) => {
+    const modifiedItems=items.map((item)=>{
       //add new pageName to test suite
       if(indexOfSection===2){
         if(item.name==='Test Suite'){
@@ -159,6 +225,17 @@ export const AppSidebarNav = () => {
         
       }else if(indexOfSection===3){//add new pageName to Data Section
         if(item.name==='Data'){
+          navigate('/dataJunction');
+          setDataPageName(fieldValue);
+          //   globleitems=items;
+          //   item.items.push({
+          //   component: CNavItem,
+          //   name: fieldValue,
+          //   to: '/dataJunction',
+          // })
+          // .catch((err) => {
+          //   console.log(err);
+          // });
           axios
           .post('http://localhost:5000/data',{pageName:fieldValue})
           .then((res)=>{
@@ -192,11 +269,6 @@ export const AppSidebarNav = () => {
           .catch((err) => {
             console.log(err);
           });
-          // item.items.push({
-          //   component: CNavItem,
-          //   name: fieldValue,
-          //   to: '/locator/'+fieldValue,
-          // })
         }
       }
 
@@ -205,7 +277,91 @@ export const AppSidebarNav = () => {
     setItems([...modifiedItems]);
   }
 
+  ///////////////////////////
+
+  const addDataSheetBasedOnExcel = () => {
+    if(dataPageName!==null){
+      console.log('calling from Excel');
+      if(indexOfSection===3){//add new pageName to Data Section
+
+        axios
+          .post('http://localhost:5000/dataJunction/dataExcel',{pageName:dataPageName+"E"})
+          .then((res)=>{
+            getDataPages();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // const modifiedItems=items;
+        // modifiedItems[3].items.push({
+        //   component: CNavItem,
+        //   name: dataPageName,  
+        //   to: '/dataJunction/dataExcel',
+        // })
+        // setItems([...modifiedItems]);
+      }
+    }
+    
+  }; 
+
+  const addDataSheetBasedOnManual = () => {
+    if(dataPageName!==null){
+      console.log('calling from manual');
+      if(indexOfSection===3){//add new pageName to Data Section
+
+        axios
+        .post('http://localhost:5000/dataJunction/data',{pageName:dataPageName+"M"})
+        .then((res)=>{
+           getDataPages(); 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+        // const modifiedItems=items;
+        // modifiedItems[3].items.push({
+        //   component: CNavItem,
+        //   name: dataPageName,  
+        //   to: '/dataJunction/data',
+        // })
+        // setItems([...modifiedItems]);
+      }
+    }
+    
+  };
+
+  //const myFunctionCalled = useSelector((state) => state.addDataSheetName.myFunctionCalled);
+  //console.log('KDK',myFunctionCalled);
+  const calledFromExcel = useSelector((state) => state.addDataSheetName.myFunctionCalledExcel);
+  console.log('KDK',calledFromExcel);
+
+  const calledFromManual = useSelector((state) => state.addDataSheetName.myFunctionCalledManual);
+  console.log('KDK',calledFromManual);
+
+  const runningConditionForExcel=useSelector((state)=> state.addDataSheetName.initialRunningConditionForExcel);
+  console.log('JDM',runningConditionForExcel);
+
+  const runningConditionForManual=useSelector((state)=> state.addDataSheetName.initialRunningConditionForManual);
+  console.log('Nismo',runningConditionForManual);
+
+  useEffect(() => {
+    if(runningConditionForExcel){
+      addDataSheetBasedOnExcel();
+    }  
+  }, [calledFromExcel]);
+
+  useEffect(() => {
+    if(runningConditionForManual){
+      addDataSheetBasedOnManual();
+    }
+  }, [calledFromManual]);
+
+  //////////////////////////
+
+
   const pagesDeleteHandler=(rest) => {
+    //'to' is an array of characters 
     const {to}=rest
     //secondChar is used to identify the type of section
     const secondChar=to[1];
@@ -226,20 +382,20 @@ export const AppSidebarNav = () => {
           console.log(err);
         });
         break;
-      case 'd':
-        lengthOfUrl=to.length;
-        pageName=to.slice(6,lengthOfUrl);
-        console.log("Yoooo",pageName);
-        url='http://localhost:5000/data/'+pageName
-        axios
-        .delete(url)
-        .then((res)=>{
-          getDataPages();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-        break;
+      // case 'd':
+      //   lengthOfUrl=to.length;
+      //   pageName=to.slice(6,lengthOfUrl);
+      //   console.log("Yoooo",pageName);
+      //   url='http://localhost:5000/data/'+pageName
+      //   axios
+      //   .delete(url)
+      //   .then((res)=>{
+      //     getDataPages();
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
+      //   break;
 
       case 'c':
     }
@@ -255,6 +411,8 @@ export const AppSidebarNav = () => {
 
   const location = useLocation()
   const navLink = (name, icon, badge) => {
+    console.log('sell',name);
+    console.log('In navLink',name)
     return (
       <>
         {icon && icon}
@@ -269,8 +427,11 @@ export const AppSidebarNav = () => {
   }
 
   const navItem = (item, index) => {
+    console.log('geeshock',index,item);
     const { component, name, badge, icon, ...rest } = item
     const Component = component
+    console.log('swiss',name);
+    console.log('In navItem',name) 
     return (
       <Component
         {...(rest.to &&
@@ -281,7 +442,7 @@ export const AppSidebarNav = () => {
         {...rest}
       >
         {navLink(name, icon, badge)}
-        {(name!=="Dashboard")&&(name!="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
+        {(name!=="Dashboard")&&(name!=="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
       </Component>
     )
   }
@@ -289,6 +450,7 @@ export const AppSidebarNav = () => {
   const navGroup = (item, index) => {
     const { component, name, icon, to, ...rest } = item
     const Component = component
+    console.log('In navGroup',name)
     return (
       <div className="Component">
         <div className="single-component">
@@ -311,6 +473,8 @@ export const AppSidebarNav = () => {
     )
   }
 
+  console.log('SIM',globleitems);
+
   return (
     <>
     <React.Fragment>
@@ -325,3 +489,5 @@ export const AppSidebarNav = () => {
 AppSidebarNav.propTypes = {
   items: PropTypes.arrayOf(PropTypes.any).isRequired,
 }
+
+// export default AppSidebarNav;

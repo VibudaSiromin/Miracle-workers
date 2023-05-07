@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import Heading from '../components/Heading';
-import FileUploader from '../components/FileUploader'
+import Heading from '../../components/Heading';
+import FileUploader from '../../components/FileUploader';
 
-const ExcelSection = (props) => {
+const DataExcel = (props) => {
   const [fileHeaders,setFileHeaders]=useState([]);
   const [fileData,setFileData]=useState([]);
 
@@ -51,10 +51,10 @@ return(
             deleteFileHeaders={fileHeaderdeleteHandler}
             >
           </FileUploader>
-          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData}></Heading>
+          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData} callingFrom="data"></Heading>
         </>
         
 );
 }
 
-export default ExcelSection;
+export default DataExcel;

@@ -1,10 +1,11 @@
 import React from 'react'
-import { useState } from 'react';
+import { useRef,useState } from 'react';
 import {SiMicrosoftexcel} from 'react-icons/si';
 import { TfiReload } from "react-icons/tfi";
 import {MdDelete} from 'react-icons/md';
 import {BsFillFileEarmarkExcelFill} from 'react-icons/bs';
 import { Button } from "react-bootstrap";
+import MessageBox from './MessageBox';
 import * as XLSX from 'xlsx'
 import './FileUploader.css';
 
@@ -14,7 +15,12 @@ const FileUploader = (props) => {
 	 const [dragActive, setDragActive] = useState(false);
 	 const [file,setFile]=useState(null);
 	 const [buttonStatus,setButtonStatus]=useState(false);
+	 const [deleteMsgStatus,setDeleteMsgStatus]=useState(false);
+	 const [reloadMsgStatus,setReloadMsgStatus]=useState(false);
 	
+
+	 const modalRefA=useRef();
+	 const modalRefB=useRef();
 	 // ref
 	 const inputRef = React.useRef(null);
 	 // handle drag events
@@ -36,14 +42,15 @@ const FileUploader = (props) => {
 		if (event.dataTransfer.files && event.dataTransfer.files[0]) {
 		   //handleFiles(event.dataTransfer.files);
 		   const excelFile=event.dataTransfer.files[0];
-		   const excelReader=new FileReader();
+		   const excelReader=new FileReader();//read the content as binary string
 		   setFile(excelFile);
 
+		   //after reading the content completly 'onload' function will be triggered!
 		   excelReader.onload=(event)=>{
 			//parse data
 			const bstr=event.target.result;
 			//creating Excel work book
-			const excelWorkBook=XLSX.read(bstr,{type:'binary'}); //need to provide two parameters.1st data,2nd type(object)
+			const excelWorkBook=XLSX.read(bstr,{type:'binary'}); //need to provide two parameters.1st binary string data,2nd type(object)
 			//selecting first work sheet name
 			const excelSheetName=excelWorkBook.SheetNames[0];
 			//get data from the selected sheet name
@@ -51,55 +58,26 @@ const FileUploader = (props) => {
 			//convert sheet data to JSON format
 			const jsonData=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:1});
 			console.log('Atlas ',jsonData)
-			const headers=jsonData[0];//headers of excel table
+			const headers=jsonData[0];//headers of excel table headers is an array
 			props.getFileHeaders(headers);//parse header array to Data(excel).js
 			console.log('SPC ',headers);
 			// excelWorkBook.SheetNames.
 			const rowObject=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:undefined});
 			props.getFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
-			console.log('BMW ',rowObject);
+			console.log('BMW ',rowObject);//rowObject is an array of object.
 	   }
 
-	   excelReader.readAsBinaryString(excelFile);//when this function is invoked.It will immediatly call above excelReader.onload function.
+	    excelReader.readAsBinaryString(excelFile);//when this function is invoked.It will immediatly call above excelReader.onload function.
   
 		}
 	  };
 
-	   // triggers when file is selected with click
-	 const handleReload = () => {
-
-			const excelReader=new FileReader();
-
-			  	 excelReader.onload=(event)=>{
-					//parse data
-					const bstr=event.target.result;
-					//creating Excel work book
-					const excelWorkBook=XLSX.read(bstr,{type:'binary'}); //need to provide two parameters.1st data,2nd type(object)
-					//selecting first work sheet name
-					const excelSheetName=excelWorkBook.SheetNames[0];
-					//get data from the selected sheet name
-					const excelWorkSheetData=excelWorkBook.Sheets[excelSheetName];
-					//convert sheet data to JSON format
-					const jsonData=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:1});
-					console.log('Atlas ',jsonData)
-					const headers=jsonData[0];//headers of excel table
-					props.reloadFileHeaders(headers);//parse header array to Data(excel).js
-					console.log('SPC ',headers);
-					// excelWorkBook.SheetNames.
-					const rowObject=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:undefined});
-					props.reloadFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
-					console.log('BMW ',rowObject);
-			   }
-	
-			   excelReader.readAsBinaryString(file);//when this function is invoked.It will immediatly call above excelReader.onload function.
-			 
-	 }  
+ 
   	 const handleChange = (event) => {
     	 event.preventDefault();
     	 if (event.target.files && event.target.files[0]) {
 			   const excelFile=event.target.files[0];
 			   const excelReader=new FileReader();
-			   console.log('special ',event.target.files[1]);
 			   setFile(excelFile);	
 
 			   excelReader.onload=(event)=>{
@@ -129,11 +107,49 @@ const FileUploader = (props) => {
   	 };
 
 	 const handleFiledeletion = () => {
-		setFile(null);
-		props.deleteFileHeaders();//call fileHeadersDeleteHandler in Data(Excel).js
-		props.deleteFileData();//call fileDataDeleteHandler in Data(Excel).js
+		modalRefA.current.log('Do you want to delete '+file.name+' ?')
+		
 	 }
 
+	 const fileDeletion = () => {
+			setFile(null);
+			props.deleteFileHeaders();//call fileHeadersDeleteHandler in Data(Excel).js
+			props.deleteFileData();//call fileDataDeleteHandler in Data(Excel).js
+		
+	 }
+
+	 	   // triggers when file is selected with click
+	 const handleReload = () => {
+		modalRefB.current.log('Do you want to reload '+file.name+' again?')
+			
+	 } 
+
+	 const fileReload = () => {
+		const excelReader=new FileReader();
+
+			  	 excelReader.onload=(event)=>{
+					//parse data
+					const bstr=event.target.result;
+					//creating Excel work book
+					const excelWorkBook=XLSX.read(bstr,{type:'binary'}); //need to provide two parameters.1st data,2nd type(object)
+					//selecting first work sheet name
+					const excelSheetName=excelWorkBook.SheetNames[0];
+					//get data from the selected sheet name
+					const excelWorkSheetData=excelWorkBook.Sheets[excelSheetName];
+					//convert sheet data to JSON format
+					const jsonData=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:1});
+					console.log('Atlas ',jsonData)
+					const headers=jsonData[0];//headers of excel table
+					props.reloadFileHeaders(headers);//parse header array to Data(excel).js
+					console.log('SPC ',headers);
+					// excelWorkBook.SheetNames.
+					const rowObject=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:undefined});
+					props.reloadFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
+					console.log('BMW ',rowObject);
+			   }
+	
+			   excelReader.readAsBinaryString(file);//when this function is invoked.It will immediatly call above excelReader.onload function.
+	 }
 	 
   
 // triggers the input when the button is clicked
@@ -147,6 +163,7 @@ const FileUploader = (props) => {
 	if(file){
 		// console.log('sharp ',file.name);
 		return(
+			<>
 			<div className="container-fluid position-relative file-uploader-container">
 				<div className="position-absolute top-0 start-50 translate-middle-x"> 
 				<form id="form-file-upload" onDragEnter={handleDrag} onSubmit={(e) => e.preventDefault()}>
@@ -183,6 +200,9 @@ const FileUploader = (props) => {
 				</div>
 				</div>
 			</div>
+			<MessageBox ref={modalRefA} modalFooterfuncOne={fileDeletion} id='deleteModal'></MessageBox>
+			<MessageBox ref={modalRefB} modalFooterfuncOne={fileReload} id='reloadModal'></MessageBox>						
+			</>
 			
 		);
 	 }else{

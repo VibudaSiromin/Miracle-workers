@@ -11,16 +11,10 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
 
   const modalRef=useRef();
   const editButtonHandler = () => {
-    console.log('Captian Price');
     modalRef.current.log();
-    console.log(testStep);
   };
 
-  console.log("raw eliye index"+rawIndex);
-
   const onEditHandler = (editedTableData) => {
-    //console.log('Index in raw props'+myindex);
-    console.log('AUZI ',editedTableData,'Index ',rawIndex);
     onEdit(editedTableData,rawIndex);
   }
 
@@ -36,10 +30,9 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
   }
 
   //const arrayConvertor=Object.values(testStep);//convert testStep object to an array
-  console.log('menna mehe',testStep);
-
 
   for(let i=0;i<title.length;i++){
+    console.log('your test step:',testStep);
     let key=title[i];
     if(testStep[key]===undefined || testStep[key]===" "){
       tableDataArray.push(
@@ -51,10 +44,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
       )
     }
     
-    console.log('tableDataArray:' , tableDataArray);
   }
-
-  console.log('Flying machine',generalPurpose);
 
   return (
     <>
@@ -72,7 +62,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
       <tr>
         <td className="table-data">
           {" "}
-          <MdModeEdit color="04D9FF" size="20px"  onClick={()=>editButtonHandler()}></MdModeEdit>
+          <MdModeEdit color="04D9FF" size="20px"  onClick={editButtonHandler}></MdModeEdit>
         </td>
         <td className="table-data">
           {" "}
