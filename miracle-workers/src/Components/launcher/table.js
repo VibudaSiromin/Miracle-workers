@@ -9,10 +9,18 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import axios from 'axios'
+import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const TableLauncher = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [data, setData] = useState({});
+  const [isLauncherMount,setIsLauncherMount] = useState(false);
+
+  const {tname}=useParams();
+  const location=useLocation();
 
   const schema = yup
     .object({
@@ -47,18 +55,45 @@ const TableLauncher = () => {
   };
 
   const saveData=(data) => {
-    const url='http://localhost:5000/launcher/';
-    
-    axios.post(url, {
-      data
-    })
-    .then(function (response) {
-      console.log(response);
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    const currentURL=location.pathname;
+   
+    if(currentURL==='/testJunction/testManual/'+tname){
+      console.log("LMG");
+      axios
+      .post('http://localhost:5000/testJunction/testManual/'+tname+'/editLauncher',{
+        editedData:data,
+        type:"Manual"
+      })
+      .then(()=>{
+
+      })
+      .catch((err)=>{
+        console.log(err);
+      })
+    }
+
   }
+
+  const getDataFromStore = () => {
+    axios
+    .get('http://localhost:5000/testJunction/testManual/'+tname+'/getLauncherContent',{
+      params:{
+        testPageName:tname+"M"
+      }
+    })
+    .then((res)=>{
+      console.log(res);
+      const launcherDetails=res.data.getLauncherDetails;
+      setData(launcherDetails);
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  useEffect(()=>{
+    getDataFromStore();
+  },[tname])
 
   const onCancel = () => {
     reset();
@@ -71,6 +106,43 @@ const TableLauncher = () => {
     }
     setIsShowModal(true);
   };
+
+  const showModalInitially = () => {
+    setIsShowModal(true);
+  }
+
+
+  // useEffect(()=>{
+  //   is
+  // },[])
+
+  const calledFromJsonTest = useSelector((state) => state.addTestSheetName.initialLauncherModalVisibilityState);
+  
+
+  const calledFromManualTest = useSelector((state) => state.addTestSheetName.initialLauncherModalVisibilityState);
+  console.log("proStreet",calledFromManualTest);
+
+  console.log('galaxy',isLauncherMount);
+  useEffect(() => {
+    console.log('wolf tooth');
+    if(isLauncherMount){
+      showModalInitially(); 
+    }else{
+      setIsLauncherMount(true);
+    }
+      
+  }, [calledFromJsonTest]);
+
+  useEffect(() => {
+    console.log('Wolf warrior');
+    if(isLauncherMount){
+      showModalInitially(); 
+      console.log('Wolf');
+    }else{
+      setIsLauncherMount(true);
+    } 
+  }, [calledFromManualTest]);
+
 
   return (
     <>

@@ -11,6 +11,7 @@ import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
 import {MdDeleteForever} from 'react-icons/md';
 import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
 import {
@@ -36,6 +37,10 @@ export const AppSidebarNav = () => {
   const [locatorPageNames,setLocatorPageNames]=useState([])
   const [dataPageNames,setDataPageNames]=useState([]);
   const [dataPageName,setDataPageName]=useState(null);
+  const [testPageNames,setTestPageNames]=useState([]);
+  const [testPageName,setTestPageName]=useState(null);
+
+  const dispatch = useDispatch();
 
   
   const getLocatorPages=()=>{
@@ -50,6 +55,7 @@ export const AppSidebarNav = () => {
     });
   }
 
+  //get available data page names as an array
   const getDataPages = () => {
     axios
     .get('http://localhost:5000')
@@ -62,6 +68,20 @@ export const AppSidebarNav = () => {
     });
 
   }
+
+  const getTestPages = () => {
+    axios
+    .get('http://localhost:5000/testPages')
+    .then((res)=>{
+      setTestPageNames(res.data.testPageNames);
+      console.log("141",res.data.testPageNames)
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  }
+
 
   // const getDataPages = () => {
   //   axios
@@ -84,6 +104,7 @@ export const AppSidebarNav = () => {
     console.log('Normandy');
     getLocatorPages();
     getDataPages();
+    getTestPages();
   }, []);
 
   console.log("Hoooo",locatorPageNames)
@@ -187,6 +208,33 @@ export const AppSidebarNav = () => {
   },[dataPageNames])
 
 
+  useEffect(()=>{
+    console.log('citadel');
+    let newArray=[];
+    for(let i=0;i<testPageNames.length;i++){
+      //routing path will be decided according to the last character of the page name
+      //if last character='J' => path = '/testJunction/testJson'
+      //if last character='M' => path = '/testJunction/testManual'
+      if(testPageNames[i].charAt(testPageNames[i].length-1)==="J"){
+        newArray.push({
+          component: CNavItem,
+          name: testPageNames[i].slice(0,-1),
+          to: '/testJunction/testJson/'+testPageNames[i].slice(0,-1),        
+        })
+      }else if(testPageNames[i].charAt(testPageNames[i].length-1)==="M"){
+        newArray.push({
+          component: CNavItem,
+          name: testPageNames[i].slice(0,-1),
+          to: '/testJunction/testManual/'+testPageNames[i].slice(0,-1),        
+        })
+      } 
+    }
+    let newItems=items;
+    newItems[2].items=newArray;
+    console.log("space",newItems) 
+    setItems([...newItems])
+  },[testPageNames])
+
 
 
 
@@ -216,11 +264,13 @@ export const AppSidebarNav = () => {
       //add new pageName to test suite
       if(indexOfSection===2){
         if(item.name==='Test Suite'){
-          item.items.push({
-            component: CNavItem,
-            name: fieldValue,
-            to: '/testSuites/'+fieldValue,
-          })
+          navigate('/testJunction');
+          setTestPageName(fieldValue);
+          // item.items.push({
+          //   component: CNavItem,
+          //   name: fieldValue,
+          //   to: '/testSuites/'+fieldValue,
+          // })
         }
         
       }else if(indexOfSection===3){//add new pageName to Data Section
@@ -331,8 +381,74 @@ export const AppSidebarNav = () => {
     
   };
 
+
+  const addTestSheetBasedOnJson = () => {
+    if(testPageName!==null){
+      console.log('calling from Json test');
+      if(indexOfSection===2){//add new pageName to Data Section
+
+        axios
+          .post('http://localhost:5000/testJunction/testJson',{pageName:testPageName+"J"})
+          .then((res)=>{
+            getTestPages();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+          // axios
+          // .post('http://localhost:5000/testJunction/testJson',{pageName:testPageName+"J"})
+          // .then((res)=>{
+          //   getTestPages();
+          // })
+          // .catch((err) => {
+          //   console.log(err);
+          // });
+
+        // const modifiedItems=items;
+        // modifiedItems[3].items.push({
+        //   component: CNavItem,
+        //   name: dataPageName,  
+        //   to: '/dataJunction/dataExcel',
+        // })
+        // setItems([...modifiedItems]);
+      }
+    }
+    
+  }; 
+
+  const addTestSheetBasedOnManual = () => {
+    console.log('Winnn');
+    if(testPageName!==null){
+      console.log('calling from manual test');
+      if(indexOfSection===2){//add new pageName to Data Section
+
+        axios
+        .post('http://localhost:5000/testJunction/testManual',{pageName:testPageName+"M"})
+        .then((res)=>{
+          getTestPages(); 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+        // const modifiedItems=items;
+        // modifiedItems[3].items.push({
+        //   component: CNavItem,
+        //   name: dataPageName,  
+        //   to: '/dataJunction/data',
+        // })
+        // setItems([...modifiedItems]);
+      }
+    }
+    
+  };
+
   //const myFunctionCalled = useSelector((state) => state.addDataSheetName.myFunctionCalled);
   //console.log('KDK',myFunctionCalled);
+
+  //for data section
+
   const calledFromExcel = useSelector((state) => state.addDataSheetName.myFunctionCalledExcel);
   console.log('KDK',calledFromExcel);
 
@@ -345,6 +461,25 @@ export const AppSidebarNav = () => {
   const runningConditionForManual=useSelector((state)=> state.addDataSheetName.initialRunningConditionForManual);
   console.log('Nismo',runningConditionForManual);
 
+
+  //for testSuite
+
+  const calledFromJsonTest = useSelector((state) => state.addTestSheetName.functionCalledJson);
+  console.log('KDK',calledFromJsonTest);
+
+  const calledFromManualTest = useSelector((state) => state.addTestSheetName.functionCalledManual);
+  console.log('KDK',calledFromManualTest);
+
+  const runningConditionForJsonTest=useSelector((state)=> state.addTestSheetName.initialRunningConditionForJson);
+  console.log('JDM',runningConditionForJsonTest);
+
+  const runningConditionForManualTest=useSelector((state)=> state.addTestSheetName.initialRunningConditionForManual);
+  console.log('Nismo',runningConditionForManualTest);
+
+
+
+
+
   useEffect(() => {
     if(runningConditionForExcel){
       addDataSheetBasedOnExcel();
@@ -356,6 +491,18 @@ export const AppSidebarNav = () => {
       addDataSheetBasedOnManual();
     }
   }, [calledFromManual]);
+
+  useEffect(() => {
+    if(runningConditionForJsonTest){
+      addTestSheetBasedOnJson();
+    }  
+  }, [calledFromJsonTest]);
+
+  useEffect(() => {
+    if(runningConditionForManualTest){
+      addTestSheetBasedOnManual();
+    }  
+  }, [calledFromManualTest]);
 
   //////////////////////////
 
@@ -401,12 +548,12 @@ export const AppSidebarNav = () => {
     }
   }
 
-  const modalRef=useRef();
+  //const modalRef=useRef();
   const initiateNameAssigner= (index) => {
-    console.log("goooooooooo",indexOfSection)
     setIndexOfSection(index);
     console.log('Warlord: ',index);
-    modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
+    dispatch({type:'INITIATE_NAME_ASSIGNER'});
+    //modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
 }
 
   const location = useLocation()
@@ -481,7 +628,7 @@ export const AppSidebarNav = () => {
       {items &&
         items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
     </React.Fragment>
-    <NameAssignModal ref={modalRef} indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
+    <NameAssignModal /*ref={modalRef}*/ indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
     </>
   )
 }

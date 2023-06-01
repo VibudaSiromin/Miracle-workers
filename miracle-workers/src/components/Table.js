@@ -124,19 +124,81 @@ const Table = (props) => {
     
   }
 
+  const getTestByPage=() => {
+    const currentURL=location.pathname
+    if(currentURL==='/testJunction/testManual/'+tname){
+      axios
+      .get('http://localhost:5000/testJunction/testManual/'+tname,{
+        params:{
+          testPageName:tname+"M"
+        }
+      })
+      .then((res)=>{
+        const data=res.data.getTestRecords;
+        console.log('banana',data)
+        settestSteps(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });    
+    }
+    if(currentURL==='/testJunction/testJson/'+tname){
+      // console.log("Thunder");
+      // axios
+      // .get('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+      //   params:{
+      //     dataPageName:dname+"E"
+      //   }
+      // })
+      // .then((res)=>{
+      //   console.log("Lighting");
+      //   const data=res.data.getDataRecords;
+      //   settestSteps(data);
+      // })
+      // .catch((err)=>{
+      //   console.log(err);
+      // });
+    }
+    
+  }
+
+
+
+
   useEffect(()=>{
-    getLocatorsByPage()
+    getLocatorsByPage();
   },[lname])
 
   useEffect(()=>{
-    getDataByPage()
+    getDataByPage();
   },[dname])
+
+  useEffect(()=>{
+    getTestByPage();
+  },[tname])
 
   const updateTestSteps = (tableData) => {
     if(props.callingFrom==='testSuites'){
-      const url='http://localhost:5000/locators/'+tname
+      const currentURL=location.pathname;
       const newTableData = [...testSteps,tableData];
       settestSteps(newTableData);
+
+      if(currentURL==='/testJunction/testManual/'+tname){
+        console.log('air cover');
+        axios
+        .post('http://localhost:5000/testJunction/testManual/'+tname,{
+          editedTestData:newTableData,
+          type:'Manual'
+        })
+        .then((res)=>{
+          console.log(res);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+      }
+      const url='http://localhost:5000/locators/'+tname
+     
       console.log('Gooooo',url); 
       axios
       .post(url,{
@@ -285,6 +347,41 @@ const Table = (props) => {
         })
       } 
     }
+    if(props.callingFrom==='testSuites'){
+      const applyEditedData=[...testSteps];
+      applyEditedData[index]=editedTableData;
+      settestSteps(applyEditedData);
+      const currentURL=location.pathname;
+
+      if(currentURL==='/testJunction/testManual/'+tname){
+        axios
+        .post('http://localhost:5000/testJunction/testManual/'+tname,{
+          editedTestData:applyEditedData,//************ */
+          type:"Manual"
+        })
+        .then((res)=>{
+
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+        
+      }else if(currentURL==='/testJunction/testJson/',tname){
+        axios
+        .post('http://localhost:5000/testJunction/testJson/'+tname,{
+          editedTestData:applyEditedData,//************ */
+          type:"Json"
+        })
+        .then((res)=>{
+
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+      } 
+
+    }
+    
    
    }
 
@@ -333,6 +430,40 @@ const Table = (props) => {
         .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
           editedData:tableDataAfterDelete,
           type:"Excel"
+        })
+        .then((res)=>{
+          console.log(res);
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
+      }
+      
+    }
+
+    if(props.callingFrom==='testSuites'){
+      const currentURL=location.pathname;
+      const tableDataAfterDelete=[...testSteps];
+      tableDataAfterDelete.splice(index,1);
+      settestSteps(tableDataAfterDelete);
+      if(currentURL==='/testJunction/testManual/'+tname){
+        console.log('examine deleteHandler')
+      axios
+      .post('http://localhost:5000/testJunction/testManual/'+tname,{
+        editedTestData:tableDataAfterDelete,
+        type:"Manual"
+      })
+      .then((res)=>{
+        
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+      }else if(currentURL==='/testJunction/testJson/'+tname){
+        axios
+        .post('http://localhost:5000/testJunction/testJson/'+tname,{
+          editedData:tableDataAfterDelete,
+          type:"Json"
         })
         .then((res)=>{
           console.log(res);

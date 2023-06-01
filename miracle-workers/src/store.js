@@ -11,6 +11,31 @@ const initialDataSheetState = {
   initialRunningConditionForManual:false
 }
 
+const initialTestSheetState = {
+  functionCalledJson: false,
+  functionCalledManual: false,
+  initialRunningConditionForJson:false,
+  initialRunningConditionForManual:false,
+  initialLauncherModalVisibilityState:false,
+}
+
+const initialTestPageNameState = {
+  testPageName:'King'
+}
+
+export const setTestPageName = (testPageName) => {
+  return{
+    type: 'SET_TEST_PAGE_NAME',
+    payload: testPageName,
+  } 
+}
+
+const nameAssignerState = {
+  initiateNameAssigner:false
+}
+
+
+
 const changeStateReducer = (state = initialSideBarState, { type, ...rest }) => {
   console.log('sirimath');
   switch (type) {
@@ -34,16 +59,66 @@ const addDataSheetNameReducer = (state = initialDataSheetState, action) => {
       return {
         ...state,
         myFunctionCalledManual: !state.myFunctionCalledManual,
-        initialRunningConditionForManual:true
+        initialRunningConditionForManual:true,
+        
       };
     default:
       return state;
   }
 }
 
+const addTestSheetNameReducer = (state = initialTestSheetState, action) => {
+  console.log('nila kuru');
+  switch (action.type) {
+    case "FUNCTION_CALLED_JSON":
+      return {
+        ...state,
+        functionCalledJson: !state.functionCalledJson,
+        initialRunningConditionForJson:true,
+        initialLauncherModalVisibilityState: !state.initialLauncherModalVisibilityState
+      };
+    case "FUNCTION_CALLED_MANUAL":
+      return {
+        ...state,
+        functionCalledManual: !state.functionCalledManual,
+        initialRunningConditionForManual:true,
+        initialLauncherModalVisibilityState: !state.initialLauncherModalVisibilityState
+      };
+    default:
+      return state;
+  }
+}
+
+const getTestSheetNameReducer = (state = initialTestPageNameState, action) => {
+  switch (action.type) {
+    case "SET_TEST_PAGE_NAME":
+      return {
+        ...state,
+        testPageName:action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
+const nameAssignerReducer = (state = nameAssignerState, action) => {
+  switch(action.type){
+    case "INITIATE_NAME_ASSIGNER":
+      return{
+        ...state,
+        initiateNameAssigner:!state.initiateNameAssigner
+      };
+      default:
+        return state;
+  }
+}
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
-    addDataSheetName:addDataSheetNameReducer
+    addDataSheetName:addDataSheetNameReducer,
+    addTestSheetName:addTestSheetNameReducer,
+    getTestSheetName:getTestSheetNameReducer,
+    nameAssigner:nameAssignerReducer
 })
 
 const store = createStore(rootReducer)

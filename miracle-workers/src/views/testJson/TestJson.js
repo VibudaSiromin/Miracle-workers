@@ -2,7 +2,7 @@ import React from "react";
 import Table from "../../components/Table";
 import Launcher from "../../components/launcher/index";
 
-const testSuite = () => {
+const TestJson = () => {
 
     const title=[
         "group",
@@ -26,4 +26,4 @@ const testSuite = () => {
     )
 }
 
-export default testSuite;
+export default TestJson;

@@ -2,11 +2,15 @@ import React,{forwardRef} from "react";
 import { useState,useEffect,useImperativeHandle } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { setTestPageName } from "../../store";
+import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
 
-const NameAssignModal = forwardRef((props,ref) => {
+const NameAssignModal = (props,ref) => {
     const [toggleOneModal,setToggleOneModal]=useState(false);
     const [fieldValue,setfieldValue]=useState('');
+    const [isMount,setIsMount]=useState(false);
 
     let sectionName;
     if(props.indexOfSection===2){
@@ -20,12 +24,12 @@ const NameAssignModal = forwardRef((props,ref) => {
     }
     
 
-    useImperativeHandle(ref,()=>({
-      log(){
-        console.log('sam');
-        initModalOne();
-      }
-    }));
+    // useImperativeHandle(ref,()=>({
+    //   log(){
+    //     console.log('sam');
+    //     initModalOne();
+    //   }
+    // }));
 
     const initModalOne = () => {
       return setToggleOneModal(true);
@@ -43,10 +47,21 @@ const NameAssignModal = forwardRef((props,ref) => {
       console.log('bravo ',fieldValue);
       event.preventDefault();
       props.newPageName(fieldValue);
+      props.setTestPageName(fieldValue);
     }
 
+    const initiateNameAssigner=useSelector((state) => state.nameAssigner.initiateNameAssigner);
+
+    useEffect(()=>{
+      if(isMount){
+        initModalOne();
+      }else{
+        setIsMount(true)
+      }
+    },[initiateNameAssigner])
+
     return(
-        <form onSubmit={submitHandlerOne} id={'formOne'}>
+        <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'formOne'}>
         <Modal show={toggleOneModal} tabIndex="-1" size="sm" centered>
           <Modal.Header closeButton onClick={TerminateModalOne}>
             {sectionName}
@@ -67,6 +82,27 @@ const NameAssignModal = forwardRef((props,ref) => {
     </form>
     )
     
-})
+};
 
-export default NameAssignModal;
+const mapStateToProps = (state) => {
+  console.log('bird',state.getTestSheetName.testPageName);
+  return{
+    testPageName: state.getTestSheetName.testPageName,
+  }
+  
+};
+
+const mapDispatchToProps =(dispatch)=> {
+  return {
+    setTestPageName:(testPageName)=>dispatch(setTestPageName(testPageName))
+  }
+  // forwardRef: true
+};
+
+const option = {
+  
+}
+
+//export default NameAssignModal;
+
+export default connect(mapStateToProps,mapDispatchToProps)(NameAssignModal);
