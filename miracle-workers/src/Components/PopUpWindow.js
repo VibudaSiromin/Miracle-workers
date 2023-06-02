@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect}from "react";
 import { Modal, Button } from "react-bootstrap";
 import PopUpInputField from "./PopUpInputField";
 import PopUpSelection from "./PopUpSelection";
@@ -12,6 +12,7 @@ function ModalDialog(props,ref) {
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [editStatus,setEditStatus] = React.useState('false');
+  const [commandBasedFields,setCommandBasedFields]=useState([]);
 
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
@@ -22,6 +23,11 @@ function ModalDialog(props,ref) {
   const testStepsData2 = {};
   const generalPurposeInputData={};
 
+  const [testSteps,setTestSteps]=useState({
+    "group":"",
+    "instruction":"",
+    "command":""
+  });
   // useImperativeHandle(ref,()=> ({
   //   log(){
   //     initModalOne();
@@ -30,21 +36,51 @@ function ModalDialog(props,ref) {
   // }));
 
   const inputHandler = (name, value) => {
-    console.log(name, value);
+    console.log("ppppppppp",name, value);
     switch (name) {
       case "group":
-        testStepsData[name] = value;
+        setTestSteps({...testSteps,[name]:value});
         break;
       case "instruction":
-        testStepsData[name] = value;
+        setTestSteps({...testSteps,[name]:value});
         break;
       case "command":
-        testStepsData[name] = value;
+        setTestSteps({...testSteps,[name]:value});
         break;
     }
-  
-    console.log(testStepsData);
+    console.log("pppppppppp",testSteps);
   };
+
+  // const inputHandler = (name, value) => {
+  //   console.log(name, value);
+  //   switch (name) {
+  //     case "group":
+  //       testStepsData[name] = value;
+  //       break;
+  //     case "instruction":
+  //       testStepsData[name] = value;
+  //       break;
+  //     case "command":
+  //       testStepsData[name] = value;
+  //       break;
+  //   }
+  //   console.log(testStepsData);
+  // };
+  useEffect(() => {
+    switch(testSteps["command"]){
+      case "Branch.BasedOnData":
+        setCommandBasedFields(["locator","locatorParameter","action","comment"]);  
+        break;
+      case "Branch.OnElementAttribute":
+        setCommandBasedFields(["action","comment"]);  
+        break;
+      default:
+        setCommandBasedFields([]);
+    }
+    console.log("ppppppppppp",commandBasedFields);
+  }, [testSteps["command"]]);
+
+
 
   const inputHandler2 = (name, value) => {
     console.log(name, value);
@@ -72,7 +108,7 @@ function ModalDialog(props,ref) {
         break;
     }
   
-    console.log(testStepsData2);
+    console.log("ppppppppppp",testStepsData2);
   };
 
   const inputHandler3 = (name,value) => {
@@ -119,12 +155,12 @@ function ModalDialog(props,ref) {
       
     }
     if (props.enableChainPopUps) {
-      for (let i = 0; i < props.noFields[1]; i++) {
-          if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
+      for (let i = 0; i < commandBasedFields.length; i++) {
+          if(commandBasedFields[i]!=='instruction' && commandBasedFields[i]!=='command' && commandBasedFields[i]!=='swapResult' && commandBasedFields[i]!=='action'){
             inputFieldArrayModalTwo.push(
               <PopUpInputField
-                id={props.noFields[0] + i}
-                title={props.title[props.noFields[0] + i]}
+                id={3+i}
+                title={commandBasedFields[i]}
                 inputType="text"
                 generalPurpose={props.generalPurpose}
                 onDataChange2={inputHandler2}
@@ -133,8 +169,8 @@ function ModalDialog(props,ref) {
           }else{
              inputFieldArrayModalTwo.push(
                <PopUpSelection
-               id={props.noFields[0] + i}
-               title={props.title[props.noFields[0] + i]}
+               id={3+i}
+               title={commandBasedFields[i]}
                generalPurpose={props.generalPurpose}
                onDataChange2={inputHandler2}
                ></PopUpSelection>
@@ -143,6 +179,31 @@ function ModalDialog(props,ref) {
    
       }
     }
+    // if (props.enableChainPopUps) {
+    //   for (let i = 0; i < props.noFields[1]; i++) {
+    //       if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
+    //         inputFieldArrayModalTwo.push(
+    //           <PopUpInputField
+    //             id={props.noFields[0] + i}
+    //             title={props.title[props.noFields[0] + i]}
+    //             inputType="text"
+    //             generalPurpose={props.generalPurpose}
+    //             onDataChange2={inputHandler2}
+    //           ></PopUpInputField>
+    //         );
+    //       }else{
+    //          inputFieldArrayModalTwo.push(
+    //            <PopUpSelection
+    //            id={props.noFields[0] + i}
+    //            title={props.title[props.noFields[0] + i]}
+    //            generalPurpose={props.generalPurpose}
+    //            onDataChange2={inputHandler2}
+    //            ></PopUpSelection>
+    //         );
+    //       }
+   
+    //   }
+    // }
 
   };
   
@@ -165,7 +226,8 @@ function ModalDialog(props,ref) {
 
   const NextStep = () => {
     if(props.generalPurpose===false){
-      setModalOneDataSet(testStepsData);
+      // setModalOneDataSet(testStepsData);
+      setModalOneDataSet(testSteps);
     }
     if(props.generalPurpose===true){
       console.log('Next step',props.purpose);
@@ -216,7 +278,11 @@ function ModalDialog(props,ref) {
     props.saveNewData(modalTwoDataSet);
     TerminateModalOne();
     }
-
+    setTestSteps({
+      "group":"",
+      "instruction":"",
+      "command":""
+    })
   };
 
   return (

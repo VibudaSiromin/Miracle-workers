@@ -1,38 +1,102 @@
 import { propTypes } from "react-bootstrap/esm/Image";
 import './PopUpSelection.css';
+import { useState ,useEffect} from "react";
+import axios from "axios";
 
 const PopUpSelection = (props) => {
-    const instructionSet=['#recovery','#skip','#screen'];
-    const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue'];
-    const swapResultSet=['Yes','No'];
-    const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
+    const [instructions,setInstructions]=useState([]);
+    const [commandSet,setCommandSet]=useState([]);
+    const [swapResult,setSwapResult]=useState([]);
+    const [actions,setActions]=useState([]);
+
+    const url="http://localhost:5000/settings/instructions";
+    const url2="http://localhost:5000/settings/commands";
+    const url3="http://localhost:5000/settings/status";  
+    const url4="http://localhost:5000/settings/conditions";
+
+    const getInstruction = () => {
+        axios
+          .get(url)
+          .then((res) => {
+            setInstructions(res.data.settingItem); 
+            console.log("gft");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+    
+      const getCommands= () => {
+        axios
+          .get(url2)
+          .then((res) => {
+            setCommandSet(res.data.settingItem); 
+            console.log("gft");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      const getStatus= () => {
+        axios
+          .get(url3)
+          .then((res) => {
+            setSwapResult(res.data.settingItem); 
+            console.log("gft");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      const getActions= () => {
+        axios
+          .get(url4)
+          .then((res) => {
+            setActions(res.data.settingItem); 
+            console.log("gft");
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      };
+
+      useEffect(() => {
+        getInstruction();
+        getCommands();
+        getStatus();
+        getActions();
+      }, []);
+
+
     let options=[];
     const InsertDataToSelection = () => {
         if(props.title==='instruction'){
-            for (let i = 0; i<instructionSet.length; i++) {
+            for (let i = 0; i<instructions.length; i++) {
                 options.push(
-                    <option value={instructionSet[i]}/>
+                    <option value={instructions[i].name}/>
                 );
               }
               console.log(options);
         }else if(props.title==='command'){
             for (let i = 0; i<commandSet.length; i++) {
                 options.push(
-                    <option value={commandSet[i]}/>
+                    <option value={commandSet[i].name}/>
                 );
               }
               console.log(options);
         }else if(props.title==='swapResult'){
-            for (let i = 0; i<swapResultSet.length; i++) {
+            for (let i = 0; i<swapResult.length; i++) {
                 options.push(
-                    <option value={swapResultSet[i]}/>
+                    <option value={swapResult[i].name}/>
                 );
               }
               console.log(options);
         }else if(props.title==='action'){
-            for (let i = 0; i<actionSet.length; i++) {
+            for (let i = 0; i<actions.length; i++) {
                 options.push(
-                    <option value={actionSet[i]}/>
+                    <option value={actions[i].name}/>
                 );
               }
               console.log(options);
@@ -46,9 +110,16 @@ const PopUpSelection = (props) => {
     const inputHandler=(event) => {
         const fieldName = event.target.getAttribute("name");
         const fieldValue = event.target.value;
+        const mandatoryFields="";
         console.log(fieldName);
         console.log(fieldValue);
         console.log('sam');
+        // if(fieldName=="command"){
+        //     switch(fieldValue){
+        //         case "Branch.BasedOnData":
+        //             mandatoryFields="100";
+        //     }
+        // }
         if(props.id<=2){
           props.onDataChange(fieldName,fieldValue);
         }else{
