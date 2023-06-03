@@ -12,6 +12,7 @@ const PopUpInputField = (props) => {
       console.log(fieldValue);
       console.log('Input id: '+ props.id);
       console.log('generalPurpose: '+ props.generalPurpose);
+
       if(props.id<=2 && props.generalPurpose===false){
         props.onDataChange(fieldName,fieldValue);
       }else if(props.id>2 && props.generalPurpose===false){
@@ -24,7 +25,6 @@ const PopUpInputField = (props) => {
 
     /////////////////////////Mapping part/////////////////
     const applyDataFieldValue = (sectionName,sheetName,heading) => {
-
       const dataValueReference=('#'+sectionName+'.'+sheetName+'.'+heading);
       console.log("DiamondHead",dataValueReference);
       setReferenceValue(dataValueReference);
@@ -44,6 +44,7 @@ const PopUpInputField = (props) => {
         <div className="form-group">
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler}></input>
+            <small className="text-danger">{errors[props.title]?.message}</small>
         </div>
     );
     }
