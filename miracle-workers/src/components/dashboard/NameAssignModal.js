@@ -1,16 +1,20 @@
 import React,{forwardRef} from "react";
-import { useState,useEffect,useImperativeHandle } from "react";
+import { useState,useEffect,useImperativeHandle,useRef } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { setTestPageName } from "../../store";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
+import axios from "axios";
+import MessageBox from "../MessageBox";
 
 
 const NameAssignModal = (props,ref) => {
     const [toggleOneModal,setToggleOneModal]=useState(false);
     const [fieldValue,setfieldValue]=useState('');
     const [isMount,setIsMount]=useState(false);
+
+    const modalRefC=useRef();
 
     let sectionName;
     if(props.indexOfSection===2){
@@ -22,14 +26,6 @@ const NameAssignModal = (props,ref) => {
     }else if(props.indexOfSection===5){
       sectionName='Locator';
     }
-    
-
-    // useImperativeHandle(ref,()=>({
-    //   log(){
-    //     console.log('sam');
-    //     initModalOne();
-    //   }
-    // }));
 
     const initModalOne = () => {
       return setToggleOneModal(true);
@@ -40,14 +36,100 @@ const NameAssignModal = (props,ref) => {
     };
 
     const inputHandler = (event) => {
-      setfieldValue(event.target.value);
+      setfieldValue(event.target.value); //set a page name
     }
 
     const submitHandlerOne = (event) => {
       console.log('bravo ',fieldValue);
       event.preventDefault();
-      props.newPageName(fieldValue);
-      props.setTestPageName(fieldValue);
+
+      //check whether any page duplications
+      if(props.indexOfSection===2){
+        axios
+        .get('http://localhost:5000/testPages')
+        .then((res)=>{
+          const availableTestPageNames=res.data.testPageNames;
+          console.log('Jaguar',availableTestPageNames);
+          for(let i=0;i<availableTestPageNames.length;i++){
+            if(fieldValue===availableTestPageNames[i].slice(0,-1)){ 
+              console.log('duplicate');
+              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              return;
+            }
+          }
+          console.log('DRAK');
+          props.newPageName(fieldValue);
+          props.setTestPageName(fieldValue);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+
+      }else if(props.indexOfSection===3){
+        axios
+        .get('http://localhost:5000/data/getDatasheets')
+        .then((res)=>{
+          const availableDataPageNames=res.data.dataPageNames;
+          console.log('Jaguar',availableDataPageNames);
+          for(let i=0;i<availableDataPageNames.length;i++){
+            if(fieldValue===availableDataPageNames[i].slice(0,-1)){ 
+              console.log('duplicate');
+              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              return;
+            }
+          }
+          props.newPageName(fieldValue);
+          props.setTestPageName(fieldValue);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+
+        //sectionName='Data';
+      }else if(props.indexOfSection===4){
+        axios
+        .get('http://localhost:5000/data/getDatasheets')
+        .then((res)=>{
+          const availableDataPageNames=res.data.dataPageNames;
+          console.log('Jaguar',availableDataPageNames);
+          for(let i=0;i<availableDataPageNames.length;i++){
+            if(fieldValue===availableDataPageNames[i].slice(0,-1)){ 
+              console.log('duplicate');
+              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              return;
+            }
+          }
+          props.newPageName(fieldValue);
+          props.setTestPageName(fieldValue);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+        //sectionName='Component';
+      }else if(props.indexOfSection===5){
+        //sectionName='Locator';
+
+        axios
+        .get('http://localhost:5000/locators')
+        .then((res)=>{
+          const availableLocatorPageNames=res.data.locatorsPageNames;
+          console.log('porche',availableLocatorPageNames);
+          for(let i=0;i<availableLocatorPageNames.length;i++){
+            if(fieldValue===availableLocatorPageNames[i]){ 
+              console.log('duplicate');
+              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              return;
+            }
+          }
+          props.newPageName(fieldValue);
+          props.setTestPageName(fieldValue);
+        })
+        .catch((err)=>{
+          console.log(err)
+        })
+      }
+
+      
     }
 
     const initiateNameAssigner=useSelector((state) => state.nameAssigner.initiateNameAssigner);
@@ -60,7 +142,10 @@ const NameAssignModal = (props,ref) => {
       }
     },[initiateNameAssigner])
 
+
+
     return(
+      <div>
         <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'formOne'}>
         <Modal show={toggleOneModal} tabIndex="-1" size="sm" centered>
           <Modal.Header closeButton onClick={TerminateModalOne}>
@@ -79,7 +164,10 @@ const NameAssignModal = (props,ref) => {
             </Button>
           </Modal.Footer>
         </Modal>
-    </form>
+      </form>
+      <MessageBox ref={modalRefC} modalFooterfuncOne={initModalOne} id='pageNameDuplicateModal'></MessageBox>
+      </div>
+
     )
     
 };

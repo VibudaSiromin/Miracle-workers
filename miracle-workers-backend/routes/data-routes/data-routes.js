@@ -37,8 +37,14 @@ router.post('/dataJunction/dataExcel',dataControllers.createDataSheetOne);
 router.post('/dataJunction/data',dataControllers.createDataSheetOne);
 //route for editing a datasheet
 
+//route for deleting data page
+router.delete('/dataJunction/deletePage',dataControllers.deleteDataSheet);
+
 //route for getting all available data sheet
 router.get('/data/getDatasheets',dataControllers.getPageNames);
 router.get('/',dataControllers.getPageNames);
+
+//route for renaming speific data sheet name
+router.patch('/dataJunction/renamePageName',dataControllers.renameDataPageName);
 
 module.exports=router;
