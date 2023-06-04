@@ -657,7 +657,8 @@ export const AppSidebarNav = () => {
   }
 
   //const modalRef=useRef();
-  const initiateNameAssigner= (index) => {
+  const initiateNameAssigner= (event,index) => {
+    event.stopPropagation();// Stop event propagation to the link
     setIndexOfSection(index);
     console.log('Warlord: ',index);
     dispatch({type:'INITIATE_NAME_ASSIGNER'});
@@ -665,20 +666,38 @@ export const AppSidebarNav = () => {
 }
 
   const location = useLocation()
-  const navLink = (name, icon, badge) => {
+  const navLink = (name, icon, badge,index) => {
     console.log('sell',name);
-    console.log('In navLink',name)
-    return (
-      <>
-        {icon && icon}
-        {name && name}
-        {badge && (
-          <CBadge color={badge.color} className="ms-auto">
-            {badge.text}
-          </CBadge>
-        )}
-      </>
-    )
+    console.log('In navLink',name);
+    console.log('buy',index);
+    if(name==='Test Suite' || name==='Data' || name==='Component' || name==='Locator'){
+      return (
+        <>
+          {icon && icon}
+          {name && name}
+          {badge && (
+            <CBadge color={badge.color} className="ms-auto">
+              {badge.text}
+            </CBadge>
+          )}
+          <AiFillFileAdd color="#CCD8DD" onClick={(event)=>initiateNameAssigner(event,index)}></AiFillFileAdd>
+        </>
+      )
+    }else{
+      return (
+        <>
+          {icon && icon}
+          {name && name}
+          {badge && (
+            <CBadge color={badge.color} className="ms-auto">
+              {badge.text}
+            </CBadge>
+          )}
+          {/* <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner()}></AiFillFileAdd> */}
+        </>
+      )
+    }
+    
   }
 
   const navItem = (item, index) => {
@@ -696,35 +715,31 @@ export const AppSidebarNav = () => {
         key={index}
         {...rest}
       >
-        {navLink(name, icon, badge)}
+        {navLink(name, icon, badge,index)}
         {(name!=="Dashboard")&&(name!=="Home")&&(name!=="Setting")? <div><MdModeEdit onClick={(event)=>alertMsgBoxForRenaming(event,rest,index)}></MdModeEdit><MdDeleteForever id="myIcon" /*className="delete"*/ onClick={(event)=>alertMsgBoxForDeleting(event,rest)}/></div>:null}  
       </Component>
     )
   }
   
   const navGroup = (item, index) => {
-    const { component, name, icon, to, ...rest } = item
+    const { component, name,badge, icon, to, ...rest } = item
     const Component = component
     console.log('In navGroup',name)
     return (
-      <div className="Component">
-        <div className="single-component">
+         <div className="single-component">
         <Component
           idx={String(index)}
           key={index}
-          toggler={navLink(name, icon)}
+          toggler={navLink(name,icon,badge,index)}
           visible={location.pathname.startsWith(to)}
           {...rest}
         >
           {item.items?.map((item, index) =>
             item.items ? navGroup(item, index) : navItem(item, index),
           )}
+          
         </Component>
         </div>
-        <div className="add-btn">
-        <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner(index)}></AiFillFileAdd>
-        </div>
-      </div>
     )
   }
 

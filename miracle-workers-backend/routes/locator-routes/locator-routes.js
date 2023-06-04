@@ -29,7 +29,9 @@ router.post('/locators/:lname', locatorControllers.editLocatorPage);
 
 //route for deleting locator page
 
-router.delete('/locators/:lname', locatorControllers.deleteLocatorPage)
+router.delete('/locators/:lname', locatorControllers.deleteLocatorPage);
+
+router.patch('/locators/renamePageName',locatorControllers.ranameLocatorPageName);
 
 
 module.exports = router;

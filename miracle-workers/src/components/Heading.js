@@ -36,7 +36,19 @@ const Heading = (props) => {
                 setIsInitialHeadingStored(true);//after initial heading stored then the record should be stored!
               })
               .catch((err)=>{
-                console.log(err);
+                if (err.response) {
+                  // The client was given an error response (5xx, 4xx)
+                  console.log(err.response.data);
+                  console.log(err.response.status);
+                  console.log(err.response.headers);
+              } else if (err.request) {
+                  // The client never received a response, and the request was never left
+                  console.log(err.request);
+              } else {
+                  // Anything else
+                  console.log('Error', err.message);
+              }
+                //console.log(err);
               })
           }
             console.log("Delta Force",props.initialHeading);
@@ -65,10 +77,23 @@ const Heading = (props) => {
             type:"Mannual"
           })
           .then((res)=>{
-            
+            //setHeading(newTitle);
+            console.log('add heading is completed');
           })
           .catch((err)=>{
-            console.log(err)
+            if (err.response) {
+              // The client was given an error response (5xx, 4xx)
+              console.log(err.response.data);
+              console.log(err.response.status);
+              console.log(err.response.headers);
+          } else if (err.request) {
+              // The client never received a response, and the request was never left
+              console.log(err.request);
+          } else {
+              // Anything else
+              console.log('Error', err.message);
+          }
+            //console.log(err)
           })
         }
         if(currentURL==='/dataJunction/dataExcel/'+dname){
@@ -82,7 +107,19 @@ const Heading = (props) => {
 
           })
           .catch((err)=>{
-            console.log(err);
+            if (err.response) {
+              // The client was given an error response (5xx, 4xx)
+              console.log(err.response.data);
+              console.log(err.response.status);
+              console.log(err.response.headers);
+          } else if (err.request) {
+              // The client never received a response, and the request was never left
+              console.log(err.request);
+          } else {
+              // Anything else
+              console.log('Error', err.message);
+          }
+            //console.log(err);
           })
         }
 
@@ -105,7 +142,19 @@ const Heading = (props) => {
             
           })
           .catch((err)=>{
-            console.log(err)
+            if (err.response) {
+              // The client was given an error response (5xx, 4xx)
+              console.log(err.response.data);
+              console.log(err.response.status);
+              console.log(err.response.headers);
+          } else if (err.request) {
+              // The client never received a response, and the request was never left
+              console.log(err.request);
+          } else {
+              // Anything else
+              console.log('Error', err.message);
+          }
+            //console.log(err)
           })
       }else if(currentURL==='/dataJunction/dataExcel/'+dname){
         axios
@@ -117,7 +166,19 @@ const Heading = (props) => {
             
           })
           .catch((err)=>{
-            console.log(err)
+            if (err.response) {
+              // The client was given an error response (5xx, 4xx)
+              console.log(err.response.data);
+              console.log(err.response.status);
+              console.log(err.response.headers);
+          } else if (err.request) {
+              // The client never received a response, and the request was never left
+              console.log(err.request);
+          } else {
+              // Anything else
+              console.log('Error', err.message);
+          }
+            //console.log(err)
           })
       }
     }
@@ -140,7 +201,19 @@ const Heading = (props) => {
         setHeading(res.data.getHeadings);
       })
       .catch((err)=>{
-        console.log(err);
+        if (err.response) {
+          // The client was given an error response (5xx, 4xx)
+          console.log(err.response.data);
+          console.log(err.response.status);
+          console.log(err.response.headers);
+      } else if (err.request) {
+          // The client never received a response, and the request was never left
+          console.log(err.request);
+      } else {
+          // Anything else
+          console.log('Error', err.message);
+      }
+        //console.log(err);
       })
       }
       if(currentURL==='/dataJunction/dataExcel/'+dname){
@@ -155,7 +228,19 @@ const Heading = (props) => {
           setHeading(res.data.getHeadings)
         })
         .catch((err)=>{
-          console.log(err);
+          if (err.response) {
+            // The client was given an error response (5xx, 4xx)
+            console.log(err.response.data);
+            console.log(err.response.status);
+            console.log(err.response.headers);
+        } else if (err.request) {
+            // The client never received a response, and the request was never left
+            console.log(err.request);
+        } else {
+            // Anything else
+            console.log('Error', err.message);
+        }
+          //console.log(err);
         })
       }
     }
