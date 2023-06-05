@@ -34,7 +34,33 @@ const nameAssignerState = {
   initiateNameAssigner:false
 }
 
+const initialTestSuiteValidation={
+    "group":false,
+    "instruction":false,
+    "command":false,
+    "locator":false,
+    "locatorParameter":false,
+    "data":false,
+    "swapResult":false,
+    "branchSelection":false,
+    "action":false,
+    "comment":false
+}
 
+const testSuiteValidator=(state=initialTestSuiteValidation,action)=>{
+  switch(action.type){
+    case "GROUP_VALID":return{
+      ...state,
+      "group":true
+    }
+    case "GROUP_INVALID":return{
+      ...state,
+      "group":false
+    }
+    default:
+      return state;  
+  }
+}
 
 const changeStateReducer = (state = initialSideBarState, { type, ...rest }) => {
   console.log('sirimath');
@@ -113,12 +139,15 @@ const nameAssignerReducer = (state = nameAssignerState, action) => {
   }
 }
 
+
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
     addDataSheetName:addDataSheetNameReducer,
     addTestSheetName:addTestSheetNameReducer,
     getTestSheetName:getTestSheetNameReducer,
-    nameAssigner:nameAssignerReducer
+    nameAssigner:nameAssignerReducer,
+    testSuiteValidate:testSuiteValidator
 })
 
 const store = createStore(rootReducer)
