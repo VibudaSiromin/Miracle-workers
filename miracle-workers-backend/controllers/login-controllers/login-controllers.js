@@ -9,14 +9,19 @@ const User =require("../../models/user-models/user");
 
 const register=async(req,res,next)=>{
     const { fname, lname, email, password, userType } = req.body;
-
     const encryptedPassword = await bcrypt.hash(password, 10);
+    console.log("oooooo");
+
     try {
+      console.log("llllllllll");
+
       const oldUser = await User.findOne({ email });
-  
+      console.log("PPPPP");
+
       if (oldUser) {
         return res.json({ error: "User Exists" });
       }
+      console.log("WWWWW");
       await User.create({
         fname,
         lname,

@@ -65,6 +65,7 @@ const Status=React.lazy(() => import('./views/settings/status'))
 //settings-testTypes
 const TestTypes=React.lazy(() => import('./views/settings/testTypes'))
 
+
 const routes = [
   { path: '/', exact: true, name: 'Home' },
   { path: '/charts', name: 'Charts', element: Charts },
