@@ -27,8 +27,8 @@ const MessageBox = forwardRef((props,ref)=>{
     return;
   }
 
-  const modalFooterFunctionOne = (modalId) => {
-    props.modalFooterfuncOne(modalId);
+  const modalFooterFunctionOne = (event,modalId) => {
+    props.modalFooterfuncOne(event,modalId);
     console.log('SUN CRUSH', modalId);
     terminateModal();
   }

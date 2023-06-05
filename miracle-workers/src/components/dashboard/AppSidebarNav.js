@@ -9,10 +9,14 @@ import { useState,useRef } from 'react';
 import { CBadge, CNavLink } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
-import {MdDeleteForever} from 'react-icons/md';
+import {MdDeleteForever,MdModeEdit} from 'react-icons/md';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import MessageBox from '../MessageBox';
+import NameRenameModal from './NameRenameModal';
+import Dashbaord from '../../views/home-page/index'
 
 import {
   cilBell,
@@ -39,9 +43,12 @@ export const AppSidebarNav = () => {
   const [dataPageName,setDataPageName]=useState(null);
   const [testPageNames,setTestPageNames]=useState([]);
   const [testPageName,setTestPageName]=useState(null);
-
+  const [URLSection,setURLSection]=useState({});
+  const [indexOfRenamePage,setIndexOfRenamePage]=useState();
   const dispatch = useDispatch();
 
+  const modalRefD=useRef();
+  const modalRefRename=useRef();
   
   const getLocatorPages=()=>{
     axios
@@ -70,11 +77,14 @@ export const AppSidebarNav = () => {
   }
 
   const getTestPages = () => {
+    console.log('gothum city');
     axios
     .get('http://localhost:5000/testPages')
     .then((res)=>{
-      setTestPageNames(res.data.testPageNames);
-      console.log("141",res.data.testPageNames)
+      const newTestPageNames=res.data.testPageNames;
+      console.log("141",newTestPageNames)
+      setTestPageNames([...newTestPageNames]);
+      
     })
     .catch((err) => {
       console.log(err);
@@ -237,28 +247,6 @@ export const AppSidebarNav = () => {
 
 
 
-
-
-
-
-
-
-  // useEffect(()=>{
-  //   let newArray=[];
-  //   for(let i=0;i<dataPageNames.length;i++){
-  //     newArray.push({
-  //       component: CNavItem,
-  //       name: dataPageNames[i],
-  //       to: '/data/'+dataPageNames[i],        
-  //     })
-  //   }
-  //   let newItems=items;
-  //   newItems[5].items=newArray;
-  //   console.log("Hoooo",newItems)
-  //   setItems(newItems)
-  // },[dataPageNames])
-  // updating items
-
   const pageNameHandler =(fieldValue) => {
     const modifiedItems=items.map((item)=>{
       //add new pageName to test suite
@@ -343,13 +331,6 @@ export const AppSidebarNav = () => {
             console.log(err);
           });
 
-        // const modifiedItems=items;
-        // modifiedItems[3].items.push({
-        //   component: CNavItem,
-        //   name: dataPageName,  
-        //   to: '/dataJunction/dataExcel',
-        // })
-        // setItems([...modifiedItems]);
       }
     }
     
@@ -369,13 +350,6 @@ export const AppSidebarNav = () => {
           console.log(err);
         });
 
-        // const modifiedItems=items;
-        // modifiedItems[3].items.push({
-        //   component: CNavItem,
-        //   name: dataPageName,  
-        //   to: '/dataJunction/data',
-        // })
-        // setItems([...modifiedItems]);
       }
     }
     
@@ -426,6 +400,7 @@ export const AppSidebarNav = () => {
         axios
         .post('http://localhost:5000/testJunction/testManual',{pageName:testPageName+"M"})
         .then((res)=>{
+          console.log('fightclub');
           getTestPages(); 
         })
         .catch((err) => {
@@ -507,45 +482,179 @@ export const AppSidebarNav = () => {
   //////////////////////////
 
 
-  const pagesDeleteHandler=(rest) => {
+  const pagesDeleteHandler=() => {
     //'to' is an array of characters 
-    const {to}=rest
+    const {to}=URLSection;
     //secondChar is used to identify the type of section
     const secondChar=to[1];
-    switch(secondChar){
-      case 't':
-
-      case 'l':
-        const lengthOfUrl=to.length;
-        const pageName=to.slice(9,lengthOfUrl);
-        console.log("Yoooo",pageName);
-        const url='http://localhost:5000/locators/'+pageName
+    console.log("NOLAN",to);
+    //console.log("NOLANNN",rest);
+    console.log("XMEN",secondChar);
+      // event.stopPropagation();
+      // event.preventDefault();
+      
+      const URL='http://localhost:5000'+to;
+      console.log('bliss',URL);
+      if(secondChar==='t'){
+        console.log('mk4');
+        const urlSections=URL.split('/');
+        const pageName=urlSections.slice(-1)[0];
+        console.log('ronn',urlSections.slice(-1)[0]);
+        
         axios
-        .delete(url)
-        .then((res)=>{
-          getLocatorPages();
+        .delete('http://localhost:5000/testJunction/testManual/deletePage',{
+          params:{
+            testPageName:pageName 
+          }        
         })
-        .catch((err) => {
-          console.log(err);
-        });
-        break;
-      // case 'd':
-      //   lengthOfUrl=to.length;
-      //   pageName=to.slice(6,lengthOfUrl);
-      //   console.log("Yoooo",pageName);
-      //   url='http://localhost:5000/data/'+pageName
-      //   axios
-      //   .delete(url)
-      //   .then((res)=>{
-      //     getDataPages();
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
-      //   break;
+        .then((res)=>{
+        console.log(res);
+        getTestPages();
+      })
+        .catch((err)=>{
+        console.log(err);
+      })
 
-      case 'c':
+      }else if(secondChar==='d'){
+        const urlSections=URL.split('/');
+        const pageName=urlSections.slice(-1)[0];
+        console.log('ronn',urlSections.slice(-1)[0]);
+        
+        axios
+        .delete('http://localhost:5000/dataJunction/deletePage',{
+          params:{
+            dataPageName:pageName 
+          }        
+        })
+        .then((res)=>{
+        console.log(res);
+        getDataPages();
+      })
+        .catch((err)=>{
+        console.log(err);
+      })
+
+      }else if(secondChar==='c'){
+        const urlSections=URL.split('/');
+        const pageName=urlSections.slice(-1)[0];
+        console.log('ronn',urlSections.slice(-1)[0]);
+        
+        axios
+        .delete('http://localhost:5000/testJunction/testManual/deletePage',{
+          params:{
+            testPageName:pageName 
+          }        
+        })
+        .then((res)=>{
+        console.log(res);
+        getTestPages();
+      })
+        .catch((err)=>{
+        console.log(err);
+      })
+
+      }else if(secondChar==='l'){
+        const urlSections=URL.split('/');
+        const pageName=urlSections.slice(-1)[0];
+        console.log('ronn',urlSections.slice(-1)[0]);
+        
+        axios
+        .delete('http://localhost:5000/testJunction/testManual/deletePage',{
+          params:{
+            testPageName:pageName 
+          }        
+        })
+        .then((res)=>{
+        console.log(res);
+        getTestPages();
+      })
+        .catch((err)=>{
+        console.log(err);
+      })
+
+      }
+
+     // Stop event propagation to the link
+    // switch(secondChar){
+    //   case 't':
+
+    //   case 'l':
+    //     const lengthOfUrl=to.length;
+    //     const pageName=to.slice(9,lengthOfUrl);
+    //     console.log("Yoooo",pageName);
+    //     const url='http://localhost:5000/locators/'+pageName
+    //     axios
+    //     .delete(url)
+    //     .then((res)=>{
+    //       getLocatorPages();
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    //     break;
+    //   // case 'd':
+    //   //   lengthOfUrl=to.length;
+    //   //   pageName=to.slice(6,lengthOfUrl);
+    //   //   console.log("Yoooo",pageName);
+    //   //   url='http://localhost:5000/data/'+pageName
+    //   //   axios
+    //   //   .delete(url)
+    //   //   .then((res)=>{
+    //   //     getDataPages();
+    //   //   })
+    //   //   .catch((err) => {
+    //   //     console.log(err);
+    //   //   });
+    //   //   break;
+
+    //   case 'c':
+    // }
+  }
+
+  const alertMsgBoxForDeleting = (event,rest) => {
+    event.stopPropagation();// Stop event propagation to the link
+    event.preventDefault();
+    setURLSection(rest);
+    const {to}=rest;
+    const URL='http://localhost:5000'+to;
+    const urlSections=URL.split('/');
+    const pageName=urlSections.slice(-1)[0];
+    modalRefD.current.log( 'Are you sure you want to delete '+"'"+pageName+"'"+'?');
+  }
+
+  const pagesRenameHandler = () => {
+    const {to}=URLSection
+    const URL='http://localhost:5000'+to;
+    const urlSections=URL.split('/');
+    if(urlSections[3]==='testJunction'){
+      setIndexOfSection(2);
+      dispatch({type:'INITIATE_RENAME_MODAL'});
+      //INITIATE_RENAME_MODAL
+    }else if(urlSections[3]==='dataJunction'){
+      setIndexOfSection(3);
+      dispatch({type:'INITIATE_RENAME_MODAL'});
+    }else if(urlSections[3]==='component'){
+      setIndexOfSection(4);
+      dispatch({type:'INITIATE_RENAME_MODAL'});
+    }else if(urlSections[3]==='locator'){
+      setIndexOfSection(5);
+      dispatch({type:'INITIATE_RENAME_MODAL'});
     }
+    
+
+  }
+
+  const alertMsgBoxForRenaming = (event,rest,index) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setURLSection(rest);
+    console.log('puma',index);
+    setIndexOfRenamePage(index);
+    const {to}=rest;
+    const URL='http://localhost:5000'+to;
+    const urlSections=URL.split('/');
+    const pageName=urlSections.slice(-1)[0];
+    modalRefRename.current.log( 'Do you want to rename '+"'"+pageName+"'"+'?');
   }
 
   //const modalRef=useRef();
@@ -574,10 +683,10 @@ export const AppSidebarNav = () => {
   }
 
   const navItem = (item, index) => {
-    console.log('geeshock',index,item);
+    console.log('geeshock',item);
     const { component, name, badge, icon, ...rest } = item
     const Component = component
-    console.log('swiss',name);
+    console.log('swiss',component);
     console.log('In navItem',name) 
     return (
       <Component
@@ -589,7 +698,7 @@ export const AppSidebarNav = () => {
         {...rest}
       >
         {navLink(name, icon, badge)}
-        {(name!=="Dashboard")&&(name!=="Home")&&(name!=="Setting")? <MdDeleteForever className="delete" onClick={()=>pagesDeleteHandler(rest)}/>:null}  
+        {(name!=="Dashboard")&&(name!=="Home")&&(name!=="Setting")? <div><MdModeEdit onClick={(event)=>alertMsgBoxForRenaming(event,rest,index)}></MdModeEdit><MdDeleteForever id="myIcon" /*className="delete"*/ onClick={(event)=>alertMsgBoxForDeleting(event,rest)}/></div>:null}  
       </Component>
     )
   }
@@ -629,6 +738,9 @@ export const AppSidebarNav = () => {
         items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
     </React.Fragment>
     <NameAssignModal /*ref={modalRef}*/ indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
+    <MessageBox ref={modalRefRename} modalFooterfuncOne={pagesRenameHandler} id='pageNameRenameModal'></MessageBox>
+    <MessageBox ref={modalRefD} modalFooterfuncOne={pagesDeleteHandler} id='pageNameDeleteModal'></MessageBox>
+    <NameRenameModal indexOfSection={indexOfSection} newPageName={pageNameHandler} currentURLSection={URLSection} renamePageIndex={indexOfRenamePage}></NameRenameModal>
     </>
   )
 }

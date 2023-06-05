@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: linear-gradient(90deg, #4B79A1 -2.09%, #283E51 88.08%);
+  /* background-image: url("https://www.parasoft.com/wp-content/uploads/2021/06/image-1-automated-ui-test-simulation-1-1024x580.png.webp"); */
 }
 
 code {

@@ -64,6 +64,11 @@ const YesNo=React.lazy(() => import('./views/settings/yesNo'))
 const Status=React.lazy(() => import('./views/settings/status'))
 //settings-testTypes
 const TestTypes=React.lazy(() => import('./views/settings/testTypes'))
+const Dashbaord=React.lazy(() => import('./views/home-page/index'));
+
+const loadFormJson=React.lazy(() => import('./components/loadFromJson/loadFromJson'));
+
+
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -91,6 +96,8 @@ const routes = [
   { path: '/testJunction/testManual/:tname' , name:'TestManual', element:TestManual},  
   { path: '/locator/:lname' , name:'Locator' , element:Locator},
   { path: '/settings' , name:'Settings', element:Settings},
+  { path: '/dashboard' , name:'Settings', element:Dashbaord},
+  { path: '/loadFormJson' , name:'Settings', element:loadFormJson},
   { path: '/settings/browsers', name:'Browsers', element:Browsers},
   { path: '/settings/commands', name:'Commands', element:Commands},
   { path: '/settings/conditions', name:'Browsers', element:Conditions},

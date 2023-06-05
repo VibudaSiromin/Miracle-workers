@@ -23,6 +23,10 @@ const initialTestPageNameState = {
   testPageName:'King'
 }
 
+const renamedPageNameState = {
+  renamedPageName:'King'
+}
+
 export const setTestPageName = (testPageName) => {
   return{
     type: 'SET_TEST_PAGE_NAME',
@@ -30,8 +34,19 @@ export const setTestPageName = (testPageName) => {
   } 
 }
 
+export const setRenamedPageName = (renamedPageName) => {
+  return{
+    type: 'RENAME_PAGE_NAME',
+    payload: renamedPageName
+  }
+}
+
 const nameAssignerState = {
   initiateNameAssigner:false
+}
+
+const renameState = {
+  initiateRenameModal:false// modal used to rename the pagenames
 }
 
 
@@ -89,6 +104,18 @@ const addTestSheetNameReducer = (state = initialTestSheetState, action) => {
   }
 }
 
+const getRenamedPageNameReducer = (state = renamedPageNameState, action) => {
+  switch (action.type) {
+    case "RENAME_PAGE_NAME":
+      return {
+        ...state,
+        renamedPageName:action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
 const getTestSheetNameReducer = (state = initialTestPageNameState, action) => {
   switch (action.type) {
     case "SET_TEST_PAGE_NAME":
@@ -113,12 +140,27 @@ const nameAssignerReducer = (state = nameAssignerState, action) => {
   }
 }
 
+const renameModalReducer = (state = renameState, action) => {
+  switch(action.type){
+    case "INITIATE_RENAME_MODAL":
+      return{
+        ...state,
+        initiateRenameModal:!state.initiateRenameModal
+      };
+      default:
+        return state;
+  }
+}
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
     addDataSheetName:addDataSheetNameReducer,
     addTestSheetName:addTestSheetNameReducer,
     getTestSheetName:getTestSheetNameReducer,
-    nameAssigner:nameAssignerReducer
+    getRenamedPageName:getRenamedPageNameReducer,
+    nameAssigner:nameAssignerReducer,
+    renameModal:renameModalReducer
+    
 })
 
 const store = createStore(rootReducer)

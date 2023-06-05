@@ -2,19 +2,34 @@ import React,{forwardRef} from "react";
 import { useState,useEffect,useImperativeHandle,useRef } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { setTestPageName } from "../../store";
+import { setRenamedPageName } from "../../store";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import MessageBox from "../MessageBox";
+import { object } from "prop-types";
 
 
-const NameAssignModal = (props,ref) => {
+const NameRenameModal = (props,ref) => {
     const [toggleOneModal,setToggleOneModal]=useState(false);
     const [fieldValue,setfieldValue]=useState('');
     const [isMount,setIsMount]=useState(false);
+    const [pageNameBeforeRenaming,setPageNameBeforeRenaming]=useState();
 
-    const modalRefC=useRef();
+    const modalRefRenaming=useRef();
+
+    useEffect(()=>{
+        if(Object.keys(props.currentURLSection).length!==0){
+          console.log('dino',props.currentURLSection);
+          const {to}=props.currentURLSection;
+          const URL='http://localhost:5000'+to;
+          const URLSections=URL.split('/');
+          const pageName=URLSections.slice(-1)[0];
+          setfieldValue(pageName);
+          setPageNameBeforeRenaming(pageName);
+        }  
+    },[props.currentURLSection]);
+
 
     let sectionName;
     if(props.indexOfSection===2){
@@ -27,11 +42,11 @@ const NameAssignModal = (props,ref) => {
       sectionName='Locator';
     }
 
-    const initModalOne = () => {
+    const initRenamingModal = () => {
       return setToggleOneModal(true);
     };
     
-    const TerminateModalOne = () => {
+    const TerminateRenamingModal = () => {
       return setToggleOneModal(false);
     };
 
@@ -49,17 +64,29 @@ const NameAssignModal = (props,ref) => {
         .get('http://localhost:5000/testPages')
         .then((res)=>{
           const availableTestPageNames=res.data.testPageNames;
-          console.log('Jaguar',availableTestPageNames);
-          for(let i=0;i<availableTestPageNames.length;i++){
-            if(fieldValue===availableTestPageNames[i].slice(0,-1)){ 
-              console.log('duplicate');
-              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
-              return;
+          console.log('Jaguar222',pageNameBeforeRenaming);
+          if(fieldValue===pageNameBeforeRenaming){
+            axios
+            .put('http://localhost:5000/testJunction/renamePageName')
+            .then((res)=>{
+            })
+            .catch((err)=>{
+              console.log(err);
+            })
+          }else{
+            for(let i=0;i<availableTestPageNames.length;i++){
+              if(fieldValue===availableTestPageNames[i].slice(0,-1)){ 
+                console.log('duplicate');
+                modalRefRenaming.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+                return;
+              }
             }
+            availableTestPageNames[props.renamePageIndex]=fieldValue;
           }
-          console.log('DRAK');
-          props.newPageName(fieldValue);
-          props.setTestPageName(fieldValue);
+          
+          // console.log('DRAK');
+          // props.newPageName(fieldValue);
+          // props.setTestPageName(fieldValue);
         })
         .catch((err)=>{
           console.log(err)
@@ -74,7 +101,7 @@ const NameAssignModal = (props,ref) => {
           for(let i=0;i<availableDataPageNames.length;i++){
             if(fieldValue===availableDataPageNames[i].slice(0,-1)){ 
               console.log('duplicate');
-              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              modalRefRenaming.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
               return;
             }
           }
@@ -95,7 +122,7 @@ const NameAssignModal = (props,ref) => {
           for(let i=0;i<availableDataPageNames.length;i++){
             if(fieldValue===availableDataPageNames[i].slice(0,-1)){ 
               console.log('duplicate');
-              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              modalRefRenaming.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
               return;
             }
           }
@@ -117,7 +144,7 @@ const NameAssignModal = (props,ref) => {
           for(let i=0;i<availableLocatorPageNames.length;i++){
             if(fieldValue===availableLocatorPageNames[i]){ 
               console.log('duplicate');
-              modalRefC.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
+              modalRefRenaming.current.log("'"+fieldValue+"'"+' page name already exists.Please enter a unique name.');
               return;
             }
           }
@@ -132,40 +159,39 @@ const NameAssignModal = (props,ref) => {
       
     }
 
-    const initiateNameAssigner=useSelector((state) => state.nameAssigner.initiateNameAssigner);
-
+    //const initiateNameAssigner=useSelector((state) => state.nameAssigner.initiateNameAssigner);
+    const initiateRenameModal=useSelector((state) => state.renameModal.initiateRenameModal);
+    //renameModal
     useEffect(()=>{
       if(isMount){
-        initModalOne();
+        initRenamingModal();
       }else{
         setIsMount(true)
       }
-    },[initiateNameAssigner])
-
-
+    },[initiateRenameModal])
 
     return(
       <div>
-        <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'formOne'}>
+        <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'renameForm'}>
         <Modal show={toggleOneModal} tabIndex="-1" size="sm" centered>
-          <Modal.Header closeButton onClick={TerminateModalOne}>
+          <Modal.Header closeButton onClick={TerminateRenamingModal}>
             {sectionName}
           </Modal.Header>
           <Modal.Body>
             <label>Enter a page name:</label>
-            <input onChange={inputHandler} name={'fieldName'}/>
+            <input onChange={inputHandler} name={'fieldName'} value={fieldValue}/>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="danger" onClick={TerminateModalOne}>
+            <Button variant="danger" onClick={TerminateRenamingModal}>
               Close
             </Button>
-            <Button variant="success" onClick={TerminateModalOne} form={'formOne'} type="submit">
+            <Button variant="success" onClick={TerminateRenamingModal} form={'renameForm'} type="submit">
               Finish
             </Button>
           </Modal.Footer>
         </Modal>
       </form>
-      <MessageBox ref={modalRefC} modalFooterfuncOne={initModalOne} id='pageNameDuplicateModal'></MessageBox>
+      <MessageBox ref={modalRefRenaming} modalFooterfuncOne={initRenamingModal} id='pageNameDuplicateModal'></MessageBox>
       </div>
 
     )
@@ -173,16 +199,16 @@ const NameAssignModal = (props,ref) => {
 };
 
 const mapStateToProps = (state) => {
-  console.log('bird',state.getTestSheetName.testPageName);
+  console.log('falcon',state.getRenamedPageName.renamedPageName);
   return{
-    testPageName: state.getTestSheetName.testPageName,
+    renamedPageName: state.getRenamedPageName.renamedPageName,
   }
   
 };
 
 const mapDispatchToProps =(dispatch)=> {
   return {
-    setTestPageName:(testPageName)=>dispatch(setTestPageName(testPageName))
+    setRenamedPageName:(renamedPageName)=>dispatch(setRenamedPageName(renamedPageName))
   }
   // forwardRef: true
 };
@@ -193,4 +219,4 @@ const option = {
 
 //export default NameAssignModal;
 
-export default connect(mapStateToProps,mapDispatchToProps)(NameAssignModal);
+export default connect(mapStateToProps,mapDispatchToProps)(NameRenameModal);
