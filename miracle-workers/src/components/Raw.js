@@ -34,7 +34,7 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
   for(let i=0;i<title.length;i++){
     console.log('your test step:',testStep);
     let key=title[i];
-    if(testStep[key]===undefined || testStep[key]===" "){
+    if(testStep[key]===undefined || testStep[key]===''){
       tableDataArray.push(
         <td>{"null"}</td>
       )

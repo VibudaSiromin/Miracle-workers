@@ -198,6 +198,19 @@ const getTestPageNames= async (req, res, next)=>{
     }
   }
 
+  const getAllTestData = async(req,res,next) => {
+    let testSection;
+    try{
+      const data = await fs.promises.readFile(testFilePath);
+      testSection = JSON.parse(data);
+      res.status(200).json({allTestData:testSection});
+    }catch(err){
+      console.log(err)
+      res.status(500).json({ message: 'Error reading test section' });
+    }
+
+  }
+
   ////////This is the test section//////////////
 
   exports.getTestPageNames=getTestPageNames;
@@ -207,3 +220,4 @@ const getTestPageNames= async (req, res, next)=>{
   exports.getHeadingsFromTest=getHeadingsFromTest;
   exports.deleteTestPage=deleteTestPage;
   exports.renameTestPageName=renameTestPageName;
+  exports.getAllTestData=getAllTestData;

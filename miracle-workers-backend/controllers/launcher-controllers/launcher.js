@@ -16,6 +16,7 @@ const createLauncher = async (req, res, next) => {
 
 const getLauncherContent = async(req,res,next) => {
   const testPageName=req.query.testPageName;
+  console.log('demon',testPageName);
   let launcherSection;
   try{
     const data = await fs.promises.readFile(launcherFilePath);
@@ -38,7 +39,7 @@ const getLauncherContent = async(req,res,next) => {
     //   res.status(200).json({getDataRecords:[]})
     // }
   }catch(err){
-      res.status(500).json({ message: 'Error reading data section' })
+      res.status(500).json({ message: 'Error reading launcher section' })
   }
 }
 
@@ -80,17 +81,85 @@ const editTestPage = async (req,res,next) => {
     const newLauncherSection=JSON.stringify(launcherSection);
     try{
       await fs.promises.writeFile(launcherFilePath,newLauncherSection);
-      res.status(200).json({message:'Edited test content'});
+      res.status(200).json({message:'Edited launcher content'});
     }catch(err){
       console.log(err);
-      res.status(500).json({message:'Error occurred when creating test content'});
+      res.status(500).json({message:'Error occurred when creating launcher content'});
     }
   }catch(err){
     console.log(err)
-    res.status(500).json({ message: 'Error reading test section' });
+    res.status(500).json({ message: 'Error reading launcher section' });
   }
 }
+
+const deleteTestPageInLauncher = async(req,res,next) => {
+  const testPageName=req.query.testPageName;
+
+  let launcherSection;
+  try{
+    const data = await fs.promises.readFile(launcherFilePath);
+    launcherSection = JSON.parse(data);
+
+    let index;
+    index = launcherSection.findIndex(test=>test[0]===testPageName+"M");
+    launcherSection.splice(index,1);
+    const newTestSection=JSON.stringify(launcherSection);
+    try{
+      await fs.promises.writeFile(launcherFilePath,newTestSection);
+      res.status(200).json({message:'Edited launcher content'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when creating launcher content'});
+    }
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
+}
+
+const renameTestPageNameInLauncher =async (req,res,next) =>{
+  const newTestPageName=req.body.newTestPageName;
+  const pageIndex=req.body.pageIndex;
+  // console.log('soda',newTestPageName);
+  // console.log('coca',pageIndex);
+  
+
+  let launcherSection;
+  try{
+    const data = await fs.promises.readFile(launcherFilePath);
+    launcherSection = JSON.parse(data);
+    launcherSection[pageIndex][0]=newTestPageName+"M";
+    const newTestSection=JSON.stringify(launcherSection);
+    try{
+      await fs.promises.writeFile(launcherFilePath,newTestSection);
+      res.status(200).json({message:'Edited launcher content'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when creating launcher content'});
+    }
+
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
+}
+
+const getAllLauncherData = async(req,res,next) => {
+  let launcherSection;
+  try{
+    const data=await fs.promises.readFile(launcherFilePath);
+    launcherSection = JSON.parse(data);
+    res.status(200).json({allLauncherData:launcherSection});
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
+}
+
 
 exports.createLauncher = createLauncher;
 exports.editTestPage=editTestPage;
 exports.getLauncherContent=getLauncherContent;
+exports.deleteTestPageInLauncher=deleteTestPageInLauncher;
+exports.renameTestPageNameInLauncher=renameTestPageNameInLauncher;
+exports.getAllLauncherData=getAllLauncherData;

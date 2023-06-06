@@ -133,7 +133,7 @@ export const AppSidebarNav = () => {
       {
         component: CNavItem,
         name: 'Home',
-        to: '/buttons/buttons',
+        to: '/home',
         icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
       },
       {
@@ -482,22 +482,22 @@ export const AppSidebarNav = () => {
 
 
   const pagesDeleteHandler=() => {
-    //'to' is an array of characters 
-    const {to}=URLSection;
-    //secondChar is used to identify the type of section
-    const secondChar=to[1];
-    console.log("NOLAN",to);
-    //console.log("NOLANNN",rest);
-    console.log("XMEN",secondChar);
+     //'to' is an array of characters 
+      const {to}=URLSection;
+      //secondChar is used to identify the type of section
+      const secondChar=to[1];
+      console.log("NOLAN",to);
+      //console.log("NOLANNN",rest);
+      console.log("XMEN",secondChar);
       // event.stopPropagation();
       // event.preventDefault();
-      
       const URL='http://localhost:5000'+to;
+      const urlSections=URL.split('/');
+      const pageName=urlSections.slice(-1)[0];
       console.log('bliss',URL);
       if(secondChar==='t'){
         console.log('mk4');
-        const urlSections=URL.split('/');
-        const pageName=urlSections.slice(-1)[0];
+        
         console.log('ronn',urlSections.slice(-1)[0]);
         
         axios
@@ -509,16 +509,16 @@ export const AppSidebarNav = () => {
         .then((res)=>{
         console.log(res);
         getTestPages();
+        deleteTestFileNameInLauncher();
+
+
       })
         .catch((err)=>{
         console.log(err);
       })
 
       }else if(secondChar==='d'){
-        const urlSections=URL.split('/');
-        const pageName=urlSections.slice(-1)[0];
-        console.log('ronn',urlSections.slice(-1)[0]);
-        
+
         axios
         .delete('http://localhost:5000/dataJunction/deletePage',{
           params:{
@@ -534,10 +534,7 @@ export const AppSidebarNav = () => {
       })
 
       }else if(secondChar==='c'){
-        const urlSections=URL.split('/');
-        const pageName=urlSections.slice(-1)[0];
-        console.log('ronn',urlSections.slice(-1)[0]);
-        
+
         axios
         .delete('http://localhost:5000/testJunction/testManual/deletePage',{
           params:{
@@ -553,10 +550,6 @@ export const AppSidebarNav = () => {
       })
 
       }else if(secondChar==='l'){
-        const urlSections=URL.split('/');
-        const pageName=urlSections.slice(-1)[0];
-        console.log('ronn',urlSections.slice(-1)[0]);
-        
         axios
         .delete('http://localhost:5000/testJunction/testManual/deletePage',{
           params:{
@@ -573,42 +566,24 @@ export const AppSidebarNav = () => {
 
       }
 
-     // Stop event propagation to the link
-    // switch(secondChar){
-    //   case 't':
-
-    //   case 'l':
-    //     const lengthOfUrl=to.length;
-    //     const pageName=to.slice(9,lengthOfUrl);
-    //     console.log("Yoooo",pageName);
-    //     const url='http://localhost:5000/locators/'+pageName
-    //     axios
-    //     .delete(url)
-    //     .then((res)=>{
-    //       getLocatorPages();
-    //     })
-    //     .catch((err) => {
-    //       console.log(err);
-    //     });
-    //     break;
-    //   // case 'd':
-    //   //   lengthOfUrl=to.length;
-    //   //   pageName=to.slice(6,lengthOfUrl);
-    //   //   console.log("Yoooo",pageName);
-    //   //   url='http://localhost:5000/data/'+pageName
-    //   //   axios
-    //   //   .delete(url)
-    //   //   .then((res)=>{
-    //   //     getDataPages();
-    //   //   })
-    //   //   .catch((err) => {
-    //   //     console.log(err);
-    //   //   });
-    //   //   break;
-
-    //   case 'c':
-    // }
+    const deleteTestFileNameInLauncher = () => {
+      axios
+      .delete('http://localhost:5000/launcher/deleteTestPageName',{
+        params:{
+          testPageName:pageName 
+        }        
+      })
+        .then((res)=>{
+        console.log(res);
+        getTestPages();
+      })
+        .catch((err)=>{
+        console.log(err);
+      })
+    }
   }
+
+  
 
   const alertMsgBoxForDeleting = (event,rest) => {
     event.stopPropagation();// Stop event propagation to the link
@@ -670,7 +645,7 @@ export const AppSidebarNav = () => {
     console.log('sell',name);
     console.log('In navLink',name);
     console.log('buy',index);
-    if(name==='Test Suite' || name==='Data' || name==='Component' || name==='Locator'){
+    if(name==='Test Suite' || name==='Data' || name==='Component' || name==='Locator'){//check this again
       return (
         <>
           {icon && icon}
@@ -743,6 +718,19 @@ export const AppSidebarNav = () => {
     )
   }
 
+  //reloading all the pages in a particular section after reloading
+  const reloadPageNames = (sectionName) => {
+    if(sectionName==='test'){
+      getTestPages();
+    }else if(sectionName==='data'){
+      getDataPages();
+    }else if(sectionName==='component'){
+      //should be implemented
+    }else if(sectionName==='locator'){
+      getLocatorPages();
+    }
+  }
+
   console.log('SIM',globleitems);
 
   return (
@@ -754,7 +742,7 @@ export const AppSidebarNav = () => {
     <NameAssignModal /*ref={modalRef}*/ indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
     <MessageBox ref={modalRefRename} modalFooterfuncOne={pagesRenameHandler} id='pageNameRenameModal'></MessageBox>
     <MessageBox ref={modalRefD} modalFooterfuncOne={pagesDeleteHandler} id='pageNameDeleteModal'></MessageBox>
-    <NameRenameModal indexOfSection={indexOfSection} reloadDataPageNames={getDataPages} currentURLSection={URLSection} renamePageIndex={indexOfRenamePage}></NameRenameModal>
+    <NameRenameModal indexOfSection={indexOfSection} updatePageNames={reloadPageNames} currentURLSection={URLSection} renamePageIndex={indexOfRenamePage}></NameRenameModal>
     </>
   )
 }

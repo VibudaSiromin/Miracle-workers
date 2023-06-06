@@ -24,11 +24,12 @@ const TableLauncher = () => {
 
   const schema = yup
     .object({
-      name: yup.string().required("Name is required"),
+      sheetName: yup.string().required("Name is required"),
+      testCase: yup.string().required("Test Case is required"),
       browser: yup.string().required("Browser is required"),
-      test_type: yup.string().required("Test Type is required"),
+      type: yup.string().required("Test Type is required"),
       status: yup.string().required("Status is required"),
-      data_sheet: yup.string().required("Data sheet is required"),
+      dataSheet: yup.string().required("Data sheet is required"),
     })
     .required();
 
@@ -40,11 +41,12 @@ const TableLauncher = () => {
   } = useForm({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: "",
+      sheetName: "",
+      testCase:"",
       browser: "",
-      test_type: "",
+      type: "",
       status: "",
-      data_sheet: "",
+      dataSheet: "",
     },
   });
   const onSubmit = (data) => {
@@ -74,22 +76,58 @@ const TableLauncher = () => {
 
   }
 
-  const getDataFromStore = () => {
-    axios
-    .get('http://localhost:5000/testJunction/testManual/'+tname+'/getLauncherContent',{
-      params:{
-        testPageName:tname+"M"
-      }
-    })
-    .then((res)=>{
-      console.log(res);
-      const launcherDetails=res.data.getLauncherDetails;
+  // const getDataFromStore = () => {
+  //   axios
+  //   .get('http://localhost:5000/testJunction/testManual/'+tname+'/getLauncherContent',{
+  //     params:{
+  //       testPageName:tname+"M"
+  //     }
+  //   })
+  //   .then((res)=>{
+  //     console.log(res);
+  //     const launcherDetails=res.data.getLauncherDetails;
+  //     setData(launcherDetails);
+  //   })
+  //   .catch((err)=>{
+  //     console.log(err)
+  //   })
+  // }
+
+  // const getData = async () => {
+  //   const response = await axios.get(
+  //     `https://famous-quotes4.p.rapidapi.com/random`
+  //   );
+  // };
+
+  const getDataFromStore =async () => {
+    try{
+      const response= await axios.get(
+        `http://localhost:5000/launcher/getLauncherContent/`+tname,
+        {
+          params:{
+                   testPageName:tname+"M"
+                 }
+        }
+      )
+      const launcherDetails=response.data.getLauncherDetails;
       setData(launcherDetails);
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
+    }catch(err){
+      if(err.response){
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }else if(err.request){
+        // The client never received a response, and the request was never left
+        console.log(err.request);
+      }else{
+        // Anything else
+        console.log('Error', err.message);
+      }
+    }
+    
   }
+
+
 
   useEffect(()=>{
     getDataFromStore();
@@ -168,15 +206,15 @@ const TableLauncher = () => {
         <tbody style={{ border: "5px solid #04D9FF" }}>
           <tr>
             <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
-              Name <PlayArrowIcon fontSize="11px" /> {data?.name}
+              Sheet Name <PlayArrowIcon fontSize="11px" /> {data?.sheetName}
             </td>
             <td style={{ width: "25%", color: "black", fontWeight: "bold",textAlign:'left' }}>
-              Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
+              Test Case<PlayArrowIcon fontSize="11px" /> {data?.testCase}
             </td>
             <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
-              Test Type <PlayArrowIcon fontSize="11px" /> {data?.test_type}
+              Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
             </td>
-            <td rowSpan={"2"}>
+            <td style={{textAlign:'center' }} rowSpan={3} >
               <IconButton aria-label="Example" onClick={() => showModal()}>
                 <CreateIcon sx={{ color: "black", fontSize: "40px" }} />
               </IconButton>
@@ -184,12 +222,17 @@ const TableLauncher = () => {
           </tr>
           <tr>
             <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+              Test Type <PlayArrowIcon fontSize="11px" /> {data?.type}
+            </td>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
               Status <PlayArrowIcon fontSize="11px" /> {data?.status}
             </td>
             <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
-              Data Sheet <PlayArrowIcon fontSize="11px" /> {data?.data_sheet}
+              Data Sheet <PlayArrowIcon fontSize="11px" /> {data?.dataSheet}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+          </tr>
+          <tr>
+            <td style={{ width: "", color: "black", fontWeight: "bold",textAlign:'left'}} colSpan={3}>
               Comment <PlayArrowIcon fontSize="11px" /> {data?.comment}
             </td>
           </tr>

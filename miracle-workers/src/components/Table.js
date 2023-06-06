@@ -84,6 +84,20 @@ const Table = (props) => {
        
   }
 
+  //////////////////////////
+
+  const testAPI=async()=>{
+    try{
+      const response = await axios.get(
+        `https://famous-quotes4.p.rapidapi.com/random`
+      );
+    }catch(e){
+
+    }
+  }
+
+  ///////////////////////////
+
   //get the all the data of specific data sheet
 
   const getDataByPage=() => {

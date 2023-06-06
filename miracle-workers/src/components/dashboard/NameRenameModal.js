@@ -74,10 +74,14 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
+              renameTestPageNameInLauncher();
+              props.updatePageNames('test');
             })
             .catch((err)=>{
               console.log(err);
             })
+            ////////////////////////////////////
+
           }else{
             for(let i=0;i<availableTestPageNames.length;i++){
               if(fieldValue===availableTestPageNames[i].slice(0,-1)){ 
@@ -92,6 +96,8 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
+              renameTestPageNameInLauncher();
+              props.updatePageNames('test')
             })
             .catch((err)=>{
               console.log(err);
@@ -120,7 +126,7 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
-              props.reloadDataPageNames();
+              props.updatePageNames('data');
             })
             .catch((err)=>{
               console.log(err);
@@ -139,7 +145,7 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
-              props.reloadDataPageNames();
+              props.updatePageNames('data');
             })
             .catch((err)=>{
               console.log(err);
@@ -162,7 +168,7 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
-              props.reloadDataPageNames();
+              props.updatePageNames('data');
             })
             .catch((err)=>{
               console.log(err);
@@ -181,7 +187,7 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
-              props.reloadDataPageNames();
+              props.updatePageNames('data');
             })
             .catch((err)=>{
               console.log(err);
@@ -228,6 +234,7 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
+              props.updatePageNames('locator');
             })
             .catch((err)=>{
               console.log(err);
@@ -246,6 +253,7 @@ const NameRenameModal = (props,ref) => {
               pageIndex:props.renamePageIndex
             })
             .then((res)=>{
+              props.updatePageNames('locator');
             })
             .catch((err)=>{
               console.log(err);
@@ -259,6 +267,19 @@ const NameRenameModal = (props,ref) => {
       }
 
       
+    }
+
+    const renameTestPageNameInLauncher = () => {
+          axios
+          .patch('http://localhost:5000/launcher/renamePageName',{
+            newTestPageName:fieldValue,
+            pageIndex:props.renamePageIndex
+          })
+          .then((res)=>{
+          })
+          .catch((err)=>{
+            console.log(err);
+          })
     }
 
     //const initiateNameAssigner=useSelector((state) => state.nameAssigner.initiateNameAssigner);

@@ -16,7 +16,8 @@ router.get('/testJunction/testManual/:tname/getHeading',testControllers.getHeadi
 router.get('/testJunction/testManual/:tname',testControllers.getTestPageContent)
 //router.post('/testJunction/testManual/:dname', testControllers.editTestPage);
 router.patch('/testJunction/renamePageName',testControllers.renameTestPageName);
-
+//route for getting all test data
+router.get('/testSuite/getAllTestData',testControllers.getAllTestData);
 //'/testJunction/testManual/test02'
 router.get('/testPages',testControllers.getTestPageNames);
 
