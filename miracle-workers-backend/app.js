@@ -1,6 +1,8 @@
 const express=require('express');
 const bodyParser =require('body-parser');
 const mongoose=require('mongoose');
+const cors = require("cors");
+
 
 const settingRoutes=require('./routes/settings-routes/settings-routes');
 const locatorRoutes=require('./routes/locator-routes/locator-routes');
@@ -11,17 +13,18 @@ const loginRoutes=require('./routes/login-routes/login-routes');
 
 const app=express();
 
+app.use(cors());
 app.use(bodyParser.json());
 
-app.use((req,res,next)=>{
-    res.setHeader('Access-Control-Allow-Origin','*');
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'Origin, X-requested-With, Content-Type, Accept, Authorization'
-    );
-    res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,DELETE');
-    next();
-})
+// app.use((req,res,next)=>{
+//     res.setHeader('Access-Control-Allow-Origin','*');
+//     res.setHeader(
+//         'Access-Control-Allow-Headers',
+//         'Origin, X-requested-With, Content-Type, Accept, Authorization'
+//     );
+//     res.setHeader('Access-Control-Allow-Methods','GET,POST,PATCH,DELETE');
+//     next();
+// })
 
 app.use('/',loginRoutes);
 app.use('/',dataRoutes);

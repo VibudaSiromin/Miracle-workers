@@ -8,7 +8,7 @@ const JWT_SECRET =
 const User =require("../../models/user-models/user");
 
 const register=async(req,res,next)=>{
-    const { fname, lname, email, password, userType } = req.body;
+    const { username, email, password, userType } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
     console.log("oooooo");
 
@@ -23,8 +23,7 @@ const register=async(req,res,next)=>{
       }
       console.log("WWWWW");
       await User.create({
-        fname,
-        lname,
+        username,
         email,
         password: encryptedPassword,
         userType,
