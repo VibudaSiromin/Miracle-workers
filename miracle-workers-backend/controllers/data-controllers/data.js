@@ -315,33 +315,64 @@ const editDataPage = async (req,res,next) => {
   }
 }
 
-// const deleteDataSheet = (req,res,next) => {
-//     const deleteDataSheetName=req.query.dataSheetName;  
+const deleteDataSheet =async (req,res,next) => {
+  const dataPageName=req.query.dataPageName;
 
-//     fs.readFile(dataFilePath, 'utf8', (err, data) => {
-//         if (err) {
-//           console.error(err);
-//           return;
-//         }
-//         const dataSection = JSON.parse(data);
-//         for(let i=0;i<dataSection.length;i++){
-//             if(dataSection[i][0]===deleteDataSheetName){
-//                dataSection.splice(i,1);
-//             }
-//         }
-//         fs.writeFile(dataFilePath, JSON.stringify(dataSection), (err) => {
-//             if (err) {
-//               console.error(err);
-//               return;
-//             }
-//             console.log('Data written to file');
-//           });
-//         res.status(200);
-//         res.json(dataSection);
-//       });
-      
+  let dataSection;
 
-// }
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+
+    let index;
+    for(let i=0;i<dataSection.length;i++){
+      const dataSheet=dataSection[i];
+      if(dataSheet[0].slice(0,-1)===dataPageName){
+          index=i;
+          break;
+      }
+    }
+    // index = dataSection.findIndex(test=>test[0]===dataPageName+"M");
+    dataSection.splice(index,1);
+    const newTestSection=JSON.stringify(dataSection);
+    try{
+      await fs.promises.writeFile(dataFilePath,newTestSection);
+      res.status(200).json({message:'Edited data content'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when creating data content'});
+    }
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading data section' });
+  }
+}
+
+const renameDataPageName =async (req,res,next) =>{
+  const newDataPageName=req.body.newDataPageName;
+  const pageIndex=req.body.pageIndex;
+  console.log('soda',newDataPageName);
+  console.log('coca',pageIndex);
+  
+
+  let dataSection;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    dataSection[pageIndex][0]=newDataPageName;
+    const newTestSection=JSON.stringify(dataSection);
+    try{
+      await fs.promises.writeFile(dataFilePath,newTestSection);
+      res.status(200).json({message:'Edited test content'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when creating test content'});
+    }
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading test section' });
+  }
+}
 
 // exports.deleteDataSheet=deleteDataSheet;
 exports.createDataSheetOne=createDataSheetOne;
@@ -352,3 +383,5 @@ exports.getHeadingsFromData=getHeadingsFromData;
 exports.getDataPageContent=getDataPageContent;
 exports.addHeading=addHeading;
 exports.removeHeading=removeHeading;
+exports.deleteDataSheet=deleteDataSheet;
+exports.renameDataPageName=renameDataPageName;
