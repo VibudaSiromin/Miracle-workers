@@ -1,7 +1,7 @@
 import React from "react";
 import "./SettingItemPage.css";
 import { RxCross1 } from "react-icons/rx";
-import {BiPlus} from "react-icons/bi";
+import { BiPlus } from "react-icons/bi";
 import { Button } from "react-bootstrap";
 import SettingItemRaw from "./SettingItemRaw";
 import axios from "axios";
@@ -21,33 +21,33 @@ const SettingItemPage = ({ settingType }) => {
 
   let logo;
 
-  switch(settingType){
-    case 'commands':
-      logo=<BsCommand className="logo"/>;
+  switch (settingType) {
+    case "commands":
+      logo = <BsCommand className="logo" />;
       break;
-    case 'browsers':
-      logo=<MdOutlineOpenInBrowser className="logo"/>
+    case "browsers":
+      logo = <MdOutlineOpenInBrowser className="logo" />;
       break;
-    case 'test-types':
-      logo=<RiNumber2 className="logo"/>
+    case "test-types":
+      logo = <RiNumber2 className="logo" />;
       break;
-    case 'status':
-      logo=<TbCircle className="logo"/>
+    case "status":
+      logo = <TbCircle className="logo" />;
       break;
-    case 'yes-no':
-      logo=<GrStatusGood className="logo"/>
+    case "yes-no":
+      logo = <GrStatusGood className="logo" />;
       break;
-    case 'instructions':
-      logo=<MdOutlineIntegrationInstructions className="logo"/>
+    case "instructions":
+      logo = <MdOutlineIntegrationInstructions className="logo" />;
       break;
-    case 'conditions':
-      logo=<RiFileSearchLine className="logo"/>
+    case "conditions":
+      logo = <RiFileSearchLine className="logo" />;
   }
 
   const [commandObject, setCommandObject] = useState([]);
 
-  let url = "http://localhost:5000/settings/" + settingType;
-  console.log(url)
+  let url = "http://localhost:8000/settings/" + settingType;
+  console.log(url);
 
   const getData = () => {
     axios
@@ -68,7 +68,7 @@ const SettingItemPage = ({ settingType }) => {
   console.log(commandObject);
 
   const deleteHandler = (id, type) => {
-    const url = "http://localhost:5000/settings/" + type + "/" + id;
+    const url = "http://localhost:8000/settings/" + type + "/" + id;
     axios
       .delete(url)
       .then((res) => {
@@ -88,7 +88,7 @@ const SettingItemPage = ({ settingType }) => {
   console.log(commandObject);
 
   const addNewItemHandler = (value) => {
-    let url = "http://localhost:5000/settings/" + settingType;
+    let url = "http://localhost:8000/settings/" + settingType;
 
     axios
       .post(url, {
@@ -103,7 +103,7 @@ const SettingItemPage = ({ settingType }) => {
       });
   };
 
-  const arr=[1,2,3]
+  const arr = [1, 2, 3];
 
   return (
     <Grid container>
@@ -122,29 +122,27 @@ const SettingItemPage = ({ settingType }) => {
             height:62.99,
             backgroundColor: 'primary.dark'
           }}/> */}
-          <div className="headerBox">
-            <span className="settingType">{settingType}</span>
-            <RxCross1 className="cross"/>
-            <button className="button" onClick={addItemHandler}>
-              <BiPlus className="plus"/>
-              <span className="add">Add</span>
-              </button>
-          </div>
-            {commandObject.map((command) => (
-              <SettingItemRaw
-                rawData={command.name}
-                key={command.id}
-                id={command.id}
-                type={settingType}
-                onDelete={deleteHandler}
-              />
-            ))}
+        <div className="headerBox">
+          <span className="settingType">{settingType}</span>
+          <RxCross1 className="cross" />
+          <button className="button" onClick={addItemHandler}>
+            <BiPlus className="plus" />
+            <span className="add">Add</span>
+          </button>
+        </div>
+        {commandObject.map((command) => (
+          <SettingItemRaw
+            rawData={command.name}
+            key={command.id}
+            id={command.id}
+            type={settingType}
+            onDelete={deleteHandler}
+          />
+        ))}
       </Grid>
       <Grid xs={0} sm={5} item>
-      <span className="textWithLogo">{settingType}</span>
-      <div>
-      {logo}
-        </div>
+        <span className="textWithLogo">{settingType}</span>
+        <div>{logo}</div>
       </Grid>
     </Grid>
   );

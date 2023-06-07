@@ -9,6 +9,10 @@ body {
   /* background-image: url("https://www.parasoft.com/wp-content/uploads/2021/06/image-1-automated-ui-test-simulation-1-1024x580.png.webp"); */
 }
 
+.body{
+  background-image: url("") !important;
+
+}
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

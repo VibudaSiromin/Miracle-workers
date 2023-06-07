@@ -49,6 +49,10 @@ const renameState = {
   initiateRenameModal:false// modal used to rename the pagenames
 }
 
+const loadFormJsonCount={
+  jsonCount:0
+}
+
 
 
 const changeStateReducer = (state = initialSideBarState, { type, ...rest }) => {
@@ -152,6 +156,18 @@ const renameModalReducer = (state = renameState, action) => {
   }
 }
 
+const changeLoadFormJsonData = (state = loadFormJsonCount, action) => {
+  switch(action.type){
+    case "LOAD_FROM_JSON":
+      return{
+        ...state,
+        jsonCount:state.jsonCount+1
+      };
+      default:
+        return state;
+  }
+}
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
     addDataSheetName:addDataSheetNameReducer,
@@ -159,7 +175,8 @@ const rootReducer = combineReducers({
     getTestSheetName:getTestSheetNameReducer,
     getRenamedPageName:getRenamedPageNameReducer,
     nameAssigner:nameAssignerReducer,
-    renameModal:renameModalReducer
+    renameModal:renameModalReducer,
+    loadFormJsonData:changeLoadFormJsonData
     
 })
 
