@@ -1,6 +1,12 @@
 import {Button } from "react-bootstrap";
 import axios from "axios";
 import { useState,useEffect } from "react";
+import {v4 as uuidv4} from 'uuid';
+import { saveAs } from 'file-saver';
+import { Modal } from "react-bootstrap";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 const JSONGenerator = () => {
     const [launcherDetails,setlauncherDetails] = useState();
@@ -9,6 +15,11 @@ const JSONGenerator = () => {
     const [isMountTwo,setIsMountTwo] = useState(false);
     const [isMountThree,setIsMountThree] = useState(false);
     const [testSuiteHeadings,setTestSuiteHeadings] = useState([]);
+    const [isModalShow, setIsModalShow] = useState(false);
+    const [fileName,setFileName] = useState('');
+    const [finalOutPut,setFinalOutPut] = useState();
+
+    //const modalRefJSONFileName=useRef();
 
     const generateFinalJSON = () => {
         gettingLauncherDetails();
@@ -151,18 +162,87 @@ const JSONGenerator = () => {
                 }           
             }
             console.log('land',testsKeyArr);
+
+            const finalJSONOutput = {
+                suiteId : uuidv4(),
+                fileName : "",
+                tests : testsKeyArr,
+                activeTestCount : 1,
+                status : null,
+                startTime : null,
+                endTime : null,
+                filePath : "",
+                reportPath : null
+
+            };
+            setFinalOutPut(finalJSONOutput);
+            console.log('kiri saman',finalJSONOutput);
+
+            initModal();
     }
 
+    const nameSchema = yup.object(
+        {
+            name:yup.string().required("File name is required!")
+        }     
+    ).required();
 
-    // const jsonHandler=() => {
-    //     const json = JSON.stringify(testSteps);
-    //     saveAs(new Blob([json], { type: 'application/json;charset=utf-8' }), 'file.json');
-    //   }
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+        reset,
+      } = useForm({
+        resolver: yupResolver(nameSchema),
+        defaultValues: {
+          name: ""
+        },
+      });
+    
+    const initModal = () => {
+        setIsModalShow(true);
+    }
 
+    const terminateModal = () => {
+        setIsModalShow(false);
+        reset();
+    }
 
+    const handleFileName = (event) => {
+        console.log('mason');
+        setFileName(event.target.value);
+    }
+
+    const downloadJSONFile = () => {
+        
+        setIsModalShow(false);
+        const JSONfileName=fileName;
+        // Convert data object to JSON string
+        const jsonData = JSON.stringify(finalOutPut,null,1);
+        const blob = new Blob([jsonData], { type: 'application/json;charset=utf-8' });
+        saveAs(blob,JSONfileName+'.json');
+        reset();
+    }
     return(
         <>
             <Button variant="danger" class="btn btn-info" onClick={generateFinalJSON}>Generate JSON</Button>
+            <form onSubmit={handleSubmit(downloadJSONFile)} id='fileNameModal' register={register} errors={errors}>
+                <Modal show={isModalShow} tabIndex="-1">
+                        <Modal.Header closeButton onClick={terminateModal}>
+                            <Modal.Title>Enter a File Name</Modal.Title>
+                        </Modal.Header>
+                        <Modal.Body>
+                            <label>Enter a file name for saving JSON data :</label>
+                            <input type="text"  {...register('name')} onChange={handleFileName}/>
+                            <small className="text-danger">{errors.name?.message}</small>
+                        </Modal.Body>
+                        <Modal.Footer>
+                            <Button variant="dark" form='fileNameModal' type="submit">
+                                Ok
+                            </Button>
+                        </Modal.Footer>
+                </Modal>
+            </form>
         </>
     );
 }
