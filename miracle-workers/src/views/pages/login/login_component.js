@@ -1,11 +1,22 @@
 import React, { Component, useState } from "react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
 
-  function handleSubmit(e) {
-    e.preventDefault();
+  const schema = yup.object().shape({
+    email: yup.string().email().required("Email is required"),
+    password: yup.string().min(8).max(15).required("Password is required")
+  });
+
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  function submitForm(data) {
+    // e.preventDefault();
+    const { email, password } = data;
 
     console.log(email, password);
     fetch("http://localhost:5000/login-user", {
@@ -37,27 +48,31 @@ export default function Login() {
   return (
     <div className="auth-wrapper">
       <div className="auth-inner">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit(submitForm)} id="login">
           <h3>Sign In</h3>
 
           <div className="mb-3">
             <label>Email address</label>
             <input
               type="email"
+              name="email"
               className="form-control"
               placeholder="Enter email"
-              onChange={(e) => setEmail(e.target.value)}
+              {...register("email")}
             />
+            <small className="text-danger">{errors.email?.message}</small>
           </div>
 
           <div className="mb-3">
             <label>Password</label>
             <input
               type="password"
+              name="password"
               className="form-control"
               placeholder="Enter password"
-              onChange={(e) => setPassword(e.target.value)}
+              {...register("password")}
             />
+            <small className="text-danger">{errors.password?.message}</small>
           </div>
 
           <div className="mb-3">
@@ -74,7 +89,7 @@ export default function Login() {
           </div>
 
           <div className="d-grid">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" form="login">
               Submit
             </button>
           </div>

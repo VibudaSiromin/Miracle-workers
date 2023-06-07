@@ -10,18 +10,14 @@ const User =require("../../models/user-models/user");
 const register=async(req,res,next)=>{
     const { username, email, password, userType } = req.body;
     const encryptedPassword = await bcrypt.hash(password, 10);
-    console.log("oooooo");
 
     try {
-      console.log("llllllllll");
-
       const oldUser = await User.findOne({ email });
-      console.log("PPPPP");
+  
 
       if (oldUser) {
         return res.json({ error: "User Exists" });
       }
-      console.log("WWWWW");
       await User.create({
         username,
         email,
@@ -72,27 +68,31 @@ const forgotPassword=async(req,res,next)=>{
       var transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
-          user: "adarsh438tcsckandivali@gmail.com",
-          pass: "rmdklolcsmswvyfw",
+          user: "miracleworkers44@gmail.com",
+          pass: "MiracleWorkers#50",
         },
       });
-  
       var mailOptions = {
-        from: "youremail@gmail.com",
-        to: "thedebugarena@gmail.com",
+        from: "miracleworkers44@gmail.com",
+        to: email,
         subject: "Password Reset",
         text: link,
       };
-  
+      console.log("HALOOOOO")
+
       transporter.sendMail(mailOptions, function (error, info) {
         if (error) {
           console.log(error);
+          console.log("HALOOOOO ppppo")
+
         } else {
           console.log("Email sent: " + info.response);
         }
       });
       console.log(link);
-    } catch (error) { }
+    } catch (error) { 
+
+    }
 }
 
 const getResetPassword=async(req,res,next)=>{
