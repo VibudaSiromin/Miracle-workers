@@ -62,7 +62,7 @@ const Heading = (props) => {
 
     console.log('file headinggggxxx ',heading);
     const addHeading = (addTitle) => {
-        
+        console.log('shogun',addTitle);
         const valueList=Object.values(addTitle);//converts object values to array values
         console.log('slender',valueList);
         const newTitle=[...heading,valueList];
@@ -128,14 +128,18 @@ const Heading = (props) => {
     const dropHeading = (headingIndex) => {
       const slicingHeading=[...heading];
       slicingHeading.splice(headingIndex,1);
-      console.log("BatMan",slicingHeading);
       setHeading(slicingHeading);
       
+      const headingArrAfterDroping=slicingHeading.map((subArr)=>{
+           return subArr[0];
+      });
+      console.log("BatMan",headingArrAfterDroping);
+
       const currentURL=location.pathname;
       if(currentURL==='/dataJunction/data/'+dname){
         axios
           .post('http://localhost:5000/dataJunction/data/'+dname+'/removeHeading',{
-            currentHeading:slicingHeading,
+            currentHeading:headingArrAfterDroping,
             type:"Mannual"
           })
           .then((res)=>{

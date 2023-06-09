@@ -25,19 +25,23 @@ const getPageNames=async(req, res, next)=>{
 }
 
 const getLocatorByPage = async(req, res, next) => {
+  //////////////////////check this one again.check slice method again/////////////
   let locatorFile;
   const locatorPageName=req.params.lname;
   try{
       const data = await fs.promises.readFile(locatorFilePath);
       locatorFile = JSON.parse(data);
-    }catch{ 
+      const locatorPage=locatorFile.find(locator=>locator[0]===locatorPageName);
+      if(locatorPage!==null || locatorPage!==undefined){
+        arrayWithoutLocatorName=locatorPage.slice(1,locatorPage.length)
+        res.json({ locators: arrayWithoutLocatorName});
+      }    
+    }catch(err){ 
       console.log(err);
       res.status(500).json({ message: 'Error reading locator file' });
       return;
     }
-    locatorPage=locatorFile.find(locator=>locator[0]===locatorPageName);
-    arrayWithoutLocatorName=locatorPage.slice(1,locatorPage.length)
-    res.json({ locators: arrayWithoutLocatorName});
+    
   };    
 
 
@@ -150,9 +154,15 @@ const ranameLocatorPageName = async(req,res,next) => {
   }
 }
 
+
+const getHeadings = (req,res,next) => {
+  res.json({getHeadings:['Name','Value']})
+}
+
 exports.getPageNames=getPageNames;
 exports.getLocatorByPage=getLocatorByPage;
 exports.createLocatorByPage=createLocatorByPage;
 exports.deleteLocatorPage=deleteLocatorPage;
 exports.editLocatorPage=editLocatorPage;
 exports.ranameLocatorPageName=ranameLocatorPageName;
+exports.getHeadings=getHeadings;

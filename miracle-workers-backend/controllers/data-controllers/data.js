@@ -141,6 +141,8 @@ const addHeadingsToData = async(req,res,next) =>{
   const type=req.body.type;
   const newDataHeading=req.body.recentHeading;
 
+  console.log('rat!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',newDataHeading);
+
   let dataSection;
 
   try{
@@ -177,22 +179,38 @@ const removeHeading = async(req,res,next) => {
   const dataPageName=req.params.dname;
   const type=req.body.type;
   const currentHeading=req.body.currentHeading;
+  //const headingArr=currentHeading[0];
+  console.log('worm*********',currentHeading);
 
   let dataSection;
 
   try{
     const data = await fs.promises.readFile(dataFilePath);
-    dataSection = JSON.parse(data);
-    
+    dataSection = JSON.parse(data); 
     let index;
     if(type==="Mannual"){
       index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
+        const dataSheet=dataSection[index];
+        const newDataObjectArr=[];
 
-    }else if(type==="Excel"){
-      index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
-    }
-    //dataSection[index][1]=[...dataSection[index][1],...newDataHeading]
-    dataSection[index][1]=currentHeading;
+        if(currentHeading.length!==0){
+           for(let i=2;i<dataSheet.length;i++){
+           const dataObject=dataSheet[i];
+           console.log('hen^^^^^^^',dataObject);
+           for(let key in dataObject){
+              console.log('sam!!!!!!!!!!!!',key);          
+              if(!currentHeading.includes(key)){
+                console.log('bat!!!!!!!!!!!!!!!!',dataObject)
+                console.log('nut!!!!!!!!!!!!!!!!',key)
+                delete dataObject[key];
+                break;
+              }         
+          }
+          console.log('ball!!!!!!!!!!!!!!!',dataObject)
+          newDataObjectArr.push(dataObject);
+        }
+      
+      dataSection[index]=[dataPageName+"M",currentHeading,...newDataObjectArr];
       const newDataSection=JSON.stringify(dataSection);
       try{
         await fs.promises.writeFile(dataFilePath,newDataSection);
@@ -203,6 +221,74 @@ const removeHeading = async(req,res,next) => {
         res.status(500).json({message:'Error occurred when removing data headings'});
       }
 
+     }else if(currentHeading.length===0){
+              dataSection[index]=[dataPageName+"M",[]];
+              const newDataSection=JSON.stringify(dataSection);
+              console.log('lemon@@@@@@@@@@@@@@@');
+              try{
+                await fs.promises.writeFile(dataFilePath,newDataSection);
+                res.status(200).json({message:'Removed data headings'});
+        
+              }catch(err){
+                console.log(err);
+                res.status(500).json({message:'Error occurred when removing data headings'});
+              }
+
+              return;
+    }
+
+
+    }else if(type==="Excel"){
+      index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
+      const dataSheet=dataSection[index];
+      const newDataObjectArr=[];
+
+      if(currentHeading.length!==0){
+         for(let i=2;i<dataSheet.length;i++){
+         const dataObject=dataSheet[i];
+         console.log('hen^^^^^^^',dataObject);
+         for(let key in dataObject){
+            console.log('sam!!!!!!!!!!!!',key);          
+            if(!currentHeading.includes(key)){
+              console.log('bat!!!!!!!!!!!!!!!!',dataObject)
+              console.log('nut!!!!!!!!!!!!!!!!',key)
+              delete dataObject[key];
+              break;
+            }         
+        }
+        console.log('ball!!!!!!!!!!!!!!!',dataObject)
+        newDataObjectArr.push(dataObject);
+      }
+    
+    dataSection[index]=[dataPageName+"E",currentHeading,...newDataObjectArr];
+    const newDataSection=JSON.stringify(dataSection);
+    try{
+      await fs.promises.writeFile(dataFilePath,newDataSection);
+      res.status(200).json({message:'Removed data headings'});
+
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when removing data headings'});
+    }
+
+   }else if(currentHeading.length===0){
+            dataSection[index]=[dataPageName+"E",[]];
+            const newDataSection=JSON.stringify(dataSection);
+            console.log('lemon@@@@@@@@@@@@@@@');
+            try{
+              await fs.promises.writeFile(dataFilePath,newDataSection);
+              res.status(200).json({message:'Removed data headings'});
+      
+            }catch(err){
+              console.log(err);
+              res.status(500).json({message:'Error occurred when removing data headings'});
+            }
+
+            return;
+       }
+
+    }
+    
   }catch(err){
     console.log(err)
     res.status(500).json({ message: 'Error reading data section' });

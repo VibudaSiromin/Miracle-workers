@@ -3,6 +3,9 @@ const router=express.Router();
 
 const locatorControllers=require('../../controllers/locator-controllers/locator');
 
+//route for getting headings
+router.get('/locators/getHeadings',locatorControllers.getHeadings);
+
 //route for getting pages
 
 router.get('/locators',locatorControllers.getPageNames)

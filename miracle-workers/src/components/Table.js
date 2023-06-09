@@ -491,14 +491,16 @@ const Table = (props) => {
     
   }
 
-  const arrowClickHandler=(upOrDown,rawIndex) => {
+  const arrowClickHandler=async(upOrDown,rawIndex) => {
     console.log("Running arrow click handler");
     const presentData=[...testSteps];
     const dataAfterArrowClick=[...testSteps];
     const numOfRaws=testSteps.length;
     console.log(numOfRaws);
     if(upOrDown===0 && rawIndex!==0){
+      console.log('pusa');
       if(props.callingFrom==='locator'){
+        console.log('jet3');
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
@@ -515,27 +517,91 @@ const Table = (props) => {
       }
 
       if(props.callingFrom==='data'){
+        console.log('jet4');
         const url='http://localhost:5000/data/'+dname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-        axios
-        .post(url,{
-          editedData:dataAfterArrowClick,
-          type:"Mannual"
-        })
-        .then((res)=>{
-          settestSteps(dataAfterArrowClick);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+
+        //////////////////////////////////
+        const currentURL=location.pathname;//get current URL
+      if(currentURL==='/dataJunction/data/'+dname){
+
+        // try{
+        //   const response= await axios.post(
+        //     `http://localhost:5000/dataJunction/data/`+dname,
+        //     {
+        //       editedData:dataAfterArrowClick,//************ */
+        //       type:"Mannual"
+        //     }
+        //   )
+        // }catch(err){
+        //   if (err.response) {
+        //     // The client was given an error response (5xx, 4xx)
+        //     console.log(err.response.data);
+        //     console.log(err.response.status);
+        //     console.log(err.response.headers);
+        // } else if (err.request) {
+        //     // The client never received a response, and the request was never left
+        //     console.log(err.request);
+        // } else {
+        //     // Anything else
+        //     console.log('Error', err.message);
+        // }
+        // }
+
+
+
+        // axios
+        // .post('http://localhost:5000/dataJunction/data/'+dname,{
+        //   editedData:applyEditedData,//************ */
+        //   type:"Mannual"
+        // })
+        // .then((res)=>{
+
+        // })
+        // .catch((err)=>{
+        //   console.log(err);
+        // })
+        
+      }else if(currentURL==='/dataJunction/dataExcel/',dname){
+        // axios
+        // .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+        //   editedData:applyEditedData,//************ */
+        //   type:"Excel"
+        // })
+        // .then((res)=>{
+
+        // })
+        // .catch((err)=>{
+        //   console.log(err);
+        // })
+      } 
+
+        //////////////////////////////////
+
+        
+
+
+        // axios
+        // .post(url,{
+        //   editedData:dataAfterArrowClick,
+        //   type:"Mannual"
+        // })
+        // .then((res)=>{
+        //   settestSteps(dataAfterArrowClick);
+        // })
+        // .catch((err) => {
+        //   console.log(err);
+        // });
       }
       // dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
       // dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-      // settestSteps(dataAfterArrowClick);
+       //settestSteps(dataAfterArrowClick);
     }
     if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
+      console.log('balla');
       if(props.callingFrom==='locator'){
+        console.log('jet1');
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
         dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
@@ -552,6 +618,7 @@ const Table = (props) => {
       }
 
       if(props.callingFrom==='data'){
+        console.log('jet2');
         const url='http://localhost:5000/data/'+dname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];

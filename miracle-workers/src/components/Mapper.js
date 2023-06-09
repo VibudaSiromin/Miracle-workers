@@ -1,128 +1,142 @@
 import './Mapper.css'
 import { useState, useEffect, useRef } from "react";
 import axios from 'axios';
-import { AiOutlineLink } from "react-icons/ai";
+import { GrLink } from "react-icons/gr";
+import { FaLink } from "react-icons/fa";
+
 
 const Mapper = (props) => {
   
   const [arrayOne, setArrayOne] = useState([]);
   const [arrayTwo, setArrayTwo] = useState([]);
-  const [dataSheet,setDataSheet] = useState([]);
+  const [sheet,setSheet] = useState([]);
   const [sectionHeading,setSectionHeading] = useState([]);
-  const [selectedDataSheet,setSelectedDataSheet] = useState();
-  const [hideDropDown,setHideDropDown]=useState(true);
+  const [selectedSheet,setSelectedSheet] = useState();
+  //const [hideDropDown,setHideDropDown]=useState(true);
+  const [showListOne,setShowListOne] = useState(false);
+  const [showListTwo,setShowListTwo] = useState(false);
 
-  const depthLevelOne = () => {
-    if(hideDropDown===true){
-     //Unhide first list items
-     for(let i=0;i<dataSheet.length;i++){
-      document.getElementById(dataSheet[i]).style.display = 'block';
-    }
-    //Unhide second list items
-    for(let j=0;j<sectionHeading.length;j++){
-      document.getElementById(sectionHeading[j]).style.display = 'block';
-    }
-      setHideDropDown(false);
-    }
-    console.log('vision plus');
-    console.log('hello',selectedDataSheet);
-    axios.get('http://localhost:5000/data/getDatasheets')
+  const depthLevelOne =async () => {
+
+    // try{
+    //   const response = await axios.get(
+    //     props.URLForGettingSheets
+    //   )
+    //   setSheet(response.data[props.reqDetailsforDB[0]]);
+
+    // }catch(err){
+    //   if (err.response) {
+    //     // The client was given an error response (5xx, 4xx)
+    //     console.log(err.response.data);
+    //     console.log(err.response.status);
+    //     console.log(err.response.headers);
+    //   } else if (err.request) {
+    //     // The client never received a response, and the request was never left
+    //     console.log(err.request);
+    //   } else {
+    //     // Anything else
+    //     console.log('Error', err.message);
+    //   }
+    // }
+
+
+    axios.get(props.URLForGettingSheets)
            .then(function (response) {
-            setDataSheet(response.data.dataPageNames);
-            console.log('LOL',response.data);
+            setSheet(response.data[props.reqDetailsforDB[0]]);
         })
             .catch(function (error) {
              console.log(error);
       })
+
+      setShowListOne(true);
+  };
+
+
+  const btnStyles = {
+    display:'block'
   };
 
   useEffect(()=>{
     let listArrayOne = [];
-    for (let i = 0; i < dataSheet.length; i++) {
+    for (let i = 0; i < sheet.length; i++) {
         listArrayOne.push(
         <li className="menu-items">
           <button 
-            id={dataSheet[i]}
-            value={dataSheet[i]}
+            id={sheet[i]}
+            value={sheet[i]}
             onClick={(e) => {
               depthLevelTwo(e);
             }}
+
+            style={btnStyles}
           >
-            {dataSheet[i]}
+            {sheet[i]}
           </button>
         </li>
       );
     }
+    console.log('monster energy',listArrayOne);
     setArrayOne([...listArrayOne]);
 
-  },[dataSheet])
+  },[sheet])
   
 
   const depthLevelTwo = (event) => {
     console.log("GG", event.target.value);
-    setSelectedDataSheet(event.target.value);
-    axios.get('http://localhost:5000/data/datasheets/getHeadings', {
+    setSelectedSheet(event.target.value);
+    axios.get(props.URLForGettingHeadings, {
 	    params: {
 		    dataPageName: event.target.value,
 	    }
     }).then(function(response){
-            setSectionHeading(response.data.getHeadings)
+            setSectionHeading(response.data[props.reqDetailsforDB[2]])
             console.log('OOP123',response.data); 
          }).catch(function(error){
             console.log(error);
          })
    
-   console.log('KK',arrayTwo);
+         setShowListTwo(true);  
   };
 
 
   useEffect(()=>{
+    console.log('devil');
     let listArrayTwo = [];
     for (let i = 0; i < sectionHeading.length; i++) {
       console.log("saman", i);
       listArrayTwo.push(
         <li className="menu-items">
-          <button id={sectionHeading[i]} value={sectionHeading[i]} onClick={(e)=>{addDataReference(e)}}>
+          <button id={sectionHeading[i]} value={sectionHeading[i]}  onClick={(e)=>{addDataReference(e)}} style={btnStyles}>
             {sectionHeading[i]}
           </button>
         </li>
       );
     }
      console.log('red bull',listArrayTwo);
-     setArrayTwo(listArrayTwo);
+     setArrayTwo([...listArrayTwo]);
      //console.log('petronas',document.getElementById(selectedDataSheet).offsetTop);
 
   },[sectionHeading])
 
   //use a proper name for the function
   const addDataReference = (e) => {
-    console.log('position',document.getElementById(selectedDataSheet).getBoundingClientRect().top);
+    console.log('position',document.getElementById(selectedSheet).getBoundingClientRect().top);
     console.log('selected data field value:',e.target.value);
     console.log("this is the second drop down");
-    props.selectedHeading(props.browseBtnId,selectedDataSheet,e.target.value);
+    props.selectedHeading(props.browseBtnId,selectedSheet,e.target.value);
+    setShowListOne(false);
+    setShowListTwo(false);
+
   };
 
   document.addEventListener('click', (event) => {
     console.log('lepord');
     //this if condition only trigger for the normal clicks.It does not trigger for btn clicks
     if (event.target.tagName.toLowerCase() !== 'button') {
-      console.log('inner lepord');
-      //Hide first list items
-      for(let i=0;i<dataSheet.length;i++){
-        console.log('trojen',dataSheet[i]);
-        if(dataSheet[i]!==null){
-            document.getElementById(dataSheet[i]).style.display = 'none';
-        }
-      }
-      //Hide second list items
-      for(let j=0;j<sectionHeading.length;j++){
-        console.log('pompe',sectionHeading[j]);
-        if(sectionHeading[j]!==null){
-            document.getElementById(sectionHeading[j]).style.display = 'none';
-        }
-        
-      }
-      setHideDropDown(true);
+    
+      setShowListOne(false);
+      setShowListTwo(false);
+
     }
 
   });
@@ -131,18 +145,23 @@ const Mapper = (props) => {
 
    const secondListPosition = {top:0}
 
-  if(selectedDataSheet!==undefined){
-    secondListPosition.top=document.getElementById(selectedDataSheet).getBoundingClientRect().top+20;
-  }
+  // if(selectedDataSheet!==undefined){
+  //   secondListPosition.top=document.getElementById(selectedDataSheet).getBoundingClientRect().top+20;
+  // }
  
   console.log("Dragon");
 
   return (
     <>
       {/* <AiOutlineLink id="dataBrowseBtn" onClick={depthLevelOne} size="30px"></AiOutlineLink> */}
+      {/* <FaLink id="dataBrowseBtn" onClick={depthLevelOne}></FaLink> */}
       <button id="dataBrowseBtn" onClick={depthLevelOne}>Browse</button>
-      <ul className="myUL">{arrayOne}</ul>
-      {selectedDataSheet!==undefined ? <ul className="myUL2" style={secondListPosition}>{arrayTwo}</ul>:<></>}
+      <div>
+        {showListOne && <ul className="myUL">{arrayOne}</ul>}
+      </div>
+      <div>
+        {showListTwo && <ul className="myUL2">{arrayTwo}</ul>}
+      </div>
       
     </>
   );

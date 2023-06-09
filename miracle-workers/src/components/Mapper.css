@@ -3,7 +3,7 @@
     font-size: 14px;
     background-color: gray;
     width: 100px;
-    z-index: 999;
+    z-index: 9999;
   }
   
   .menu-items a {
@@ -24,14 +24,15 @@
   
   .myUL2 {
     list-style: none;
-    position: relative;
-    left: 100px;
+    display: block;
+    position: absolute;
+    left: 117px;
     display: block;
     z-index: 999;
   }
   
   .menu-items button {
-    display: flex;
+    display: block;
     align-items: center;
     color: inherit;
     font-size: inherit;

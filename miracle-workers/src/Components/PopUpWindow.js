@@ -200,7 +200,7 @@ function ModalDialog(props,ref) {
             props.saveNewGeneralData(modalOneGeneralDataSet);// calling from heading component
           }
           if(props.purpose==='addHeading'){
-            console.log('triple H')
+            console.log('triple H',modalOneGeneralDataSet)
             props.saveNewHeadingData(modalOneGeneralDataSet);
           }          
         }

@@ -91,24 +91,6 @@ export const AppSidebarNav = () => {
 
   }
 
-
-  // const getDataPages = () => {
-  //   axios
-  //   .
-  // }
-
-  // const getDataPages=()=>{
-  //   axios
-  //   .get('http://localhost:5000/data')
-  //   .then((res)=>{
-  //     setDataPageNames(res.data.dataPageNames);
-  //     console.log("rooooooo",res.data.dataPageNames)
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
-
   useEffect(() => {
     console.log('Normandy');
     getLocatorPages();
@@ -247,6 +229,8 @@ export const AppSidebarNav = () => {
 
 
   const pageNameHandler =(fieldValue) => {
+    console.log('dragon');
+
     const modifiedItems=items.map((item)=>{
       //add new pageName to test suite
       if(indexOfSection===2){
@@ -640,7 +624,7 @@ export const AppSidebarNav = () => {
     //modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
 }
 
-  const location = useLocation()
+  const location = useLocation();
   const navLink = (name, icon, badge,index) => {
     console.log('sell',name);
     console.log('In navLink',name);
