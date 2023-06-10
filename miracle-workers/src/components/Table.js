@@ -43,11 +43,12 @@ const Table = (props) => {
       const currentURL=location.pathname;
       if(props.callingFrom==="data"){ 
         if(currentURL==='/dataJunction/dataExcel/'+dname){
-          console.log("VEGA INO");
+          console.log("VEGA INO",props.initialExcelFileName);
           axios
           .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
             editedData:props.initialData,
-            type:"Excel"
+            type:"Excel",
+            excelFileName:props.initialExcelFileName
           })
           .then(()=>{
 

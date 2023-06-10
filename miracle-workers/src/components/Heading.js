@@ -268,7 +268,7 @@ const Heading = (props) => {
           formID={["myFormOnePart1", "myFormOnePart2"]}  
         >
         </ModalDialog>
-        <Table title={heading} dropHeading={dropHeading} generalPurpose={props.generalPurpose} /*true*/ noFields={[heading.length]} enableChainPopUps={false} purpose="fillData" removeHeading={props.removeHeading} /*true*/initialData={props.initialData} callingFrom={props.callingFrom} isInitialHeadingStored={isInitialHeadingStored}></Table>
+        <Table title={heading} dropHeading={dropHeading} generalPurpose={props.generalPurpose} /*true*/ noFields={[heading.length]} enableChainPopUps={false} purpose="fillData" removeHeading={props.removeHeading} /*true*/initialData={props.initialData} initialExcelFileName={props.initialExcelFileName}  callingFrom={props.callingFrom} isInitialHeadingStored={isInitialHeadingStored}></Table>
         {/* initialData can be null array as well. */}
         <></>
         </>

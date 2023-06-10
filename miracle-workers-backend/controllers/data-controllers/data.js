@@ -291,6 +291,7 @@ const removeHeading = async(req,res,next) => {
     }else if(type==="Excel"){
       index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
       const dataSheet=dataSection[index];
+      //const excelFileName=dataSheet[2];
       const newDataObjectArr=[];
 
       if(currentHeading.length!==0){
@@ -410,15 +411,12 @@ const getDataPageContent = async(req,res,next) => {
 //edit data pages individually
 
 const editDataPage = async (req,res,next) => {
-  console.log('birdDDD');
   //const dataPageName=req.body.dname;
   const dataPageName=req.params.dname
   const newDataContent=req.body.editedData;
   const type=req.body.type;
 
-  // console.log("dataPageName: ",dataPageName);
-  // console.log("Type: ",type);
-  // console.log("data content: ",newDataContent);
+  console.log('dhel@@@@@@@@@@@@@@@',req.body.excelFileName);
 
   let dataSection;
   try{
@@ -441,24 +439,7 @@ const editDataPage = async (req,res,next) => {
      dataSection[index]=newDataPage;
      const newDataSection=JSON.stringify(dataSection);
      try{
-      // Create a writable stream
-//const writeStream = fs.createWriteStream('store/data.json');
-//console.log('@@@@@@@@@',writeStream);
-// Write the data to the stream
-//writeStream.write(newDataSection);
 
-// Close the stream
-//writeStream.end();
-
-// Handle the 'finish' event to know when the write operation is complete
-// writeStream.on('finish', () => {
-//   console.log('File write operation completed.');
-// });
-
-// Handle any errors that may occur during the write operation
-// writeStream.on('error', (err) => {
-//   console.error('Error writing to file:',err);
-// });
       await fs.promises.writeFile(dataFilePath,newDataSection);
       res.status(200).json({message:'Edited data content'});
     }catch(err){

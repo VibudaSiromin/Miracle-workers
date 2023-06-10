@@ -112,6 +112,8 @@ const FileUploader = (props) => {
 					// excelWorkBook.SheetNames.
 					const rowObject=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:undefined});
 					props.getFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
+					props.getExcelFileName(excelFile.name);
+					
 					console.log('BMW ',rowObject);//rowObject is an array of object.
 			   }
 		
@@ -177,8 +179,9 @@ const FileUploader = (props) => {
 					 // excelWorkBook.SheetNames.
 					 const rowObject=XLSX.utils.sheet_to_json(excelWorkSheetData,{header:undefined});
 					 props.getFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
+					 props.getExcelFileName(excelFile.name);
 					 console.log('BMW ',rowObject);
-				}
+					}
 	 
 				excelReader.readAsBinaryString(excelFile);//when this function is invoked.It will immediatly call above excelReader.onload function.
 			
