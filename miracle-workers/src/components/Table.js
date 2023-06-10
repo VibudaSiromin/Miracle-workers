@@ -526,15 +526,18 @@ const Table = (props) => {
         const currentURL=location.pathname;//get current URL
       if(currentURL==='/dataJunction/data/'+dname){
 
-        // try{
-        //   const response= await axios.post(
-        //     `http://localhost:5000/dataJunction/data/`+dname,
-        //     {
-        //       editedData:dataAfterArrowClick,//************ */
-        //       type:"Mannual"
-        //     }
-        //   )
-        // }catch(err){
+        try{
+          const response= await axios.post(
+            `http://localhost:5000/dataJunction/data/`+dname,
+            {
+              editedData:dataAfterArrowClick,//************ */
+              type:"Mannual",
+              dname:dname
+            }
+          )
+        }catch(err){
+
+          console.info("1111111111111111111",err);
         //   if (err.response) {
         //     // The client was given an error response (5xx, 4xx)
         //     console.log(err.response.data);
@@ -547,7 +550,7 @@ const Table = (props) => {
         //     // Anything else
         //     console.log('Error', err.message);
         // }
-        // }
+        }
 
 
 
@@ -596,7 +599,7 @@ const Table = (props) => {
       }
       // dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
       // dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-       //settestSteps(dataAfterArrowClick);
+       settestSteps(dataAfterArrowClick);
     }
     if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
       console.log('balla');

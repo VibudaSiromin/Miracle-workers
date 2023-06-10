@@ -19,15 +19,20 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
   }
 
   const moveUpDownHandler=(upOrDown) => {
+
+
+
     if(upOrDown===0){
       // console.log("move up",rawIndex);
-      onArrowClick(upOrDown,rawIndex);
+       onArrowClick(upOrDown,rawIndex);
 
     }else{
       // console.log("move down",rawIndex);
-      onArrowClick(upOrDown,rawIndex);
+       onArrowClick(upOrDown,rawIndex);
     }
   }
+
+  
 
   //const arrayConvertor=Object.values(testStep);//convert testStep object to an array
 
