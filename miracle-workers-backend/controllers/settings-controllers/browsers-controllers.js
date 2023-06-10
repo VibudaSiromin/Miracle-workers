@@ -55,7 +55,28 @@ const createdBrowser=async(req,res,next)=>{
 
 }
 
+const editedBrowser=async(req,res,next)=>{
+        const { id, editedValue } = req.body;
+      
+        try {
+          // Find the browser setting by ID
+          const browser = await Browser.findById(id);
+
+          // Update the name property with the new value
+          browser.name = editedValue;
+          console.log("ppppppppppp",editedValue)
+
+          // Save the updated browser setting
+          await browser.save();
+          res.status(200).json({ message: 'Updated setting item' });
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({ message: 'Error updating setting item' });
+        }
+}
+
 exports.getBrowserById=getBrowserById;
 exports.getAllBrowsers=getAllBrowsers;
 exports.deleteBrowserById=deleteBrowserById;
 exports.createdBrowser=createdBrowser;
+exports.editedBrowser=editedBrowser;

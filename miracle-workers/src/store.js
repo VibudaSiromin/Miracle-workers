@@ -27,6 +27,12 @@ const renamedPageNameState = {
   renamedPageName:'King'
 }
 
+const userState={
+  username:"",
+  email:"",
+  userType:""
+}
+
 export const setTestPageName = (testPageName) => {
   return{
     type: 'SET_TEST_PAGE_NAME',
@@ -61,6 +67,18 @@ const renameState = {
   initiateRenameModal:false// modal used to rename the pagenames
 }
 
+
+const userReducer=(state = userState, action)=>{
+  switch(action.type){
+    case "GET_USER_DETAILS":return{
+      username:action.payload.username,
+      email:action.payload.email,
+      userType:action.payload.userType
+    }
+    default:
+      return state; 
+  }
+}
 
 const testSuiteValidator=(state=initialTestSuiteValidation,action)=>{
   switch(action.type){
@@ -185,8 +203,8 @@ const rootReducer = combineReducers({
     getTestSheetName:getTestSheetNameReducer,
     getRenamedPageName:getRenamedPageNameReducer,
     nameAssigner:nameAssignerReducer,
-    renameModal:renameModalReducer
-    
+    renameModal:renameModalReducer,
+    userDetails:userReducer
 })
 
 const store = createStore(rootReducer)

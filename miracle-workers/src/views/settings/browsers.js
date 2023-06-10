@@ -1,9 +1,9 @@
 import React from 'react'
-import SettingItemPage from '../../components/setting section/SettingItemPage'
+import BrowserPage from '../../components/setting section/browserPage';
 
 const browsers = () => {
   return (
-    <SettingItemPage settingType="browsers"/>
+    <BrowserPage/>
     )
 }
 

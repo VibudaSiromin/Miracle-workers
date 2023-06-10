@@ -37,6 +37,7 @@ export default function Login() {
         console.log(data, "userRegister");
         if (data.status == "ok") {
           alert("login successful");
+          console.log("LLLLLL",data)
           window.localStorage.setItem("token", data.data);
           window.localStorage.setItem("loggedIn", true);
 
