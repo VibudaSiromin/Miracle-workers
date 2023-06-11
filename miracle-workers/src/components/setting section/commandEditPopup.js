@@ -7,14 +7,32 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Checkbox from '@mui/material/Checkbox';
 
-const CommandEditPopup = ({command, onEdit}, ref) => {
+const ConditionEditPopup = ({command, onEdit}, ref) => {
 
   const schema = yup.object().shape({
-    command: yup.string().required("Cannot Be Empty"),
+    command: yup.string().required("Command cannot be empty")
+    .matches(/^[A-Z]/, "First character must be uppercase")
+    .matches(/\./, "Command must include at least one dot (.) character")
+    .test(
+        "is-uppercase-after-dot",
+        "The character after the dot must be uppercase",
+        (value) => {
+          if (!value) return true; // Skip validation if value is empty
+          const dotIndex = value.indexOf(".");
+          if (dotIndex === -1 || dotIndex === value.length - 1) return true; // Skip validation if no dot or dot is the last character
+          return value[dotIndex + 1].match(/[A-Z]/);
+        }
+      ),
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors },watch } = useForm({
     resolver: yupResolver(schema),
+    defaultValues:{
+      command:command.name,
+      locator:command.binaryValue[0]==1?true:false,
+      data:command.binaryValue[1]==1?true:false,
+      branchSelection:command.binaryValue[2]==1?true:false,
+    }
   });
 
   console.log(command)
@@ -67,12 +85,13 @@ const CommandEditPopup = ({command, onEdit}, ref) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmitHandler)} id="commandEditPopup" method="POST">
       <Modal show={enablePopup}>
         <Modal.Header closeButton onClick={closeModal}>
           <Modal.Title>Edit Commands</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+        <form onSubmit={handleSubmit(onSubmitHandler)} id="commandEditPopup" method="POST">
+
           <div>
             <div>
               Edit command
@@ -83,11 +102,13 @@ const CommandEditPopup = ({command, onEdit}, ref) => {
               <div>
                 Choose Required Fields for relevant command
               </div>
-                Locator<Checkbox name="locator" {...register("locator")}/> 
-                Data <Checkbox name="data" {...register("data")}/>
-                Branch Selection<Checkbox name="branchSelection"  {...register("branchSelection")}/>
+                Locator<Checkbox name="locator" checked={watch("locator")} {...register("locator")}/> 
+                Data <Checkbox name="data" checked={watch("data")} {...register("data")}/>
+                Branch Selection<Checkbox name="branchSelection" checked={watch("branchSelection")} {...register("branchSelection")}/>
             </div>
-          </div>               
+          </div>  
+          </form>
+             
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={closeModal}>
@@ -98,8 +119,7 @@ const CommandEditPopup = ({command, onEdit}, ref) => {
           </Button>
         </Modal.Footer>
       </Modal>
-    </form>
   );
 };
 
-export default forwardRef(CommandEditPopup);
+export default forwardRef(ConditionEditPopup);

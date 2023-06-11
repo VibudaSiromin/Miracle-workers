@@ -4,15 +4,15 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { BsCommand } from "react-icons/bs";
 import { Grid } from "@material-ui/core";
-import InstructionPopup from "./instructionPopup";
-import InstructionRaw from "./instructionRaw";
+import ConditionRaw from "./conditionRaw";
+import ConditionPopup from "./conditionPopup";
 import { Button } from "react-bootstrap";
 
-const InstructionPage = () => {
+const ConditionPage = () => {
 
   const [item, setItem] = useState([]);
 
-  let url = "http://localhost:5000/settings/instructions";
+  let url = "http://localhost:5000/settings/conditions";
   console.log(url)
 
   const getData = () => {
@@ -35,7 +35,7 @@ const InstructionPage = () => {
 
   const deleteHandler = (id) => {
     console.log("jjjjjjjjj")
-    const url = "http://localhost:5000/settings/instructions/"+ id;
+    const url = "http://localhost:5000/settings/conditions/"+ id;
     axios
       .delete(url)
       .then((res) => {
@@ -54,7 +54,7 @@ const InstructionPage = () => {
   console.log(item);
 
   const addNewItemHandler = (item) => {
-    let url = "http://localhost:5000/settings/instructions";
+    let url = "http://localhost:5000/settings/conditions";
     axios
       .post(url, {
         newValue: item,
@@ -70,7 +70,7 @@ const InstructionPage = () => {
 
 
   const editHandler=(item,id)=>{
-    const url = "http://localhost:5000/settings/instructions/"  + id;
+    const url = "http://localhost:5000/settings/conditions/"  + id;
     const editedItem={
       id:id,
       editedValue:item,
@@ -91,7 +91,7 @@ const InstructionPage = () => {
     // <Grid container>
     //   <Grid xs={12} sm={7} item>
   <div className="version-01">
-    <InstructionPopup
+    <ConditionPopup
       ref={ref}
       addNew={addNewItemHandler}
     />
@@ -99,17 +99,17 @@ const InstructionPage = () => {
     <thead>
       <tr>
         <Button onClick={addItemHandler}>
-          Add New Instruction
+          Add New Condition
         </Button>
       </tr>
       <tr>
-          <th>Instruction</th>
+          <th>Condition</th>
           <th>Actions</th>
         </tr>
     </thead>
     <tbody>
           {item.map((item) => (
-              <InstructionRaw
+              <ConditionRaw
                item={item}
                onDelete={deleteHandler}
                onItemEdit={editHandler}
@@ -122,4 +122,4 @@ const InstructionPage = () => {
   );
 };
 
-export default InstructionPage;
+export default ConditionPage;

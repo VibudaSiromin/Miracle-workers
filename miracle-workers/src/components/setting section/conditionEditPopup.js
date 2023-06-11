@@ -7,16 +7,16 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import Checkbox from '@mui/material/Checkbox';
 
-const InstructionEditPopup = ({item, onEdit}, ref) => {
+const ConditionEditPopup = ({item, onEdit}, ref) => {
 
   const schema = yup.object().shape({
-    instruction: yup.string().required("Cannot Be Empty"),
+    condition: yup.string().required("Cannot Be Empty")
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(schema),
     defaultValues:{
-        instruction:item.name,
+        condition:item.name,
     }
   });
 
@@ -36,24 +36,24 @@ const InstructionEditPopup = ({item, onEdit}, ref) => {
   }));
 
   const onSubmitHandler = (data) => {
-    onEdit(data.instruction,item.id);
+    onEdit(data.condition,item.id);
     setEnablePopup(false);
   };
 
   return (
       <Modal show={enablePopup}>
         <Modal.Header closeButton onClick={closeModal}>
-          <Modal.Title>Edit Instruction</Modal.Title>
+          <Modal.Title>Edit Condition</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-        <form onSubmit={handleSubmit(onSubmitHandler)} id="instructionEditPopup" method="POST">
+        <form onSubmit={handleSubmit(onSubmitHandler)} id="conditionEditPopup" method="POST">
 
           <div>
             <div>
-              Edit Instruction
+              Edit Condition
             </div>
-            <input type="text" name="instruction" {...register("instruction")}/>
-            <small className="text-danger">{errors.instruction?.message}</small>
+            <input type="text" name="condition" {...register("condition")}/>
+            <small className="text-danger">{errors.condition?.message}</small>
           </div>  
           </form>
              
@@ -62,7 +62,7 @@ const InstructionEditPopup = ({item, onEdit}, ref) => {
           <Button variant="danger" onClick={closeModal}>
             Close
           </Button>
-          <Button variant="dark" form="instructionEditPopup" type="submit">
+          <Button variant="dark" form="conditionEditPopup" type="submit">
             <span>Edit</span>
           </Button>
         </Modal.Footer>
@@ -70,4 +70,4 @@ const InstructionEditPopup = ({item, onEdit}, ref) => {
   );
 };
 
-export default forwardRef(InstructionEditPopup);
+export default forwardRef(ConditionEditPopup);

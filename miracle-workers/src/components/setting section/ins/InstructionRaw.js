@@ -2,11 +2,9 @@ import React, { useState } from "react";
 import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
 // import "./SettingItemRaw.css";
 import { useRef } from "react";
-import InstructionEditPopup from "./instructionEditPopup";
+import InstructionEditPopup from "./InstructionEditPopup";
 
 const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
-
-  // const [clickedItem, setClickedItem] = useState("");
 
   const ref=useRef();
 
@@ -15,6 +13,7 @@ const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
   }
 
   const editHandler=(item,id)=>{
+    console.log(item,id)
     onItemEdit(item,id);
   }
 
@@ -23,18 +22,15 @@ const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
   }
 
   return (
-      <tr className='table-primary' key={item.id}>
+      <tr className='table-primary'>
         <td>{item.name}</td>
         <InstructionEditPopup
         ref={ref}
         item={item}
         onEdit={editHandler}
         />
-        <td className="table-data">
-          <MdModeEdit onClick={()=>onEditClickHandler()}/>
-          {" "}
-          <MdDeleteForever onClick={()=>deleteHandler()}/>
-        </td>
+        <MdModeEdit onClick={()=>onEditClickHandler()}/>
+        <MdDeleteForever onClick={()=>deleteHandler()}/>
     </tr>
   );
 };

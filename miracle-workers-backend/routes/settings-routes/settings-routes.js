@@ -74,8 +74,8 @@ router.put('/settings/browsers/:bid',browserControllers.editedBrowser);
 
 // router.post('/settings/status',statusControllers.editedStatus);
 
-// router.post('/settings/instructions',instructionControllers.editedInstruction);
+router.put('/settings/instructions/:insid',instructionControllers.editedInstruction);
 
-// router.put('/settings/conditions/:cid',conditionControllers.editedCondition);
+router.put('/settings/conditions/:conid',conditionControllers.editedCondition);
 
 module.exports = router;

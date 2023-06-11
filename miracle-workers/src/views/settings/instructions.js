@@ -1,6 +1,5 @@
 import React from 'react'
-import InstructionPage from '../../components/setting section/InstructionPage'
-
+import InstructionPage from '../../components/setting section/instructionPage'
 
 const instructions = () => {
   return (

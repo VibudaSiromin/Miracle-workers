@@ -1,32 +1,35 @@
 import React from "react";
 import { useState } from "react";
-import { Modal, Button} from "react-bootstrap";
+import { Modal, Button } from "react-bootstrap";
 import { forwardRef, useImperativeHandle} from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Checkbox from '@mui/material/Checkbox';
 
-const InstructionEditPopup = ({item, onEdit}, ref) => {
+const InstructionEditPopup = ({item,onEdit}, ref) => {
 
   const schema = yup.object().shape({
-    instruction: yup.string().required("Cannot Be Empty"),
+    instruction: yup.string().required("Cannot enter a empty value").trim().test('firstCharHash', 'First character should be #', (value) => {
+      if (value && value.charAt(0) !== '#') {
+        return false;
+      }
+      return true;
+    }),
   });
-
+    
   const { register, handleSubmit, formState: { errors } } = useForm({
-    resolver: yupResolver(schema),
-    defaultValues:{
-        instruction:item.name,
-    }
+        resolver: yupResolver(schema),
+        defaultValues:{
+          instruction:item.name
+        }
   });
-
-  console.log(item)
 
   const [enablePopup, setEnablePopup] = useState(false);
 
+  console.log(item);
+
   const closeModal = () => {
     setEnablePopup(false);
-    // setFieldValue("")
   };
 
   useImperativeHandle(ref, () => ({
@@ -47,16 +50,11 @@ const InstructionEditPopup = ({item, onEdit}, ref) => {
         </Modal.Header>
         <Modal.Body>
         <form onSubmit={handleSubmit(onSubmitHandler)} id="instructionEditPopup" method="POST">
-
-          <div>
-            <div>
-              Edit Instruction
-            </div>
             <input type="text" name="instruction" {...register("instruction")}/>
-            <small className="text-danger">{errors.instruction?.message}</small>
-          </div>  
+              <div>
+                <small className="text-danger">{errors.instruction?.message}</small>
+              </div>
           </form>
-             
         </Modal.Body>
         <Modal.Footer>
           <Button variant="danger" onClick={closeModal}>

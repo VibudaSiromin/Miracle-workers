@@ -10,8 +10,19 @@ import Checkbox from '@mui/material/Checkbox';
 const CommandPopup = ({ value, addNew}, ref) => {
 
   const schema = yup.object().shape({
-    command: yup.string().required("Cannot Be Empty"),
-
+    command: yup.string().required("Command cannot be empty")
+            .matches(/^[A-Z]/, "First character must be uppercase")
+            .matches(/\./, "Command must include at least one dot (.) character")
+            .test(
+                "is-uppercase-after-dot",
+                "The character after the dot must be uppercase",
+                (value) => {
+                  if (!value) return true; // Skip validation if value is empty
+                  const dotIndex = value.indexOf(".");
+                  if (dotIndex === -1 || dotIndex === value.length - 1) return true; // Skip validation if no dot or dot is the last character
+                  return value[dotIndex + 1].match(/[A-Z]/);
+                }
+              ),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({

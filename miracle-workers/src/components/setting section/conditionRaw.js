@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
 // import "./SettingItemRaw.css";
 import { useRef } from "react";
-import InstructionEditPopup from "./instructionEditPopup";
+import ConditionEditPopup from "./conditionEditPopup";
 
-const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
+const ConditionRaw = ({ item,onDelete,onItemEdit }) => {
 
   // const [clickedItem, setClickedItem] = useState("");
 
@@ -25,7 +25,7 @@ const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
   return (
       <tr className='table-primary' key={item.id}>
         <td>{item.name}</td>
-        <InstructionEditPopup
+        <ConditionEditPopup
         ref={ref}
         item={item}
         onEdit={editHandler}
@@ -39,4 +39,4 @@ const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
   );
 };
 
-export default InstructionRaw;
+export default ConditionRaw;
