@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
 // import "./SettingItemRaw.css";
 import { useRef } from "react";
-import InstructionEditPopup from "./instructionEditPopup";
+import InstructionEditPopup from "./InstructionEditPopup";
 
 const InstructionRaw = ({ item,onDelete,onItemEdit }) => {
 

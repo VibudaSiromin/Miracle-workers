@@ -4,8 +4,8 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { BsCommand } from "react-icons/bs";
 import { Grid } from "@material-ui/core";
-import InstructionPopup from "./instructionPopup";
-import InstructionRaw from "./instructionRaw";
+import InstructionPopup from "./InstructionPopup";
+import InstructionRaw from "./InstructionRaw";
 import { Button } from "react-bootstrap";
 
 const InstructionPage = () => {

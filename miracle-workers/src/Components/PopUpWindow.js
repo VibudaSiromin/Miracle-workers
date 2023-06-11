@@ -4,6 +4,7 @@ import PopUpInputField from "./PopUpInputField";
 import PopUpSelection from "./PopUpSelection";
 import {MdTableRows} from 'react-icons/md';
 import { forwardRef,useImperativeHandle,useState } from "react";
+import axios from "axios";
 
 function ModalDialog(props,ref) {
   const [toggleOneModal, setToggleOneModal]  = React.useState(false);
@@ -13,6 +14,8 @@ function ModalDialog(props,ref) {
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [editStatus,setEditStatus] = React.useState('false');
   const [commandBasedFields,setCommandBasedFields]=useState([]);
+  const [commandSet,setCommandSet]=useState([]);
+
 
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
@@ -66,6 +69,22 @@ function ModalDialog(props,ref) {
   //   }
   //   console.log(testStepsData);
   // };
+  const getCommands= () => {
+    axios
+      .get("http://localhost:5000/settings/commands")
+      .then((res) => {
+        setCommandSet(res.data.settingItem); 
+        console.log("gft");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getCommands();
+  }, []);
+
   useEffect(() => {
     switch(testSteps["command"]){
       case "Branch.BasedOnData":

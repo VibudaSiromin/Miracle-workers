@@ -10,7 +10,8 @@ import Checkbox from '@mui/material/Checkbox';
 const ConditionEditPopup = ({item, onEdit}, ref) => {
 
   const schema = yup.object().shape({
-    condition: yup.string().required("Cannot Be Empty")
+    condition: yup.string().required("Condition cannot Be Empty")
+    .matches(/^[A-Z][a-zA-Z]*$/, "Condition must start with an uppercase letter")
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({

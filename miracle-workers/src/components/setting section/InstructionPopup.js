@@ -9,8 +9,22 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const InstructionPopup = ({ value, addNew}, ref) => {
 
   const schema = yup.object().shape({
-    instruction: yup.string().required("Cannot Be Empty"),
-
+    instruction: yup.string().required("Instruction cannot Be Empty")
+    .matches(/^#[a-z]+$/, {
+        message: "First character must be '#' and remaining letters should be lowercase letters ",
+        excludeEmptyString: true,
+        excludeInfinity: true,
+      })
+      .test(
+        "is-first-character-hash",
+        "First character must be '#'",
+        (value) => value && value[0] === "#"
+      )
+      .test(
+        "is-remaining-lowercase-letters",
+        "Remaining characters should be lowercase English letters",
+        (value) => value && /^[a-z]+$/.test(value.slice(1))
+      ),
   });
 
   const { register, handleSubmit, formState: { errors } } = useForm({

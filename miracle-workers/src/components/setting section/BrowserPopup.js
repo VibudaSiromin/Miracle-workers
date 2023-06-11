@@ -71,7 +71,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 const BrowserPopup = ({ value, addNew}, ref) => {
 
   const schema = yup.object().shape({
-    browser: yup.string().required("Cannot Be Empty")
+    browser: yup.string().required("Browser cannot Be Empty")
     .matches(/^[A-Z][a-zA-Z]*$/, "Name must start with an uppercase letter"),
 
   });
