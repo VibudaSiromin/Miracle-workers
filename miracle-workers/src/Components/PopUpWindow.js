@@ -85,18 +85,55 @@ function ModalDialog(props,ref) {
     getCommands();
   }, []);
 
+
+
+
   useEffect(() => {
-    switch(testSteps["command"]){
-      case "Branch.BasedOnData":
-        setCommandBasedFields(["locator","locatorParameter","action","comment"]);  
+    let matchedBinaryValue;
+    for(let i=0;i<commandSet.length;i++){
+      if(commandSet[i].name==testSteps["command"]){
+        matchedBinaryValue=commandSet[i].matchedBinary;
+        return;
+      }
+    }
+
+    switch(matchedBinaryValue){
+      case "001":
+        setCommandBasedFields(["swapResult","branchSelection","action","comment"]);  
         break;
-      case "Branch.OnElementAttribute":
-        setCommandBasedFields(["action","comment"]);  
+      case "010":
+        setCommandBasedFields(["data","swapResult","action","comment"]);  
         break;
+      case "011":
+        setCommandBasedFields(["data","swapResult","branchSelection","action","comment"]);  
+        break;
+      case "100":
+        setCommandBasedFields(["locator","locatorParameter","swapResult","action","comment"]);  
+        break;
+      case "101":
+        setCommandBasedFields(["locator","locatorParameter","swapResult","branchSelection","action","comment"]);  
+        break;
+      case "110":
+        setCommandBasedFields(["locator","locatorParameter","data","swapResult","action","comment"]);  
+        break;
+      case "111":
+        setCommandBasedFields(["locator","locatorParameter","data","swapResult","branchSelection","action","comment"]);  
+        break;
+
       default:
         setCommandBasedFields([]);
     }
-    console.log("ppppppppppp",commandBasedFields);
+    // switch(testSteps["command"]){
+    //   case "Branch.BasedOnData":
+    //     setCommandBasedFields(["locator","locatorParameter","action","comment"]);  
+    //     break;
+    //   case "Branch.OnElementAttribute":
+    //     setCommandBasedFields(["action","comment"]);  
+    //     break;
+    //   default:
+    //     setCommandBasedFields([]);
+    // }
+    // console.log("ppppppppppp",commandBasedFields);
   }, [testSteps["command"]]);
 
 
