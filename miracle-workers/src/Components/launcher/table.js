@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
-import axios from 'axios'
+import axios from "axios";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
@@ -17,10 +17,10 @@ import { useLocation } from "react-router-dom";
 const TableLauncher = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [data, setData] = useState({});
-  const [isLauncherMount,setIsLauncherMount] = useState(false);
+  const [isLauncherMount, setIsLauncherMount] = useState(false);
 
-  const {tname}=useParams();
-  const location=useLocation();
+  const { tname } = useParams();
+  const location = useLocation();
 
   const schema = yup
     .object({
@@ -54,46 +54,53 @@ const TableLauncher = () => {
     setIsShowModal(false);
   };
 
-  const saveData=(data) => {
-    const currentURL=location.pathname;
-   
-    if(currentURL==='/testJunction/testManual/'+tname){
+  const saveData = (data) => {
+    const currentURL = location.pathname;
+
+    if (currentURL === "/testJunction/testManual/" + tname) {
       console.log("LMG");
       axios
-      .post('http://localhost:5000/testJunction/testManual/'+tname+'/editLauncher',{
-        editedData:data,
-        type:"Manual"
-      })
-      .then(()=>{
-
-      })
-      .catch((err)=>{
-        console.log(err);
-      })
+        .post(
+          "http://localhost:8000/testJunction/testManual/" +
+            tname +
+            "/editLauncher",
+          {
+            editedData: data,
+            type: "Manual",
+          }
+        )
+        .then(() => {})
+        .catch((err) => {
+          console.log(err);
+        });
     }
-
-  }
+  };
 
   const getDataFromStore = () => {
     axios
-    .get('http://localhost:5000/testJunction/testManual/'+tname+'/getLauncherContent',{
-      params:{
-        testPageName:tname+"M"
-      }
-    })
-    .then((res)=>{
-      console.log(res);
-      const launcherDetails=res.data.getLauncherDetails;
-      setData(launcherDetails);
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
-  }
+      .get(
+        "http://localhost:8000/testJunction/testManual/" +
+          tname +
+          "/getLauncherContent",
+        {
+          params: {
+            testPageName: tname + "M",
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res);
+        const launcherDetails = res.data.getLauncherDetails;
+        setData(launcherDetails);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     getDataFromStore();
-  },[tname])
+  }, [tname]);
 
   const onCancel = () => {
     reset();
@@ -109,40 +116,40 @@ const TableLauncher = () => {
 
   const showModalInitially = () => {
     setIsShowModal(true);
-  }
-
+  };
 
   // useEffect(()=>{
   //   is
   // },[])
 
-  const calledFromJsonTest = useSelector((state) => state.addTestSheetName.initialLauncherModalVisibilityState);
-  
+  const calledFromJsonTest = useSelector(
+    (state) => state.addTestSheetName.initialLauncherModalVisibilityState
+  );
 
-  const calledFromManualTest = useSelector((state) => state.addTestSheetName.initialLauncherModalVisibilityState);
-  console.log("proStreet",calledFromManualTest);
+  const calledFromManualTest = useSelector(
+    (state) => state.addTestSheetName.initialLauncherModalVisibilityState
+  );
+  console.log("proStreet", calledFromManualTest);
 
-  console.log('galaxy',isLauncherMount);
+  console.log("galaxy", isLauncherMount);
   useEffect(() => {
-    console.log('wolf tooth');
-    if(isLauncherMount){
-      showModalInitially(); 
-    }else{
+    console.log("wolf tooth");
+    if (isLauncherMount) {
+      showModalInitially();
+    } else {
       setIsLauncherMount(true);
     }
-      
   }, [calledFromJsonTest]);
 
   useEffect(() => {
-    console.log('Wolf warrior');
-    if(isLauncherMount){
-      showModalInitially(); 
-      console.log('Wolf');
-    }else{
+    console.log("Wolf warrior");
+    if (isLauncherMount) {
+      showModalInitially();
+      console.log("Wolf");
+    } else {
       setIsLauncherMount(true);
-    } 
+    }
   }, [calledFromManualTest]);
-
 
   return (
     <>
@@ -167,13 +174,34 @@ const TableLauncher = () => {
       >
         <tbody style={{ border: "5px solid #04D9FF" }}>
           <tr>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td
+              style={{
+                width: "35%",
+                color: "black",
+                fontWeight: "bold",
+                textAlign: "left",
+              }}
+            >
               Name <PlayArrowIcon fontSize="11px" /> {data?.name}
             </td>
-            <td style={{ width: "25%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td
+              style={{
+                width: "25%",
+                color: "black",
+                fontWeight: "bold",
+                textAlign: "left",
+              }}
+            >
               Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td
+              style={{
+                width: "35%",
+                color: "black",
+                fontWeight: "bold",
+                textAlign: "left",
+              }}
+            >
               Test Type <PlayArrowIcon fontSize="11px" /> {data?.test_type}
             </td>
             <td rowSpan={"2"}>
@@ -183,13 +211,34 @@ const TableLauncher = () => {
             </td>
           </tr>
           <tr>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td
+              style={{
+                width: "35%",
+                color: "black",
+                fontWeight: "bold",
+                textAlign: "left",
+              }}
+            >
               Status <PlayArrowIcon fontSize="11px" /> {data?.status}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td
+              style={{
+                width: "35%",
+                color: "black",
+                fontWeight: "bold",
+                textAlign: "left",
+              }}
+            >
               Data Sheet <PlayArrowIcon fontSize="11px" /> {data?.data_sheet}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td
+              style={{
+                width: "35%",
+                color: "black",
+                fontWeight: "bold",
+                textAlign: "left",
+              }}
+            >
               Comment <PlayArrowIcon fontSize="11px" /> {data?.comment}
             </td>
           </tr>

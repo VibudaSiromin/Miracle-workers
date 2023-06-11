@@ -39,7 +39,7 @@
 //       e.preventDefault();
 
 //       console.log(username, email, password);
-//       fetch("http://localhost:5000/register", {
+//       fetch("http://localhost:8000/register", {
 //         method: "POST",
 //         crossDomain: true,
 //         headers: {
@@ -105,7 +105,7 @@
 //               />
 //               <small className="text-danger">{errors.Secret_key?.message}</small>
 //             </div>
-            
+
 //           ) : null}
 
 //           <div className="mb-3">
@@ -191,20 +191,25 @@ export default function SignUp() {
       .oneOf([yup.ref("password"), null], "Passwords must match"),
   });
 
-  const { register, handleSubmit, formState: { errors },watch } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const formData=watch(); 
+  const formData = watch();
 
   const submitForm = (data) => {
-    const { UserType, username, email, password,Secret_key } = data;
+    const { UserType, username, email, password, Secret_key } = data;
 
     if (UserType == "Admin" && Secret_key != "AdarshT") {
       alert("Invalid Admin");
     } else {
       console.log(username, email, password);
-      fetch("http://localhost:5000/register", {
+      fetch("http://localhost:8000/register", {
         method: "POST",
         crossDomain: true,
         headers: {
@@ -256,7 +261,7 @@ export default function SignUp() {
             <small className="text-danger">{errors.UserType?.message}</small>
             Admin
           </div>
-          {formData.UserType=="Admin"? (
+          {formData.UserType == "Admin" ? (
             <div className="mb-3">
               <label>Secret Key</label>
               <input
@@ -266,9 +271,11 @@ export default function SignUp() {
                 placeholder="Secret Key"
                 {...register("Secret_key")}
               />
-              <small className="text-danger">{errors.Secret_key?.message}</small>
+              <small className="text-danger">
+                {errors.Secret_key?.message}
+              </small>
             </div>
-          ):null}
+          ) : null}
 
           <div className="mb-3">
             <label>Username</label>
@@ -315,7 +322,9 @@ export default function SignUp() {
               placeholder="Confirm password"
               {...register("confirmPassword")}
             />
-            <small className="text-danger">{errors.confirmPassword?.message}</small>
+            <small className="text-danger">
+              {errors.confirmPassword?.message}
+            </small>
           </div>
 
           <div className="d-grid">

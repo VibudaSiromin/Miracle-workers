@@ -1,24 +1,27 @@
 import React from "react";
 import { useState } from "react";
 import { Modal, Button } from "react-bootstrap";
-import { forwardRef, useImperativeHandle} from "react";
+import { forwardRef, useImperativeHandle } from "react";
 
-const SettingEditPopup = ({ type, itemID ,value,callingFrom, addNewOrEdit}, ref) => {
-  let url = "http://localhost:5000/settings/" + type + "/" + itemID;
+const SettingEditPopup = (
+  { type, itemID, value, callingFrom, addNewOrEdit },
+  ref
+) => {
+  let url = "http://localhost:8000/settings/" + type + "/" + itemID;
 
   const [enablePopup, setEnablePopup] = useState(false);
 
   console.log(value);
 
-  const [fieldValue,setFieldValue]=useState(value);
-  console.log(fieldValue)
-  const inputHandler=(event) => {
+  const [fieldValue, setFieldValue] = useState(value);
+  console.log(fieldValue);
+  const inputHandler = (event) => {
     setFieldValue(event.target.value);
-  }
+  };
 
   const closeModal = () => {
     setEnablePopup(false);
-    setFieldValue("")
+    setFieldValue("");
   };
 
   useImperativeHandle(ref, () => ({
@@ -29,8 +32,8 @@ const SettingEditPopup = ({ type, itemID ,value,callingFrom, addNewOrEdit}, ref)
 
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    if(callingFrom==="add"){
-      console.log('hiiiiiiiiii');
+    if (callingFrom === "add") {
+      console.log("hiiiiiiiiii");
       addNewOrEdit(fieldValue);
     }
     setEnablePopup(false);
@@ -38,10 +41,17 @@ const SettingEditPopup = ({ type, itemID ,value,callingFrom, addNewOrEdit}, ref)
   };
 
   return (
-    <form onSubmit={onSubmitHandler} id="settingsEditPopup" action="" method="POST">
+    <form
+      onSubmit={onSubmitHandler}
+      id="settingsEditPopup"
+      action=""
+      method="POST"
+    >
       <Modal show={enablePopup}>
         <Modal.Header closeButton onClick={closeModal}>
-          <Modal.Title>{callingFrom} {type}</Modal.Title>
+          <Modal.Title>
+            {callingFrom} {type}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <input type="text" value={fieldValue} onChange={inputHandler}></input>
@@ -51,7 +61,7 @@ const SettingEditPopup = ({ type, itemID ,value,callingFrom, addNewOrEdit}, ref)
             Close
           </Button>
           <Button variant="dark" form="settingsEditPopup" type="submit">
-            {callingFrom==="add"?<span>Add</span>:<span>Edit</span>}
+            {callingFrom === "add" ? <span>Add</span> : <span>Edit</span>}
           </Button>
         </Modal.Footer>
       </Modal>
