@@ -4,9 +4,6 @@ var nodemailer = require("nodemailer");
 const TwoFa = require("../../models/two-fa-code-models/two-fa");
 require("dotenv").config();
 
-const JWT_SECRET =
-  "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
-
 const User = require("../../models/user-models/user");
 const { encrypt, decrypt } = require("../../utils/encode-decode");
 const { generateResetCode } = require("../../utils/generate-reset-code");
@@ -41,7 +38,7 @@ const login = async (req, res, next) => {
     return res.json({ error: "User Not found" });
   }
   if (await bcrypt.compare(password, user.password)) {
-    const token = jwt.sign({ email: user.email }, JWT_SECRET, {
+    const token = jwt.sign({ email: user.email, userType:user.userType}, process.env.JWT_SECRET, {
       expiresIn: "15m",
     });
 
@@ -109,7 +106,7 @@ const getResetPassword = async (req, res, next) => {
   if (!oldUser) {
     return res.json({ status: "User does not exists!!" });
   }
-  const secret = JWT_SECRET + oldUser.password;
+  const secret = process.env.JWT_SECRET + oldUser.password;
   try {
     const verify = jwt.verify(token, secret);
     res.render("index", { email: verify.email, status: "Not Verified" });
@@ -127,7 +124,7 @@ const resetPassword = async (req, res, next) => {
   if (!oldUser) {
     return res.json({ status: "User Not Exists!!" });
   }
-  const secret = JWT_SECRET + oldUser.password;
+  const secret = process.env.JWT_SECRET + oldUser.password;
   try {
     const verify = jwt.verify(token, secret);
     const encryptedPassword = await bcrypt.hash(password, 10);

@@ -178,6 +178,7 @@ import React from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import "./login.scss"
 
 export default function SignUp() {
   const schema = yup.object().shape({
