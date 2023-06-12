@@ -13,6 +13,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import "./launcher-style.css";
 
 const TableLauncher = () => {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -177,7 +178,7 @@ const TableLauncher = () => {
             <td
               style={{
                 width: "35%",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 textAlign: "left",
               }}
@@ -187,7 +188,7 @@ const TableLauncher = () => {
             <td
               style={{
                 width: "25%",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 textAlign: "left",
               }}
@@ -197,7 +198,7 @@ const TableLauncher = () => {
             <td
               style={{
                 width: "35%",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 textAlign: "left",
               }}
@@ -205,8 +206,23 @@ const TableLauncher = () => {
               Test Type <PlayArrowIcon fontSize="11px" /> {data?.test_type}
             </td>
             <td rowSpan={"2"}>
-              <IconButton aria-label="Example" onClick={() => showModal()}>
-                <CreateIcon sx={{ color: "black", fontSize: "40px" }} />
+              <IconButton
+                aria-label="Example"
+                onClick={() => showModal()}
+                style={{
+                  margin: 0,
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                }}
+              >
+                <CreateIcon
+                  sx={{
+                    color: "rgb(4, 217, 255)",
+                    fontSize: "30px",
+                  }}
+                />
               </IconButton>
             </td>
           </tr>
@@ -214,7 +230,7 @@ const TableLauncher = () => {
             <td
               style={{
                 width: "35%",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 textAlign: "left",
               }}
@@ -224,7 +240,7 @@ const TableLauncher = () => {
             <td
               style={{
                 width: "35%",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 textAlign: "left",
               }}
@@ -234,7 +250,7 @@ const TableLauncher = () => {
             <td
               style={{
                 width: "35%",
-                color: "black",
+                color: "white",
                 fontWeight: "bold",
                 textAlign: "left",
               }}

@@ -14,6 +14,7 @@
 
   background: linear-gradient(180deg, #516183 0%, #000000 100%);
   border-radius: 16.7969px 16.7969px 0px 0px;
+  padding: 22px;
 }
 
 .cross {
@@ -22,6 +23,8 @@
   top: 19.82%;
   bottom: 78.52%;
   color: #ffffff;
+  margin-top: 5px;
+  margin-right: 7px;
 }
 
 .button {
@@ -65,10 +68,19 @@
   font-size: 40.3125px;
   line-height: 48px;
   text-align: center;
-  color: rgba(36, 34, 34, 0.52);
+  color: rgba(255, 255, 255, 0.52);
 }
 
 .logo {
   height: 167.96875px;
   width: 155.37109375px;
+}
+
+.center-logo {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  left: 70%;
 }
