@@ -7,10 +7,29 @@ import { Grid } from "@material-ui/core";
 import InstructionPopup from "./InstructionPopup";
 import InstructionRaw from "./InstructionRaw";
 import { Button } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
+import { useDispatch,useSelector } from "react-redux";
+
 
 const InstructionPage = () => {
 
   const [item, setItem] = useState([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+
+      const decodedToken = jwt_decode(token);
+      const { userType } = decodedToken;
+      if(userType=="Admin"){
+        dispatch({ type: "SET_ADMIN" })
+      }
+    }
+  }, [dispatch]);
+
+  const userType=useSelector(state => state.userTypeReducer.userType);
 
   let url = "http://localhost:5000/settings/instructions";
   console.log(url)
@@ -97,14 +116,22 @@ const InstructionPage = () => {
     />
   <table id="data-Table">
     <thead>
-      <tr>
+      {
+        userType=="Admin"?
+        <tr>
         <Button onClick={addItemHandler}>
           Add New Instruction
         </Button>
       </tr>
+      :null
+      }
+ 
       <tr>
           <th>Instruction</th>
+          {userType=="Admin"?
           <th>Actions</th>
+          :null
+          }
         </tr>
     </thead>
     <tbody>
@@ -114,6 +141,7 @@ const InstructionPage = () => {
                onDelete={deleteHandler}
                onItemEdit={editHandler}
                key={item.id}
+               userType={userType}
               />
           ))}
     </tbody>

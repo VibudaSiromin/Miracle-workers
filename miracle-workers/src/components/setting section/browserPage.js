@@ -169,12 +169,31 @@ import { BsCommand } from "react-icons/bs";
 import { Grid } from "@material-ui/core";
 import BrowserPopup from "./BrowserPopup";
 import BrowserRaw from "./BrowserRaw";
+import jwt_decode from "jwt-decode";
+import { useDispatch,useSelector } from "react-redux";
 
 import { Button } from "react-bootstrap";
 
 const BrowserPage = () => {
 
   const [item, setItem] = useState([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+
+      const decodedToken = jwt_decode(token);
+      const { userType } = decodedToken;
+      if(userType=="Admin"){
+        dispatch({ type: "SET_ADMIN" })
+      }
+    }
+  }, [dispatch]);
+
+  const userType="User"
+  // useSelector(state => state.userTypeReducer.userType);
 
   let url = "http://localhost:5000/settings/browsers";
   console.log(url)
@@ -261,14 +280,22 @@ const BrowserPage = () => {
     />
   <table id="data-Table">
     <thead>
-      <tr>
-        <Button onClick={addItemHandler}>
-          Add New Browser
-        </Button>
-      </tr>
+      {
+        userType=="Admin"?
+        <tr>
+          <Button onClick={addItemHandler}>
+            Add New Browser
+          </Button>
+        </tr>
+      :null
+      }
+
       <tr>
           <th>Browser</th>
+          {userType=="Admin"?
           <th>Actions</th>
+          :null
+          }
         </tr>
     </thead>
     <tbody>
@@ -278,6 +305,7 @@ const BrowserPage = () => {
                onDelete={deleteHandler}
                onItemEdit={editHandler}
                key={item.id}
+               userType={userType}
               />
           ))}
     </tbody>

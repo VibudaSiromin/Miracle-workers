@@ -1,4 +1,4 @@
-import React from "react";
+import React ,{useEffect} from "react";
 import SettingsItem from "./SettingsItem";
 import { RiNumber2 } from "react-icons/ri";
 import { BsCommand } from "react-icons/bs";
@@ -10,29 +10,6 @@ import { MdOutlineIntegrationInstructions } from "react-icons/md";
 import { Grid } from "@material-ui/core";
 
 const Settings = () => {
-  // const commandHandler = (num) => {
-  //   if (num === 1) {
-  //     console.log("com");
-  //   }
-  //   if (num === 2) {
-  //     console.log("brow");
-  //   }
-  //   if (num === 3) {
-  //     console.log("brow");
-  //   }
-  //   if (num === 4) {
-  //     console.log("brow");
-  //   }
-  //   if (num === 5) {
-  //     console.log("brow");
-  //   }
-  //   if (num === 6) {
-  //     console.log("brow");
-  //   }
-  //   if (num === 7) {
-  //     console.log("brow");
-  //   }
-  // };
 
   return (
     <Grid container spacing={5}>

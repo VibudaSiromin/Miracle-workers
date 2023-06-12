@@ -40,7 +40,7 @@ import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
 import { useRef } from "react";
 import BrowserEditPopup from "./BrowserEditPopup";
 
-const BrowserRaw = ({ item,onDelete,onItemEdit }) => {
+const BrowserRaw = ({ item,onDelete,onItemEdit ,userType}) => {
 
   // const [clickedItem, setClickedItem] = useState("");
 
@@ -61,16 +61,22 @@ const BrowserRaw = ({ item,onDelete,onItemEdit }) => {
   return (
       <tr className='table-primary' key={item.id}>
         <td>{item.name}</td>
-        <BrowserEditPopup
-        ref={ref}
-        item={item}
-        onEdit={editHandler}
-        />
-        <td className="table-data">
+        {userType=="Admin"?
+        <span>
+          <BrowserEditPopup
+          ref={ref}
+          item={item}
+          onEdit={editHandler}
+          />    
+          <td className="table-data">
           <MdModeEdit onClick={()=>onEditClickHandler()}/>
           {" "}
           <MdDeleteForever onClick={()=>deleteHandler()}/>
-        </td>
+          </td>
+        </span>
+        :null      
+        }
+
     </tr>
   );
 };

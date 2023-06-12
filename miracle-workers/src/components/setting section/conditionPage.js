@@ -7,10 +7,28 @@ import { Grid } from "@material-ui/core";
 import ConditionRaw from "./conditionRaw";
 import ConditionPopup from "./conditionPopup";
 import { Button } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
+import { useDispatch,useSelector } from "react-redux";
 
 const ConditionPage = () => {
 
   const [item, setItem] = useState([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+
+      const decodedToken = jwt_decode(token);
+      const { userType } = decodedToken;
+      if(userType=="Admin"){
+        dispatch({ type: "SET_ADMIN" })
+      }
+    }
+  }, [dispatch]);
+
+  const userType=useSelector(state => state.userTypeReducer.userType);
 
   let url = "http://localhost:5000/settings/conditions";
   console.log(url)
@@ -97,14 +115,22 @@ const ConditionPage = () => {
     />
   <table id="data-Table">
     <thead>
+      {userType=="Admin"?
       <tr>
         <Button onClick={addItemHandler}>
-          Add New Condition
+            Add New Condition
         </Button>
       </tr>
+      :null
+      }
+
       <tr>
           <th>Condition</th>
-          <th>Actions</th>
+          {
+            userType=="Admin"?
+            <th>Actions</th>
+            :null
+          }
         </tr>
     </thead>
     <tbody>
@@ -114,6 +140,7 @@ const ConditionPage = () => {
                onDelete={deleteHandler}
                onItemEdit={editHandler}
                key={item.id}
+               userType={userType}
               />
           ))}
     </tbody>

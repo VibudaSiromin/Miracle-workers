@@ -4,7 +4,7 @@ import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
 import { useRef } from "react";
 import ConditionEditPopup from "./conditionEditPopup";
 
-const ConditionRaw = ({ item,onDelete,onItemEdit }) => {
+const ConditionRaw = ({ item,onDelete,onItemEdit,userType }) => {
 
   // const [clickedItem, setClickedItem] = useState("");
 
@@ -25,16 +25,23 @@ const ConditionRaw = ({ item,onDelete,onItemEdit }) => {
   return (
       <tr className='table-primary' key={item.id}>
         <td>{item.name}</td>
-        <ConditionEditPopup
-        ref={ref}
-        item={item}
-        onEdit={editHandler}
-        />
-        <td className="table-data">
-          <MdModeEdit onClick={()=>onEditClickHandler()}/>
-          {" "}
-          <MdDeleteForever onClick={()=>deleteHandler()}/>
-        </td>
+        {
+          userType=="Admin"?
+          <span>
+            <ConditionEditPopup
+            ref={ref}
+            item={item}
+            onEdit={editHandler}
+            />
+            <td className="table-data">   
+              <MdModeEdit onClick={()=>onEditClickHandler()}/>
+              {" "}
+              <MdDeleteForever onClick={()=>deleteHandler()}/>
+            </td>
+          </span>
+        :null
+        }
+
     </tr>
   );
 };

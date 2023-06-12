@@ -29,6 +29,7 @@
     "file": "^0.2.2",
     "file-saver": "^2.0.5",
     "file-server": "^2.2.1",
+    "jwt-decode": "^3.1.2",
     "mdb-react-ui-kit": "^6.1.0",
     "mdbreact": "^5.2.0",
     "prop-types": "^15.8.1",

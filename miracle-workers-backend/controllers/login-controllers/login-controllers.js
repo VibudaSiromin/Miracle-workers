@@ -39,7 +39,7 @@ const login=async(req,res,next)=>{
       return res.json({ error: "User Not found" });
     }
     if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ email: user.email }, JWT_SECRET, {
+      const token = jwt.sign({ email: user.email,userType:user.userType }, JWT_SECRET, {
         expiresIn: "15m",
       });
   

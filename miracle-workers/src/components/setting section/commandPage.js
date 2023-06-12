@@ -7,10 +7,29 @@ import { Grid } from "@material-ui/core";
 import CommandPopup from "./commandPopup";
 import CommandRaw from "./commandRaw";
 import { Button } from "react-bootstrap";
+import jwt_decode from "jwt-decode";
+import { useDispatch,useSelector } from "react-redux";
 
-const CommandPage = ({ settingType }) => {
+const CommandPage = () => {
 
   const [commandObject, setCommandObject] = useState([]);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+
+      const decodedToken = jwt_decode(token);
+      const { userType } = decodedToken;
+      if(userType=="Admin"){
+        dispatch({ type: "SET_ADMIN" })
+      }
+    }
+  }, [dispatch]);
+
+  const userType=useSelector(state => state.userTypeReducer.userType);
+
 
   let url = "http://localhost:5000/settings/commands";
   console.log(url)
@@ -53,11 +72,6 @@ const CommandPage = ({ settingType }) => {
     ref.current.open();
   };
   console.log(commandObject);
-
-
-  const onEditClickHandler=(command)=>{
-    editRef.current.open(command);
-  }
 
   const addNewItemHandler = (commandName,binaryValue) => {
     let url = "http://localhost:5000/settings/commands";
@@ -105,17 +119,21 @@ const CommandPage = ({ settingType }) => {
     />
   <table id="data-Table">
     <thead>
+      {userType=="Admin"?      
       <tr>
         <Button onClick={addItemHandler}>
           Add New Command
         </Button>
       </tr>
+      :null
+      }
+
       <tr>
           <th>Command</th>
           <th>Locator</th>
           <th>Data</th>
           <th>Brach Selection</th>
-          <th>Actions</th>
+          {userType=="Admin"?<th>Actions</th>:null}
         </tr>
     </thead>
     <tbody>
@@ -125,6 +143,7 @@ const CommandPage = ({ settingType }) => {
                onDelete={deleteHandler}
                onCommandEdit={editHandler}
                key={command.id}
+               userType={userType}
               />
           ))}
     </tbody>

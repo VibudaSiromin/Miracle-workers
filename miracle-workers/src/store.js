@@ -33,6 +33,10 @@ const userState={
   userType:""
 }
 
+const initialUserType={
+  userType:"User"
+}
+
 export const setTestPageName = (testPageName) => {
   return{
     type: 'SET_TEST_PAGE_NAME',
@@ -65,6 +69,19 @@ const initialTestSuiteValidation={
 }
 const renameState = {
   initiateRenameModal:false// modal used to rename the pagenames
+}
+
+const userTypeReducer=(state=initialUserType,action)=>{
+  switch(action.type){
+    case "SET_ADMIN":{
+      return {
+        ...state,
+        userType:"Admin"
+      }
+    }
+    default:
+      return state;
+  }
 }
 
 
@@ -204,7 +221,8 @@ const rootReducer = combineReducers({
     getRenamedPageName:getRenamedPageNameReducer,
     nameAssigner:nameAssignerReducer,
     renameModal:renameModalReducer,
-    userDetails:userReducer
+    userDetails:userReducer,
+    userTypeReducer:userTypeReducer
 })
 
 const store = createStore(rootReducer)

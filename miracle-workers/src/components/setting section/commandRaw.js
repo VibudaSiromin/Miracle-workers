@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
 // import "./SettingItemRaw.css";
-import commandEditPopup from "./commandEditPopup";
 import { useRef } from "react";
 import axios from "axios";
 import CommandEditPopup from "./commandEditPopup";
 
-const CommandRaw = ({ command,onDelete,onCommandEdit }) => {
+const CommandRaw = ({ command,onDelete,onCommandEdit,userType }) => {
 
   // const [clickedItem, setClickedItem] = useState("");
 
@@ -29,19 +28,26 @@ const CommandRaw = ({ command,onDelete,onCommandEdit }) => {
         <td>{command.name}</td>
         <td>{command.binaryValue[0]=="1"?"True":"False"}</td>
         <td>{command.binaryValue[1]=="1"?"True":"False"}</td>
-        <td>{command.binaryValue[2]=="1"?"True":"False"}
+        <td>{command.binaryValue[2]=="1"?"True":"False"}</td>
 
-        <CommandEditPopup
-        ref={ref}
-        command={command}
-        onEdit={editHandler}
-        />
-        </td>
-        <td className="table-data">
-          <MdModeEdit onClick={()=>onEditClickHandler()}/>
-          {" "}
-          <MdDeleteForever onClick={()=>deleteHandler()}/>
-        </td>
+        {
+          userType=="Admin"?  
+          <span>
+          <CommandEditPopup
+          ref={ref}
+          command={command}
+          onEdit={editHandler}
+          />
+          <td className="table-data">
+            <MdModeEdit onClick={()=>onEditClickHandler()}/>
+            {" "}
+            <MdDeleteForever onClick={()=>deleteHandler()}/>
+          </td>
+          </span>
+
+          :null
+        }
+
     </tr>
   );
 };
