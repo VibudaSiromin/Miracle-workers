@@ -192,8 +192,7 @@ const BrowserPage = () => {
     }
   }, [dispatch]);
 
-  const userType="User"
-  // useSelector(state => state.userTypeReducer.userType);
+  const userType=useSelector(state => state.userTypeReducer.userType);
 
   let url = "http://localhost:5000/settings/browsers";
   console.log(url)

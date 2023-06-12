@@ -10,7 +10,7 @@ import ExcelSection from './pages/Data(Excel)'
 import React, { Component, Suspense } from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import './scss/style.scss'
-import { IndexContextProvider } from "./contexts/indexContext";
+import PrivateRoutes from "./PrivateRoute";
 
 const loading = (
   <div className="pt-3 text-center">
@@ -41,7 +41,6 @@ function App() {
  
   return (
     <div className="App">
-      <IndexContextProvider>
        <BrowserRouter>
         <Suspense fallback={loading}>
           <Routes>
@@ -50,8 +49,11 @@ function App() {
             <Route exact path="/reset" name="Forgot Password" element={<ForgotPassword />} />
             {/* <Route exact path="/404" name="Page 404" element={<Page404 />} />
             <Route exact path="/500" name="Page 500" element={<Page500 />} /> */}
-            <Route exact path="/dataJuction" name="Data section Path" element={<DataJunction />} />
-            <Route path="*" name="Home" element={<DefaultLayout />} />
+            <Route element={<PrivateRoutes/>}>
+              <Route exact path="/dataJuction" name="Data section Path" element={<DataJunction />} />
+              <Route path="*" name="Home" element={<DefaultLayout />} />              
+            </Route>
+
           </Routes>
         </Suspense>
       </BrowserRouter>
@@ -62,7 +64,6 @@ function App() {
       {/* <StickyHeadTable></StickyHeadTable> */}
       {/* <ExcelSection></ExcelSection> */}
       {/* <BasicTable></BasicTable> */}
-      </IndexContextProvider>
     </div>
   );
 }
