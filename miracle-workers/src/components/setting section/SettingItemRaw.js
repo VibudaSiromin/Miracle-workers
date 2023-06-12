@@ -39,9 +39,23 @@ const SettingItemRaw = ({ rawData, id, type, onDelete }) => {
   console.log(clickedItem);
   return (
     <div className="raw">
-      <span>{rawData}</span>
-      <HiPencil onClick={editHandler} />
-      <MdOutlineDeleteForever onClick={deleteHandler} />
+      <span
+        className="float-left"
+        style={{ marginLeft: "18px", marginTop: "7px", color: "white" }}
+      >
+        {rawData}
+      </span>
+      <MdOutlineDeleteForever
+        onClick={deleteHandler}
+        className="float-right"
+        style={{ marginRight: "18px", marginTop: "7px", color: "red" }}
+      />
+
+      <HiPencil
+        onClick={editHandler}
+        className="float-right"
+        style={{ marginRight: "18px", marginTop: "7px", color: "#73FBFD" }}
+      />
       <SettingEditPopup
         type={type}
         ref={ref}

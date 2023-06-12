@@ -15,6 +15,7 @@ import { GrStatusGood } from "react-icons/gr";
 import { TbCircle } from "react-icons/tb";
 import { RiFileSearchLine } from "react-icons/ri";
 import { MdOutlineIntegrationInstructions } from "react-icons/md";
+import { fontWeight } from "@mui/system";
 
 const SettingItemPage = ({ settingType }) => {
   //remove this comment after changing the name "commandObject"
@@ -106,8 +107,8 @@ const SettingItemPage = ({ settingType }) => {
   const arr = [1, 2, 3];
 
   return (
-    <Grid container>
-      <Grid xs={12} sm={7} item>
+    <div className="row">
+      <div className="col-lg-8">
         <SettingEditPopup
           type={settingType}
           ref={ref}
@@ -123,28 +124,42 @@ const SettingItemPage = ({ settingType }) => {
             backgroundColor: 'primary.dark'
           }}/> */}
         <div className="headerBox">
-          <span className="settingType">{settingType}</span>
-          <RxCross1 className="cross" />
-          <button className="button" onClick={addItemHandler}>
+          <span
+            className="settingType float-left"
+            style={{
+              width: "22%",
+              // padding: "22px",
+              fontWeight: "700",
+              fontSize: "17px",
+            }}
+          >
+            {settingType}
+          </span>
+          <button className="button float-right" onClick={addItemHandler}>
             <BiPlus className="plus" />
             <span className="add">Add</span>
           </button>
+          <RxCross1 className="cross float-right" />
         </div>
-        {commandObject.map((command) => (
-          <SettingItemRaw
-            rawData={command.name}
-            key={command.id}
-            id={command.id}
-            type={settingType}
-            onDelete={deleteHandler}
-          />
-        ))}
-      </Grid>
-      <Grid xs={0} sm={5} item>
+        <div className="row" style={{ paddingLeft: "16px" }}>
+          <div className="col-lg-8">
+            {commandObject.map((command) => (
+              <SettingItemRaw
+                rawData={command.name}
+                key={command.id}
+                id={command.id}
+                type={settingType}
+                onDelete={deleteHandler}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="col-lg-4 center-logo">
         <span className="textWithLogo">{settingType}</span>
         <div>{logo}</div>
-      </Grid>
-    </Grid>
+      </div>
+    </div>
   );
 };
 

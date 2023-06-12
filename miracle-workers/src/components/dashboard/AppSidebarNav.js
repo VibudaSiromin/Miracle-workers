@@ -691,6 +691,7 @@ export const AppSidebarNav = () => {
           )}
           <AiFillFileAdd
             color="#CCD8DD"
+            style={{ position: "absolute", right: "17%" }}
             onClick={(event) => initiateNameAssigner(event, index)}
           ></AiFillFileAdd>
         </>
@@ -728,7 +729,7 @@ export const AppSidebarNav = () => {
       >
         {navLink(name, icon, badge, index)}
         {name !== "Dashboard" && name !== "Home" && name !== "Setting" ? (
-          <div>
+          <div style={{ position: "absolute", right: "19%" }}>
             <MdModeEdit
               onClick={(event) => alertMsgBoxForRenaming(event, rest, index)}
             ></MdModeEdit>
