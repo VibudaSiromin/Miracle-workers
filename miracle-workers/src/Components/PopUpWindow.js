@@ -26,11 +26,6 @@ function ModalDialog(props,ref) {
   const testStepsData2 = {};
   const generalPurposeInputData={};
 
-  const [testSteps,setTestSteps]=useState({
-    "group":"",
-    "instruction":"",
-    "command":""
-  });
   // useImperativeHandle(ref,()=> ({
   //   log(){
   //     initModalOne();
@@ -42,16 +37,15 @@ function ModalDialog(props,ref) {
     console.log("ppppppppp",name, value);
     switch (name) {
       case "group":
-        setTestSteps({...testSteps,[name]:value});
+        testStepsData[name] = value;
         break;
       case "instruction":
-        setTestSteps({...testSteps,[name]:value});
+        testStepsData[name] = value;
         break;
       case "command":
-        setTestSteps({...testSteps,[name]:value});
+        testStepsData[name] = value;
         break;
     }
-    console.log("pppppppppp",testSteps);
   };
 
   // const inputHandler = (name, value) => {
@@ -89,15 +83,19 @@ function ModalDialog(props,ref) {
 
 
   useEffect(() => {
+    console.log("aaaaaaaa")
     let matchedBinaryValue;
     for(let i=0;i<commandSet.length;i++){
-      if(commandSet[i].name==testSteps["command"]){
-        matchedBinaryValue=commandSet[i].matchedBinary;
-        return;
+      console.log("bbbbbbb")
+      if(commandSet[i].name==modalOneDataSet["command"]){
+        matchedBinaryValue=commandSet[i].binaryValue;        ;
       }
     }
-
+    console.log("hloo",matchedBinaryValue)
     switch(matchedBinaryValue){
+      case "000":
+        setCommandBasedFields(["swapResult","action","comment"]);
+        break;
       case "001":
         setCommandBasedFields(["swapResult","branchSelection","action","comment"]);  
         break;
@@ -123,18 +121,7 @@ function ModalDialog(props,ref) {
       default:
         setCommandBasedFields([]);
     }
-    // switch(testSteps["command"]){
-    //   case "Branch.BasedOnData":
-    //     setCommandBasedFields(["locator","locatorParameter","action","comment"]);  
-    //     break;
-    //   case "Branch.OnElementAttribute":
-    //     setCommandBasedFields(["action","comment"]);  
-    //     break;
-    //   default:
-    //     setCommandBasedFields([]);
-    // }
-    // console.log("ppppppppppp",commandBasedFields);
-  }, [testSteps["command"]]);
+  }, [modalOneDataSet["command"]]);
 
 
 
@@ -282,8 +269,7 @@ function ModalDialog(props,ref) {
 
   const NextStep = () => {
     if(props.generalPurpose===false){
-      // setModalOneDataSet(testStepsData);
-      setModalOneDataSet(testSteps);
+      setModalOneDataSet(testStepsData);
     }
     if(props.generalPurpose===true){
       console.log('Next step',props.purpose);
@@ -334,11 +320,6 @@ function ModalDialog(props,ref) {
     props.saveNewData(modalTwoDataSet);
     TerminateModalOne();
     }
-    setTestSteps({
-      "group":"",
-      "instruction":"",
-      "command":""
-    })
   };
 
   return (
