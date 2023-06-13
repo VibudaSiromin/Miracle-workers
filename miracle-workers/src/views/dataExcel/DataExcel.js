@@ -6,6 +6,7 @@ const DataExcel = (props) => {
   const [fileHeaders,setFileHeaders]=useState([]);
   const [fileData,setFileData]=useState([]);
   const [fileName,setFileName]=useState('');
+  //const [btnStatus,setBtnStatus] = useState();
 
   const fileHeadersHandler = (Headers) => {
     const excelHeaders=[...fileHeaders,...Headers]

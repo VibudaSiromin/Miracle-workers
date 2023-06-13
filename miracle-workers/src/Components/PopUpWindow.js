@@ -3,6 +3,8 @@ import { Modal, Button } from "react-bootstrap";
 import PopUpInputField from "./PopUpInputField";
 import PopUpSelection from "./PopUpSelection";
 import {MdTableRows} from 'react-icons/md';
+import { setCommand } from "../store";
+import { useDispatch } from "react-redux";
 import { forwardRef,useImperativeHandle,useState } from "react";
 
 function ModalDialog(props,ref) {
@@ -22,6 +24,7 @@ function ModalDialog(props,ref) {
   const testStepsData2 = {};
   const generalPurposeInputData={};
 
+  const dispatch = useDispatch();
   // useImperativeHandle(ref,()=> ({
   //   log(){
   //     initModalOne();
@@ -39,6 +42,8 @@ function ModalDialog(props,ref) {
         testStepsData[name] = value;
         break;
       case "command":
+        console.log('DMC',value);
+        dispatch(setCommand(value));
         testStepsData[name] = value;
         break;
     }
@@ -189,6 +194,7 @@ function ModalDialog(props,ref) {
   ApplyBtnValue();
 
   const submitHandlerOne = (event) => {
+    console.log('sailor')
     event.preventDefault();
     if(props.enableChainPopUps===false){
         if(props.generalPurpose===false){
@@ -211,6 +217,7 @@ function ModalDialog(props,ref) {
   };
 
   const submitHandlerTwo = (event) => {
+    console.log('sailor2');
     event.preventDefault();
     if(props.enableChainPopUps===true){
     props.saveNewData(modalTwoDataSet);

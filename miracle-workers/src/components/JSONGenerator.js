@@ -26,40 +26,67 @@ const JSONGenerator = () => {
     }
 
     const gettingLauncherDetails =async () => {
-        try{
-            const response=await axios.get(
-                `http://localhost:5000/launcher/getAllLauncherData`
-            )
-            const launcherDetails=response.data.allLauncherData;
-            console.log('tiger',response.data.allLauncherData);
-            const newLauncherDetails=launcherDetails.map((launcherPage)=>{
+
+        axios
+        .get('http://localhost:5000/launcher/getAllLauncherData')
+        .then((response)=>{
+            console.log('tiger111',response.data.allLauncherData);
+            const launcher=response.data.allLauncherData;
+            const newLauncher=launcher.map((launcherPage)=>{
                 const launcherObj=launcherPage[1];
                 launcherObj['groups']=[{}];
                 launcherObj['startTime']=null;
                 launcherObj['endTime']=null;
-                launcherObj['status']=null;
+                // launcherObj['status']=null;
                 launcherObj['testSettings']={}
                 launcherPage[1]=launcherObj;
 
                 return launcherPage;
             });
-            console.log('lion',newLauncherDetails);
-            setlauncherDetails([...newLauncherDetails]);
+            console.log('lion',newLauncher);
+            setlauncherDetails([...newLauncher]);
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
 
-        }catch(err){
-            if (err.response) {
-                // The client was given an error response (5xx, 4xx)
-                console.log(err.response.data);
-                console.log(err.response.status);
-                console.log(err.response.headers);
-            } else if (err.request) {
-                // The client never received a response, and the request was never left
-                console.log(err.request);
-            } else {
-                // Anything else
-                console.log('Error', err.message);
-            }
-        }       
+
+
+
+        // try{
+        //     const response=await axios.get(
+        //         `http://localhost:5000/launcher/getAllLauncherData`
+        //     )
+        //     const launcher=response.data.allLauncherData;
+        //     console.log('tiger',response.data.allLauncherData);
+        //     const newLauncher=launcher.map((launcherPage)=>{
+        //         const launcherObj=launcherPage[1];
+        //         launcherObj['groups']=[{}];
+        //         launcherObj['startTime']=null;
+        //         launcherObj['endTime']=null;
+        //         launcherObj['status']=null;
+        //         launcherObj['testSettings']={}
+        //         launcherPage[1]=launcherObj;
+
+        //         return launcherPage;
+        //     });
+        //     console.log('lion',newLauncher);
+        //     setlauncherDetails([...newLauncher]);
+
+        // }catch(err){
+        //     if (err.response) {
+        //         // The client was given an error response (5xx, 4xx)
+        //         console.log(err.response.data);
+        //         console.log(err.response.status);
+        //         console.log(err.response.headers);
+        //     } else if (err.request) {
+        //         // The client never received a response, and the request was never left
+        //         console.log(err.request);
+        //     } else {
+        //         // Anything else
+        //         console.log('Error', err.message);
+        //     }
+        // }       
     }
 
     useEffect(()=>{
@@ -76,8 +103,8 @@ const JSONGenerator = () => {
                 `http://localhost:5000/testSuite/getAllTestData`
             )
             setTestData(response.data.allTestData);
-            const testData = response.data.allTestData;
-            console.log('ship',testData);
+            // const testData = response.data.allTestData;
+            // console.log('ship',testData);
         }catch(err){
             if (err.response) {
                 // The client was given an error response (5xx, 4xx)
@@ -103,6 +130,7 @@ const JSONGenerator = () => {
     },[testData])
 
     const getTestSuiteHeadings = async() => {
+        console.log('solor',testData);
         try{
             const response = await axios.get(
                 `http://localhost:5000/testJunction/testManual/:tname/getHeading`
@@ -133,33 +161,47 @@ const JSONGenerator = () => {
 
     const appendingTestdataWithLauncher = () => {
 
-            let testsKeyArr = [];
+            let testsKeyArr = [];  //a key of outter object (array)
+            console.log('frank',launcherDetails);
             for(let i=0;i<launcherDetails.length;i++){
-                if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
-                    let testSheet=testData[i];
-                    let newTestSheet=[];
-                    for(let j=1;j<testSheet.length;j++){//selecting a test step
-                        let testStep=testSheet[j];
-                        console.log('my test step',testStep);
-                        const newTestStep={};
-                        for(let k=0;k<testSuiteHeadings.length;k++){
-                            const key=testSuiteHeadings[k];
-                            if(testStep.hasOwnProperty(key)){                           
-                                console.log('myValue',testStep[key]);
-                                newTestStep[key]=testStep[key];
-                            }else{
-                                console.log('myValue2');
-                                newTestStep[key]="";
+
+                console.log("status",launcherDetails[i][1]);
+                if(launcherDetails[i][1].status==="Enabled"){
+
+                    if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
+                        let testSheet=testData[i];
+                        let newTestSheet=[];
+                        for(let j=1;j<testSheet.length;j++){//selecting a test step
+                            let testStep=testSheet[j];
+                            console.log('my test step',testStep);
+                            const newTestStep={};
+                            for(let k=0;k<testSuiteHeadings.length;k++){
+                                const key=testSuiteHeadings[k];
+                                if(testStep.hasOwnProperty(key)){                           
+                                    console.log('myValue',testStep[key]);
+                                    newTestStep[key]=testStep[key];
+                                }else{
+                                    console.log('myValue2');
+                                    newTestStep[key]="";
+                                }
                             }
+                            newTestSheet.push(newTestStep);
                         }
-                        newTestSheet.push(newTestStep);
-                    }
+                        const tempLauncherDetails=launcherDetails;
+                        tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
+                        //launcherDetails['groups'][0]['steps']=newTestSheet;
+                        testsKeyArr.push(tempLauncherDetails[i][1]);
+                         console.log('zone',newTestSheet);
+                    } 
+
+
+                }else{
                     const tempLauncherDetails=launcherDetails;
-                    tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
-                    //launcherDetails['groups'][0]['steps']=newTestSheet;
+                    tempLauncherDetails[i][1]['groups']=[];
                     testsKeyArr.push(tempLauncherDetails[i][1]);
-                     console.log('zone',newTestSheet);
-                }           
+                }
+
+          
             }
             console.log('land',testsKeyArr);
 
@@ -217,6 +259,7 @@ const JSONGenerator = () => {
         
         setIsModalShow(false);
         const JSONfileName=fileName;
+        finalOutPut["fileName"]=JSONfileName;
         // Convert data object to JSON string
         const jsonData = JSON.stringify(finalOutPut,null,1);
         const blob = new Blob([jsonData], { type: 'application/json;charset=utf-8' });

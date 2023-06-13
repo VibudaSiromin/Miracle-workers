@@ -42,9 +42,8 @@ const FileUploader = (props) => {
 			}
 		})
 		.then((res)=>{
-			const fileNameArr=res.data.excelFileName;
-			console.log('core',fileNameArr[0]);
-			const fileName=fileNameArr[0];
+			const fileName=res.data.excelFileName;
+			console.log('duck',fileName)
 		 	setExcelFileName(fileName);
 		})
 		.catch((err)=>{
@@ -81,17 +80,6 @@ const FileUploader = (props) => {
 				   const excelReader=new FileReader();//read the content as binary string
 				   setFile(excelFile);
 				   setExcelFileName(excelFile.name);
-					// try{
-					// 	const response=await axios.post(
-					// 		`http://localhost:5000/dataJunction/dataExcel/excelFileNames`+dname,
-					// 		{
-					// 			fileName:excelFile.name
-					// 		}
-					// 	)
-					// }catch(err){
-					// 	console.log(err);
-					// }
-		
 		
 				   //after reading the content completly 'onload' function will be triggered!
 				   excelReader.onload=(event)=>{
@@ -148,17 +136,6 @@ const FileUploader = (props) => {
  
 				console.log('parrot',excelFile);
 				console.log('parrot2',excelFile.type);
- 
-			 //    try{
-			 // 	const response=await axios.post(
-			 // 		`http://localhost:5000/dataJunction/dataExcel/`+dname+`/excelFileNames`,
-			 // 		{
-			 // 			fileName:excelFile.name
-			 // 		}
-			 // 	)
-			 // 	}catch(err){
-			 // 		console.log(err);
-			 // 	}
  
  
 				excelReader.onload=(event)=>{

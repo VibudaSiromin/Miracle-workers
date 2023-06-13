@@ -211,6 +211,78 @@ const getTestPageNames= async (req, res, next)=>{
 
   }
 
+  const getLoopName = async(req,res,next) => {
+    const testPageName = req.query.testPageName;
+    let testSection;
+    console.log('ssssssssssssssssssssssssssss',testPageName);
+    try{
+      const data = await fs.promises.readFile(testFilePath);
+      testSection = JSON.parse(data);
+      let index;
+      index = testSection.findIndex(test=>test[0]===testPageName+"M");
+      const selectedTestSheet = testSection[index];
+      for(let i=selectedTestSheet.length-1;i>0;i--){
+        const testObject=selectedTestSheet[i];
+
+        const command = testObject['command'];
+        const parts = command.split('.');
+        if(parts[0]==="While"){
+          console.log('^^^^^^^^^^^^^^^^^^^^^',command); 
+          res.status(200).json({
+            command:command,
+            data:testObject['data']
+          })
+          return;
+        }
+      }
+      res.status(200).json({
+        command:null,
+        data:null
+      })
+    }catch(err){
+      console.log(err);
+      res.status(500).json({ message: 'Error reading test section' })
+    }
+
+  }
+
+  const getAllLoopNames = async(req,res,next) => {
+    const testPageName = req.query.testPageName;
+    let testSection;
+
+    try{
+      const data = await fs.promises.readFile(testFilePath);
+      testSection = JSON.parse(data);
+      let index;
+      index = testSection.findIndex(test=>test[0]===testPageName+"M");
+      const selectedTestSheet = testSection[index];
+      const loopArr=[];
+      for(let i=selectedTestSheet.length-1;i>0;i--){
+        const testObject=selectedTestSheet[i];
+        const command = testObject['command'];
+        const parts = command.split('.');
+        if(parts[0]==="While"){
+          const data=testObject['data'];
+          if(parts[1]==="DataExists"){
+            const parts = data.split(':');
+            const loopName = parts[2];
+            loopArr.push(loopName);
+          }else if(parts[1]==='Count'){
+            const firstSplit = data.split('|');
+            const secondSplit = firstSplit[0].split(':')
+            const loopName = secondSplit[1];
+            loopArr.push(loopName);
+          }
+        }
+      }
+      res.status(200).json({loopArray:loopArr})
+    }catch(err){
+      console.log(err);
+      res.status(500).json({ message: 'Error reading test section' })
+    }
+  }
+
+
   ////////This is the test section//////////////
 
   exports.getTestPageNames=getTestPageNames;
@@ -221,3 +293,5 @@ const getTestPageNames= async (req, res, next)=>{
   exports.deleteTestPage=deleteTestPage;
   exports.renameTestPageName=renameTestPageName;
   exports.getAllTestData=getAllTestData;
+  exports.getLoopName=getLoopName;
+  exports.getAllLoopNames=getAllLoopNames;

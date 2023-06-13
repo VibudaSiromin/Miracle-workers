@@ -5,22 +5,12 @@ const locatorControllers=require('../../controllers/locator-controllers/locator'
 
 //route for getting headings
 router.get('/locators/getHeadings',locatorControllers.getHeadings);
-
-//route for getting pages
-
-router.get('/locators',locatorControllers.getPageNames)
-
-//route for getting all locators
-
-// router.get('/locators',locatorControllers.getAllLocators);
-
 //route for getting locators By Page
-
-router.get('/locators/:lname',locatorControllers.getLocatorByPage); 
-
-//route for deleting locator by ID
-
-// router.delete('/locators/:lid', locatorControllers.deleteLocatorById);
+router.get('/locators/:lname',locatorControllers.getLocatorByPage);
+//route for getting no of raws
+router.get('/locators/getNoofRaws',locatorControllers.getNoofRaws);
+//route for getting pages
+router.get('/locators',locatorControllers.getPageNames);
 
 //route for creating locator page
 
@@ -32,7 +22,7 @@ router.post('/locators/:lname', locatorControllers.editLocatorPage);
 
 //route for deleting locator page
 
-router.delete('/locators/:lname', locatorControllers.deleteLocatorPage);
+router.delete('/locators/deleteLocator', locatorControllers.deleteLocatorPage);
 
 router.patch('/locators/renamePageName',locatorControllers.ranameLocatorPageName);
 

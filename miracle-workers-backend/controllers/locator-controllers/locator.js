@@ -103,7 +103,8 @@ const editLocatorPage=async (req,res,next)=>{
 }
 
 const deleteLocatorPage=async(req,res,next)=>{
-    const locatorPageName=req.params.lname;
+  const locatorPageName=req.query.locatorPageName;
+    //const locatorPageName=req.params.locatorPageName;
     let locatorFile;
     try{
       data = await fs.promises.readFile(locatorFilePath);
@@ -159,6 +160,24 @@ const getHeadings = (req,res,next) => {
   res.json({getHeadings:['Name','Value']})
 }
 
+const getNoofRaws = async(req,res,next) => {
+  const LocatorPageName = req.query.pageName;
+  let locatorSection;
+
+  try{
+    const data = await fs.promises.readFile(locatorFilePath);
+    locatorSection = JSON.parse(data);
+
+    const index = locatorSection.findIndex(data=>data[0]===LocatorPageName);
+    const selectedLocatorSheet=locatorSection[index];
+    const sheetLength=selectedLocatorSheet.length;
+    res.status(200).json({noofRaws:sheetLength-1});
+  }catch(err){
+      res.status(500).json({ message: 'Error reading locator section' })
+  }
+
+}
+
 exports.getPageNames=getPageNames;
 exports.getLocatorByPage=getLocatorByPage;
 exports.createLocatorByPage=createLocatorByPage;
@@ -166,3 +185,4 @@ exports.deleteLocatorPage=deleteLocatorPage;
 exports.editLocatorPage=editLocatorPage;
 exports.ranameLocatorPageName=ranameLocatorPageName;
 exports.getHeadings=getHeadings;
+exports.getNoofRaws=getNoofRaws;

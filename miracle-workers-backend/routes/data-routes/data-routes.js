@@ -23,11 +23,15 @@ router.get('/dataJunction/dataExcel/:dname/getHeading',dataControllers.getHeadin
 router.get('/data/datasheets/getHeadings',dataControllers.getHeadingsFromData);
 //router.get('/dataJunction/dataExcel/:dname/getHeading2',dataControllers.addHeading);
 
+router.get('/data/datasheets/getNoofRaws',dataControllers.getNoofRaws);
+
 
 //route for editing data page
 router.post('/dataJunction/data/:dname', dataControllers.editDataPage);
 
 router.post('/dataJunction/dataExcel/:dname',dataControllers.editDataPage);
+
+router.get('/dataExcel/excelFileNames',dataControllers.getExcelFileNames);
 
 //route for get the content of a data page
 router.get('/dataJunction/data/:dname',dataControllers.getDataPageContent);

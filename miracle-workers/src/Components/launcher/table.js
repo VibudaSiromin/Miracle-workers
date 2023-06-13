@@ -13,6 +13,8 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import { setTestType,setDataSheet } from "../../store";
+import { useDispatch } from "react-redux";
 
 const TableLauncher = () => {
   const [isShowModal, setIsShowModal] = useState(false);
@@ -21,6 +23,7 @@ const TableLauncher = () => {
 
   const {tname}=useParams();
   const location=useLocation();
+  const dispatch = useDispatch();
 
   const schema = yup
     .object({
@@ -50,6 +53,12 @@ const TableLauncher = () => {
     },
   });
   const onSubmit = (data) => {
+    console.log('zambia',data);
+    const testType= data.type;
+    const dataSheet = data.dataSheet;
+
+    dispatch(setTestType(testType));
+    dispatch(setDataSheet(dataSheet));
     reset();
     setData(data);
     saveData(data);
@@ -102,7 +111,7 @@ const TableLauncher = () => {
   const getDataFromStore =async () => {
     try{
       const response= await axios.get(
-        `http://localhost:5000/launcher/getLauncherContent/`+tname,
+        `http://localhost:5000/launcher/getLauncherContent`,
         {
           params:{
                    testPageName:tname+"M"

@@ -10,6 +10,10 @@ router.post('/testJunction/testManual/:tname',testControllers.editTestPage);
 // router.post('/data',dataControllers.createDataSheet);
 router.post('/testJunction/testManual',testControllers.createTestSheet);
 
+//route for getting loopname
+router.get('/testPages/getLoopName',testControllers.getLoopName)
+//route for getting all the loopnames
+router.get('/testPages/getAllLoopNames',testControllers.getAllLoopNames)
 //route for getting the headings of a test page
 router.get('/testJunction/testManual/:tname/getHeading',testControllers.getHeadingsFromTest);
 //route for getting content of a test page

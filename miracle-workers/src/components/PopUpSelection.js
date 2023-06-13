@@ -3,7 +3,7 @@ import './PopUpSelection.css';
 
 const PopUpSelection = (props) => {
     const instructionSet=['#recovery','#skip','#screen'];
-    const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue'];
+    const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue','While.DataExists','Report.Info','While.End'];
     const swapResultSet=['Yes','No'];
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
     let options=[];
@@ -67,4 +67,5 @@ const PopUpSelection = (props) => {
     );
 }
 
+//export default connect(mapStateToProps)(Card);
 export default PopUpSelection;

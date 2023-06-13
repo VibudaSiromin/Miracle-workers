@@ -27,6 +27,40 @@ const renamedPageNameState = {
   renamedPageName:'King'
 }
 
+const commandState = {
+  command:'cmd1'
+}
+
+const typeState = {
+  testType :'type'
+}
+
+const dataSheetState = {
+  dataSheet:'sheet'
+}
+
+export const setDataSheet = (sheetName) => {
+  return{
+    type:'SET_DATA_SHEET_NAME',
+    payload:sheetName
+  }
+}
+
+
+export const setTestType = (type) => {
+  return {
+    type:'SET_TEST_TYPE',
+    payload:type
+  }
+}
+
+export const setCommand = (commandName) => {
+  return {
+    type: 'SET_COMMAND',
+    payload:commandName
+  }
+}
+
 export const setTestPageName = (testPageName) => {
   return{
     type: 'SET_TEST_PAGE_NAME',
@@ -52,7 +86,7 @@ const renameState = {
 
 
 const changeStateReducer = (state = initialSideBarState, { type, ...rest }) => {
-  console.log('sirimath');
+
   switch (type) {
     case 'set':
       return { ...state, ...rest }
@@ -83,7 +117,7 @@ const addDataSheetNameReducer = (state = initialDataSheetState, action) => {
 }
 
 const addTestSheetNameReducer = (state = initialTestSheetState, action) => {
-  console.log('nila kuru');
+ 
   switch (action.type) {
     case "FUNCTION_CALLED_JSON":
       return {
@@ -128,6 +162,43 @@ const getTestSheetNameReducer = (state = initialTestPageNameState, action) => {
   }
 }
 
+const getCommandReducer = (state = commandState,action) => {
+  switch (action.type) {
+    case "SET_COMMAND":
+      return{
+        ...state,
+        command:action.payload,
+      }
+      default:
+        return state;
+  }
+}
+
+const getTestTypeReducer = (state=typeState , action)=> {
+  switch(action.type){
+    case  'SET_TEST_TYPE':
+      return{
+        ...state,
+        testType:action.payload
+      }
+      default:
+        return state;
+  }
+}
+
+const getDataSheetNameReducer = (state=dataSheetState , action)=> {
+  switch(action.type){
+    case  'SET_DATA_SHEET_NAME':
+      return{
+        ...state,
+        dataSheet:action.payload
+      }
+      default:
+        return state;
+  }
+}
+
+
 const nameAssignerReducer = (state = nameAssignerState, action) => {
   switch(action.type){
     case "INITIATE_NAME_ASSIGNER":
@@ -159,8 +230,10 @@ const rootReducer = combineReducers({
     getTestSheetName:getTestSheetNameReducer,
     getRenamedPageName:getRenamedPageNameReducer,
     nameAssigner:nameAssignerReducer,
-    renameModal:renameModalReducer
-    
+    renameModal:renameModalReducer,
+    getCommand:getCommandReducer,
+    getTestType:getTestTypeReducer,
+    getDataSheetName:getDataSheetNameReducer
 })
 
 const store = createStore(rootReducer)

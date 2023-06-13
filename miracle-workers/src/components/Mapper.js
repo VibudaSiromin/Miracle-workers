@@ -1,8 +1,12 @@
 import './Mapper.css'
 import { useState, useEffect, useRef } from "react";
 import axios from 'axios';
+import { Modal, Button } from "react-bootstrap";
 import { GrLink } from "react-icons/gr";
 import { FaLink } from "react-icons/fa";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 const Mapper = (props) => {
@@ -12,34 +16,58 @@ const Mapper = (props) => {
   const [sheet,setSheet] = useState([]);
   const [sectionHeading,setSectionHeading] = useState([]);
   const [selectedSheet,setSelectedSheet] = useState();
-  //const [hideDropDown,setHideDropDown]=useState(true);
+  const [showModal,setShowModal] = useState(false);
   const [showListOne,setShowListOne] = useState(false);
   const [showListTwo,setShowListTwo] = useState(false);
+  const [noofRaws,setNoofRaws] = useState(0);
+  const [inputValue,setInputValue] = useState();
+  const [isMount,setIsMount] = useState(false);
+  const [selectedHeading,setSelectedHeading] = useState();
+  const [showLoopModal,setShowLoopModal] = useState(false);
+  const [inputLoopName,setInputLoopName] = useState();
+  const [optionsInDDMode,setOptionsInDDMode] = useState([]);
+      
+  
+const nameSchema = yup.object(
+    {
+        name:yup.number().required('Number is required.'),                
+    }     
+).required();
+
+const loopSchema = yup.object(
+  {
+      loopName:yup.string().required('Enter a name for creating a loop')                
+  }     
+).required();
+
+const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(nameSchema),
+    defaultValues: {
+      name : ""
+    },
+  });
+
+  // const {
+  //   register1,
+  //   handleSubmit2,
+  //   formState: { errors2 },
+  //   reset2,
+  // } = useForm({
+  //   resolver: yupResolver(loopSchema),
+  //   defaultValues: {
+  //     loopName:""
+  //   },
+  // });
+ 
+
 
   const depthLevelOne =async () => {
-
-    // try{
-    //   const response = await axios.get(
-    //     props.URLForGettingSheets
-    //   )
-    //   setSheet(response.data[props.reqDetailsforDB[0]]);
-
-    // }catch(err){
-    //   if (err.response) {
-    //     // The client was given an error response (5xx, 4xx)
-    //     console.log(err.response.data);
-    //     console.log(err.response.status);
-    //     console.log(err.response.headers);
-    //   } else if (err.request) {
-    //     // The client never received a response, and the request was never left
-    //     console.log(err.request);
-    //   } else {
-    //     // Anything else
-    //     console.log('Error', err.message);
-    //   }
-    // }
-
-
+    console.log('razor');
     axios.get(props.URLForGettingSheets)
            .then(function (response) {
             setSheet(response.data[props.reqDetailsforDB[0]]);
@@ -58,7 +86,10 @@ const Mapper = (props) => {
 
   useEffect(()=>{
     let listArrayOne = [];
-    for (let i = 0; i < sheet.length; i++) {
+
+    if(props.usage==='basic'){
+      console.log('dim');
+      for (let i = 0; i < sheet.length; i++) {
         listArrayOne.push(
         <li className="menu-items">
           <button 
@@ -75,6 +106,28 @@ const Mapper = (props) => {
         </li>
       );
     }
+    }else if(props.usage==="iteration-data"){
+      console.log('sim');
+      for (let i = 0; i < sheet.length; i++) {
+        listArrayOne.push(
+        <li className="menu-items">
+          <button 
+            id={sheet[i]}
+            value={sheet[i]}
+            onClick={(e) => {
+              getLoopName(e);
+            }}
+
+            style={btnStyles}
+          >
+            {sheet[i]}
+          </button>
+        </li>
+      );
+    }
+    }
+
+   
     console.log('monster energy',listArrayOne);
     setArrayOne([...listArrayOne]);
 
@@ -106,7 +159,7 @@ const Mapper = (props) => {
       console.log("saman", i);
       listArrayTwo.push(
         <li className="menu-items">
-          <button id={sectionHeading[i]} value={sectionHeading[i]}  onClick={(e)=>{addDataReference(e)}} style={btnStyles}>
+          <button id={sectionHeading[i]} value={sectionHeading[i]}  onClick={(e)=>depthLevelThree(e)} style={btnStyles}>
             {sectionHeading[i]}
           </button>
         </li>
@@ -118,16 +171,62 @@ const Mapper = (props) => {
 
   },[sectionHeading])
 
-  //use a proper name for the function
-  const addDataReference = (e) => {
-    console.log('position',document.getElementById(selectedSheet).getBoundingClientRect().top);
-    console.log('selected data field value:',e.target.value);
-    console.log("this is the second drop down");
-    props.selectedHeading(props.browseBtnId,selectedSheet,e.target.value);
-    setShowListOne(false);
-    setShowListTwo(false);
 
+  const depthLevelThree = (e) => {
+    setSelectedHeading(e.target.value)
+    axios
+    .get(props.URLForGettingNoofRaws,{
+      params: {
+		    pageName: selectedSheet,
+	    }
+    })
+    .then((res)=>{
+      console.log('kaha',res.data.noofRaws)
+      const raws=res.data.noofRaws;
+      setNoofRaws(raws); 
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+  }
+
+
+  useEffect(()=>{
+    if(isMount){
+      setShowModal(true);
+    }else{
+      setIsMount(true);
+    }
+  },[noofRaws])
+
+  const terminateModal = () => {
+    setShowModal(false)
+  }
+
+  const terminateLoopModal = () => {
+    setShowLoopModal(false)
+  }
+
+  //use a proper name for the function
+  const addDataReference = (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      console.log("dead",inputValue);
+      terminateModal();
+      props.selectedHeading(props.browseBtnId,selectedSheet,selectedHeading,inputValue);
+      setShowListOne(false);
+      setShowListTwo(false);
   };
+
+  const addDataReferenceForLoop = (event) => {
+      event.preventDefault();
+      event.stopPropagation()
+      console.log('york');
+      terminateLoopModal();
+      props.assignLoopRef(props.browseBtnId,selectedSheet,inputLoopName);
+      setShowListOne(false);
+  }
 
   document.addEventListener('click', (event) => {
     console.log('lepord');
@@ -141,6 +240,14 @@ const Mapper = (props) => {
 
   });
 
+
+  const getLoopName = (event) => {
+    console.log('eye');
+    setSelectedSheet(event.target.value);
+    setShowLoopModal(true);
+  }
+
+
   console.log('SON',document.getElementsByClassName("myUL"));
 
    const secondListPosition = {top:0}
@@ -151,20 +258,110 @@ const Mapper = (props) => {
  
   console.log("Dragon");
 
-  return (
-    <>
-      {/* <AiOutlineLink id="dataBrowseBtn" onClick={depthLevelOne} size="30px"></AiOutlineLink> */}
-      {/* <FaLink id="dataBrowseBtn" onClick={depthLevelOne}></FaLink> */}
-      <button id="dataBrowseBtn" onClick={depthLevelOne}>Browse</button>
+  const inputHandler = (event) => {
+        setInputValue(event.target.value);
+  }
+
+  const inputLoopNameHandler = (event) => {
+        setInputLoopName(event.target.value);
+  }
+
+
+  useEffect(()=>{
+    if(props.usage==="Data Driven"){
+      axios.get(props.URLForGettingHeadings, {
+        params: {
+          dataPageName: props.dataSheetName
+        }
+      }).then(function(response){
+              const headingArr=response.data.getHeadings;
+              const dataOptionsInDDMode=[];
+              for(let i=0;i<headingArr.length;i++){
+                dataOptionsInDDMode.push(
+                  <option value={"#data."+props.dataSheetName+"."+headingArr[i][0]}>{"#data."+props.dataSheetName+"."+headingArr[i][0]}</option>
+                )
+              }
+              console.log('damn',headingArr);
+              setOptionsInDDMode(dataOptionsInDDMode);
+           }).catch(function(error){
+              console.log(error);
+           })
+    }
+  },[])
+
+
+
+  if(props.usage==='basic'){
+    return (
+      <>
+        {/* <AiOutlineLink id="dataBrowseBtn" onClick={depthLevelOne} size="30px"></AiOutlineLink> */}
+        {/* <FaLink id="dataBrowseBtn" onClick={depthLevelOne}></FaLink> */}
+        <Button  id="dataBrowseBtn" className="btn-sm" onClick={depthLevelOne}>Browse</Button>
+        <div>
+          {showListOne && <ul className="myUL">{arrayOne}</ul>}
+        </div>
+        <div>
+          {showListTwo && <ul className="myUL2">{arrayTwo}</ul>}
+        </div>     
+          <Modal show={showModal} tabIndex="-1" size="sm" centered>
+          <form  onSubmit={addDataReference} id={'formInMapper'} register={register} errors={errors}>
+            <Modal.Header>
+              <Modal.Title>Enter an Index</Modal.Title>    
+            </Modal.Header>
+            <Modal.Body>
+              <label>Enter an Index For Getting a value:</label>
+              <input {...register('name')} type="text" onChange={inputHandler}/>
+              <small className="text-danger">{errors.name?.message}</small>
+            </Modal.Body>
+            <Modal.Footer> 
+              <Button variant="success" form={'formInMapper'} type="submit">
+                Enter
+              </Button>
+            </Modal.Footer>
+            </form>
+          </Modal> 
+      </>
+    );
+  }else if(props.usage==="iteration-data"){
+    return(
+      <>
+      <Button className='btn-sm' id="loopBtn"  onClick={depthLevelOne}>Loop</Button>
       <div>
-        {showListOne && <ul className="myUL">{arrayOne}</ul>}
-      </div>
-      <div>
-        {showListTwo && <ul className="myUL2">{arrayTwo}</ul>}
+          {showListOne && <ul className="myUL">{arrayOne}</ul>}
       </div>
       
-    </>
-  );
+          
+          <Modal show={showLoopModal} tabIndex="-1" size="sm" centered> 
+          <form  onSubmit={addDataReferenceForLoop} id='formLoop' register={register} errors={errors}>
+            <Modal.Header closeButton onClick={terminateLoopModal}>
+              <Modal.Title> Iteration Based On Data Section</Modal.Title>    
+            </Modal.Header>
+            <Modal.Body>
+              <label>Enter a loop name:</label>
+              <input  type="text" onChange={inputLoopNameHandler}/>
+            </Modal.Body>
+            <Modal.Footer> 
+              <Button variant="success" form='formLoop' type="submit">
+                Enter
+              </Button>
+            </Modal.Footer>
+            </form>
+            </Modal>
+            
+           
+      </>
+    )
+    
+  }else if(props.usage==='Data Driven' && optionsInDDMode.length!==0){
+    return(
+      <div className="form-group">
+            <label>{props.title}</label>
+            <select name="DD_list" id="DD_list" className="form-select" aria-label="Default select example" onChange={(event)=>props.setSelectorValues(event.target.value)}>{optionsInDDMode}</select>
+      </div>
+    )
+  }
+
+
 };
 
 export default Mapper;
