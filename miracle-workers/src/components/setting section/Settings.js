@@ -2,6 +2,7 @@ import React ,{useEffect} from "react";
 import SettingsItem from "./SettingsItem";
 import { RiNumber2 } from "react-icons/ri";
 import { BsCommand } from "react-icons/bs";
+import { FaCheckDouble } from "react-icons/fa";
 import { MdOutlineOpenInBrowser } from "react-icons/md";
 import { GrStatusGood } from "react-icons/gr";
 import { TbCircle } from "react-icons/tb";
@@ -16,54 +17,51 @@ const Settings = () => {
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Command"
-          symbol={<BsCommand size={42}/>}
+          symbol={<BsCommand size={42} />}
+          linearGradient={1}
         />
       </Grid>
 
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Browser"
-          symbol={
-            <MdOutlineOpenInBrowser
-              size={42}
-            />
-          }
+          symbol={<MdOutlineOpenInBrowser size={42} />}
+          linearGradient={2}
         />
       </Grid>
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="TestType"
-          symbol={<RiNumber2 size={42}/>}
+          symbol={<RiNumber2 size={42} />}
+          linearGradient={1}
         />
       </Grid>
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Status"
-          symbol={<TbCircle size={42}/>}
+          symbol={<TbCircle size={42} />}
+          linearGradient={1}
         />
       </Grid>
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Yes/No"
-          symbol={<GrStatusGood size={42}/>}
+          symbol={<FaCheckDouble size={42} />}
+          linearGradient={2}
         />
       </Grid>
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Instruction"
-          symbol={
-            <MdOutlineIntegrationInstructions
-              size={42}
-        />
-          }
+          symbol={<MdOutlineIntegrationInstructions size={42} />}
+          linearGradient={1}
         />
       </Grid>
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Condition"
-          symbol={
-            <RiFileSearchLine size={42}/>
-          }
+          symbol={<RiFileSearchLine size={42} />}
+          linearGradient={2}
         />
       </Grid>
     </Grid>

@@ -16,18 +16,18 @@ const SettingItemPage = ({ settingType }) => {
     case 'test-types':
       logo=<RiNumber2 className="logo"/>
       break;
-    case 'status':
-      logo=<TbCircle className="logo"/>
+    case "status":
+      logo = <TbCircle className="logo" />;
       break;
-    case 'yes-no':
-      logo=<GrStatusGood className="logo"/>
+    case "yes-no":
+      logo = <GrStatusGood className="logo" />;
       break;
   }
 
   const [commandObject, setCommandObject] = useState([]);
 
-  let url = "http://localhost:5000/settings/" + settingType;
-  console.log(url)
+  let url = "http://localhost:8000/settings/" + settingType;
+  console.log(url);
 
   const getData = () => {
     axios
@@ -121,11 +121,16 @@ const SettingItemPage = ({ settingType }) => {
         </div>
       </Grid>
       <Grid xs={0} sm={5} item>
-      <span className="textWithLogo">{settingType}</span>
-      <div>
-      {logo}
+        <div>
+          <span className="textWithLogo">{settingType}</span>
         </div>
-      </Grid>
+      {logo}
+
+      <div className="col-lg-4 center-logo">
+        <span className="textWithLogo">{settingType}</span>
+        <div>{logo}</div>
+      </div>
+    </Grid>
     </Grid>
   );
 };

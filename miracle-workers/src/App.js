@@ -16,20 +16,29 @@ const loading = (
   <div className="pt-3 text-center">
     <div className="sk-spinner sk-spinner-pulse"></div>
   </div>
-)
+);
 
 // import Launcher from "./components/Launcher";
 
 // Containers
-const DefaultLayout = React.lazy(() => import('./layout/DefaultLayout'))
+const DefaultLayout = React.lazy(() => import("./layout/DefaultLayout"));
 
 // Pages
-const Login = React.lazy(() => import('./views/pages/login/login_component'))
-const Register = React.lazy(() => import('./views/pages/login/signup_component'))
-const ForgotPassword = React.lazy(() => import('./views/pages/login/reset'))
+const Login = React.lazy(() => import("./views/pages/login/login_component"));
+const Register = React.lazy(() =>
+  import("./views/pages/login/signup_component")
+);
+const ForgotPassword = React.lazy(() => import("./views/pages/login/reset"));
+const TwoFA = React.lazy(() => import("./views/pages/two-fa/index"));
+const ResetPassword = React.lazy(() =>
+  import("./views/pages/reset-password/index")
+);
+
 // const Page404 = React.lazy(() => import('./views/pages/page404/Page404'))
 // const Page500 = React.lazy(() => import('./views/pages/page500/Page500'))
-const DataJunction = React.lazy(() => import('./views/dataJunction/DataJunction'))
+const DataJunction = React.lazy(() =>
+  import("./views/dataJunction/DataJunction")
+);
 
 const PropsForChainPopUp = {
   enableChainPopUps: true,
@@ -38,7 +47,6 @@ const PropsForChainPopUp = {
 };
 
 function App() {
- 
   return (
     <div className="App">
        <BrowserRouter>

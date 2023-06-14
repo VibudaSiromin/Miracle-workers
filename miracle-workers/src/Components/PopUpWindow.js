@@ -26,11 +26,11 @@ function ModalDialog(props,ref) {
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
-  const getEditTestStep=props.editTestStep;
-  
+  const getEditTestStep = props.editTestStep;
+
   const testStepsData = {};
   const testStepsData2 = {};
-  const generalPurposeInputData={};
+  const generalPurposeInputData = {};
 
   const {lname}=useParams();
   // useImperativeHandle(ref,()=> ({
@@ -143,15 +143,21 @@ function ModalDialog(props,ref) {
     console.log("ppppppppppp",testStepsData2);
   };
 
-  const inputHandler3 = (name,value) => {
-      console.log('inputHandler3: '+name,value);
-      generalPurposeInputData[name]=value;
-      console.log('inputHandler3:',props.purpose);
-  }
+  const inputHandler3 = (name, value) => {
+    console.log("inputHandler3: " + name, value);
+    generalPurposeInputData[name] = value;
+    console.log("inputHandler3:", props.purpose);
+  };
 
   const myLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
-      if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action' && props.generalPurpose===false){
+      if (
+        props.title[i] !== "instruction" &&
+        props.title[i] !== "command" &&
+        props.title[i] !== "swapResult" &&
+        props.title[i] !== "action" &&
+        props.generalPurpose === false
+      ) {
         inputFieldArrayModalOne.push(
           <PopUpInputField
             id={i}
@@ -161,9 +167,10 @@ function ModalDialog(props,ref) {
             onDataChange={inputHandler}
           ></PopUpInputField>
         );
-      }else if(props.generalPurpose===true){//section for all general purpose data inputs such as data section,login,locator section ect...
-        console.log('jazz ',props.title);
-        console.log('jazz weke');
+      } else if (props.generalPurpose === true) {
+        //section for all general purpose data inputs such as data section,login,locator section ect...
+        console.log("jazz ", props.title);
+        console.log("jazz weke");
         inputFieldArrayModalOne.push(
           <PopUpInputField
             id={i}
@@ -174,19 +181,17 @@ function ModalDialog(props,ref) {
             locNameErr={locNameErr}
             locValue={locValue}
           ></PopUpInputField>
-        ); 
-        
-      }else if(props.generalPurpose===false){
-         inputFieldArrayModalOne.push(
-             <PopUpSelection
-             id={i}
-             title={props.title[i]}
-             generalPurpose={props.generalPurpose}
-             onDataChange={inputHandler}
-             ></PopUpSelection>
-         );
+        );
+      } else if (props.generalPurpose === false) {
+        inputFieldArrayModalOne.push(
+          <PopUpSelection
+            id={i}
+            title={props.title[i]}
+            generalPurpose={props.generalPurpose}
+            onDataChange={inputHandler}
+          ></PopUpSelection>
+        );
       }
-      
     }
     if (props.enableChainPopUps) {
       for (let i = 0; i < commandBasedFields[0].length; i++) {
@@ -243,7 +248,6 @@ function ModalDialog(props,ref) {
     // }
 
   };
-  
 
   myLoop();
   const initModalOne = () => {
@@ -326,7 +330,7 @@ function ModalDialog(props,ref) {
   };
 
   const NextStep = () => {
-    if(props.generalPurpose===false){
+    if (props.generalPurpose === false) {
       setModalOneDataSet(testStepsData);
     }
     if(props.generalPurpose===true){
@@ -364,9 +368,14 @@ function ModalDialog(props,ref) {
 
   const submitHandlerOne = (event) => {
     event.preventDefault();
-    if(props.enableChainPopUps===false){
-        if(props.generalPurpose===false){
-          props.saveNewData(modalOneDataSet);
+    if (props.enableChainPopUps === false) {
+      if (props.generalPurpose === false) {
+        props.saveNewData(modalOneDataSet);
+      }
+      if (props.generalPurpose === true) {
+        if (props.purpose === "fillData") {
+          console.log("fillData AX1");
+          props.saveNewGeneralData(modalOneGeneralDataSet); // calling from heading component
         }
         if(props.generalPurpose===true){
           if(props.purpose==='fillData'){

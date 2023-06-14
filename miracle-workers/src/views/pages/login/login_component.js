@@ -1,16 +1,21 @@
-import React, { Component, useState } from "react";
+import React from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Link } from "react-router-dom";
+import "./login.scss";
 
 export default function Login() {
-
   const schema = yup.object().shape({
     email: yup.string().email().required("Email is required"),
-    password: yup.string().min(8).max(15).required("Password is required")
+    password: yup.string().min(8).max(15).required("Password is required"),
   });
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     resolver: yupResolver(schema),
   });
 
@@ -19,7 +24,7 @@ export default function Login() {
     const { email, password } = data;
 
     console.log(email, password);
-    fetch("http://localhost:5000/login-user", {
+    fetch("http://localhost:8000/login-user", {
       method: "POST",
       crossDomain: true,
       headers: {
@@ -47,61 +52,82 @@ export default function Login() {
   }
 
   return (
-    <div className="auth-wrapper">
-      <div className="auth-inner">
-        <form onSubmit={handleSubmit(submitForm)} id="login">
-          <h3>Sign In</h3>
+    <div className="row spacing-in-form">
+      <div className="col-lg-4"></div>
+      <div className="col-lg-4">
+        <div className="auth-wrapper">
+          <div className="auth-inner">
+            <form onSubmit={handleSubmit(submitForm)} id="login">
+              <h3
+                style={{
+                  color: "white",
+                  fontWeight: "bold",
+                  paddingTop: "20px",
+                  paddingBottom: "20px",
+                }}
+              >
+                Login
+              </h3>
+              <div className="form-group">
+                <p
+                  style={{
+                    textAlign: "left",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Username
+                </p>
+                <input
+                  type="email"
+                  name="email"
+                  className="form-control custom-input-box"
+                  {...register("email")}
+                  autoComplete="off"
+                />
+                <small className="text-danger">{errors.email?.message}</small>
+              </div>
 
-          <div className="mb-3">
-            <label>Email address</label>
-            <input
-              type="email"
-              name="email"
-              className="form-control"
-              placeholder="Enter email"
-              {...register("email")}
-            />
-            <small className="text-danger">{errors.email?.message}</small>
-          </div>
+              <div className="form-group">
+                <p
+                  style={{
+                    textAlign: "left",
+                    color: "white",
+                    fontWeight: "bold",
+                  }}
+                >
+                  Password
+                </p>
+                <input
+                  type="password"
+                  name="password"
+                  className="form-control custom-input-box"
+                  {...register("password")}
+                  autoComplete="off"
+                />
+                <small className="text-danger">
+                  {errors.password?.message}
+                </small>
+                <Link to="/reset">
+                  <p className="forget-password">Forgot Password?</p>
+                </Link>
+              </div>
+              <button
+                type="submit"
+                className="btn btn-primary submit-button"
+                form="login"
+              >
+                Login
+              </button>
 
-          <div className="mb-3">
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              className="form-control"
-              placeholder="Enter password"
-              {...register("password")}
-            />
-            <small className="text-danger">{errors.password?.message}</small>
+              <Link to="/sign-up">
+                <p className="sign-up">Sign Up</p>
+              </Link>
+            </form>
           </div>
-
-          <div className="mb-3">
-            <div className="custom-control custom-checkbox">
-              <input
-                type="checkbox"
-                className="custom-control-input"
-                id="customCheck1"
-              />
-              <label className="custom-control-label" htmlFor="customCheck1">
-                Remember me
-              </label>
-            </div>
-          </div>
-
-          <div className="d-grid">
-            <button type="submit" className="btn btn-primary" form="login">
-              Submit
-            </button>
-          </div>
-          <p className="forgot-password text-right">
-            <a href="/sign-up">Sign Up</a>
-          </p>
-          <p className="forgot-password text-right">
-            <a href="/reset">forgot password</a>
-          </p>
-        </form>
+        </div>
       </div>
+      <div className="col-lg-4"></div>
     </div>
   );
 }
