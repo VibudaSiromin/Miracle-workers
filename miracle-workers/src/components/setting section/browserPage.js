@@ -171,7 +171,7 @@ import BrowserPopup from "./BrowserPopup";
 import BrowserRaw from "./BrowserRaw";
 import jwt_decode from "jwt-decode";
 import { useDispatch,useSelector } from "react-redux";
-
+import { BiPlus } from "react-icons/bi";
 import { Button } from "react-bootstrap";
 
 const BrowserPage = () => {
@@ -272,30 +272,44 @@ const BrowserPage = () => {
   return (
     // <Grid container>
     //   <Grid xs={12} sm={7} item>
-  <div className="version-01">
+  <div>
     <BrowserPopup
       ref={ref}
       addNew={addNewItemHandler}
     />
-  <table id="data-Table">
+  <table >
+
     <thead>
-      {
-        userType=="Admin"?
-        <tr>
-          <Button onClick={addItemHandler}>
-            Add New Browser
-          </Button>
-        </tr>
+      <tr>
+  <div className="headerBox">
+    <span
+      className="settingType float-left"
+      style={{
+      width: "22%",
+              // padding: "22px",
+      fontWeight: "700",
+      fontSize: "17px",
+      }}
+      >
+        Browsers
+    </span>
+    {userType=="Admin"?
+        <button className="button float-right" onClick={addItemHandler}>
+          <BiPlus className="plus" />
+          <span className="add"> Add New Browser</span>
+        </button>
       :null
       }
-
-      <tr>
+        {/* <RxCross1 className="cross float-right" /> */}
+      </div>
+      </tr>
+      {/* <tr>
           <th>Browser</th>
           {userType=="Admin"?
           <th>Actions</th>
           :null
           }
-        </tr>
+        </tr> */}
     </thead>
     <tbody>
           {item.map((item) => (

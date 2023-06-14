@@ -36,7 +36,7 @@
 
 import React, { useState } from "react";
 import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
-// import "./SettingItemRaw.css";
+import "./SettingItemRaw.css";
 import { useRef } from "react";
 import BrowserEditPopup from "./BrowserEditPopup";
 
@@ -59,7 +59,7 @@ const BrowserRaw = ({ item,onDelete,onItemEdit ,userType}) => {
   }
 
   return (
-      <tr className='table-primary' key={item.id}>
+      <tr  key={item.id}>
         <td>{item.name}</td>
         {userType=="Admin"?
         <span>
@@ -69,9 +69,9 @@ const BrowserRaw = ({ item,onDelete,onItemEdit ,userType}) => {
           onEdit={editHandler}
           />    
           <td className="table-data">
-          <MdModeEdit onClick={()=>onEditClickHandler()}/>
+          <MdModeEdit onClick={()=>onEditClickHandler()} className="float-right" style={{ marginRight: "18px", marginTop: "7px", color: "#73FBFD" }}/>
           {" "}
-          <MdDeleteForever onClick={()=>deleteHandler()}/>
+          <MdDeleteForever onClick={()=>deleteHandler()} className="float-right"style={{ marginRight: "18px", marginTop: "7px", color: "red"}} />
           </td>
         </span>
         :null      

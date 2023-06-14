@@ -39,7 +39,7 @@ mongoose
     "mongodb+srv://RestAPI:RestAPI123@cluster0.xq2zop1.mongodb.net/miracleworkers?retryWrites=true&w=majority"
   )
   .then(() => {
-    app.listen(8000);
+    app.listen(5000);
   })
   .catch((err) => {
     console.log(err);
