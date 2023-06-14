@@ -15,7 +15,7 @@ const getBrowserById=async(req,res,next)=>{
     const browserId=req.params.bid;
     let browser;
     try{
-        browser=await Browser.findById(browserId); 
+        browser=await Browser.findById(browserId);
     }catch(err){
         console.log(err);
     }

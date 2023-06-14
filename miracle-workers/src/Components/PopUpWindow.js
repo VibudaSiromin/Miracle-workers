@@ -5,6 +5,8 @@ import PopUpSelection from "./PopUpSelection";
 import {MdTableRows} from 'react-icons/md';
 import { forwardRef,useImperativeHandle,useState } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
+import { Lan } from "@mui/icons-material";
 
 function ModalDialog(props,ref) {
   const [toggleOneModal, setToggleOneModal]  = React.useState(false);
@@ -13,9 +15,13 @@ function ModalDialog(props,ref) {
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [editStatus,setEditStatus] = React.useState('false');
-  const [commandBasedFields,setCommandBasedFields]=useState([]);
+  const [commandBasedFields,setCommandBasedFields]=useState([[],""]);
   const [commandSet,setCommandSet]=useState([]);
-
+  const [dataError,setDataError]=useState("");
+  const [locatorError,setLocatorError]=useState("");
+  const [branchError,setBranchError]=useState("");
+  const [locNameErr,setLocNameErr]=useState("");
+  const [locValue,setLocValue]=useState("");
 
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
@@ -26,6 +32,7 @@ function ModalDialog(props,ref) {
   const testStepsData2 = {};
   const generalPurposeInputData={};
 
+  const {lname}=useParams();
   // useImperativeHandle(ref,()=> ({
   //   log(){
   //     initModalOne();
@@ -48,21 +55,6 @@ function ModalDialog(props,ref) {
     }
   };
 
-  // const inputHandler = (name, value) => {
-  //   console.log(name, value);
-  //   switch (name) {
-  //     case "group":
-  //       testStepsData[name] = value;
-  //       break;
-  //     case "instruction":
-  //       testStepsData[name] = value;
-  //       break;
-  //     case "command":
-  //       testStepsData[name] = value;
-  //       break;
-  //   }
-  //   console.log(testStepsData);
-  // };
   const getCommands= () => {
     axios
       .get("http://localhost:5000/settings/commands")
@@ -80,8 +72,6 @@ function ModalDialog(props,ref) {
   }, []);
 
 
-
-
   useEffect(() => {
     console.log("aaaaaaaa")
     let matchedBinaryValue;
@@ -94,35 +84,34 @@ function ModalDialog(props,ref) {
     console.log("hloo",matchedBinaryValue)
     switch(matchedBinaryValue){
       case "000":
-        setCommandBasedFields(["swapResult","action","comment"]);
+        setCommandBasedFields([["swapResult","action","comment"],"000"]);
         break;
       case "001":
-        setCommandBasedFields(["swapResult","branchSelection","action","comment"]);  
+        setCommandBasedFields([["swapResult","branchSelection","action","comment"],"001"]);  
         break;
       case "010":
-        setCommandBasedFields(["data","swapResult","action","comment"]);  
+        setCommandBasedFields([["data","swapResult","action","comment"],"010"]);  
         break;
       case "011":
-        setCommandBasedFields(["data","swapResult","branchSelection","action","comment"]);  
+        setCommandBasedFields([["data","swapResult","branchSelection","action","comment"],"011"]);  
         break;
       case "100":
-        setCommandBasedFields(["locator","locatorParameter","swapResult","action","comment"]);  
+        setCommandBasedFields([["locator","locatorParameter","swapResult","action","comment"],"100"]);  
         break;
       case "101":
-        setCommandBasedFields(["locator","locatorParameter","swapResult","branchSelection","action","comment"]);  
+        setCommandBasedFields([["locator","locatorParameter","swapResult","branchSelection","action","comment"],"101"]);  
         break;
       case "110":
-        setCommandBasedFields(["locator","locatorParameter","data","swapResult","action","comment"]);  
+        setCommandBasedFields([["locator","locatorParameter","data","swapResult","action","comment"],"110"]);  
         break;
       case "111":
-        setCommandBasedFields(["locator","locatorParameter","data","swapResult","branchSelection","action","comment"]);  
+        setCommandBasedFields([["locator","locatorParameter","data","swapResult","branchSelection","action","comment"],"111"]);  
         break;
 
       default:
-        setCommandBasedFields([]);
+        setCommandBasedFields([[],""]);
     }
   }, [modalOneDataSet["command"]]);
-
 
 
   const inputHandler2 = (name, value) => {
@@ -182,6 +171,8 @@ function ModalDialog(props,ref) {
             inputType="text"
             generalPurpose={props.generalPurpose}
             onDataChange={inputHandler3}
+            locNameErr={locNameErr}
+            locValue={locValue}
           ></PopUpInputField>
         ); 
         
@@ -198,22 +189,25 @@ function ModalDialog(props,ref) {
       
     }
     if (props.enableChainPopUps) {
-      for (let i = 0; i < commandBasedFields.length; i++) {
-          if(commandBasedFields[i]!=='instruction' && commandBasedFields[i]!=='command' && commandBasedFields[i]!=='swapResult' && commandBasedFields[i]!=='action'){
+      for (let i = 0; i < commandBasedFields[0].length; i++) {
+          if(commandBasedFields[0][i]!=='instruction' && commandBasedFields[0][i]!=='command' && commandBasedFields[0][i]!=='swapResult' && commandBasedFields[0][i]!=='action'){
             inputFieldArrayModalTwo.push(
               <PopUpInputField
                 id={3+i}
-                title={commandBasedFields[i]}
+                title={commandBasedFields[0][i]}
                 inputType="text"
                 generalPurpose={props.generalPurpose}
                 onDataChange2={inputHandler2}
+                dataError={dataError}
+                locatorError={locatorError}
+                branchError={branchError}
               ></PopUpInputField>
             );
           }else{
              inputFieldArrayModalTwo.push(
                <PopUpSelection
                id={3+i}
-               title={commandBasedFields[i]}
+               title={commandBasedFields[0][i]}
                generalPurpose={props.generalPurpose}
                onDataChange2={inputHandler2}
                ></PopUpSelection>
@@ -261,10 +255,74 @@ function ModalDialog(props,ref) {
   const initModalTwo = () => {
     return setToggleTwoModal(true);
   };
-  const TerminateModalTwo = () => {
-    console.log(testStepsData2)
-    setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
+
+  const closeModalTwo=()=>{
     return setToggleTwoModal(false);
+  }
+  const TerminateModalTwo = () => {
+    setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
+    console.log(modalTwoDataSet)
+    const {data,locator,branchSelection}=modalTwoDataSet;
+    setDataError("");
+    setLocatorError("");
+    setBranchError("");
+    switch(commandBasedFields[1]){
+      case "001":
+        if(branchSelection==undefined){
+          setBranchError("Branch Selection cannot be empty");
+          return;
+        }
+        // break;
+      case "010":
+        if(locator==undefined){
+          setLocatorError("Locator cannot be empty");
+          return;
+        }
+        // break;
+      case "011":
+        if(branchSelection==undefined){
+          setBranchError("Branch Selection cannot be empty");
+
+        }
+        if(locator==undefined){
+          setLocatorError("Locator cannot be empty");
+        }
+        break;
+      case "100":
+        if(data==undefined){
+          setDataError("Data cannot be empty");
+          return;
+        }
+        // break;
+      case "101":
+        if(data==undefined){
+          setDataError("Data cannot be empty");
+        }
+        if(branchSelection==undefined){
+          setBranchError("Branch Selection be empty");
+        }
+        break;
+      case "110":
+        if(data==undefined){
+          setDataError("Data cannot be empty");
+        }
+        if(locator==undefined){
+          setLocatorError("Locator cannot be empty");
+        }
+        break;
+      case "111":
+        if(data==undefined){
+          setDataError("Data cannot be empty");
+        }
+        if(locator==undefined){
+          setLocatorError("Locator cannot be empty");
+        }
+        if(branchSelection==undefined){
+          setBranchError("Branch Selection be empty");
+        }
+        break;
+    }
+      // return setToggleTwoModal(false);
   };
 
   const NextStep = () => {
@@ -273,6 +331,18 @@ function ModalDialog(props,ref) {
     }
     if(props.generalPurpose===true){
       console.log('Next step',props.purpose);
+
+      if(lname[0]==='L'){
+        const {"Locator Name":name,"Locator Value":value}=generalPurposeInputData
+        if(name===undefined){
+          setModalOneGeneralDataSet({...modalOneGeneralDataSet,"Locator Value":value})
+        }else if(value==undefined){
+          setModalOneGeneralDataSet({...modalOneGeneralDataSet,"Locator Name":name})
+        }else{
+          setModalOneGeneralDataSet(generalPurposeInputData);
+        }
+        return;
+      }
       setModalOneGeneralDataSet(generalPurposeInputData);
     }
     TerminateModalOne();
@@ -300,16 +370,34 @@ function ModalDialog(props,ref) {
         }
         if(props.generalPurpose===true){
           if(props.purpose==='fillData'){
+            setLocNameErr("");
+            setLocValue("");
             console.log('fillData AX1');
-            props.saveNewGeneralData(modalOneGeneralDataSet);// calling from heading component
+            if(lname[0]==="L"){
+                const {"Locator Name":name,"Locator Value":value}=modalOneGeneralDataSet
+                console.log(modalOneGeneralDataSet)
+                if(name===undefined){
+                  setLocNameErr("Locator name cannot be empty")
+                  console.log("aaaaa")
+                }
+                if(value===undefined){
+                  setLocValue("Locator Value cannot be empty")
+                  console.log("aaaaa")
+                }
+                if(name==undefined || name==="" || value===undefined|| value===""){
+                  return;
+                }
+                console.log("eeee",name,value)
+                props.saveNewGeneralData(modalOneGeneralDataSet);// calling from heading component
+                setModalOneGeneralDataSet({})
+            }
           }
           if(props.purpose==='addHeading'){
             console.log('triple H')
             props.saveNewHeadingData(modalOneGeneralDataSet);
           }          
         }
-        
-
+    
     TerminateModalOne();
     }
   };
@@ -317,8 +405,12 @@ function ModalDialog(props,ref) {
   const submitHandlerTwo = (event) => {
     event.preventDefault();
     if(props.enableChainPopUps===true){
-    props.saveNewData(modalTwoDataSet);
-    TerminateModalOne();
+      if(dataError=="" && locatorError=="" && branchError==""){
+        props.saveNewData(modalTwoDataSet);
+        console.log("kkkkkkk")
+        setToggleTwoModal(false)
+      }
+
     }
   };
 
@@ -328,8 +420,8 @@ function ModalDialog(props,ref) {
         <MdTableRows></MdTableRows>
         {props.buttonValue}
       </Button>
-      <form onSubmit={submitHandlerOne} id={props.formID[0]}>
         <Modal show={toggleOneModal} tabIndex="-1">
+        <form onSubmit={submitHandlerOne} id={props.formID[0]}>
           <Modal.Header closeButton onClick={TerminateModalOne}>
             <Modal.Title>Feed Data to Test</Modal.Title>
           </Modal.Header>
@@ -342,17 +434,17 @@ function ModalDialog(props,ref) {
               {btnValue}
             </Button>
           </Modal.Footer>
+          </form>
         </Modal>
-      </form>
 
-      <form onSubmit={submitHandlerTwo} id={props.formID[1]}>
       <Modal show={toggleTwoModal} tabIndex="-1">
+      <form onSubmit={submitHandlerTwo} id={props.formID[1]}>
         <Modal.Header closeButton onClick={TerminateModalTwo}>
           <Modal.Title>Feed Data to Test</Modal.Title>
         </Modal.Header>
         <Modal.Body>{inputFieldArrayModalTwo}</Modal.Body>
         <Modal.Footer>
-          <Button variant="danger" onClick={TerminateModalTwo}>
+          <Button variant="danger" onClick={closeModalTwo}>
             Close
           </Button>
           <Button
@@ -364,8 +456,8 @@ function ModalDialog(props,ref) {
             Finish
           </Button>
         </Modal.Footer>
+        </form>
       </Modal>
-      </form>
     </>
   );
 }

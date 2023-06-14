@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 const PopUpInputField = (props) => {
 
     const [referenceValue,setReferenceValue]=useState('');
-
+    let error;
     const inputHandler= (event) => {
       const fieldName = event.target.getAttribute("name");
       const fieldValue = event.target.value;
@@ -32,7 +32,7 @@ const PopUpInputField = (props) => {
       setReferenceValue(dataValueReference);
   }
 
-    console.log("Moon",props.title);
+    console.log("Moon",props.errors);
 
     if(props.title==='data'){
       return(
@@ -40,6 +40,8 @@ const PopUpInputField = (props) => {
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={referenceValue}></input>
             <Mapper selectedHeading={applyDataFieldValue} browseBtnId={'data'}></Mapper>
+          
+            <div><small className="text-danger">{props.dataError}</small></div>
         </div>
     );
     }else{
@@ -47,6 +49,19 @@ const PopUpInputField = (props) => {
         <div className="form-group">
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler}></input>
+
+            {props.title=='Locator Name'
+            ?<small className="text-danger">{props.locNameErr}</small>:null
+            }
+            {props.title=='Locator Value'
+            ?<small className="text-danger">{props.locValue}</small>:null
+            }
+            {props.title=='locator'
+            ?<small className="text-danger">{props.locatorError}</small>:null
+            }
+            {props.title=='branchSelection'
+            ?<small className="text-danger">{props.branchError}</small>:null
+            }
         </div>
     );
     }
