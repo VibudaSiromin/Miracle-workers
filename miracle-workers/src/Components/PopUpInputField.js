@@ -3,6 +3,8 @@ import Mapper from "./Mapper";
 import { connect } from 'react-redux';
 import axios from "axios";
 import { useParams } from "react-router-dom";
+//import { Button } from "@coreui/coreui";
+import { Button,Modal } from "react-bootstrap";
 
 const PopUpInputField =(props) => {
 
@@ -16,6 +18,10 @@ const PopUpInputField =(props) => {
     const [reportNormal,setReportNormal] = useState(false);
     const [whileEndLoopValue,setWhileEndLoopValue] = useState([]);
     const [launcherDetails,setLauncherDetails] = useState(null);
+    const [showLocTypeModal,setShowLocTypeModal] = useState(false);
+    const [xPath,setXPath] = useState(false);
+    const [locatorValue,setLocatorValue] = useState(null);
+    const [locatorTypeValue,setLocatorTypeValue] = useState();
 
     const {lname,tname,cname,dname} =useParams();
 
@@ -113,6 +119,48 @@ const PopUpInputField =(props) => {
       setFieldName('data'); 
   }
 
+  // value={'className'}>Class Name</option>
+  // <option value={'cssSelector'}>CSS Selector</option>
+  // <option value={'ID'}>ID</option>
+  // <option value={'linkTest'}>Link Text</option>
+  // <option value={'Name'}>Name</option>
+  // <option value={'partialLinkTest'}>Partial Link Text</option>
+  // <option value={'tagName'}>Tag Name</option>
+  // <option value={'xPath'}>
+
+  const addReferenceToLocator = (event) => {
+    console.log('goddd')
+    event.preventDefault();
+    event.stopPropagation();
+    setFieldName('locator');
+    setShowLocTypeModal(false);
+    let locatorReference;
+    if(locatorTypeValue==='className'){
+      locatorReference = '#class.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='cssSelector'){
+      locatorReference = '#css.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='ID'){
+      locatorReference = '#id.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='linkText'){
+      locatorReference = '#linktext.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='Name'){
+      locatorReference = '#name.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='partialLinkText'){
+      locatorReference = '#partiallinktext.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='tagName'){
+      locatorReference = '#tagname.'+locatorValue
+      setFieldValue(locatorReference);
+    }else if(locatorTypeValue==='xPath'){
+      setFieldValue(locatorValue);
+    }
+  }
+
   useEffect(()=>{
     if(isMountTwo){
       if(command==='While.DataExists'){
@@ -120,9 +168,6 @@ const PopUpInputField =(props) => {
         const loopName = parts[2];
         const dataPageName = parts[1].split('|')[0];
         console.log('stAr',loopName,dataPageName);
-
-  
-
       }else if(command==="While.End"){
         setReportNormal(true);
       }else if(command==="While.Count"){
@@ -135,6 +180,32 @@ const PopUpInputField =(props) => {
 
   },[command])
 
+  const initLocTypeModal = () => {
+    setShowLocTypeModal(true);
+  }
+
+  const terminateLocTypeModal = () => {
+    setShowLocTypeModal(false);
+  }
+
+  const setLocatorType = (e) => {
+    setLocatorTypeValue(e.target.value);
+    setLocatorValue('');
+    if(e.target.value==='xPath'){
+      setXPath(true);
+    }else{
+      setXPath(false);
+    }
+    
+  }
+  const getLocatorNameValue = (e) => {
+      setLocatorValue(e.target.value);
+  }
+
+  const getLocatorValueFromLocatorFile = (dataValue) => {
+      console.log('cloud',dataValue)
+      setLocatorValue(dataValue)
+  }
 
     if(props.title==='data'){
 
@@ -217,7 +288,7 @@ const PopUpInputField =(props) => {
           <div className="form-group">
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={fieldValue}></input>
-            <Mapper usage={'basic'}  selectedHeading={applyDataFieldValue} browseBtnId={'data'} URLForGettingSheets='http://localhost:5000/data/getDatasheets' URLForGettingHeadings='http://localhost:5000/data/datasheets/getHeadings' URLForGettingNoofRaws='http://localhost:5000/data/datasheets/getNoofRaws' reqDetailsforDB={['dataPageNames','dataPageName','getHeadings']}></Mapper>
+            <Mapper usage={'basicDataSection'}  selectedHeading={applyDataFieldValue} browseBtnId={'data'} URLForGettingSheets='http://localhost:5000/data/getDatasheets' URLForGettingHeadings='http://localhost:5000/data/datasheets/getHeadings' URLForGettingNoofRaws='http://localhost:5000/data/datasheets/getNoofRaws' reqDetailsforDB={['dataPageNames','dataPageName','getHeadings']}></Mapper>
           </div>
         )    
       }    
@@ -231,11 +302,43 @@ const PopUpInputField =(props) => {
     }
     }else if(props.title==='locator'){
       return(
+        <>
         <div className="form-group">
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={fieldValue}></input>
-            <Mapper usage={'basic'}  selectedHeading={applyDataFieldValue} browseBtnId={'locator'} URLForGettingSheets='http://localhost:5000/locators' URLForGettingHeadings='http://localhost:5000/locators/getHeadings' URLForGettingNoofRaws='http://localhost:5000/locators/getNoofRaws' reqDetailsforDB={['locatorsPageNames','locatorPageName','getHeadings']}></Mapper>
+            <Button id="locatorDirectBtn" className="btn-sm" onClick={initLocTypeModal}>Types</Button>
+            {/* <Mapper usage={'basic'}  selectedHeading={applyDataFieldValue} browseBtnId={'locator'} URLForGettingSheets='http://localhost:5000/locators' URLForGettingHeadings='http://localhost:5000/locators/getHeadings' URLForGettingNoofRaws='http://localhost:5000/locators/getNoofRaws' reqDetailsforDB={['locatorsPageNames','locatorPageName','getHeadings']}></Mapper> */}
         </div>
+            <Modal show={showLocTypeModal} tabIndex="-1" size="sm" centered>
+              <form  id={'formInInputField'} onSubmit={addReferenceToLocator}>
+              <Modal.Header closeButton onClick={terminateLocTypeModal}>
+                <Modal.Title>Enter Locator Type</Modal.Title>    
+              </Modal.Header>
+              <Modal.Body>
+                <label>Type</label>
+                <select name="loc-type-list" id="loc-type-list" className="form-select" aria-label="Default select example" onChange={(e)=>setLocatorType(e)}>
+                  <option value={'className'}>Class Name</option>
+                  <option value={'cssSelector'}>CSS Selector</option>
+                  <option value={'ID'}>ID</option>
+                  <option value={'linkText'}>Link Text</option>
+                  <option value={'Name'}>Name</option>
+                  <option value={'partialLinkText'}>Partial Link Text</option>
+                  <option value={'tagName'}>Tag Name</option>
+                  <option value={'xPath'}>XPath</option>
+                </select>
+                <br/>
+                <label>Locator</label>
+                <input className="form-control" value={locatorValue} onChange={getLocatorNameValue}></input>
+                {xPath ?<Mapper usage={'basicLocSection'}  locatorNames={getLocatorValueFromLocatorFile} browseBtnId={'locator'} URLForGettingSheets='http://localhost:5000/locators' URLForGettingHeadings='http://localhost:5000/locators/getHeadings' URLForGettingNoofRaws='http://localhost:5000/locators/getNoofRaws' reqDetailsforDB={['locatorsPageNames','locatorPageName','getHeadings']}></Mapper>:<></>}
+              </Modal.Body>
+              <Modal.Footer> 
+                <Button variant="success" form={'formInInputField'} type="submit">
+                  Enter
+                </Button>
+              </Modal.Footer>
+              </form>
+            </Modal> 
+          </>
     );
     }else{
       return(

@@ -8,54 +8,6 @@ const path = require('path');
 const dataFilePath=path.join(__dirname,'../../store/data.json');
 
 
-
-
-const func01 =async (req,res,next) => {
-  //const fs = require('fs');
- console.log('9999999999999999999999999999999999')
-  const data = 'This is the content that will be written to the file.';
-
-  const data2=JSON.stringify(data)
-try{
-
-   //fs.promises.writeFile(dataFilePath,data2);
-   const writeStream = fs.createWriteStream(dataFilePath);
-
-   // Write some data to the stream
-   writeStream.write('Hello, World!');
-   writeStream.write('This is a test.');
-   
-   // End the stream to indicate that no more data will be written
-   writeStream.end();
-   
-   // Listen for the 'finish' event to know when the write operation is finished
-   writeStream.on('finish', () => {
-     console.log('Write operation finished.');
-     //setTimeout(res.status(200).json({message:'Edited data content'}), 8000);
-     setTimeout(() => {
-      res.status(200).json({message:'Edited data content'})
-    },8000)
-   });
-
-
-
- 
-
-}catch(err){
-  console.log(err)
-}
-
-
-
-
-}
-
-
-
-
-
-
-
 // controller for fetching datasheets
 // const getDataSheetByLinkName = (req,res,next)=>{
 //     const linkName=req.query.DataSheetName;
@@ -574,6 +526,17 @@ const getNoofRaws = async(req,res,next) => {
 
 }
 
+const getAllData = async(req,res,next) => {
+  let dataSection;
+  try{
+    const data = await fs.promises.readFile(dataFilePath);
+    dataSection = JSON.parse(data);
+    res.status(200).json({dataSection:dataSection});
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
+}
 
 // exports.deleteDataSheet=deleteDataSheet;
 exports.createDataSheetOne=createDataSheetOne;
@@ -588,4 +551,4 @@ exports.deleteDataSheet=deleteDataSheet;
 exports.renameDataPageName=renameDataPageName;
 exports.getExcelFileNames=getExcelFileNames;
 exports.getNoofRaws=getNoofRaws;
-exports.func01=func01;
+exports.getAllData=getAllData;

@@ -168,15 +168,38 @@ const getNoofRaws = async(req,res,next) => {
     const data = await fs.promises.readFile(locatorFilePath);
     locatorSection = JSON.parse(data);
 
-    const index = locatorSection.findIndex(data=>data[0]===LocatorPageName);
+    const index = locatorSection.findIndex(locator=>locator[0]===LocatorPageName);
     const selectedLocatorSheet=locatorSection[index];
     const sheetLength=selectedLocatorSheet.length;
     res.status(200).json({noofRaws:sheetLength-1});
+  }catch(err){
+      res.status(500).json({ message: 'Error reading locator section' });
+  }
+
+}
+
+const getLocatorNames = async(req,res,next) => {
+  const LocatorPageName = req.query.locatorName;
+  let locatorSection;
+
+  try{
+    const data = await fs.promises.readFile(locatorFilePath);
+    locatorSection = JSON.parse(data);
+    const index = locatorSection.findIndex(locator=>locator[0]===LocatorPageName);
+    const selectedLocatorSheet=locatorSection[index];
+    const locatorNames = [];
+    for(let i=1;i<selectedLocatorSheet.length;i++){
+      const locatorObj=selectedLocatorSheet[i];
+      const locatorName=locatorObj['Locator Name'];
+      locatorNames.push(locatorName);
+    }
+    res.status(200).json({locatorNames:locatorNames});
   }catch(err){
       res.status(500).json({ message: 'Error reading locator section' })
   }
 
 }
+
 
 exports.getPageNames=getPageNames;
 exports.getLocatorByPage=getLocatorByPage;
@@ -186,3 +209,4 @@ exports.editLocatorPage=editLocatorPage;
 exports.ranameLocatorPageName=ranameLocatorPageName;
 exports.getHeadings=getHeadings;
 exports.getNoofRaws=getNoofRaws;
+exports.getLocatorNames=getLocatorNames;

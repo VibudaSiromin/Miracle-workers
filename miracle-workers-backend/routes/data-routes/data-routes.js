@@ -11,7 +11,6 @@ router.post('/dataJunction/data/:dname/addHeading',dataControllers.addHeadingsTo
 router.post('/dataJunction/dataExcel/:dname/addHeading',dataControllers.addHeadingsToData);
 
 ////////&&&&&&&
-router.post('/testroute',dataControllers.func01);
 
 //route for removing heading from selected data page
 router.post('/dataJunction/data/:dname/removeHeading',dataControllers.removeHeading);
@@ -24,7 +23,8 @@ router.get('/data/datasheets/getHeadings',dataControllers.getHeadingsFromData);
 //router.get('/dataJunction/dataExcel/:dname/getHeading2',dataControllers.addHeading);
 
 router.get('/data/datasheets/getNoofRaws',dataControllers.getNoofRaws);
-
+//route for getting all data
+router.get('/data/getAllData',dataControllers.getAllData);
 
 //route for editing data page
 router.post('/dataJunction/data/:dname', dataControllers.editDataPage);
@@ -52,4 +52,4 @@ router.get('/',dataControllers.getPageNames);
 //route for renaming speific data sheet name
 router.patch('/dataJunction/renamePageName',dataControllers.renameDataPageName);
 
-module.exports=router;
+module.exports=router; 

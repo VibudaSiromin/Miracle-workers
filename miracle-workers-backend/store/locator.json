@@ -1,1 +1,1 @@
-[["1",{"Locator Name":"dsd","Locator Value":"dsd"},{"Locator Name":"455","Locator Value":"sd"}]]
+[["tc_001",{"Locator Name":"txt_pass","Locator Value":"//input[@id=''txtPassword]"},{"Locator Name":"btn_login","Locator Value":"//input[@id=\"%1$s\"]"}]]

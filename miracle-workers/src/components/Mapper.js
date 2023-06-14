@@ -26,6 +26,7 @@ const Mapper = (props) => {
   const [showLoopModal,setShowLoopModal] = useState(false);
   const [inputLoopName,setInputLoopName] = useState();
   const [optionsInDDMode,setOptionsInDDMode] = useState([]);
+  const [locatorNames,setLocatorNames] = useState([]);
       
   
 const nameSchema = yup.object(
@@ -66,7 +67,9 @@ const {
  
 
 
-  const depthLevelOne =async () => {
+  const depthLevelOne =(event) => {
+    event.preventDefault();
+    event.stopPropagation();
     console.log('razor');
     axios.get(props.URLForGettingSheets)
            .then(function (response) {
@@ -87,7 +90,7 @@ const {
   useEffect(()=>{
     let listArrayOne = [];
 
-    if(props.usage==='basic'){
+    if(props.usage==='basicDataSection'){
       console.log('dim');
       for (let i = 0; i < sheet.length; i++) {
         listArrayOne.push(
@@ -106,6 +109,24 @@ const {
         </li>
       );
     }
+    }else if(props.usage==='basicLocSection'){
+      for (let i = 0; i < sheet.length; i++) {
+        listArrayOne.push(
+        <li className="menu-items">
+          <button 
+            id={sheet[i]}
+            value={sheet[i]}
+            onClick={(e) => {
+              depthLevelTwoLoc(e);
+            }}
+            style={btnStyles}
+          >
+            {sheet[i]}
+          </button>
+        </li>
+      );
+    }
+
     }else if(props.usage==="iteration-data"){
       console.log('sim');
       for (let i = 0; i < sheet.length; i++) {
@@ -126,13 +147,47 @@ const {
       );
     }
     }
-
-   
     console.log('monster energy',listArrayOne);
     setArrayOne([...listArrayOne]);
 
   },[sheet])
   
+  const depthLevelTwoLoc = (e) => {
+    e.preventDefault();
+    e.stopPropagation()
+    setSelectedSheet(e.target.value);
+    axios
+    .get('http://localhost:5000/locators/getLocatorNames',{
+      params:{
+        locatorName:e.target.value
+      }
+    })
+    .then((res)=>{
+      setLocatorNames(res.data.locatorNames);
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+
+    setShowListTwo(true);
+  }
+
+  useEffect(()=>{
+    console.log('croc',locatorNames);
+    let listArrayTwo = [];
+    for (let i = 0; i < locatorNames.length; i++) {
+      listArrayTwo.push(
+        <li className="menu-items">
+          <button id={locatorNames[i]} value={locatorNames[i]}  onClick={(e)=>addReferenceForLocator(e)} style={btnStyles}>
+            {locatorNames[i]}
+          </button>
+        </li>
+      );
+    }
+     console.log('red bull',listArrayTwo);
+     setArrayTwo([...listArrayTwo]);
+
+  },[locatorNames])
 
   const depthLevelTwo = (event) => {
     console.log("GG", event.target.value);
@@ -186,7 +241,7 @@ const {
       setNoofRaws(raws); 
     })
     .catch((err)=>{
-      console.log(err)
+      console.log(err);
     })
 
   }
@@ -226,6 +281,14 @@ const {
       terminateLoopModal();
       props.assignLoopRef(props.browseBtnId,selectedSheet,inputLoopName);
       setShowListOne(false);
+  }
+
+  const addReferenceForLocator = (event) => {
+    const selectedLocatorName = event.target.value;
+    const valueFormat = '#loc.'+selectedSheet+"."+selectedLocatorName
+    props.locatorNames(valueFormat);
+    setShowListOne(false);
+    setShowListTwo(false);
   }
 
   document.addEventListener('click', (event) => {
@@ -291,12 +354,12 @@ const {
 
 
 
-  if(props.usage==='basic'){
+  if(props.usage==='basicDataSection'){
     return (
       <>
         {/* <AiOutlineLink id="dataBrowseBtn" onClick={depthLevelOne} size="30px"></AiOutlineLink> */}
         {/* <FaLink id="dataBrowseBtn" onClick={depthLevelOne}></FaLink> */}
-        <Button  id="dataBrowseBtn" className="btn-sm" onClick={depthLevelOne}>Browse</Button>
+        <Button  id="dataBrowseBtn" className="btn-sm" onClick={depthLevelOne}>Refer</Button>
         <div>
           {showListOne && <ul className="myUL">{arrayOne}</ul>}
         </div>
@@ -322,15 +385,25 @@ const {
           </Modal> 
       </>
     );
+  }else if(props.usage==='basicLocSection'){
+    return(
+    <>
+      <Button  id="dataBrowseBtn" className="btn-sm" onClick={depthLevelOne} >Refer</Button>
+      <div>
+        {showListOne && <ul className="myUL">{arrayOne}</ul>}
+      </div>
+      <div>
+        {showListTwo && <ul className="myUL2">{arrayTwo}</ul>}
+      </div>  
+    </>
+    )
   }else if(props.usage==="iteration-data"){
     return(
       <>
-      <Button className='btn-sm' id="loopBtn"  onClick={depthLevelOne}>Loop</Button>
+      <Button className='btn-sm' id="loopBtn"  onClick={(e)=>depthLevelOne(e)}>Loop</Button>
       <div>
           {showListOne && <ul className="myUL">{arrayOne}</ul>}
-      </div>
-      
-          
+      </div>     
           <Modal show={showLoopModal} tabIndex="-1" size="sm" centered> 
           <form  onSubmit={addDataReferenceForLoop} id='formLoop' register={register} errors={errors}>
             <Modal.Header closeButton onClick={terminateLoopModal}>

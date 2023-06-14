@@ -14,17 +14,20 @@ const JSONGenerator = () => {
     const [isMountOne,setIsMountOne] = useState(false);
     const [isMountTwo,setIsMountTwo] = useState(false);
     const [isMountThree,setIsMountThree] = useState(false);
+    const [isMountFour,setIsMountFour] = useState(false);
     const [testSuiteHeadings,setTestSuiteHeadings] = useState([]);
     const [isModalShow, setIsModalShow] = useState(false);
     const [fileName,setFileName] = useState('');
     const [finalOutPut,setFinalOutPut] = useState();
-
+    const [dataSection,setDataSection] = useState();
+    const [attachDataSheets,setAttachDataSheets] = useState([]);
+    const [loopsDetailsStartCmd,setLoopsDetailsStartCmd] = useState([]);
+    const [loopsDetailsEndCmd,setLoopsDetailsEndCmd] = useState([]);
     //const modalRefJSONFileName=useRef();
 
     const generateFinalJSON = () => {
         gettingLauncherDetails();
     }
-
     const gettingLauncherDetails =async () => {
 
         axios
@@ -48,47 +51,8 @@ const JSONGenerator = () => {
         })
         .catch((err)=>{
             console.log(err)
-        })
-
-
-
-
-        // try{
-        //     const response=await axios.get(
-        //         `http://localhost:5000/launcher/getAllLauncherData`
-        //     )
-        //     const launcher=response.data.allLauncherData;
-        //     console.log('tiger',response.data.allLauncherData);
-        //     const newLauncher=launcher.map((launcherPage)=>{
-        //         const launcherObj=launcherPage[1];
-        //         launcherObj['groups']=[{}];
-        //         launcherObj['startTime']=null;
-        //         launcherObj['endTime']=null;
-        //         launcherObj['status']=null;
-        //         launcherObj['testSettings']={}
-        //         launcherPage[1]=launcherObj;
-
-        //         return launcherPage;
-        //     });
-        //     console.log('lion',newLauncher);
-        //     setlauncherDetails([...newLauncher]);
-
-        // }catch(err){
-        //     if (err.response) {
-        //         // The client was given an error response (5xx, 4xx)
-        //         console.log(err.response.data);
-        //         console.log(err.response.status);
-        //         console.log(err.response.headers);
-        //     } else if (err.request) {
-        //         // The client never received a response, and the request was never left
-        //         console.log(err.request);
-        //     } else {
-        //         // Anything else
-        //         console.log('Error', err.message);
-        //     }
-        // }       
+        }) 
     }
-
     useEffect(()=>{
         if(isMountOne){
             gettingTestSuiteDetails();
@@ -96,6 +60,14 @@ const JSONGenerator = () => {
             setIsMountOne(true);
         }
     },[launcherDetails])
+
+    useEffect(()=>{
+        if(isMountFour){
+            getAllDataFromDataSection();
+        }else{
+            setIsMountFour(true);
+        }
+    },[testSuiteHeadings]);
 
     const gettingTestSuiteDetails = async() => {
         try{
@@ -120,7 +92,6 @@ const JSONGenerator = () => {
             }
         }
     }
-
     useEffect(()=>{
         if(isMountTwo){
             getTestSuiteHeadings();
@@ -151,13 +122,25 @@ const JSONGenerator = () => {
         }
     }
 
+    const getAllDataFromDataSection = () => {
+        axios
+        .get('http://localhost:5000/data/getAllData')
+        .then((res)=>{
+            setDataSection(res.data.dataSection);
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+            
+    }
+
     useEffect(()=>{
         if(isMountThree){
             appendingTestdataWithLauncher();
         }else{
             setIsMountThree(true);
         }
-    },[testSuiteHeadings])
+    },[dataSection])
 
     const appendingTestdataWithLauncher = () => {
 
@@ -168,59 +151,240 @@ const JSONGenerator = () => {
                 console.log("status",launcherDetails[i][1]);
                 if(launcherDetails[i][1].status==="Enabled"){
 
-                    if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
-                        let testSheet=testData[i];
-                        let newTestSheet=[];
-                        for(let j=1;j<testSheet.length;j++){//selecting a test step
-                            let testStep=testSheet[j];
-                            console.log('my test step',testStep);
-                            const newTestStep={};
-                            for(let k=0;k<testSuiteHeadings.length;k++){
-                                const key=testSuiteHeadings[k];
-                                if(testStep.hasOwnProperty(key)){                           
-                                    console.log('myValue',testStep[key]);
-                                    newTestStep[key]=testStep[key];
-                                }else{
-                                    console.log('myValue2');
-                                    newTestStep[key]="";
+                    if(launcherDetails[i][1].type==="Sequential"){
+                        if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
+                            let testSheet=testData[i];
+                            let newTestSheet=[];
+                            const commonLocatorId = uuidv4();
+                            for(let j=1;j<testSheet.length;j++){//selecting a test step
+                                let testStep=testSheet[j];
+                                console.log('my test step',testStep);
+                                const newTestStep={};
+                                for(let k=0;k<testSuiteHeadings.length;k++){
+                                    const key=testSuiteHeadings[k];
+                                    if(testStep.hasOwnProperty(key)){                           
+                                        console.log('myValue',testStep[key]);
+                                        //identify loop name and relevant data page name 
+                                        if(testStep[key]==='While.DataExists'){
+                                            const dataValue = testStep['data'];
+                                            const dataValueParts = dataValue.split('|');
+                                            const dataPageName = dataValueParts[0].split(':')[1];
+                                            const loopName = dataValueParts[1].split(':')[1];
+                                            const start_step =  commonLocatorId+"."+(j+1);
+                                            const existingLoopDetails = loopsDetailsStartCmd;
+                                            const loopDetailsObj = {};
+                                            loopDetailsObj['loopName'] = loopName;
+                                            loopDetailsObj['start_step'] = start_step;
+                                            loopDetailsObj['dataPageName'] = dataPageName;
+                                            existingLoopDetails.push(loopDetailsObj);
+                                            setLoopsDetailsStartCmd(existingLoopDetails);
+                                            if(attachDataSheets.length===0){
+                                                const arr=attachDataSheets;
+                                                arr.push(dataPageName);
+                                                setAttachDataSheets(arr);
+                                            }else{
+                                                if(!attachDataSheets.includes(dataPageName)){
+                                                    const arr=attachDataSheets;
+                                                    arr.push(dataPageName);
+                                                    setAttachDataSheets(arr);
+                                                }
+                                            }
+                                            if(loopsDetailsStartCmd.length!==0 && loopsDetailsEndCmd.length!==0){
+                                                for(let i = 0;i<loopsDetailsEndCmd.length;i++){
+                                                    if(loopsDetailsEndCmd[i]['loopName']===loopName){
+                                                        newTestStep['data']=testStep['data']+'|'+'end_step'+loopsDetailsEndCmd[i]['end_step']
+                                                    }
+                                                }
+
+                                            }
+                                            
+                                        }
+                                        if(testStep[key]==='While.End'){
+                                            const dataValue = testStep['data'];
+                                            const loopName = dataValue.split(':')[1];
+                                            const end_step =  commonLocatorId+"."+(j+1);
+                                            const existingLoopDetails = loopsDetailsEndCmd;
+                                            const loopDetailsObj = {};
+                                            loopDetailsObj['loopName'] = loopName;
+                                            loopDetailsObj['end_step'] = end_step;
+                                            existingLoopDetails.push(loopDetailsObj);
+                                            setLoopsDetailsEndCmd(existingLoopDetails);
+
+                                            if(loopsDetailsStartCmd.length!==0 && loopsDetailsEndCmd.length!==0){
+                                                for(let i = 0;i<loopsDetailsStartCmd.length;i++){
+                                                    if(loopsDetailsStartCmd[i]['loopName']===loopName){
+                                                        newTestStep['data']=testStep['data']+'|'+'start_step'+loopsDetailsStartCmd[i]['start_step'];
+                                                        console.log('bean',newTestStep['data']);
+                                                        continue;
+                                                    }
+                                                }
+                                                
+                                            }
+                                        }
+                                        if(key==="data"){
+                                            console.log('hellooooo',testStep[key])
+                                            //if(testStep[key].charAt(0)==="#"){// identify data values which strats with '#'
+                                                if(testStep[key].split('.')[0]==='#data'){// identify data values which connects with the data section
+                                                    const refParts=testStep[key].split('.');
+                                                    const dataPage=refParts[1];
+                                                    const heading=refParts[2];
+                                                    const rawNo=refParts[3];
+                                                    console.log('creed',dataSection,dataPage);
+
+                                                    const index = dataSection.findIndex(data=>data[0]===dataPage);
+                                                     const selectedPageWithValues=dataSection[index];
+                                                    if(dataPage.charAt(dataPage.length-1)==="M"){
+                                                         console.log('wall',rawNo)
+                                                         const selectedDataObject=selectedPageWithValues[parseInt(rawNo)+1];
+                                                         console.log('wall',selectedDataObject);
+                                                         const actualDataValue=selectedDataObject[heading];
+                                                         newTestStep[key]=actualDataValue;
+                                                    }
+                                                }else if(testStep['command']!=='While.End' && testStep['command']!=='While.DataExists'){
+                                                    newTestStep[key]=testStep[key]
+                                                }
+                                                    
+                                                
+                                            //}
+                                           
+                                        }else{
+                                            newTestStep[key]=testStep[key];
+                                        }
+                                        
+                                    }else{
+                                        console.log('myValue2');
+                                        newTestStep[key]="";
+                                    }
                                 }
+                                newTestStep['stepId']=uuidv4();
+                                newTestStep['uniqueLocator'] = commonLocatorId+"."+(j+1);
+                                newTestSheet.push(newTestStep);
                             }
-                            newTestSheet.push(newTestStep);
-                        }
-                        const tempLauncherDetails=launcherDetails;
-                        tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
-                        //launcherDetails['groups'][0]['steps']=newTestSheet;
-                        testsKeyArr.push(tempLauncherDetails[i][1]);
-                         console.log('zone',newTestSheet);
-                    } 
+                            const tempLauncherDetails=launcherDetails;
+                            tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
+                            //launcherDetails['groups'][0]['steps']=newTestSheet;
+                            testsKeyArr.push(tempLauncherDetails[i][1]);
+                             console.log('zone',newTestSheet);
+                        } 
 
+                    }else if(launcherDetails[i][1].type==="Data Driven"){
+                        ///////////////////////////////////////////
+                        if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
+                            let testSheet=testData[i];
+                            let newTestSheet=[];
+                            const commonLocatorId = uuidv4();
+                            for(let j=1;j<testSheet.length;j++){//selecting a test step
+                                let testStep=testSheet[j];
+                                console.log('my test step',testStep);
+                                const newTestStep={};
+                                for(let k=0;k<testSuiteHeadings.length;k++){
+                                    const key=testSuiteHeadings[k];
+                                    if(testStep.hasOwnProperty(key)){                           
+                                        console.log('myValue',testStep[key]);
 
+                                        //////////////////////////////////
+                                        console.log('hellooooo',testStep[key])
+                                        if(testStep[key].charAt(0)==="#"){// identify data values which strats with '#'
+                                            if(testStep[key].split('.')[0]==='#data'){// identify data values which connects with the data section
+                                                const refParts=testStep[key].split('.');
+                                                const dataPage=refParts[1];
+                                                if(attachDataSheets.length===0){
+                                                    const arr=attachDataSheets;
+                                                    arr.push(dataPage);
+                                                    setAttachDataSheets(arr);
+                                                }else{
+                                                    if(!attachDataSheets.includes(dataPage)){
+                                                        const arr=attachDataSheets;
+                                                        arr.push(dataPage);
+                                                        setAttachDataSheets(arr);
+                                                    }
+                                                }
+                                                newTestStep[key]=testStep[key];                                            
+                                            }
+                                        }
+                                        newTestStep[key]=testStep[key];
+                                    }else{
+                                        console.log('myValue2');
+                                        newTestStep[key]="";
+                                    }
+                                }
+                                newTestStep['stepId']=uuidv4();
+                                newTestStep['uniqueLocator'] = commonLocatorId+"."+(j+1);
+                                newTestSheet.push(newTestStep);
+                            }
+                            const tempLauncherDetails=launcherDetails;
+                            tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
+                            //launcherDetails['groups'][0]['steps']=newTestSheet;
+                            testsKeyArr.push(tempLauncherDetails[i][1]);
+                             console.log('zone',newTestSheet);
+                        } 
+
+                        ///////////////////////////////////////////
+                    }
                 }else{
                     const tempLauncherDetails=launcherDetails;
                     tempLauncherDetails[i][1]['groups']=[];
                     testsKeyArr.push(tempLauncherDetails[i][1]);
+                }       
+            }
+            console.log('land',loopsDetailsEndCmd);
+            console.log('lord',loopsDetailsStartCmd)
+
+            if(attachDataSheets.length!==0){
+                const dataPages={};             
+                for(let i=0;i<attachDataSheets.length;i++){
+                    const index = dataSection.findIndex(data=>data[0]===attachDataSheets[i]);
+                    const selectedSheetNameWithdata=dataSection[index];
+                    const tempObj={};
+                    if(attachDataSheets[i].charAt(attachDataSheets[i].length-1)==="M"){
+                        for(let j=2;j<selectedSheetNameWithdata.length;j++){
+                            tempObj[j-1]=selectedSheetNameWithdata[j];
+                        }
+                    }else if(attachDataSheets[i].charAt(attachDataSheets[i].length-1)==="E"){
+                        for(let j=3;j<selectedSheetNameWithdata.length;j++){
+                            tempObj[j-1]=selectedSheetNameWithdata[j];
+                        }
+                    }
+                    dataPages[attachDataSheets[i]]=tempObj;
                 }
 
-          
+                console.log('yoga',dataPages)
+                const finalJSONOutput = {
+                    suiteId : uuidv4(),
+                    fileName : "",
+                    tests : testsKeyArr,
+                    activeTestCount : 1,
+                    status : null,
+                    startTime : null,
+                    endTime : null,
+                    filePath : "",
+                    reportPath : null,
+                    dataPages:dataPages
+    
+                };
+                setFinalOutPut(finalJSONOutput);
+    
+                initModal();
+
+            }else{
+                const finalJSONOutput = {
+                    suiteId : uuidv4(),
+                    fileName : "",
+                    tests : testsKeyArr,
+                    activeTestCount : 1,
+                    status : null,
+                    startTime : null,
+                    endTime : null,
+                    filePath : "",
+                    reportPath : null
+    
+                };
+                setFinalOutPut(finalJSONOutput);
+    
+                initModal();
             }
-            console.log('land',testsKeyArr);
 
-            const finalJSONOutput = {
-                suiteId : uuidv4(),
-                fileName : "",
-                tests : testsKeyArr,
-                activeTestCount : 1,
-                status : null,
-                startTime : null,
-                endTime : null,
-                filePath : "",
-                reportPath : null
 
-            };
-            setFinalOutPut(finalJSONOutput);
-            console.log('kiri saman',finalJSONOutput);
-
-            initModal();
     }
 
     const nameSchema = yup.object(
@@ -276,7 +440,7 @@ const JSONGenerator = () => {
                         </Modal.Header>
                         <Modal.Body>
                             <label>Enter a file name for saving JSON data :</label>
-                            <input type="text"  {...register('name')} onChange={handleFileName}/>
+                            <input type="text"  {...register('name')} onChange={handleFileName} className="form-control"/>
                             <small className="text-danger">{errors.name?.message}</small>
                         </Modal.Body>
                         <Modal.Footer>
