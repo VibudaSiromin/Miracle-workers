@@ -43,13 +43,13 @@ const Settings = () => {
           linearGradient={1}
         />
       </Grid>
-      <Grid item sm={4} xs={6}>
+      {/* <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Yes/No"
           symbol={<FaCheckDouble size={42} />}
           linearGradient={2}
         />
-      </Grid>
+      </Grid> */}
       <Grid item sm={4} xs={6}>
         <SettingsItem
           title="Instruction"

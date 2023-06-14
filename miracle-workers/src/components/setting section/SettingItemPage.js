@@ -2,10 +2,11 @@ import React from "react";
 import "./SettingItemPage.css";
 import axios from "axios";
 import { useState, useEffect} from "react";
-import { Grid } from "@material-ui/core";
 import { RiNumber2 } from "react-icons/ri";
 import { GrStatusGood } from "react-icons/gr";
 import { TbCircle } from "react-icons/tb";
+import "./SettingItemPage.css";
+import "./SettingItemRaw.css";
 
 const SettingItemPage = ({ settingType }) => {
   //remove this comment after changing the name "commandObject"
@@ -26,7 +27,7 @@ const SettingItemPage = ({ settingType }) => {
 
   const [commandObject, setCommandObject] = useState([]);
 
-  let url = "http://localhost:8000/settings/" + settingType;
+  let url = "http://localhost:5000/settings/" + settingType;
   console.log(url);
 
   const getData = () => {
@@ -101,37 +102,41 @@ const SettingItemPage = ({ settingType }) => {
   // }
 
   return (
-    <Grid container>
-      <Grid xs={12} sm={7} item>
-      <div className="version-01">
-        <table id="data-Table">
-          <thead>
-            <tr>
-              {settingType}
-            </tr>
-          </thead>
-          <tbody>
-            {commandObject.map((command) => (
-             <div className="raw" key={command.id}>
-                <span>{command.name}</span>
-             </div>
-            ))}
-            </tbody>
-          </table>
+    <div className="row">
+      <div className="col-lg-9">
+        <div className="headerBox">
+            <span
+              className="settingType float-left"
+              style={{
+              width: "22%",
+              // padding: "22px",
+              fontWeight: "700",
+              fontSize: "17px",
+              }}
+              >
+              {settingType}          
+            </span>
+          </div>
         </div>
-      </Grid>
-      <Grid xs={0} sm={5} item>
-        <div>
-          <span className="textWithLogo">{settingType}</span>
+        <div className="row" style={{ paddingLeft: "16px" }}>
+          <div className="col-lg-9">
+              {commandObject.map((command) => (
+                  <div className="raw" key={command.id}>
+                  <span
+                    className="float-left"
+                    style={{ marginLeft: "18px", marginTop: "7px", color: "white" }}
+                  >
+                    {command.name}
+                  </span>
+              </div>
+              ))}
+          </div>
+            <div className="col-lg-3 center-logo">
+              <span className="textWithLogo">{settingType}</span>
+              <div>{logo}</div>
+            </div>
         </div>
-      {logo}
-
-      <div className="col-lg-4 center-logo">
-        <span className="textWithLogo">{settingType}</span>
-        <div>{logo}</div>
-      </div>
-    </Grid>
-    </Grid>
+    </div>
   );
 };
 

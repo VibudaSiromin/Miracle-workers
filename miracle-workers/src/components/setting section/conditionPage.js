@@ -9,6 +9,9 @@ import ConditionPopup from "./conditionPopup";
 import { Button } from "react-bootstrap";
 import jwt_decode from "jwt-decode";
 import { useDispatch,useSelector } from "react-redux";
+import { RiFileSearchLine } from "react-icons/ri";
+import { BiPlus } from "react-icons/bi";
+import Swal from 'sweetalert2';
 
 const ConditionPage = () => {
 
@@ -51,17 +54,67 @@ const ConditionPage = () => {
 
   console.log(item);
 
+  // const deleteHandler = (id) => {
+  //   console.log("jjjjjjjjj")
+  //   const url = "http://localhost:5000/settings/conditions/"+ id;
+  //   axios
+  //     .delete(url)
+  //     .then((res) => {
+  //       getData();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
   const deleteHandler = (id) => {
-    console.log("jjjjjjjjj")
-    const url = "http://localhost:5000/settings/conditions/"+ id;
-    axios
-      .delete(url)
-      .then((res) => {
-        getData();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    });
+  
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const url = "http://localhost:5000/settings/conditions/" + id;
+        axios
+          .delete(url)
+          .then((res) => {
+            // Optional: Show success message using SweetAlert2
+            swalWithBootstrapButtons.fire(
+              'Deleted!',
+              'Condition has been added.',
+              'success'
+            );
+            // Perform any additional actions after successful deletion
+            getData();
+          })
+          .catch((err) => {
+            console.log(err);
+            // Optional: Show error message using SweetAlert2
+            swalWithBootstrapButtons.fire(
+              'Error',
+              'Failed to delete the Condition.',
+              'error'
+            );
+          });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          '',
+          'error'
+        );
+      }
+    });
   };
 
   const ref = useRef();
@@ -78,10 +131,23 @@ const ConditionPage = () => {
         newValue: item,
       })
       .then((res) => {
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'Condition has been added',
+          showConfirmButton: false,
+          timer: 1500
+        });
         getData();
         console.log("inserted");
       })
       .catch((err) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Something went wrong!',
+          footer: ''
+        })
         console.log(err);
       });
   };
@@ -96,44 +162,66 @@ const ConditionPage = () => {
     axios
     .put(url,editedItem)
     .then((res) => {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Condition has been edited',
+        showConfirmButton: false,
+        timer: 1500
+      });
       getData();
       console.log("kll");
     })
     .catch((err) => {
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Something went wrong!',
+        footer: ''
+      })
       console.log(err);
     });
   }
-  // const arr=[1,2,3]
 
   return (
-    // <Grid container>
-    //   <Grid xs={12} sm={7} item>
-  <div className="version-01">
-    <ConditionPopup
-      ref={ref}
-      addNew={addNewItemHandler}
-    />
-  <table id="data-Table">
-    <thead>
-      {userType=="Admin"?
-      <tr>
-        <Button onClick={addItemHandler}>
-            Add New Condition
-        </Button>
-      </tr>
-      :null
-      }
+    
+    <div className="row">
+      <div className="col-lg-9">
+        <ConditionPopup
+          ref={ref}
+          addNew={addNewItemHandler}
+        />
+          <div className="headerBox">
+          <span
+            className="settingType float-left"
+            style={{
+            width: "22%",
+            // padding: "22px",
+            fontWeight: "700",
+            fontSize: "17px",
+            }}
+            >
+            Conditions
+          </span>
+          {userType=="Admin"?
+              <button className="button float-right" onClick={addItemHandler}>
+                <BiPlus className="plus" />
+                <span className="add"> Add</span>
+              </button>
+            :null
+            }
+          </div>
+      </div>
 
-      <tr>
-          <th>Condition</th>
+
+          {/* <th>Condition</th>
           {
             userType=="Admin"?
             <th>Actions</th>
             :null
-          }
-        </tr>
-    </thead>
-    <tbody>
+          } */}
+    <div className="row" style={{ paddingLeft: "16px" }}>
+        <div className="col-lg-9">
           {item.map((item) => (
               <ConditionRaw
                item={item}
@@ -143,9 +231,13 @@ const ConditionPage = () => {
                userType={userType}
               />
           ))}
-    </tbody>
-  </table>
-</div>
+          </div>
+          <div className="col-lg-3 center-logo">
+            <span className="textWithLogo">Browser</span>
+            <div><RiFileSearchLine className="logo"/></div>
+          </div>
+      </div>
+  </div>
   );
 };
 

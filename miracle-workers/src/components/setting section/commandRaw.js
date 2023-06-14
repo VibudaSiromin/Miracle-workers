@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import {MdModeEdit,MdDeleteForever} from 'react-icons/md';
-// import "./SettingItemRaw.css";
+import "./SettingItemRaw.css";
 import { useRef } from "react";
 import axios from "axios";
 import CommandEditPopup from "./commandEditPopup";
@@ -24,11 +24,16 @@ const CommandRaw = ({ command,onDelete,onCommandEdit,userType }) => {
   }
 
   return (
-      <tr className='table-primary' key={command.id}>
-        <td>{command.name}</td>
-        <td>{command.binaryValue[0]=="1"?"True":"False"}</td>
-        <td>{command.binaryValue[1]=="1"?"True":"False"}</td>
-        <td>{command.binaryValue[2]=="1"?"True":"False"}</td>
+    <div className="raw">
+      <span
+        className="float-left"
+        style={{ marginLeft: "18px", marginTop: "7px", color: "white" }}
+      >
+          {command.name}
+          {command.binaryValue[0]=="1"?"True":"False"}
+          {command.binaryValue[1]=="1"?"True":"False"}
+          {command.binaryValue[2]=="1"?"True":"False"}
+      </span>
 
         {
           userType=="Admin"?  
@@ -39,16 +44,15 @@ const CommandRaw = ({ command,onDelete,onCommandEdit,userType }) => {
           onEdit={editHandler}
           />
           <td className="table-data">
-            <MdModeEdit onClick={()=>onEditClickHandler()}/>
+            <MdModeEdit onClick={()=>onEditClickHandler()} className="float-right" style={{ marginRight: "18px", marginTop: "7px", color: "#73FBFD" }}/>
             {" "}
-            <MdDeleteForever onClick={()=>deleteHandler()}/>
+            <MdDeleteForever onClick={()=>deleteHandler()} className="float-right"style={{ marginRight: "18px", marginTop: "7px", color: "red"}}/>
           </td>
           </span>
 
           :null
         }
-
-    </tr>
+    </div>
   );
 };
 
