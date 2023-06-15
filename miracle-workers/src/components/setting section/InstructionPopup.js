@@ -67,7 +67,9 @@ const InstructionPopup = ({ value, addNew}, ref) => {
               Enter your Instruction
             </div>
             <input type="text" name="instruction" {...register("instruction")}/>
+            <div>
             <small className="text-danger">{errors.instruction?.message}</small>
+            </div>
           </div> 
           </form>  
         </Modal.Body>

@@ -267,7 +267,7 @@ const ConditionPage = () => {
           ))}
           </div>
           <div className="col-lg-3 center-logo">
-            <span className="textWithLogo">Browser</span>
+            <span className="textWithLogo">Condition</span>
             <div><RiFileSearchLine className="logo"/></div>
           </div>
       </div>

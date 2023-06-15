@@ -54,7 +54,9 @@ const ConditionEditPopup = ({item, onEdit}, ref) => {
               Edit Condition
             </div>
             <input type="text" name="condition" {...register("condition")}/>
+            <div>
             <small className="text-danger">{errors.condition?.message}</small>
+            </div>
           </div>  
           </form>
              

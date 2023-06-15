@@ -111,7 +111,9 @@ const BrowserEditPopup = ({item, onEdit}, ref) => {
               Edit Browser
             </div>
             <input type="text" name="browser" {...register("browser")}/>
+            <div>
             <small className="text-danger">{errors.browser?.message}</small>
+            </div>
           </div>  
           </form>
              

@@ -53,7 +53,9 @@ const ConditionPopup = ({ value, addNew}, ref) => {
               Enter your condition
             </div>
             <input type="text" name="condition" {...register("condition")}/>
+            <div>
             <small className="text-danger">{errors.condition?.message}</small>
+            </div>
           </div> 
           </form>  
         </Modal.Body>

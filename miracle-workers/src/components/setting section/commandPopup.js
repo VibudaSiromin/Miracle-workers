@@ -85,7 +85,9 @@ const CommandPopup = ({ value, addNew}, ref) => {
               Enter your command
             </div>
             <input type="text" name="command" {...register("command")}/>
+            <div>
             <small className="text-danger">{errors.command?.message}</small>
+            </div>
             <div>
               <div>
                 Choose Required Fields for relevant command

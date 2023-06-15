@@ -67,7 +67,9 @@ const InstructionEditPopup = ({item, onEdit}, ref) => {
               Edit Instruction
             </div>
             <input type="text" name="instruction" {...register("instruction")}/>
+            <div>
             <small className="text-danger">{errors.instruction?.message}</small>
+            </div>
           </div>  
           </form>
              
