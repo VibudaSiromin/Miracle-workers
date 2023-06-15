@@ -38,7 +38,7 @@ const ResetPassword = () => {
   const submitForm = (data) => {
     iseIsLoading(true);
     axios
-      .post("http://localhost:8000/reset-password", {
+      .post("http://localhost:5000/reset-password", {
         email: email,
         password: data.password,
       })

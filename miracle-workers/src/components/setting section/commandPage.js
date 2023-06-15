@@ -125,6 +125,18 @@ const CommandPage = () => {
   console.log(commandObject);
 
   const addNewItemHandler = (commandName,binaryValue) => {
+
+    const isNamePresent = commandObject.some((obj) => obj.name === commandName);
+    if(isNamePresent===true){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Duplicate Command. Cannot be added',
+        footer: ''
+      })
+      return;
+    }
+
     let url = "http://localhost:5000/settings/commands";
     axios
       .post(url, {
@@ -154,7 +166,28 @@ const CommandPage = () => {
   };
 
 
-  const editHandler=(command,binaryValue,id)=>{
+  const editHandler=(command,binaryValue,id,oldValue)=>{
+
+    if(command!==oldValue.name){
+      const isNamePresent = commandObject.some((obj) => obj.name === command);
+      if(isNamePresent===true){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Duplicate Command. Cannot be edited',
+          footer: ''
+        })
+        return;
+      }
+    }else if(binaryValue===oldValue.binaryValue){
+      Swal.fire({
+        icon: 'success',
+        title: 'Oops...',
+        text: 'You entered the current Command',
+        footer: ''
+      })
+      return;
+    }
     const url = "http://localhost:5000/settings/commands/"  + id;
     const editedItem={
       id:id,

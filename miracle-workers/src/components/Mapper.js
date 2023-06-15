@@ -26,7 +26,7 @@ const Mapper = (props) => {
     console.log("vision plus");
     console.log("hello", selectedDataSheet);
     axios
-      .get("http://localhost:8000/data/getDatasheets")
+      .get("http://localhost:5000/data/getDatasheets")
       .then(function (response) {
         setDataSheet(response.data.dataPageNames);
         console.log("LOL", response.data);
@@ -60,7 +60,7 @@ const Mapper = (props) => {
     console.log("GG", event.target.value);
     setSelectedDataSheet(event.target.value);
     axios
-      .get("http://localhost:8000/data/datasheets/getHeadings", {
+      .get("http://localhost:5000/data/datasheets/getHeadings", {
         params: {
           dataPageName: event.target.value,
         },

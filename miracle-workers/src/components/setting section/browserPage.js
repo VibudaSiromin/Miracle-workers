@@ -308,7 +308,7 @@ const BrowserPage = () => {
       Swal.fire({
         icon: 'error',
         title: 'Oops...',
-        text: 'Duplicate Value',
+        text: 'Duplicate Browser. Cannot be added',
         footer: ''
       })
       return;
@@ -360,11 +360,33 @@ const BrowserPage = () => {
   //   });
   // }
 
-  const editHandler = (item, id) => {
+  const editHandler = (newItem, id,oldValue) => {
+    
+    if(newItem!==oldValue){
+      const isNamePresent = item.some((obj) => obj.name === newItem);
+      if(isNamePresent===true){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Duplicate Browser. Cannot be edited',
+          footer: ''
+        })
+        return;
+      }
+    }else{
+      Swal.fire({
+        icon: 'success',
+        title: 'Oops...',
+        text: 'You entered the current Browser',
+        footer: ''
+      })
+      return;
+    }
+
     const url = "http://localhost:5000/settings/browsers/" + id;
     const editedItem = {
       id: id,
-      editedValue: item,
+      editedValue: newItem,
     };
     axios
       .put(url, editedItem)

@@ -62,7 +62,7 @@ const TableLauncher = () => {
       console.log("LMG");
       axios
         .post(
-          "http://localhost:8000/testJunction/testManual/" +
+          "http://localhost:5000/testJunction/testManual/" +
             tname +
             "/editLauncher",
           {
@@ -80,7 +80,7 @@ const TableLauncher = () => {
   const getDataFromStore = () => {
     axios
       .get(
-        "http://localhost:8000/testJunction/testManual/" +
+        "http://localhost:5000/testJunction/testManual/" +
           tname +
           "/getLauncherContent",
         {

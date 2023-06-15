@@ -9,7 +9,6 @@ import "./SettingItemPage.css";
 import "./SettingItemRaw.css";
 
 const SettingItemPage = ({ settingType }) => {
-  //remove this comment after changing the name "commandObject"
 
   let logo;
 
@@ -47,59 +46,6 @@ const SettingItemPage = ({ settingType }) => {
   }, []);
 
   console.log(commandObject);
-
-  // const deleteHandler = (id, type) => {
-  //   const url = "http://localhost:5000/settings/" + type + "/" + id;
-  //   axios
-  //     .delete(url)
-  //     .then((res) => {
-  //       getData();
-  //       console.log("kll");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-  // const ref = useRef();
-
-  // const addItemHandler = () => {
-  //   ref.current.open();
-  // };
-  console.log(commandObject);
-
-  // const addNewItemHandler = (value) => {
-  //   let url = "http://localhost:5000/settings/" + settingType;
-  //   axios
-  //     .post(url, {
-  //       newValue: value,
-  //     })
-  //     .then((res) => {
-  //       getData();
-  //       console.log("inserted");
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
-
-
-  // const editHandler=(id,type,value)=>{
-  //   const url = "http://localhost:5000/settings/" + type + "/" + id;
-  //   const editedItem={
-  //     id:id,
-  //     editedValue:value
-  //   }
-  //   axios
-  //   .put(url,editedItem)
-  //   .then((res) => {
-  //     getData();
-  //     console.log("kll");
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-  // }
 
   return (
     <div className="row">

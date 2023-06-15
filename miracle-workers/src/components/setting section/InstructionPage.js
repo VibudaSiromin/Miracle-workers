@@ -122,11 +122,23 @@ const InstructionPage = () => {
   };
   console.log(item);
 
-  const addNewItemHandler = (item) => {
+  const addNewItemHandler = (newItem) => {
+
+    const isNamePresent = item.some((obj) => obj.name === newItem);
+    if(isNamePresent===true){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Duplicate Instruction. Cannot be added',
+        footer: ''
+      })
+      return;
+    }
+
     let url = "http://localhost:5000/settings/instructions";
     axios
       .post(url, {
-        newValue: item,
+        newValue: newItem,
       })
       .then((res) => {
         Swal.fire({
@@ -151,11 +163,33 @@ const InstructionPage = () => {
   };
 
 
-  const editHandler=(item,id)=>{
+  const editHandler=(newItem,id,oldValue)=>{
+
+    if(newItem!==oldValue){
+      const isNamePresent = item.some((obj) => obj.name === newItem);
+      if(isNamePresent===true){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Duplicate Instruction. Cannot be edited',
+          footer: ''
+        })
+        return;
+      }
+    }else{
+      Swal.fire({
+        icon: 'success',
+        title: 'Oops...',
+        text: 'You entered the current Instruction',
+        footer: ''
+      })
+      return;
+    }
+
     const url = "http://localhost:5000/settings/instructions/"  + id;
     const editedItem={
       id:id,
-      editedValue:item,
+      editedValue:newItem,
     }
     axios
     .put(url,editedItem)

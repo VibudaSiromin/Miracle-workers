@@ -124,11 +124,23 @@ const ConditionPage = () => {
   };
   console.log(item);
 
-  const addNewItemHandler = (item) => {
+  const addNewItemHandler = (newItem) => {
+
+    const isNamePresent = item.some((obj) => obj.name === newItem);
+    if(isNamePresent===true){
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Duplicate Condition. Cannot be added',
+        footer: ''
+      })
+      return;
+    }
+
     let url = "http://localhost:5000/settings/conditions";
     axios
       .post(url, {
-        newValue: item,
+        newValue: newItem,
       })
       .then((res) => {
         Swal.fire({
@@ -153,11 +165,33 @@ const ConditionPage = () => {
   };
 
 
-  const editHandler=(item,id)=>{
+  const editHandler=(newItem,id,oldValue)=>{
+
+    if(newItem!==oldValue){
+      const isNamePresent = item.some((obj) => obj.name === newItem);
+      if(isNamePresent===true){
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Duplicate Condition. Cannot be edited',
+          footer: ''
+        })
+        return;
+      }
+    }else{
+      Swal.fire({
+        icon: 'success',
+        title: 'Oops...',
+        text: 'You entered the current Condition',
+        footer: ''
+      })
+      return;
+    }
+
     const url = "http://localhost:5000/settings/conditions/"  + id;
     const editedItem={
       id:id,
-      editedValue:item,
+      editedValue:newItem,
     }
     axios
     .put(url,editedItem)

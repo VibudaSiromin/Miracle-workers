@@ -24,7 +24,7 @@ export default function Login() {
     const { email, password } = data;
 
     console.log(email, password);
-    fetch("http://localhost:8000/login-user", {
+    fetch("http://localhost:5000/login-user", {
       method: "POST",
       crossDomain: true,
       headers: {

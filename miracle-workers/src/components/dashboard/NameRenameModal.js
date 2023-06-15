@@ -21,7 +21,7 @@ const NameRenameModal = (props, ref) => {
     if (Object.keys(props.currentURLSection).length !== 0) {
       console.log("dino", props.currentURLSection);
       const { to } = props.currentURLSection;
-      const URL = "http://localhost:8000" + to;
+      const URL = "http://localhost:5000" + to;
       const URLSections = URL.split("/");
       const pageName = URLSections.slice(-1)[0];
       setfieldValue(pageName);
@@ -60,13 +60,13 @@ const NameRenameModal = (props, ref) => {
     if (props.indexOfSection === 2) {
       //**************Manuall MODE Implemented. JSON MODE should be implemented ***************//
       axios
-        .get("http://localhost:8000/testPages")
+        .get("http://localhost:5000/testPages")
         .then((res) => {
           const availableTestPageNames = res.data.testPageNames;
           console.log("Jaguar222", pageNameBeforeRenaming);
           if (fieldValue === pageNameBeforeRenaming) {
             axios
-              .patch("http://localhost:8000/testJunction/renamePageName", {
+              .patch("http://localhost:5000/testJunction/renamePageName", {
                 newTestPageName: fieldValue,
                 pageIndex: props.renamePageIndex,
               })
@@ -88,7 +88,7 @@ const NameRenameModal = (props, ref) => {
               }
             }
             axios
-              .patch("http://localhost:8000/testJunction/renamePageName", {
+              .patch("http://localhost:5000/testJunction/renamePageName", {
                 newTestPageName: fieldValue,
                 pageIndex: props.renamePageIndex,
               })
@@ -108,13 +108,13 @@ const NameRenameModal = (props, ref) => {
       console.log("cop", URLSection);
       if (URLSection[2] === "dataExcel") {
         axios
-          .get("http://localhost:8000/data/getDatasheets")
+          .get("http://localhost:5000/data/getDatasheets")
           .then((res) => {
             const availableDataPageNames = res.data.dataPageNames;
             console.log("Jaguar222", pageNameBeforeRenaming);
             if (fieldValue === pageNameBeforeRenaming) {
               axios
-                .patch("http://localhost:8000/dataJunction/renamePageName", {
+                .patch("http://localhost:5000/dataJunction/renamePageName", {
                   newDataPageName: fieldValue + "E",
                   pageIndex: props.renamePageIndex,
                 })
@@ -138,7 +138,7 @@ const NameRenameModal = (props, ref) => {
                 }
               }
               axios
-                .patch("http://localhost:8000/dataJunction/renamePageName", {
+                .patch("http://localhost:5000/dataJunction/renamePageName", {
                   newDataPageName: fieldValue + "E",
                   pageIndex: props.renamePageIndex,
                 })
@@ -155,13 +155,13 @@ const NameRenameModal = (props, ref) => {
           });
       } else if (URLSection[2] === "data") {
         axios
-          .get("http://localhost:8000/data/getDatasheets")
+          .get("http://localhost:5000/data/getDatasheets")
           .then((res) => {
             const availableDataPageNames = res.data.dataPageNames;
             console.log("Jaguar222", pageNameBeforeRenaming);
             if (fieldValue === pageNameBeforeRenaming) {
               axios
-                .patch("http://localhost:8000/dataJunction/renamePageName", {
+                .patch("http://localhost:5000/dataJunction/renamePageName", {
                   newDataPageName: fieldValue + "M",
                   pageIndex: props.renamePageIndex,
                 })
@@ -185,7 +185,7 @@ const NameRenameModal = (props, ref) => {
                 }
               }
               axios
-                .patch("http://localhost:8000/dataJunction/renamePageName", {
+                .patch("http://localhost:5000/dataJunction/renamePageName", {
                   newDataPageName: fieldValue + "M",
                   pageIndex: props.renamePageIndex,
                 })
@@ -204,7 +204,7 @@ const NameRenameModal = (props, ref) => {
     } else if (props.indexOfSection === 4) {
       //component section
       axios
-        .get("http://localhost:8000/data/getDatasheets")
+        .get("http://localhost:5000/data/getDatasheets")
         .then((res) => {
           const availableDataPageNames = res.data.dataPageNames;
           console.log("Jaguar", availableDataPageNames);
@@ -230,13 +230,13 @@ const NameRenameModal = (props, ref) => {
     } else if (props.indexOfSection === 5) {
       //sectionName='Locator';
       axios
-        .get("http://localhost:8000/locators")
+        .get("http://localhost:5000/locators")
         .then((res) => {
           const availableLocatorPageNames = res.data.locatorsPageNames;
           console.log("Jaguar222", pageNameBeforeRenaming);
           if (fieldValue === pageNameBeforeRenaming) {
             axios
-              .patch("http://localhost:8000/locators/renamePageName", {
+              .patch("http://localhost:5000/locators/renamePageName", {
                 newLocatorPageName: fieldValue,
                 pageIndex: props.renamePageIndex,
               })
@@ -258,7 +258,7 @@ const NameRenameModal = (props, ref) => {
               }
             }
             axios
-              .patch("http://localhost:8000/locators/renamePageName", {
+              .patch("http://localhost:5000/locators/renamePageName", {
                 newLocatorPageName: fieldValue,
                 pageIndex: props.renamePageIndex,
               })

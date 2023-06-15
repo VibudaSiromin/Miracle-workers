@@ -39,7 +39,7 @@
 //       e.preventDefault();
 
 //       console.log(username, email, password);
-//       fetch("http://localhost:8000/register", {
+//       fetch("http://localhost:5000/register", {
 //         method: "POST",
 //         crossDomain: true,
 //         headers: {
@@ -215,7 +215,7 @@ export default function SignUp() {
       alert("Invalid Admin");
     } else {
       console.log(username, email, password);
-      fetch("http://localhost:8000/register", {
+      fetch("http://localhost:5000/register", {
         method: "POST",
         crossDomain: true,
         headers: {

@@ -45,7 +45,7 @@ const NameAssignModal = (props, ref) => {
     //check whether any page duplications
     if (props.indexOfSection === 2) {
       axios
-        .get("http://localhost:8000/testPages")
+        .get("http://localhost:5000/testPages")
         .then((res) => {
           const availableTestPageNames = res.data.testPageNames;
           console.log("Jaguar", availableTestPageNames);
@@ -70,7 +70,7 @@ const NameAssignModal = (props, ref) => {
         });
     } else if (props.indexOfSection === 3) {
       axios
-        .get("http://localhost:8000/data/getDatasheets")
+        .get("http://localhost:5000/data/getDatasheets")
         .then((res) => {
           const availableDataPageNames = res.data.dataPageNames;
           console.log("Jaguar", availableDataPageNames);
@@ -96,7 +96,7 @@ const NameAssignModal = (props, ref) => {
       //sectionName='Data';
     } else if (props.indexOfSection === 4) {
       axios
-        .get("http://localhost:8000/data/getDatasheets")
+        .get("http://localhost:5000/data/getDatasheets")
         .then((res) => {
           const availableDataPageNames = res.data.dataPageNames;
           console.log("Jaguar", availableDataPageNames);
@@ -123,7 +123,7 @@ const NameAssignModal = (props, ref) => {
       //sectionName='Locator';
 
       axios
-        .get("http://localhost:8000/locators")
+        .get("http://localhost:5000/locators")
         .then((res) => {
           const availableLocatorPageNames = res.data.locatorsPageNames;
           console.log("porche", availableLocatorPageNames);

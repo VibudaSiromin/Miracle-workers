@@ -15,8 +15,8 @@ const CommandRaw = ({ command,onDelete,onCommandEdit,userType }) => {
     ref.current.open();
   }
 
-  const editHandler=(command,binaryValue,id)=>{
-    onCommandEdit(command,binaryValue,id);
+  const editHandler=(command,binaryValue,id,oldValue)=>{
+    onCommandEdit(command,binaryValue,id,oldValue);
   }
 
   const deleteHandler=() => {

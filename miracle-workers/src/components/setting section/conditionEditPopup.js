@@ -37,7 +37,7 @@ const ConditionEditPopup = ({item, onEdit}, ref) => {
   }));
 
   const onSubmitHandler = (data) => {
-    onEdit(data.condition,item.id);
+    onEdit(data.condition,item.id,item.name);
     setEnablePopup(false);
   };
 

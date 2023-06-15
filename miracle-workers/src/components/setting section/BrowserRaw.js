@@ -14,8 +14,8 @@ const BrowserRaw = ({ item,onDelete,onItemEdit ,userType}) => {
     ref.current.open();
   }
 
-  const editHandler=(item,id)=>{
-    onItemEdit(item,id);
+  const editHandler=(item,id,oldValue)=>{
+    onItemEdit(item,id,oldValue);
   }
 
   const deleteHandler=() => {

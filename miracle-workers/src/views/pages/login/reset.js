@@ -29,7 +29,7 @@ const Reset = () => {
     setCommonError("");
     setIsLading(true);
     axios
-      .post("http://localhost:8000/forgot-password", {
+      .post("http://localhost:5000/forgot-password", {
         email: data.email,
       })
       .then(function (response) {

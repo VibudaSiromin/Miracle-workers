@@ -43,7 +43,7 @@ const Table = (props) => {
         if (currentURL === "/dataJunction/dataExcel/" + dname) {
           console.log("VEGA INO");
           axios
-            .post("http://localhost:8000/dataJunction/dataExcel/" + dname, {
+            .post("http://localhost:5000/dataJunction/dataExcel/" + dname, {
               editedData: props.initialData,
               type: "Excel",
             })
@@ -69,7 +69,7 @@ const Table = (props) => {
   //trigger when click on locator sheet links
   const getLocatorsByPage = () => {
     if (lname) {
-      const url = "http://localhost:8000/locators/" + lname;
+      const url = "http://localhost:5000/locators/" + lname;
       axios
         .get(url)
         .then((res) => {
@@ -89,7 +89,7 @@ const Table = (props) => {
     const currentURL = location.pathname;
     if (currentURL === "/dataJunction/data/" + dname) {
       axios
-        .get("http://localhost:8000/dataJunction/data/" + dname, {
+        .get("http://localhost:5000/dataJunction/data/" + dname, {
           params: {
             dataPageName: dname + "M",
           },
@@ -106,7 +106,7 @@ const Table = (props) => {
     if (currentURL === "/dataJunction/dataExcel/" + dname) {
       console.log("Thunder");
       axios
-        .get("http://localhost:8000/dataJunction/dataExcel/" + dname, {
+        .get("http://localhost:5000/dataJunction/dataExcel/" + dname, {
           params: {
             dataPageName: dname + "E",
           },
@@ -126,7 +126,7 @@ const Table = (props) => {
     const currentURL = location.pathname;
     if (currentURL === "/testJunction/testManual/" + tname) {
       axios
-        .get("http://localhost:8000/testJunction/testManual/" + tname, {
+        .get("http://localhost:5000/testJunction/testManual/" + tname, {
           params: {
             testPageName: tname + "M",
           },
@@ -143,7 +143,7 @@ const Table = (props) => {
     if (currentURL === "/testJunction/testJson/" + tname) {
       // console.log("Thunder");
       // axios
-      // .get('http://localhost:8000/dataJunction/dataExcel/'+dname,{
+      // .get('http://localhost:5000/dataJunction/dataExcel/'+dname,{
       //   params:{
       //     dataPageName:dname+"E"
       //   }
@@ -180,7 +180,7 @@ const Table = (props) => {
       if (currentURL === "/testJunction/testManual/" + tname) {
         console.log("air cover");
         axios
-          .post("http://localhost:8000/testJunction/testManual/" + tname, {
+          .post("http://localhost:5000/testJunction/testManual/" + tname, {
             editedTestData: newTableData,
             type: "Manual",
           })
@@ -191,7 +191,7 @@ const Table = (props) => {
             console.log(err);
           });
       }
-      const url = "http://localhost:8000/locators/" + tname;
+      const url = "http://localhost:5000/locators/" + tname;
 
       console.log("Gooooo", url);
       axios
@@ -206,7 +206,7 @@ const Table = (props) => {
         });
     }
     if (props.callingFrom === "component") {
-      const url = "http://localhost:8000/locators/" + cname;
+      const url = "http://localhost:5000/locators/" + cname;
       const newTableData = [...testSteps, tableData];
       console.log("Gooooo", url);
       axios
@@ -228,7 +228,7 @@ const Table = (props) => {
   //update when click on 'ADD' btn
   const updateGeneralData = (tableData) => {
     if (props.callingFrom == "locator") {
-      const url = "http://localhost:8000/locators/" + lname;
+      const url = "http://localhost:5000/locators/" + lname;
       const newTableData = [...testSteps, tableData];
       settestSteps(newTableData);
       console.log("Gooooo", url);
@@ -250,7 +250,7 @@ const Table = (props) => {
         console.log("hello hell");
         console.log("examine updateGeneralData");
         axios
-          .post("http://localhost:8000/dataJunction/data/" + dname, {
+          .post("http://localhost:5000/dataJunction/data/" + dname, {
             editedData: newTableData,
             type: "Mannual",
           })
@@ -265,7 +265,7 @@ const Table = (props) => {
         const newTableData = [...testSteps, tableData];
         // settestSteps(newTableData);
         axios
-          .post("http://localhost:8000/dataJunction/dataExcel/" + dname, {
+          .post("http://localhost:5000/dataJunction/dataExcel/" + dname, {
             editedData: newTableData,
             type: "Excel",
           })
@@ -284,7 +284,7 @@ const Table = (props) => {
   const editHandler = (editedTableData, index) => {
     console.log("F1");
     if (props.callingFrom === "locator") {
-      const url = "http://localhost:8000/locators/" + lname;
+      const url = "http://localhost:5000/locators/" + lname;
       const applyEditedData = [...testSteps];
       applyEditedData[index] = editedTableData;
       console.log("Gooooo", url);
@@ -311,7 +311,7 @@ const Table = (props) => {
       if (currentURL === "/dataJunction/data/" + dname) {
         console.log("examine editHandler");
         axios
-          .post("http://localhost:8000/dataJunction/data/" + dname, {
+          .post("http://localhost:5000/dataJunction/data/" + dname, {
             editedData: applyEditedData, //************ */
             type: "Mannual",
           })
@@ -321,7 +321,7 @@ const Table = (props) => {
           });
       } else if ((currentURL === "/dataJunction/dataExcel/", dname)) {
         axios
-          .post("http://localhost:8000/dataJunction/dataExcel/" + dname, {
+          .post("http://localhost:5000/dataJunction/dataExcel/" + dname, {
             editedData: applyEditedData, //************ */
             type: "Excel",
           })
@@ -339,7 +339,7 @@ const Table = (props) => {
 
       if (currentURL === "/testJunction/testManual/" + tname) {
         axios
-          .post("http://localhost:8000/testJunction/testManual/" + tname, {
+          .post("http://localhost:5000/testJunction/testManual/" + tname, {
             editedTestData: applyEditedData, //************ */
             type: "Manual",
           })
@@ -349,7 +349,7 @@ const Table = (props) => {
           });
       } else if ((currentURL === "/testJunction/testJson/", tname)) {
         axios
-          .post("http://localhost:8000/testJunction/testJson/" + tname, {
+          .post("http://localhost:5000/testJunction/testJson/" + tname, {
             editedTestData: applyEditedData, //************ */
             type: "Json",
           })
@@ -372,7 +372,7 @@ const Table = (props) => {
   const deleteHandler = (index) => {
     console.log("Running delete handler");
     if (props.callingFrom === "locator") {
-      const url = "http://localhost:8000/locators/" + lname;
+      const url = "http://localhost:5000/locators/" + lname;
       const tableDataAfterDelete = [...testSteps];
       tableDataAfterDelete.splice(index, 1);
       axios
@@ -394,7 +394,7 @@ const Table = (props) => {
       if (currentURL === "/dataJunction/data/" + dname) {
         console.log("examine deleteHandler");
         axios
-          .post("http://localhost:8000/dataJunction/data/" + dname, {
+          .post("http://localhost:5000/dataJunction/data/" + dname, {
             editedData: tableDataAfterDelete,
             type: "Mannual",
           })
@@ -404,7 +404,7 @@ const Table = (props) => {
           });
       } else if (currentURL === "/dataJunction/dataExcel/" + dname) {
         axios
-          .post("http://localhost:8000/dataJunction/dataExcel/" + dname, {
+          .post("http://localhost:5000/dataJunction/dataExcel/" + dname, {
             editedData: tableDataAfterDelete,
             type: "Excel",
           })
@@ -425,7 +425,7 @@ const Table = (props) => {
       if (currentURL === "/testJunction/testManual/" + tname) {
         console.log("examine deleteHandler");
         axios
-          .post("http://localhost:8000/testJunction/testManual/" + tname, {
+          .post("http://localhost:5000/testJunction/testManual/" + tname, {
             editedTestData: tableDataAfterDelete,
             type: "Manual",
           })
@@ -435,7 +435,7 @@ const Table = (props) => {
           });
       } else if (currentURL === "/testJunction/testJson/" + tname) {
         axios
-          .post("http://localhost:8000/testJunction/testJson/" + tname, {
+          .post("http://localhost:5000/testJunction/testJson/" + tname, {
             editedData: tableDataAfterDelete,
             type: "Json",
           })
@@ -457,7 +457,7 @@ const Table = (props) => {
     console.log(numOfRaws);
     if (upOrDown === 0 && rawIndex !== 0) {
       if (props.callingFrom === "locator") {
-        const url = "http://localhost:8000/locators/" + lname;
+        const url = "http://localhost:5000/locators/" + lname;
         dataAfterArrowClick[rawIndex - 1] = presentData[rawIndex];
         dataAfterArrowClick[rawIndex] = presentData[rawIndex - 1];
         axios
@@ -473,7 +473,7 @@ const Table = (props) => {
       }
 
       if (props.callingFrom === "data") {
-        const url = "http://localhost:8000/data/" + dname;
+        const url = "http://localhost:5000/data/" + dname;
         dataAfterArrowClick[rawIndex - 1] = presentData[rawIndex];
         dataAfterArrowClick[rawIndex] = presentData[rawIndex - 1];
         axios
@@ -494,7 +494,7 @@ const Table = (props) => {
     }
     if (upOrDown === 1 && rawIndex !== numOfRaws - 1) {
       if (props.callingFrom === "locator") {
-        const url = "http://localhost:8000/locators/" + lname;
+        const url = "http://localhost:5000/locators/" + lname;
         dataAfterArrowClick[rawIndex] = presentData[rawIndex + 1];
         dataAfterArrowClick[rawIndex + 1] = presentData[rawIndex];
         axios
@@ -510,7 +510,7 @@ const Table = (props) => {
       }
 
       if (props.callingFrom === "data") {
-        const url = "http://localhost:8000/data/" + dname;
+        const url = "http://localhost:5000/data/" + dname;
         dataAfterArrowClick[rawIndex - 1] = presentData[rawIndex];
         dataAfterArrowClick[rawIndex] = presentData[rawIndex - 1];
         axios

@@ -93,7 +93,8 @@ const BrowserEditPopup = ({item, onEdit}, ref) => {
   }));
 
   const onSubmitHandler = (data) => {
-    onEdit(data.browser,item.id);
+    console.log(data.browser,item.id,item.name)
+    onEdit(data.browser,item.id,item.name);
     setEnablePopup(false);
   };
 

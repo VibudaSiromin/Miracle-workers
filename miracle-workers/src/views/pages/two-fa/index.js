@@ -27,7 +27,7 @@ const TwoFA = () => {
       email,
     };
     axios
-      .post("http://localhost:8000/reset-code", {
+      .post("http://localhost:5000/reset-code", {
         ...data,
       })
       .then(function (response) {

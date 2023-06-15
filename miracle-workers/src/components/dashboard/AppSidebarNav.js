@@ -50,7 +50,7 @@ export const AppSidebarNav = () => {
 
   const getLocatorPages = () => {
     axios
-      .get("http://localhost:8000/locators")
+      .get("http://localhost:5000/locators")
       .then((res) => {
         setLocatorPageNames(res.data.locatorsPageNames);
         console.log("rooooooo", res.data.locatorsPageNames);
@@ -63,7 +63,7 @@ export const AppSidebarNav = () => {
   //get available data page names as an array
   const getDataPages = () => {
     axios
-      .get("http://localhost:8000")
+      .get("http://localhost:5000")
       .then((res) => {
         setDataPageNames(res.data.dataPageNames);
         console.log("rooooooo", res.data.dataPageNames);
@@ -76,7 +76,7 @@ export const AppSidebarNav = () => {
   const getTestPages = () => {
     console.log("gothum city");
     axios
-      .get("http://localhost:8000/testPages")
+      .get("http://localhost:5000/testPages")
       .then((res) => {
         const newTestPageNames = res.data.testPageNames;
         console.log("141", newTestPageNames);
@@ -94,7 +94,7 @@ export const AppSidebarNav = () => {
 
   // const getDataPages=()=>{
   //   axios
-  //   .get('http://localhost:8000/data')
+  //   .get('http://localhost:5000/data')
   //   .then((res)=>{
   //     setDataPageNames(res.data.dataPageNames);
   //     console.log("rooooooo",res.data.dataPageNames)
@@ -263,7 +263,7 @@ export const AppSidebarNav = () => {
           //   console.log(err);
           // });
           axios
-            .post("http://localhost:8000/data", { pageName: fieldValue })
+            .post("http://localhost:5000/data", { pageName: fieldValue })
             .then((res) => {
               getDataPages();
             })
@@ -290,7 +290,7 @@ export const AppSidebarNav = () => {
         //add new pageName to Locator section
         if (item.name === "Locator") {
           axios
-            .post("http://localhost:8000/locators", { pageName: fieldValue })
+            .post("http://localhost:5000/locators", { pageName: fieldValue })
             .then((res) => {
               getLocatorPages();
             })
@@ -314,7 +314,7 @@ export const AppSidebarNav = () => {
         //add new pageName to Data Section
 
         axios
-          .post("http://localhost:8000/dataJunction/dataExcel", {
+          .post("http://localhost:5000/dataJunction/dataExcel", {
             pageName: dataPageName + "E",
           })
           .then((res) => {
@@ -334,7 +334,7 @@ export const AppSidebarNav = () => {
         //add new pageName to Data Section
 
         axios
-          .post("http://localhost:8000/dataJunction/data", {
+          .post("http://localhost:5000/dataJunction/data", {
             pageName: dataPageName + "M",
           })
           .then((res) => {
@@ -354,7 +354,7 @@ export const AppSidebarNav = () => {
         //add new pageName to Data Section
 
         axios
-          .post("http://localhost:8000/testJunction/testJson", {
+          .post("http://localhost:5000/testJunction/testJson", {
             pageName: testPageName + "J",
           })
           .then((res) => {
@@ -365,7 +365,7 @@ export const AppSidebarNav = () => {
           });
 
         // axios
-        // .post('http://localhost:8000/testJunction/testJson',{pageName:testPageName+"J"})
+        // .post('http://localhost:5000/testJunction/testJson',{pageName:testPageName+"J"})
         // .then((res)=>{
         //   getTestPages();
         // })
@@ -392,7 +392,7 @@ export const AppSidebarNav = () => {
         //add new pageName to Data Section
 
         axios
-          .post("http://localhost:8000/testJunction/testManual", {
+          .post("http://localhost:5000/testJunction/testManual", {
             pageName: testPageName + "M",
           })
           .then((res) => {
@@ -498,7 +498,7 @@ export const AppSidebarNav = () => {
     // event.stopPropagation();
     // event.preventDefault();
 
-    const URL = "http://localhost:8000" + to;
+    const URL = "http://localhost:5000" + to;
     console.log("bliss", URL);
     if (secondChar === "t") {
       console.log("mk4");
@@ -507,7 +507,7 @@ export const AppSidebarNav = () => {
       console.log("ronn", urlSections.slice(-1)[0]);
 
       axios
-        .delete("http://localhost:8000/testJunction/testManual/deletePage", {
+        .delete("http://localhost:5000/testJunction/testManual/deletePage", {
           params: {
             testPageName: pageName,
           },
@@ -525,7 +525,7 @@ export const AppSidebarNav = () => {
       console.log("ronn", urlSections.slice(-1)[0]);
 
       axios
-        .delete("http://localhost:8000/dataJunction/deletePage", {
+        .delete("http://localhost:5000/dataJunction/deletePage", {
           params: {
             dataPageName: pageName,
           },
@@ -543,7 +543,7 @@ export const AppSidebarNav = () => {
       console.log("ronn", urlSections.slice(-1)[0]);
 
       axios
-        .delete("http://localhost:8000/testJunction/testManual/deletePage", {
+        .delete("http://localhost:5000/testJunction/testManual/deletePage", {
           params: {
             testPageName: pageName,
           },
@@ -561,7 +561,7 @@ export const AppSidebarNav = () => {
       console.log("ronn", urlSections.slice(-1)[0]);
 
       axios
-        .delete("http://localhost:8000/testJunction/testManual/deletePage", {
+        .delete("http://localhost:5000/testJunction/testManual/deletePage", {
           params: {
             testPageName: pageName,
           },
@@ -583,7 +583,7 @@ export const AppSidebarNav = () => {
     //     const lengthOfUrl=to.length;
     //     const pageName=to.slice(9,lengthOfUrl);
     //     console.log("Yoooo",pageName);
-    //     const url='http://localhost:8000/locators/'+pageName
+    //     const url='http://localhost:5000/locators/'+pageName
     //     axios
     //     .delete(url)
     //     .then((res)=>{
@@ -597,7 +597,7 @@ export const AppSidebarNav = () => {
     //   //   lengthOfUrl=to.length;
     //   //   pageName=to.slice(6,lengthOfUrl);
     //   //   console.log("Yoooo",pageName);
-    //   //   url='http://localhost:8000/data/'+pageName
+    //   //   url='http://localhost:5000/data/'+pageName
     //   //   axios
     //   //   .delete(url)
     //   //   .then((res)=>{
@@ -617,7 +617,7 @@ export const AppSidebarNav = () => {
     event.preventDefault();
     setURLSection(rest);
     const { to } = rest;
-    const URL = "http://localhost:8000" + to;
+    const URL = "http://localhost:5000" + to;
     const urlSections = URL.split("/");
     const pageName = urlSections.slice(-1)[0];
     modalRefD.current.log(
@@ -627,7 +627,7 @@ export const AppSidebarNav = () => {
 
   const pagesRenameHandler = () => {
     const { to } = URLSection;
-    const URL = "http://localhost:8000" + to;
+    const URL = "http://localhost:5000" + to;
     const urlSections = URL.split("/");
     if (urlSections[3] === "testJunction") {
       setIndexOfSection(2);
@@ -652,7 +652,7 @@ export const AppSidebarNav = () => {
     console.log("puma", index);
     setIndexOfRenamePage(index);
     const { to } = rest;
-    const URL = "http://localhost:8000" + to;
+    const URL = "http://localhost:5000" + to;
     const urlSections = URL.split("/");
     const pageName = urlSections.slice(-1)[0];
     modalRefRename.current.log(

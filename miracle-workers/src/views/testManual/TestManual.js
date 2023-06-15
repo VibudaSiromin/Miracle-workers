@@ -11,7 +11,7 @@ const TestManual = () => {
   const getTestSuiteHeadings = () => {
     axios
       .get(
-        "http://localhost:8000/testJunction/testManual/" + tname + "/getHeading"
+        "http://localhost:5000/testJunction/testManual/" + tname + "/getHeading"
       )
       .then((res) => {
         const testTitles = res.data.getTestHeadings;

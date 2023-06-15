@@ -29,7 +29,7 @@ const Heading = (props) => {
       if (currentURL === "/dataJunction/dataExcel/" + dname) {
         axios
           .post(
-            "http://localhost:8000/dataJunction/dataExcel/" +
+            "http://localhost:5000/dataJunction/dataExcel/" +
               dname +
               "/addHeading",
             {
@@ -74,7 +74,7 @@ const Heading = (props) => {
     if (currentURL === "/dataJunction/data/" + dname) {
       axios
         .post(
-          "http://localhost:8000/dataJunction/data/" + dname + "/addHeading",
+          "http://localhost:5000/dataJunction/data/" + dname + "/addHeading",
           {
             recentHeading: valueList,
             type: "Mannual",
@@ -104,7 +104,7 @@ const Heading = (props) => {
       console.log("Mark1");
       axios
         .post(
-          "http://localhost:8000/dataJunction/dataExcel/" +
+          "http://localhost:5000/dataJunction/dataExcel/" +
             dname +
             "/addHeading",
           {
@@ -141,7 +141,7 @@ const Heading = (props) => {
     if (currentURL === "/dataJunction/data/" + dname) {
       axios
         .post(
-          "http://localhost:8000/dataJunction/data/" + dname + "/removeHeading",
+          "http://localhost:5000/dataJunction/data/" + dname + "/removeHeading",
           {
             currentHeading: slicingHeading,
             type: "Mannual",
@@ -166,7 +166,7 @@ const Heading = (props) => {
     } else if (currentURL === "/dataJunction/dataExcel/" + dname) {
       axios
         .post(
-          "http://localhost:8000/dataJunction/dataExcel/" +
+          "http://localhost:5000/dataJunction/dataExcel/" +
             dname +
             "/removeHeading",
           {
@@ -202,7 +202,7 @@ const Heading = (props) => {
 
       axios
         .get(
-          "http://localhost:8000/dataJunction/data/" + dname + "/getHeading",
+          "http://localhost:5000/dataJunction/data/" + dname + "/getHeading",
           {
             params: {
               dataPageName: dname + "M",
@@ -233,7 +233,7 @@ const Heading = (props) => {
     if (currentURL === "/dataJunction/dataExcel/" + dname) {
       axios
         .get(
-          "http://localhost:8000/dataJunction/dataExcel/" +
+          "http://localhost:5000/dataJunction/dataExcel/" +
             dname +
             "/getHeading",
           {

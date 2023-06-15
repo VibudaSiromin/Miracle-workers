@@ -50,7 +50,7 @@ const InstructionEditPopup = ({item, onEdit}, ref) => {
   }));
 
   const onSubmitHandler = (data) => {
-    onEdit(data.instruction,item.id);
+    onEdit(data.instruction,item.id,item.name);
     setEnablePopup(false);
   };
 
