@@ -30,9 +30,9 @@ const CommandRaw = ({ command,onDelete,onCommandEdit,userType }) => {
         style={{ marginLeft: "18px", marginTop: "7px", color: "white" }}
       >
           {command.name}
-          {command.binaryValue[0]=="1"?"True":"False"}
+          {/* {command.binaryValue[0]=="1"?"True":"False"}
           {command.binaryValue[1]=="1"?"True":"False"}
-          {command.binaryValue[2]=="1"?"True":"False"}
+          {command.binaryValue[2]=="1"?"True":"False"} */}
       </span>
 
         {
@@ -43,11 +43,12 @@ const CommandRaw = ({ command,onDelete,onCommandEdit,userType }) => {
           command={command}
           onEdit={editHandler}
           />
-          <td className="table-data">
+          {/* <span className="float-right">
+            {command.binaryValue}
+          </span> */}
             <MdModeEdit onClick={()=>onEditClickHandler()} className="float-right" style={{ marginRight: "18px", marginTop: "7px", color: "#73FBFD" }}/>
             {" "}
-            <MdDeleteForever onClick={()=>deleteHandler()} className="float-right"style={{ marginRight: "18px", marginTop: "7px", color: "red"}}/>
-          </td>
+            <MdDeleteForever onClick={()=>deleteHandler()} className="float-right" style={{ marginRight: "18px", marginTop: "7px", color: "red"}}/>
           </span>
 
           :null

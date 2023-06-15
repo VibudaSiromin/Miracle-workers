@@ -1,7 +1,7 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import ModalDialog from "./components/PopUpWindow";
-import Table from "./components/Table";
+// import Table from "./components/Table";
 import { Button } from "react-bootstrap";
 import OutputJSON from './components/OutputJSON';
 import Card from './components/Card';

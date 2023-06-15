@@ -247,13 +247,13 @@ const CommandPage = () => {
                 }
             </div>
       </div>
-          <tr>
+          {/* <tr>
               <th>Command</th>
               <th>Locator</th>
               <th>Data</th>
               <th>Brach Selection</th>
               {userType=="Admin"?<th>Actions</th>:null}
-          </tr>
+          </tr> */}
         <div className="row" style={{ paddingLeft: "16px" }}>
           <div className="col-lg-10">
             {commandObject.map((command) => (

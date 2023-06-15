@@ -260,40 +260,39 @@ function ModalDialog(props,ref) {
     return setToggleTwoModal(false);
   }
   const TerminateModalTwo = () => {
-    setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
+    // setModalTwoDataSet(Object.assign(modalOneDataSet,testStepsData2));
     console.log(modalTwoDataSet)
-    const {data,locator,branchSelection}=modalTwoDataSet;
-    setDataError("");
-    setLocatorError("");
-    setBranchError("");
+    const {data,locator,branchSelection}=testStepsData2;
     switch(commandBasedFields[1]){
-      case "001":
-        if(branchSelection==undefined){
-          setBranchError("Branch Selection cannot be empty");
-          return;
-        }
-        // break;
-      case "010":
-        if(locator==undefined){
-          setLocatorError("Locator cannot be empty");
-          return;
-        }
-        // break;
+      // case "001":
+      //   if(branchSelection==undefined){
+          
+      //     return;
+      //   }
+      //   // break;
+      // case "010":
+      //   if(locator==undefined){
+      //     setLocatorError("Locator cannot be empty");
+      //     return;
+      //   }
+      //   // break;
       case "011":
-        if(branchSelection==undefined){
-          setBranchError("Branch Selection cannot be empty");
-
+        if(branchSelection===undefined && data!==undefined){
+          setModalTwoDataSet({...modalTwoDataSet,"data":data})
+        if(data===undefined && branchSelection!==undefined){
+          setModalTwoDataSet({...modalTwoDataSet,"branchSelection":branchSelection})
         }
-        if(locator==undefined){
-          setLocatorError("Locator cannot be empty");
+        if(data!==undefined && branchSelection!==undefined){
+          setModalTwoDataSet(testStepsData2);
         }
-        break;
-      case "100":
-        if(data==undefined){
-          setDataError("Data cannot be empty");
-          return;
-        }
-        // break;
+        return;
+      }
+      // case "100":
+      //   if(data==undefined){
+      //     setDataError("Data cannot be empty");
+      //     return;
+      //   }
+      //   // break;
       case "101":
         if(data==undefined){
           setDataError("Data cannot be empty");
@@ -321,8 +320,8 @@ function ModalDialog(props,ref) {
           setBranchError("Branch Selection be empty");
         }
         break;
-    }
-      // return setToggleTwoModal(false);
+    
+        }  // return setToggleTwoModal(false);
   };
 
   const NextStep = () => {
@@ -334,11 +333,13 @@ function ModalDialog(props,ref) {
 
       if(lname[0]==='L'){
         const {"Locator Name":name,"Locator Value":value}=generalPurposeInputData
-        if(name===undefined){
+        if(name===undefined && value !==undefined){
           setModalOneGeneralDataSet({...modalOneGeneralDataSet,"Locator Value":value})
-        }else if(value==undefined){
+        }
+        if(value===undefined && name !==undefined){
           setModalOneGeneralDataSet({...modalOneGeneralDataSet,"Locator Name":name})
-        }else{
+        }
+        if(value!==undefined && name!==undefined){
           setModalOneGeneralDataSet(generalPurposeInputData);
         }
         return;
@@ -376,11 +377,11 @@ function ModalDialog(props,ref) {
             if(lname[0]==="L"){
                 const {"Locator Name":name,"Locator Value":value}=modalOneGeneralDataSet
                 console.log(modalOneGeneralDataSet)
-                if(name===undefined){
+                if(name===undefined || name===""){
                   setLocNameErr("Locator name cannot be empty")
                   console.log("aaaaa")
                 }
-                if(value===undefined){
+                if(value===undefined|| value===""){
                   setLocValue("Locator Value cannot be empty")
                   console.log("aaaaa")
                 }
@@ -405,13 +406,86 @@ function ModalDialog(props,ref) {
   const submitHandlerTwo = (event) => {
     event.preventDefault();
     if(props.enableChainPopUps===true){
-      if(dataError=="" && locatorError=="" && branchError==""){
-        props.saveNewData(modalTwoDataSet);
-        console.log("kkkkkkk")
-        setToggleTwoModal(false)
+      setDataError("");
+      setLocatorError("");
+      setBranchError("");
+      const {data,locator,branchSelection}=modalTwoDataSet;
+      console.log(modalTwoDataSet)
+      switch(commandBasedFields[1]){
+        // case "001":
+        //   if(branchSelection==undefined){
+            
+        //     return;
+        //   }
+        //   // break;
+        // case "010":
+        //   if(locator==undefined){
+        //     setLocatorError("Locator cannot be empty");
+        //     return;
+        //   }
+        //   // break;
+        case "011":
+          console.log(modalTwoDataSet)
+          if(data===undefined || data===""){
+            setDataError("Data cannot be empty")
+            console.log("aaaaa")
+          }
+          if(branchSelection===undefined|| branchSelection===""){
+            setBranchError("Branch Selection cannot be empty")
+            console.log("aaaaa")
+          }
+          if(data==undefined || data==="" || branchSelection===undefined|| branchSelection===""){
+            return;
+          }
+          const allDataSet=(Object.assign(modalOneDataSet,modalTwoDataSet));
+          console.log(allDataSet)
+          props.saveNewData(allDataSet);
+          console.log("kkkkkkk")
+          setToggleTwoModal(false)
+
+        // case "100":
+        //   if(data==undefined){
+        //     setDataError("Data cannot be empty");
+        //     return;
+        //   }
+        //   // break;
+        // case "101":
+        //   if(data==undefined){
+        //     setDataError("Data cannot be empty");
+        //   }
+        //   if(branchSelection==undefined){
+        //     setBranchError("Branch Selection be empty");
+        //   }
+        //   break;
+        // case "110":
+        //   if(data==undefined){
+        //     setDataError("Data cannot be empty");
+        //   }
+        //   if(locator==undefined){
+        //     setLocatorError("Locator cannot be empty");
+        //   }
+        //   break;
+        // case "111":
+        //   if(data==undefined){
+        //     setDataError("Data cannot be empty");
+        //   }
+        //   if(locator==undefined){
+        //     setLocatorError("Locator cannot be empty");
+        //   }
+        //   if(branchSelection==undefined){
+        //     setBranchError("Branch Selection be empty");
+        //   }
+        //   break;
+      
+        // return setToggleTwoModal(false);
+      };
+      
+        // props.saveNewData(modalTwoDataSet);
+        // console.log("kkkkkkk")
+        // setToggleTwoModal(false)
       }
 
-    }
+    
   };
 
   return (

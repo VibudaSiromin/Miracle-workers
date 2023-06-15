@@ -38,7 +38,7 @@ const BrowserRaw = ({ item,onDelete,onItemEdit ,userType}) => {
           item={item}
           onEdit={editHandler}
           />    
-          <MdModeEdit onClick={()=>onEditClickHandler()} className="float-right" style={{ marginRight: "18px", marginTop: "7px", color: "#73FBFD" }}/>
+          <MdModeEdit onClick={()=>onEditClickHandler()} className="float-right" style={{ marginRight: "18px", marginTop: "7px", color: "#73FBFD", curser:"pointer"}}/>
           {" "}
           <MdDeleteForever onClick={()=>deleteHandler()} className="float-right"style={{ marginRight: "18px", marginTop: "7px", color: "red"}} />
         </span>

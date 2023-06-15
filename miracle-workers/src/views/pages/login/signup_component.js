@@ -183,11 +183,17 @@ import "./login.scss"
 
 export default function SignUp() {
   const schema = yup.object().shape({
-    Secret_key: yup.string()
-    .when('UserType', {
+    // Secret_key: yup.string()
+    // .when('UserType', {
+    //   is: "Admin",
+    //   then: yup.string().required("Secret Key is required"),
+    // }),
+    Secret_key:yup.string().
+    when('UserType', {
       is: "Admin",
-      then: yup.string().required("Secret Key is required"),
-    }),
+      then:  (schema) => yup.string().required("Secret Key is required")
+      // otherwise: (schema) => schema.string().required("Secret Key is required"),
+    }),
     UserType: yup.string().required("User Type is required"),
     username: yup.string().required("Username is required"),
     email: yup.string().email().required("Email is required"),
@@ -259,15 +265,15 @@ export default function SignUp() {
               Sign Up
           </h3>
           <div>
-            <span
+            <p
                 style={{
-                  textAlign: "left",
+                  textAlign: "center",
                   color: "white",
                   fontWeight: "bold",
                 }}
               >
             Register As
-            </span>
+            </p>
 
             <input
               type="radio"
@@ -281,6 +287,7 @@ export default function SignUp() {
                   textAlign: "left",
                   color: "white",
                   fontWeight: "bold",
+                  paddingRight:"20px"
                 }}
               >
             User
