@@ -292,7 +292,7 @@ const PopUpInputField =(props) => {
           </div>
         )    
       }    
-    }else if(launcherDetails!==null && launcherDetails.type==='Data Driven'){
+    }else if(launcherDetails!==null && launcherDetails!==undefined && launcherDetails.type==='Data Driven'){
       return(
         <div className="form-group">
             <label>{props.title}</label>

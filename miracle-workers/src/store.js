@@ -23,8 +23,16 @@ const initialTestPageNameState = {
   testPageName:'King'
 }
 
+const initialDataPageNameState = {
+  dataPageName:''
+}
+
 const renamedPageNameState = {
   renamedPageName:'King'
+}
+
+const testAddBtnStatus = {
+  status:false
 }
 
 const commandState = {
@@ -38,6 +46,21 @@ const typeState = {
 const dataSheetState = {
   dataSheet:'sheet'
 }
+
+export const setTestAddBtnStatus = (status) => {
+  return{
+    type:'SET_TEST_ADD_BTN_STATUS',
+    payload:status
+  }
+}
+
+export const setDataSheetAtNameAssigner = (sheetName) => {
+  return{
+    type:'SET_DATA_SHEET_NAME_AT_NAME_ASSIGNER',
+    payload:sheetName
+  }
+}
+
 
 export const setDataSheet = (sheetName) => {
   return{
@@ -198,6 +221,30 @@ const getDataSheetNameReducer = (state=dataSheetState , action)=> {
   }
 }
 
+const getDataSheetAtNameAssignerReducer = (state = initialDataPageNameState ,action) => {
+  switch(action.type){
+    case  'SET_DATA_SHEET_NAME_AT_NAME_ASSIGNER':
+      return{
+        ...state,
+        dataPageName:action.payload
+      }
+      default:
+        return state;
+  }
+}
+
+
+const getTestAddBtnStatusReducer = (state = testAddBtnStatus ,action) => {
+  switch(action.type){
+    case  'SET_TEST_ADD_BTN_STATUS':
+      return{
+        ...state,
+        status:action.payload
+      }
+      default:
+        return state;
+  }
+}
 
 const nameAssignerReducer = (state = nameAssignerState, action) => {
   switch(action.type){
@@ -210,6 +257,7 @@ const nameAssignerReducer = (state = nameAssignerState, action) => {
         return state;
   }
 }
+
 
 const renameModalReducer = (state = renameState, action) => {
   switch(action.type){
@@ -233,7 +281,9 @@ const rootReducer = combineReducers({
     renameModal:renameModalReducer,
     getCommand:getCommandReducer,
     getTestType:getTestTypeReducer,
-    getDataSheetName:getDataSheetNameReducer
+    getDataSheetName:getDataSheetNameReducer,
+    getDataSheetAtNameAssigner:getDataSheetAtNameAssignerReducer,
+    getTestAddBtnStatus:getTestAddBtnStatusReducer
 })
 
 const store = createStore(rootReducer)

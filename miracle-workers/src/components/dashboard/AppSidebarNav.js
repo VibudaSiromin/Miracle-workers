@@ -380,29 +380,38 @@ export const AppSidebarNav = () => {
     console.log('Winnn');
     if(testPageName!==null){
       console.log('calling from manual test');
-      if(indexOfSection===2){//add new pageName to Data Section
-
+      if(indexOfSection===2){//add new pageName to test Section
         axios
         .post('http://localhost:5000/testJunction/testManual',{pageName:testPageName+"M"})
         .then((res)=>{
           console.log('fightclub');
-          getTestPages(); 
+          getTestPages();
+          launcherSheetBasedOnManual(); 
         })
         .catch((err) => {
           console.log(err);
         });
-
-        // const modifiedItems=items;
-        // modifiedItems[3].items.push({
-        //   component: CNavItem,
-        //   name: dataPageName,  
-        //   to: '/dataJunction/data',
-        // })
-        // setItems([...modifiedItems]);
       }
     }
     
   };
+
+  const launcherSheetBasedOnManual = () => {
+    if(testPageName!==null){
+      console.log('calling from manual test');
+     // if(indexOfSection===2){//add new pageName to Data Section
+        axios
+        .post('http://localhost:5000/launcher/createLauncherPage',{pageName:testPageName+"M"})
+        .then((res)=>{
+          // console.log('fightclub');
+          // getTestPages(); 
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+     // }
+    }
+  }
 
   //const myFunctionCalled = useSelector((state) => state.addDataSheetName.myFunctionCalled);
   //console.log('KDK',myFunctionCalled);

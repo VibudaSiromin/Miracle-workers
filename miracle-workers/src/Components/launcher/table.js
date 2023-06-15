@@ -13,26 +13,61 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { setTestType,setDataSheet } from "../../store";
+import { setTestType,setDataSheet,setTestAddBtnStatus } from "../../store";
 import { useDispatch } from "react-redux";
+import { connect } from "react-redux";
 
-const TableLauncher = () => {
+
+const TableLauncher = (props) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [data, setData] = useState({});
   const [isLauncherMount,setIsLauncherMount] = useState(false);
+  const [isMount,setIsMount] = useState(false);
+  const [isDataDriven,setIsDataDriven] = useState(false);
 
   const {tname}=useParams();
   const location=useLocation();
   const dispatch = useDispatch();
 
+  console.log('drum',props.testPageName);
+
+  
+  useEffect(()=>{
+    if(isMount){
+      //const data=data;
+      //Object.keys(data).length===0
+      // if(Object.keys(data).length===0){
+      //   dispatch(setTestAddBtnStatus(false));
+      // }else{
+      //   dispatch(setTestAddBtnStatus(true))
+      // }
+    }else{
+      setIsMount(true)
+    }
+  },[data])
+
+
+  const testTypeHandler = (testType) => {
+    if(testType==='Data Driven'){
+      setIsDataDriven(true);
+    }else{
+      setIsDataDriven(false);
+    }
+  }
+
   const schema = yup
     .object({
-      sheetName: yup.string().required("Name is required"),
+      // sheetName: yup.string().required("Name is required"),
       testCase: yup.string().required("Test Case is required"),
       browser: yup.string().required("Browser is required"),
       type: yup.string().required("Test Type is required"),
       status: yup.string().required("Status is required"),
-      dataSheet: yup.string().required("Data sheet is required"),
+      dataSheet: yup.string().when('type',{
+        is:'Data Driven',
+        then:(schema) => schema.required("Data sheet is required"),
+        otherwise:(schema) => schema.notRequired()
+      })
+      //dataSheet: yup.string().required("Data sheet is required"),
     })
     .required();
 
@@ -53,9 +88,11 @@ const TableLauncher = () => {
     },
   });
   const onSubmit = (data) => {
+    data['sheetName']=props.testPageName;
     console.log('zambia',data);
     const testType= data.type;
     const dataSheet = data.dataSheet;
+    dispatch(setTestAddBtnStatus(true));
 
     dispatch(setTestType(testType));
     dispatch(setDataSheet(dataSheet));
@@ -120,6 +157,13 @@ const TableLauncher = () => {
       )
       const launcherDetails=response.data.getLauncherDetails;
       setData(launcherDetails);
+      console.log('arial',launcherDetails);
+      if(launcherDetails===undefined){
+        dispatch(setTestAddBtnStatus(false));
+      }else{
+        dispatch(setTestAddBtnStatus(true));
+      }
+      
     }catch(err){
       if(err.response){
         console.log(err.response.data);
@@ -200,7 +244,7 @@ const TableLauncher = () => {
         onSubmit={handleSubmit(onSubmit)}
         saveButtonText="Feed"
       >
-        <LauncherForm register={register} errors={errors} />
+        <LauncherForm register={register} errors={errors} testPageName={props.testPageName} testTypeHandler={testTypeHandler}/>
       </ModalComponent>
       <Table
         striped
@@ -251,4 +295,13 @@ const TableLauncher = () => {
   );
 };
 
-export default TableLauncher;
+
+const mapStateToProps = (state) => {
+  return{
+    testPageName: state.getTestSheetName.testPageName,
+  }
+};
+
+export default connect(mapStateToProps)(TableLauncher);
+
+//export default TableLauncher;

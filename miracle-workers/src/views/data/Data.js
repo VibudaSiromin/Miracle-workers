@@ -15,7 +15,7 @@ const Data = (props) => {
 
     return(
         <>
-        <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true} initialHeading={[]} callingFrom="data"></Heading>
+        <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true} initialHeading={[]} callingFrom="data" addBtnId={'dataMBtn'}></Heading>
         </>
     )
 }

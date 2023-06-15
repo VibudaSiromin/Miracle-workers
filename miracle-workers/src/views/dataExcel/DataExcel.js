@@ -59,7 +59,7 @@ return(
             getExcelFileName={excelFileNameHandler}
             >
           </FileUploader>
-          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData} initialExcelFileName={fileName} callingFrom="data"></Heading>
+          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData} initialExcelFileName={fileName} callingFrom="data" addBtnId={'dataEBtn'}></Heading>
         </>
         
 );

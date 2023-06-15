@@ -265,10 +265,11 @@ const Heading = (props) => {
           buttonValue="Column"
           saveNewHeadingData={addHeading}
           purpose='addHeading'
-          formID={["myFormOnePart1", "myFormOnePart2"]}  
+          formID={["myFormOnePart1", "myFormOnePart2"]}
+          addBtnId={props.addBtnId}  
         >
         </ModalDialog>
-        <Table title={heading} dropHeading={dropHeading} generalPurpose={props.generalPurpose} /*true*/ noFields={[heading.length]} enableChainPopUps={false} purpose="fillData" removeHeading={props.removeHeading} /*true*/initialData={props.initialData} initialExcelFileName={props.initialExcelFileName}  callingFrom={props.callingFrom} isInitialHeadingStored={isInitialHeadingStored}></Table>
+        <Table title={heading} dropHeading={dropHeading} generalPurpose={props.generalPurpose} /*true*/ noFields={[heading.length]} enableChainPopUps={false} purpose="fillData" removeHeading={props.removeHeading} /*true*/initialData={props.initialData} initialExcelFileName={props.initialExcelFileName}  callingFrom={props.callingFrom} isInitialHeadingStored={isInitialHeadingStored} addBtnId={props.addBtnId}></Table>
         {/* initialData can be null array as well. */}
         <></>
         </>

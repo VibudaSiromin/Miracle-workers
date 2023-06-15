@@ -1,6 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
+import { useState } from "react";
 
-const LauncherForm = ({ register, errors }) => {
+const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
+
+  const [isDataDriven,setIsDataDriven] = useState(false);
+
   const browsrLists = [
     "Chrome",
     "Firefox",
@@ -8,12 +13,24 @@ const LauncherForm = ({ register, errors }) => {
     "Internet Explore",
   ];
 
+  console.log('bard',testPageName);
+
+  const getTestTypeHandler = (value) => {
+    testTypeHandler(value);
+    if(value==='Data Driven'){
+      setIsDataDriven(true);
+    }else{
+      setIsDataDriven(false);
+    }
+  }
+
+
   return (
     <>
       <div className="form-group">
         <label>Sheet Name</label>
-        <input className="form-control" {...register("sheetName")} />
-        <small className="text-danger">{errors.sheetName?.message}</small>
+        <input className="form-control" /*{...register("sheetName")}*/ value={testPageName}/>
+        {/* <small className="text-danger">{errors.sheetName?.message}</small> */}
       </div>
 
       <div className="form-group">
@@ -51,6 +68,8 @@ const LauncherForm = ({ register, errors }) => {
           class="form-select"
           aria-label="Default select example"
           {...register("type")}
+
+          onChange={(e)=>getTestTypeHandler(e.target.value)}
         >
           <option></option>
           <option value="Sequential">Sequential</option>
@@ -71,10 +90,10 @@ const LauncherForm = ({ register, errors }) => {
         </select>
         <small className="text-danger">{errors.status?.message}</small>
       </div>
-      <div className="form-group">
-        <label>Data Sheet</label>
-        <input className="form-control" {...register("dataSheet")} />
-        <small className="text-danger">{errors.dataSheet?.message}</small>
+      <div className="form-group">      
+          <label>Data Sheet</label>
+          <input className="form-control" {...register("dataSheet")} />
+          <small className="text-danger">{errors.dataSheet?.message}</small>     
       </div>
       <div className="form-group">
         <label>Comment</label>
@@ -84,4 +103,9 @@ const LauncherForm = ({ register, errors }) => {
   );
 };
 
-export default LauncherForm;
+//export default LauncherForm;
+
+
+
+export default LauncherForm
+//export default connect(mapStateToProps)(LauncherForm);

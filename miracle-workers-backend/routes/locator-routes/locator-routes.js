@@ -11,10 +11,10 @@ router.get('/locators/getLocatorNames',locatorControllers.getLocatorNames);
 router.get('/locators/:lname',locatorControllers.getLocatorByPage);
 //route for getting no of raws
 router.get('/locators/getNoofRaws',locatorControllers.getNoofRaws);
-
+//route for get all data
+router.get('/locator/getAllData',locatorControllers.getAllLocatorData);
 
 //route for creating locator page
-
 router.post('/locators', locatorControllers.createLocatorByPage);
 
 //route for editing locator page

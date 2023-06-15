@@ -6,6 +6,7 @@ import {MdTableRows} from 'react-icons/md';
 import { setCommand } from "../store";
 import { useDispatch } from "react-redux";
 import { forwardRef,useImperativeHandle,useState } from "react";
+import { connect } from 'react-redux';
 
 function ModalDialog(props,ref) {
   const [toggleOneModal, setToggleOneModal]  = React.useState(false);
@@ -14,6 +15,9 @@ function ModalDialog(props,ref) {
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [editStatus,setEditStatus] = React.useState('false');
+  //const [btnStatus,setBtnStatus] = useState(true);
+
+  console.log('btn status',props.btnStatus)
 
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
@@ -25,12 +29,9 @@ function ModalDialog(props,ref) {
   const generalPurposeInputData={};
 
   const dispatch = useDispatch();
-  // useImperativeHandle(ref,()=> ({
-  //   log(){
-  //     initModalOne();
-  //     setEditStatus(true);
-  //   }
-  // }));
+
+  
+
 
   const inputHandler = (name, value) => {
     console.log(name, value);
@@ -226,12 +227,30 @@ function ModalDialog(props,ref) {
 
   };
 
-  return (
-    <>
-      <Button variant="success" onClick={initModalOne}>
+  const renderAddButton = () => {
+    if (props.addBtnId==='testMBtn') {
+      return (
+        <Button variant="success" onClick={initModalOne} id={props.addBtnId} disabled={!props.btnStatus}>
         <MdTableRows></MdTableRows>
         {props.buttonValue}
-      </Button>
+        </Button>
+    );
+    } else {
+      return(
+        <Button variant="success" onClick={initModalOne} id={props.addBtnId} >
+        <MdTableRows></MdTableRows>
+        {props.buttonValue}
+        </Button>
+      )
+    }
+  }
+
+  return (
+    <>{renderAddButton()}
+      {/* <Button variant="success" onClick={initModalOne} id={props.addBtnId}>
+        <MdTableRows></MdTableRows>
+        {props.buttonValue}
+      </Button> */}
       <form onSubmit={submitHandlerOne} id={props.formID[0]}>
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>
@@ -273,4 +292,12 @@ function ModalDialog(props,ref) {
     </>
   );
 }
-export default forwardRef(ModalDialog);
+//export default forwardRef(ModalDialog);
+const mapStateToProps = (state) => {
+  return{
+      btnStatus:state.getTestAddBtnStatus.status
+  }
+};
+
+
+export default connect(mapStateToProps)(forwardRef(ModalDialog));

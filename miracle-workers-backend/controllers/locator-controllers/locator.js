@@ -200,6 +200,17 @@ const getLocatorNames = async(req,res,next) => {
 
 }
 
+const getAllLocatorData = async (req,res,next) => {
+  let locatorSection;
+  try{
+    const data = await fs.promises.readFile(locatorFilePath);
+    locatorSection = JSON.parse(data);
+    res.status(200).json({locatorSection:locatorSection})  
+  }catch(err){
+    res.status(500).json({message: 'Error reading locator section'})
+  }
+}
+
 
 exports.getPageNames=getPageNames;
 exports.getLocatorByPage=getLocatorByPage;
@@ -210,3 +221,4 @@ exports.ranameLocatorPageName=ranameLocatorPageName;
 exports.getHeadings=getHeadings;
 exports.getNoofRaws=getNoofRaws;
 exports.getLocatorNames=getLocatorNames;
+exports.getAllLocatorData=getAllLocatorData;

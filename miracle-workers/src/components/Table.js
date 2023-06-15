@@ -736,6 +736,7 @@ console.log('hello world!!!!!');
           buttonValue="Add"
           purpose="fillData"
           formID={["myFormTwoPart1", "myFormTwoPart2"]}
+          addBtnId={props.addBtnId}
         ></ModalDialog>
       </div>
       <div className="version-01">

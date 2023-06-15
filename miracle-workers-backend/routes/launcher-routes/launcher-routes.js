@@ -6,7 +6,8 @@ const launcherControllers=require('../../controllers/launcher-controllers/launch
 
 //route for editing laoncher page
 router.post('/testJunction/testManual/:tname/editLauncher',launcherControllers.editTestPage);
-//route for getting launcher content
+//route for creating a launcher page
+router.post('/launcher/createLauncherPage',launcherControllers.createLauncherPage);
 //router.get('/testJunction/testManual/:tname/getLauncherContent',launcherControllers.getLauncherContent);
 router.get('/launcher/getLauncherContent',launcherControllers.getLauncherContent);
 //route for getting all launcher data

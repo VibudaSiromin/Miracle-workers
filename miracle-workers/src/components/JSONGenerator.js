@@ -15,6 +15,7 @@ const JSONGenerator = () => {
     const [isMountTwo,setIsMountTwo] = useState(false);
     const [isMountThree,setIsMountThree] = useState(false);
     const [isMountFour,setIsMountFour] = useState(false);
+    const [isMountFive,setIsMountFive] = useState(false)
     const [testSuiteHeadings,setTestSuiteHeadings] = useState([]);
     const [isModalShow, setIsModalShow] = useState(false);
     const [fileName,setFileName] = useState('');
@@ -23,6 +24,7 @@ const JSONGenerator = () => {
     const [attachDataSheets,setAttachDataSheets] = useState([]);
     const [loopsDetailsStartCmd,setLoopsDetailsStartCmd] = useState([]);
     const [loopsDetailsEndCmd,setLoopsDetailsEndCmd] = useState([]);
+    const [locatorSection,setLocatorSection] = useState();
     //const modalRefJSONFileName=useRef();
 
     const generateFinalJSON = () => {
@@ -135,12 +137,33 @@ const JSONGenerator = () => {
     }
 
     useEffect(()=>{
+        if(isMountFive){
+            getAllDataFromLocatorSection();
+        }else{
+            setIsMountFive(true);
+        }
+    },[dataSection])
+
+
+    const getAllDataFromLocatorSection = () => {
+         axios
+        .get('http://localhost:5000/locator/getAllData')
+        .then((res)=>{
+            console.log('hash',res.data.locatorSection);
+            setLocatorSection(res.data.locatorSection);
+        })
+        .catch((err)=>{
+            console.log(err)
+        })
+
+    }
+    useEffect(()=>{
         if(isMountThree){
             appendingTestdataWithLauncher();
         }else{
             setIsMountThree(true);
         }
-    },[dataSection])
+    },[locatorSection])
 
     const appendingTestdataWithLauncher = () => {
 
@@ -232,7 +255,7 @@ const JSONGenerator = () => {
                                                     console.log('creed',dataSection,dataPage);
 
                                                     const index = dataSection.findIndex(data=>data[0]===dataPage);
-                                                     const selectedPageWithValues=dataSection[index];
+                                                    const selectedPageWithValues=dataSection[index];
                                                     if(dataPage.charAt(dataPage.length-1)==="M"){
                                                          console.log('wall',rawNo)
                                                          const selectedDataObject=selectedPageWithValues[parseInt(rawNo)+1];
@@ -243,14 +266,26 @@ const JSONGenerator = () => {
                                                 }else if(testStep['command']!=='While.End' && testStep['command']!=='While.DataExists'){
                                                     newTestStep[key]=testStep[key]
                                                 }
+                                        }else if(key==='locator'){
+                                            if(testStep[key].split('.')[0]==='#loc'){
+                                                const refParts=testStep[key].split('.');
+                                                const LocatorPage=refParts[1];
+                                                const locatorName=refParts[2];
+                                                const index = locatorSection.findIndex(locator=>locator[0]===LocatorPage);
+                                                const selectedPageWithValues=locatorSection[index];
+                                                    for(let i=1;i<selectedPageWithValues.length;i++){
+                                                        const locatorObj=selectedPageWithValues[i];
+                                                        if(locatorObj['Locator Name']===locatorName){
+                                                            newTestStep[key] = locatorObj['Locator Value']; 
+                                                        }
+                                                    }
                                                     
-                                                
-                                            //}
-                                           
+                                            }else{
+                                                newTestStep[key] = testStep[key];
+                                            }
                                         }else{
                                             newTestStep[key]=testStep[key];
-                                        }
-                                        
+                                        }              
                                     }else{
                                         console.log('myValue2');
                                         newTestStep[key]="";
@@ -300,9 +335,28 @@ const JSONGenerator = () => {
                                                     }
                                                 }
                                                 newTestStep[key]=testStep[key];                                            
+                                            }else if(testStep[key].split('.')[0]==='#loc'){
+                                                 const refParts=testStep[key].split('.');
+                                                 const LocatorPage=refParts[1];
+                                                 const locatorName=refParts[2];
+                                                 const index = locatorSection.findIndex(locator=>locator[0]===LocatorPage);
+                                                 console.log('jam',index);
+                                                 const selectedPageWithValues=locatorSection[index];
+                                                    for(let i=1;i<selectedPageWithValues.length;i++){
+                                                        const locatorObj=selectedPageWithValues[i];
+                                                        
+                                                        if(locatorObj['Locator Name']===locatorName){
+                                                            console.log('flyyy',locatorObj['Locator Value']);
+                                                            newTestStep[key] = locatorObj['Locator Value']; 
+                                                        }
+                                                    }
+                                            }else{
+                                                newTestStep[key]=testStep[key];
                                             }
+                                        }else{
+                                            newTestStep[key]=testStep[key];
                                         }
-                                        newTestStep[key]=testStep[key];
+                  
                                     }else{
                                         console.log('myValue2');
                                         newTestStep[key]="";
@@ -383,10 +437,7 @@ const JSONGenerator = () => {
     
                 initModal();
             }
-
-
     }
-
     const nameSchema = yup.object(
         {
             name:yup.string().required("File name is required!")

@@ -44,26 +44,26 @@ const getTestPageNames= async (req, res, next)=>{
     }
 
     //add test sheets names to launcher.js
-    let testFileTwo;
+    //let testFileTwo;
 
-    try{
-      const data = await fs.promises.readFile(dataFilePathForLauncher);
-      testFileTwo = JSON.parse(data);
-      testFileTwo.push([testPageName]);
-      const newTest=JSON.stringify(testFileTwo);
-      try{
-        await fs.promises.writeFile(dataFilePathForLauncher,newTest);
-        res.status(200).json({message:'Created test Page in launcher file'});
-      }catch(err){
-        console.log(err);
-        res.status(500).json({message:'Error occurred when creating test sheet name in launcher file'});
-        return;
-      }    
-    }catch(err){
-      console.log(err);
-      res.status(500).json({ message: 'Error reading test file' });
-      return;
-    }
+    // try{
+    //   const data = await fs.promises.readFile(dataFilePathForLauncher);
+    //   testFileTwo = JSON.parse(data);
+    //   testFileTwo.push([testPageName]);
+    //   const newTest=JSON.stringify(testFileTwo);
+    //   try{
+    //     await fs.promises.writeFile(dataFilePathForLauncher,newTest);
+    //     res.status(200).json({message:'Created test Page in launcher file'});
+    //   }catch(err){
+    //     console.log(err);
+    //     res.status(500).json({message:'Error occurred when creating test sheet name in launcher file'});
+    //     return;
+    //   }    
+    // }catch(err){
+    //   console.log(err);
+    //   res.status(500).json({ message: 'Error reading test file' });
+    //   return;
+    // }
   }
 
   const getHeadingsFromTest =async(req,res,next) => {

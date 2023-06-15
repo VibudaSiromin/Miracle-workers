@@ -156,6 +156,32 @@ const getAllLauncherData = async(req,res,next) => {
   }
 }
 
+const createLauncherPage = async(req,res,next) => {
+  console.log('vally');
+  const testPageName = req.body.pageName;
+  let launcherSection;
+
+  try{
+    const data = await fs.promises.readFile(launcherFilePath);
+    launcherSection = JSON.parse(data);
+    launcherSection.push([testPageName]);
+    const newLauncherSection=JSON.stringify(launcherSection);
+    try{
+      await fs.promises.writeFile(launcherFilePath,newLauncherSection);
+      res.status(200).json({message:'Created test Page in launcher file'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when creating test sheet name in launcher file'});
+      return;
+    }    
+  }catch(err){
+    console.log(err);
+    res.status(500).json({ message: 'Error reading test file' });
+    return;
+  }
+
+}
+
 
 exports.createLauncher = createLauncher;
 exports.editTestPage=editTestPage;
@@ -163,3 +189,4 @@ exports.getLauncherContent=getLauncherContent;
 exports.deleteTestPageInLauncher=deleteTestPageInLauncher;
 exports.renameTestPageNameInLauncher=renameTestPageNameInLauncher;
 exports.getAllLauncherData=getAllLauncherData;
+exports.createLauncherPage=createLauncherPage;

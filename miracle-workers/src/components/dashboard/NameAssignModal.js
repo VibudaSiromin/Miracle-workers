@@ -3,10 +3,12 @@ import { useState,useEffect,useImperativeHandle,useRef } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { setTestPageName } from "../../store";
+import { setDataSheetAtNameAssigner } from "../../store";
 import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import MessageBox from "../MessageBox";
+
 
 
 const NameAssignModal = (props,ref) => {
@@ -38,6 +40,14 @@ const NameAssignModal = (props,ref) => {
     const inputHandler = (event) => {
       setfieldValue(event.target.value); //set a page name
     }
+
+
+  //   const nameAssignSchema = yup.object(
+  //     {
+  //         name:yup.number().required('Number is required.'),                
+  //     }     
+  // ).required();
+
 
     const submitHandlerOne = (event) => {
       console.log('bravo ',fieldValue);
@@ -79,7 +89,7 @@ const NameAssignModal = (props,ref) => {
             }
           }
           props.newPageName(fieldValue);
-          props.setTestPageName(fieldValue);
+          props.setDataSheetAtNameAssigner(fieldValue);
         })
         .catch((err)=>{
           console.log(err)
@@ -182,7 +192,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps =(dispatch)=> {
   return {
-    setTestPageName:(testPageName)=>dispatch(setTestPageName(testPageName))
+    setTestPageName:(testPageName)=>dispatch(setTestPageName(testPageName)),
+    setDataSheetAtNameAssigner:(dataPageName)=>dispatch(setDataSheetAtNameAssigner(dataPageName))
   }
   // forwardRef: true
 };
