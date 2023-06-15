@@ -10,7 +10,6 @@ const dataControllers=require('../../controllers/data-controllers/data');
 router.post('/dataJunction/data/:dname/addHeading',dataControllers.addHeadingsToData);
 router.post('/dataJunction/dataExcel/:dname/addHeading',dataControllers.addHeadingsToData);
 
-////////&&&&&&&
 
 //route for removing heading from selected data page
 router.post('/dataJunction/data/:dname/removeHeading',dataControllers.removeHeading);

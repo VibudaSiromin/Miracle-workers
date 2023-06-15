@@ -29,7 +29,7 @@ const getLauncherContent = async(req,res,next) => {
        index = launcherSection.findIndex(launcher=>launcher[0]===testPageName);
     }
     //const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
-    const launcherDetails=launcherSection[index][1];
+    const launcherDetails=launcherSection[index][1]; 
     res.status(200).json({getLauncherDetails:launcherDetails})
     // if(launcherSection[index].length>2){
     //   const dataRecords=launcherSection[index];

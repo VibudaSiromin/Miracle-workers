@@ -8,12 +8,15 @@ import { connect } from "react-redux";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import MessageBox from "../MessageBox";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 
 const NameAssignModal = (props,ref) => {
     const [toggleOneModal,setToggleOneModal]=useState(false);
-    const [fieldValue,setfieldValue]=useState('');
+    //const [fieldValue,setfieldValue]=useState('');
     const [isMount,setIsMount]=useState(false);
 
     const modalRefC=useRef();
@@ -37,21 +40,36 @@ const NameAssignModal = (props,ref) => {
       return setToggleOneModal(false);
     };
 
-    const inputHandler = (event) => {
-      setfieldValue(event.target.value); //set a page name
-    }
+    // const inputHandler = (event) => {
+    //   setfieldValue(event.target.value); //set a page name
+    // }
 
 
-  //   const nameAssignSchema = yup.object(
-  //     {
-  //         name:yup.number().required('Number is required.'),                
-  //     }     
-  // ).required();
+    const nameAssignSchema = yup.object(
+      {
+        fieldName:yup.string().required('Sheet Name is required!!')                
+      }     
+  ).required();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(nameAssignSchema),
+    defaultValues: {
+      fieldName : ""
+    },
+  });
 
 
     const submitHandlerOne = (event) => {
-      console.log('bravo ',fieldValue);
-      event.preventDefault();
+      const {fieldName} = event;
+      const fieldValue=fieldName;
+      console.log('bravo ',event);
+      TerminateModalOne();
+      reset();
 
       //check whether any page duplications
       if(props.indexOfSection===2){
@@ -156,25 +174,28 @@ const NameAssignModal = (props,ref) => {
 
     return(
       <div>
-        <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'formOne'}>
+        
         <Modal show={toggleOneModal} tabIndex="-1" size="sm" centered>
+        <form /*ref={ref}*/ onSubmit={handleSubmit(submitHandlerOne)} id={'formOne'} >
           <Modal.Header closeButton onClick={TerminateModalOne}>
             {sectionName}
           </Modal.Header>
           <Modal.Body>
             <label>Enter a page name:</label>
-            <input onChange={inputHandler} name={'fieldName'}/>
+            <input  {...register('fieldName')} className="form-control"/>
+            <small className="text-danger">{errors.fieldName?.message}</small>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={TerminateModalOne}>
               Close
             </Button>
-            <Button variant="success" onClick={TerminateModalOne} form={'formOne'} type="submit">
+            <Button variant="success"  form={'formOne'} type="submit">
               Finish
             </Button>
           </Modal.Footer>
+          </form>
         </Modal>
-      </form>
+      
       <MessageBox ref={modalRefC} modalFooterfuncOne={initModalOne} id='pageNameDuplicateModal'></MessageBox>
       </div>
 

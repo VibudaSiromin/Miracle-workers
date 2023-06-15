@@ -20,51 +20,15 @@ const Mapper = (props) => {
   const [showListOne,setShowListOne] = useState(false);
   const [showListTwo,setShowListTwo] = useState(false);
   const [noofRaws,setNoofRaws] = useState(0);
-  const [inputValue,setInputValue] = useState();
+  const [inputValue,setInputValue] = useState(null);
   const [isMount,setIsMount] = useState(false);
   const [selectedHeading,setSelectedHeading] = useState();
   const [showLoopModal,setShowLoopModal] = useState(false);
-  const [inputLoopName,setInputLoopName] = useState();
+  const [inputLoopName,setInputLoopName] = useState(null);
   const [optionsInDDMode,setOptionsInDDMode] = useState([]);
   const [locatorNames,setLocatorNames] = useState([]);
-      
-  
-const nameSchema = yup.object(
-    {
-        name:yup.number().required('Number is required.'),                
-    }     
-).required();
-
-const loopSchema = yup.object(
-  {
-      loopName:yup.string().required('Enter a name for creating a loop')                
-  }     
-).required();
-
-const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm({
-    resolver: yupResolver(nameSchema),
-    defaultValues: {
-      name : ""
-    },
-  });
-
-  // const {
-  //   register1,
-  //   handleSubmit2,
-  //   formState: { errors2 },
-  //   reset2,
-  // } = useForm({
-  //   resolver: yupResolver(loopSchema),
-  //   defaultValues: {
-  //     loopName:""
-  //   },
-  // });
- 
+  const [showErrMsgOne,setShowErrMsgOne] = useState(false);
+  const [showErrMsgTwo,setShowErrMsgTwo] = useState(false);
 
 
   const depthLevelOne =(event) => {
@@ -238,7 +202,8 @@ const {
     .then((res)=>{
       console.log('kaha',res.data.noofRaws)
       const raws=res.data.noofRaws;
-      setNoofRaws(raws); 
+      const rawArr = [raws];
+      setNoofRaws([...rawArr]); 
     })
     .catch((err)=>{
       console.log(err);
@@ -249,6 +214,7 @@ const {
 
   useEffect(()=>{
     if(isMount){
+      console.log('RAWS',noofRaws)
       setShowModal(true);
     }else{
       setIsMount(true);
@@ -267,20 +233,48 @@ const {
   const addDataReference = (event) => {
       event.preventDefault();
       event.stopPropagation();
+
+      if(inputValue===null && inputLoopName!==''){
+        console.log('y value is null')
+        setShowErrMsgOne(true);
+        setInputValue(null);
+      }else if(!isNaN(+inputValue)){
+        if(inputValue<=noofRaws && inputValue>0){
+          terminateModal();
+          props.selectedHeading(props.browseBtnId,selectedSheet,selectedHeading,inputValue);
+          setShowListOne(false);
+          setShowListTwo(false);
+          setInputValue(null);
+          setShowErrMsgOne(false);
+        }else{
+          setShowErrMsgOne(true);
+        }
+      }else{
+        console.log('y value is not number');
+        setInputValue(null);
+        setShowErrMsgOne(true);
+      }
+
+
       console.log("dead",inputValue);
-      terminateModal();
-      props.selectedHeading(props.browseBtnId,selectedSheet,selectedHeading,inputValue);
-      setShowListOne(false);
-      setShowListTwo(false);
+      
   };
 
   const addDataReferenceForLoop = (event) => {
       event.preventDefault();
       event.stopPropagation()
-      console.log('york');
-      terminateLoopModal();
-      props.assignLoopRef(props.browseBtnId,selectedSheet,inputLoopName);
-      setShowListOne(false);
+      if(inputLoopName!==null && inputLoopName!==''){
+        terminateLoopModal();
+        props.assignLoopRef(props.browseBtnId,selectedSheet,inputLoopName);
+        setShowListOne(false);
+        setInputLoopName(null);
+        setShowErrMsgTwo(false);
+      }else{
+        setInputLoopName(null);
+        setShowErrMsgTwo(true);
+      }
+
+      
   }
 
   const addReferenceForLocator = (event) => {
@@ -367,14 +361,14 @@ const {
           {showListTwo && <ul className="myUL2">{arrayTwo}</ul>}
         </div>     
           <Modal show={showModal} tabIndex="-1" size="sm" centered>
-          <form  onSubmit={addDataReference} id={'formInMapper'} register={register} errors={errors}>
-            <Modal.Header>
-              <Modal.Title>Enter an Index</Modal.Title>    
+          <form  onSubmit={addDataReference} id={'formInMapper'} >
+            <Modal.Header closeButton onClick={terminateModal}>
+              <Modal.Title>Enter Raw Number</Modal.Title>    
             </Modal.Header>
             <Modal.Body>
-              <label>Enter an Index For Getting a value:</label>
-              <input {...register('name')} type="text" onChange={inputHandler}/>
-              <small className="text-danger">{errors.name?.message}</small>
+              <label>Enter a raw For Getting a value:</label>
+              <input type="text" onChange={inputHandler} className="form-control"/>
+              {showErrMsgOne?<small className="text-danger">{"Enter a value from 1 to "+noofRaws}</small>:<></>}
             </Modal.Body>
             <Modal.Footer> 
               <Button variant="success" form={'formInMapper'} type="submit">
@@ -405,13 +399,14 @@ const {
           {showListOne && <ul className="myUL">{arrayOne}</ul>}
       </div>     
           <Modal show={showLoopModal} tabIndex="-1" size="sm" centered> 
-          <form  onSubmit={addDataReferenceForLoop} id='formLoop' register={register} errors={errors}>
+          <form  onSubmit={addDataReferenceForLoop} id='formLoop' >
             <Modal.Header closeButton onClick={terminateLoopModal}>
               <Modal.Title> Iteration Based On Data Section</Modal.Title>    
             </Modal.Header>
             <Modal.Body>
               <label>Enter a loop name:</label>
-              <input  type="text" onChange={inputLoopNameHandler}/>
+              <input  type="text" onChange={inputLoopNameHandler} className="form-control"/>
+              {showErrMsgTwo?<small className="text-danger">{"Enter a loop name"}</small>:<></>}
             </Modal.Body>
             <Modal.Footer> 
               <Button variant="success" form='formLoop' type="submit">

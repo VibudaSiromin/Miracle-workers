@@ -14,8 +14,6 @@ function ModalDialog(props,ref) {
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
-  const [editStatus,setEditStatus] = React.useState('false');
-  //const [btnStatus,setBtnStatus] = useState(true);
 
   console.log('btn status',props.btnStatus)
 
@@ -87,7 +85,7 @@ function ModalDialog(props,ref) {
       console.log('inputHandler3:',props.purpose);
   }
 
-  const myLoop = () => {
+  const fieldLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
       if(props.title[i]!=='instruction' && props.title[i]!=='command' && props.title[i]!=='swapResult' && props.title[i]!=='action' && props.generalPurpose===false){
         inputFieldArrayModalOne.push(
@@ -153,7 +151,7 @@ function ModalDialog(props,ref) {
   };
   
 
-  myLoop();
+  fieldLoop();
   const initModalOne = () => {
     return setToggleOneModal(true);
   };
@@ -174,7 +172,7 @@ function ModalDialog(props,ref) {
       setModalOneDataSet(testStepsData);
     }
     if(props.generalPurpose===true){
-      console.log('Next step',props.purpose);
+      console.log('Next step',generalPurposeInputData);
       setModalOneGeneralDataSet(generalPurposeInputData);
     }
     TerminateModalOne();
@@ -203,7 +201,7 @@ function ModalDialog(props,ref) {
         }
         if(props.generalPurpose===true){
           if(props.purpose==='fillData'){
-            console.log('fillData AX1');
+            console.log('fillData AX1',modalOneGeneralDataSet);
             props.saveNewGeneralData(modalOneGeneralDataSet);// calling from heading component
           }
           if(props.purpose==='addHeading'){

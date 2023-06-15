@@ -275,7 +275,8 @@ const Table = (props) => {
         axios
         .post('http://localhost:5000/dataJunction/data/'+dname,{
           editedData:newTableData,
-          type:"Mannual"
+          type:"Mannual",
+          excelFileName:"notAvailable"
         })
         .then((res)=>{
           settestSteps(newTableData);
@@ -290,7 +291,9 @@ const Table = (props) => {
         axios
         .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
           editedData:newTableData,
-          type:"Excel"
+          type:"Excel",
+          excelFileName:"notAvailable"
+          
         })
         .then((res)=>{
           settestSteps(newTableData);
@@ -339,7 +342,8 @@ const Table = (props) => {
         axios
         .post('http://localhost:5000/dataJunction/data/'+dname,{
           editedData:applyEditedData,//************ */
-          type:"Mannual"
+          type:"Mannual",
+          excelFileName:"notAvailable"
         })
         .then((res)=>{
 
@@ -352,7 +356,9 @@ const Table = (props) => {
         axios
         .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
           editedData:applyEditedData,//************ */
-          type:"Excel"
+          type:"Excel",
+          excelFileName:"notAvailable"
+
         })
         .then((res)=>{
 
@@ -444,7 +450,8 @@ const Table = (props) => {
         axios
         .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
           editedData:tableDataAfterDelete,
-          type:"Excel"
+          type:"Excel",
+          excelFileName:"notAvailable"
         })
         .then((res)=>{
           console.log(res);
@@ -505,16 +512,16 @@ const Table = (props) => {
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-        axios
-        .post(url,{
-          editedLocator:dataAfterArrowClick
-        })
-        .then((res)=>{
-          settestSteps(dataAfterArrowClick);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        // axios
+        // .post(url,{
+        //   editedLocator:dataAfterArrowClick
+        // })
+        // .then((res)=>{
+        //   settestSteps(dataAfterArrowClick);
+        // })
+        // .catch((err) => {
+        //   console.log(err);
+        // });
       }
 
       if(props.callingFrom==='data'){
@@ -527,18 +534,17 @@ const Table = (props) => {
         const currentURL=location.pathname;//get current URL
       if(currentURL==='/dataJunction/data/'+dname){
 
-        try{
-          const response= await axios.post(
-            `http://localhost:5000/dataJunction/data/`+dname,
-            {
-              editedData:dataAfterArrowClick,//************ */
-              type:"Mannual",
-              dname:dname
-            }
-          )
-        }catch(err){
+        // try{
+        //   const response= await axios.post(
+        //     `http://localhost:5000/dataJunction/data/`+dname,
+        //     {
+        //       editedData:dataAfterArrowClick,//************ */
+        //       type:"Mannual",
+        //       dname:dname
+        //     }
+        //   )
+        // }catch(err){
 
-          console.info("1111111111111111111",err);
         //   if (err.response) {
         //     // The client was given an error response (5xx, 4xx)
         //     console.log(err.response.data);
@@ -551,8 +557,7 @@ const Table = (props) => {
         //     // Anything else
         //     console.log('Error', err.message);
         // }
-        }
-
+        // }
 
 
         // axios
@@ -580,11 +585,7 @@ const Table = (props) => {
         //   console.log(err);
         // })
       } 
-
         //////////////////////////////////
-
-        
-
 
         // axios
         // .post(url,{
@@ -598,8 +599,8 @@ const Table = (props) => {
         //   console.log(err);
         // });
       }
-      // dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
-      // dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+       dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+       dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
        settestSteps(dataAfterArrowClick);
     }
     if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
@@ -609,34 +610,34 @@ const Table = (props) => {
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
         dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
-        axios
-        .post(url,{
-          editedLocator:dataAfterArrowClick
-        })
-        .then((res)=>{
-          settestSteps(dataAfterArrowClick);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        // axios
+        // .post(url,{
+        //   editedLocator:dataAfterArrowClick
+        // })
+        // .then((res)=>{
+        //   settestSteps(dataAfterArrowClick);
+        // })
+        // .catch((err) => {
+        //   console.log(err);
+        // });
       }
 
       if(props.callingFrom==='data'){
         console.log('jet2');
         const url='http://localhost:5000/data/'+dname
-        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
-        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-        axios
-        .post(url,{
-          editedData:dataAfterArrowClick,
-          type:"Mannual"
-        })
-        .then((res)=>{
-          settestSteps(dataAfterArrowClick);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
+        dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+        // axios
+        // .post(url,{
+        //   editedData:dataAfterArrowClick,
+        //   type:"Mannual"
+        // })
+        // .then((res)=>{
+        //   settestSteps(dataAfterArrowClick);
+        // })
+        // .catch((err) => {
+        //   console.log(err);
+        // });
       }
       
       // dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];

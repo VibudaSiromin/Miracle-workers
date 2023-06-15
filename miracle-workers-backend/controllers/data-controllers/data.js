@@ -401,9 +401,15 @@ const editDataPage = async (req,res,next) => {
       dataPage=dataSection.find(data=>data[0]===dataPageName+"M");
       newDataPage=[dataPageName+"M",dataPage[1],...newDataContent];
     }else if(type==="Excel"){
-      index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
-      dataPage=dataSection.find(data=>data[0]===dataPageName+"E");
-      newDataPage=[dataPageName+"E",dataPage[1],[excelFileName],...newDataContent];
+        index = dataSection.findIndex(data=>data[0]===dataPageName+"E");
+        dataPage=dataSection.find(data=>data[0]===dataPageName+"E");
+      if(excelFileName==="notAvailable"){
+        const existingExcelFileName = dataPage[2];
+        newDataPage=[dataPageName+"E",dataPage[1],[...existingExcelFileName],...newDataContent];
+      }else{
+        newDataPage=[dataPageName+"E",dataPage[1],[excelFileName],...newDataContent];
+      }
+      
     }
     
      dataSection[index]=newDataPage;

@@ -22,6 +22,7 @@ const PopUpInputField =(props) => {
     const [xPath,setXPath] = useState(false);
     const [locatorValue,setLocatorValue] = useState(null);
     const [locatorTypeValue,setLocatorTypeValue] = useState();
+    const [showErrMsgOne,setShowErrMsgOne] = useState(false);
 
     const {lname,tname,cname,dname} =useParams();
 
@@ -30,23 +31,13 @@ const PopUpInputField =(props) => {
     console.log('myType',props.testType);
 
     const inputHandler=(event) => {
-      // const fieldName = event.target.getAttribute("name");
-      // const fieldValue = event.target.value;
-      // console.log(fieldName);
-      // console.log(fieldValue);
+ 
       console.log('Input id: '+ props.id);
       console.log('generalPurpose: '+ props.generalPurpose);
 
       setFieldValue(event.target.value);
       setFieldName(event.target.getAttribute("name"));
-      // if(props.id<=2 && props.generalPurpose===false){
-      //   props.onDataChange(fieldName,fieldValue);
-      // }else if(props.id>2 && props.generalPurpose===false){
-      //   props.onDataChange2(fieldName,fieldValue);
-      // }
-      // if(props.generalPurpose===true){
-      //   props.onDataChange(fieldName,fieldValue);
-      // }
+    
     }
 
     useEffect(()=>{
@@ -119,19 +110,12 @@ const PopUpInputField =(props) => {
       setFieldName('data'); 
   }
 
-  // value={'className'}>Class Name</option>
-  // <option value={'cssSelector'}>CSS Selector</option>
-  // <option value={'ID'}>ID</option>
-  // <option value={'linkTest'}>Link Text</option>
-  // <option value={'Name'}>Name</option>
-  // <option value={'partialLinkTest'}>Partial Link Text</option>
-  // <option value={'tagName'}>Tag Name</option>
-  // <option value={'xPath'}>
-
   const addReferenceToLocator = (event) => {
     console.log('goddd')
     event.preventDefault();
     event.stopPropagation();
+
+    if(locatorValue!==null && locatorValue!==''){
     setFieldName('locator');
     setShowLocTypeModal(false);
     let locatorReference;
@@ -159,6 +143,13 @@ const PopUpInputField =(props) => {
     }else if(locatorTypeValue==='xPath'){
       setFieldValue(locatorValue);
     }
+    setLocatorValue(null);
+    setShowErrMsgOne(false);
+
+    }else{
+      setShowErrMsgOne(true);
+    }
+
   }
 
   useEffect(()=>{
@@ -329,6 +320,8 @@ const PopUpInputField =(props) => {
                 <br/>
                 <label>Locator</label>
                 <input className="form-control" value={locatorValue} onChange={getLocatorNameValue}></input>
+                {showErrMsgOne?<small className="text-danger">{"Enter a locator name"}</small>:<></>}
+                <br/>         
                 {xPath ?<Mapper usage={'basicLocSection'}  locatorNames={getLocatorValueFromLocatorFile} browseBtnId={'locator'} URLForGettingSheets='http://localhost:5000/locators' URLForGettingHeadings='http://localhost:5000/locators/getHeadings' URLForGettingNoofRaws='http://localhost:5000/locators/getNoofRaws' reqDetailsforDB={['locatorsPageNames','locatorPageName','getHeadings']}></Mapper>:<></>}
               </Modal.Body>
               <Modal.Footer> 

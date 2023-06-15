@@ -163,7 +163,7 @@ const Heading = (props) => {
       }else if(currentURL==='/dataJunction/dataExcel/'+dname){
         axios
           .post('http://localhost:5000/dataJunction/dataExcel/'+dname+'/removeHeading',{
-            currentHeading:slicingHeading,
+            currentHeading:headingArrAfterDroping,
             type:"Excel"
           })
           .then((res)=>{

@@ -8,13 +8,17 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import MessageBox from "../MessageBox";
 import { object } from "prop-types";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 
 const NameRenameModal = (props,ref) => {
     const [toggleOneModal,setToggleOneModal]=useState(false);
-    const [fieldValue,setfieldValue]=useState('');
+    const [fieldValue,setfieldValue]=useState(null);
     const [isMount,setIsMount]=useState(false);
     const [pageNameBeforeRenaming,setPageNameBeforeRenaming]=useState();
+    const [showErrMsgOne,setShowErrMsgOne] = useState(false);
 
     const modalRefRenaming=useRef();
 
@@ -43,6 +47,7 @@ const NameRenameModal = (props,ref) => {
     }
 
     const initRenamingModal = () => {
+      setShowErrMsgOne(false);
       return setToggleOneModal(true);
     };
     
@@ -54,9 +59,33 @@ const NameRenameModal = (props,ref) => {
       setfieldValue(event.target.value); //set a page name
     }
 
+
+
+  const renameAssignSchema = yup.object(
+      {
+        fieldName:yup.string().required('Sheet Name is required!!')                
+      }     
+  ).required();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(renameAssignSchema),
+    defaultValues: {
+      fieldName : ""
+    },
+  });
+
+
+
     const submitHandlerOne = (event) => {
       console.log('bravo ',fieldValue);
       event.preventDefault();
+
+      if(fieldValue!==null && fieldValue!==''){
 
       //check whether any page duplications
       if(props.indexOfSection===2){
@@ -265,7 +294,14 @@ const NameRenameModal = (props,ref) => {
         })
 
       }
+      setfieldValue(null);
+      setShowErrMsgOne(false);
+      TerminateRenamingModal();
 
+    }else{
+      setfieldValue(true);
+      setShowErrMsgOne(true);
+    }
       
     }
 
@@ -295,25 +331,27 @@ const NameRenameModal = (props,ref) => {
 
     return(
       <div>
-        <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'renameForm'}>
+        
         <Modal show={toggleOneModal} tabIndex="-1" size="sm" centered>
+        <form /*ref={ref}*/ onSubmit={submitHandlerOne} id={'renameForm'}>
           <Modal.Header closeButton onClick={TerminateRenamingModal}>
             {sectionName}
           </Modal.Header>
           <Modal.Body>
             <label>Enter a page name:</label>
-            <input onChange={inputHandler} name={'fieldName'} value={fieldValue}/>
+            <input onChange={inputHandler} name={'fieldName'} value={fieldValue} className="form-control"/>
+            {showErrMsgOne?<small className="text-danger">{"Enter a sheet name"}</small>:<></>}    
           </Modal.Body>
           <Modal.Footer>
             <Button variant="danger" onClick={TerminateRenamingModal}>
               Close
             </Button>
-            <Button variant="success" onClick={TerminateRenamingModal} form={'renameForm'} type="submit">
+            <Button variant="success"  form={'renameForm'} type="submit">
               Finish
             </Button>
           </Modal.Footer>
+          </form>
         </Modal>
-      </form>
       <MessageBox ref={modalRefRenaming} modalFooterfuncOne={initRenamingModal} id='pageNameDuplicateModal'></MessageBox>
       </div>
 
