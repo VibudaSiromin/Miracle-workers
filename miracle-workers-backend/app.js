@@ -43,6 +43,7 @@ mongoose
     .connect('mongodb+srv://RestAPI:RestAPI123@cluster0.xq2zop1.mongodb.net/miracleworkers?retryWrites=true&w=majority')
     .then(()=>{
         app.listen(5000);
+        console.log('Backend is up');
     })
     .catch(err =>{
         console.log(err);

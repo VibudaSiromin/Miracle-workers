@@ -254,38 +254,39 @@ const TableLauncher = (props) => {
           borderCollapse: "collapse",
           borderRadius: "5px",
           overflow: "hidden",
+          color:"white"
         }}
       >
         <tbody style={{ border: "5px solid #04D9FF" }}>
           <tr>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
               Sheet Name <PlayArrowIcon fontSize="11px" /> {data?.sheetName}
             </td>
-            <td style={{ width: "25%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td style={{ width: "25%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
               Test Case<PlayArrowIcon fontSize="11px" /> {data?.testCase}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
               Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
             </td>
             <td style={{textAlign:'center' }} rowSpan={3} >
               <IconButton aria-label="Example" onClick={() => showModal()}>
-                <CreateIcon sx={{ color: "black", fontSize: "40px" }} />
+                <CreateIcon sx={{ color:"04D9FF", fontSize: "40px" }} />
               </IconButton>
             </td>
           </tr>
           <tr>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
               Test Type <PlayArrowIcon fontSize="11px" /> {data?.type}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' ,color:'white'}}>
               Status <PlayArrowIcon fontSize="11px" /> {data?.status}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' ,color:'white'}}>
               Data Sheet <PlayArrowIcon fontSize="11px" /> {data?.dataSheet}
             </td>
           </tr>
           <tr>
-            <td style={{ width: "", color: "black", fontWeight: "bold",textAlign:'left'}} colSpan={3}>
+            <td style={{ width: "", color: "black", fontWeight: "bold",textAlign:'left',color:'white'}} colSpan={3}>
               Comment <PlayArrowIcon fontSize="11px" /> {data?.comment}
             </td>
           </tr>

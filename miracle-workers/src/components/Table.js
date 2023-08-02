@@ -771,9 +771,9 @@ console.log('hello world!!!!!');
               <MdNavigateNext onClick={next} style={nextIconStyle} size="30px"></MdNavigateNext>
             </div>
       </div>
-      <Button onClick={jsonHandler}>
+      {/* <Button onClick={jsonHandler}>
               Generate JSON
-      </Button>     
+      </Button>      */}
     </div>
   );
 };

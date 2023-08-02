@@ -3,7 +3,7 @@ import './PopUpSelection.css';
 
 const PopUpSelection = (props) => {
     const instructionSet=['#recovery','#skip','#screen'];
-    const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue','While.DataExists','Report.Info','While.End'];
+    const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue','While.DataExists','Report.Info','While.End','Textbox.Write','Browser.Navigate.ToURL','Mouse.Click'];
     const swapResultSet=['Yes','No'];
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
     let options=[];
@@ -56,15 +56,29 @@ const PopUpSelection = (props) => {
         }
       }
 
-    return(
-        <div className="form-group">
-            <label for={props.id} className="form-label">{props.title}</label>
-                <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
-                <datalist id={props.title}>
-                    {options}
-                </datalist>
-        </div>
-    );
+    if(props.title==='command'){
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+                    {props.isCmdEmpty && <small className="text-danger">command field can not be empty</small>}                  
+            </div>
+        );
+    }else{
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+            </div>
+        );
+    }
+ 
 }
 
 //export default connect(mapStateToProps)(Card);

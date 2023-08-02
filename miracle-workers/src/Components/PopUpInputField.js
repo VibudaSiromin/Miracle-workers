@@ -208,6 +208,7 @@ const PopUpInputField =(props) => {
           <div className="form-group">
               <label>{props.title}</label>
               <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={fieldValue}></input>
+              <small className="text-danger">bye</small>
               <Mapper usage={'iteration-data'}  assignLoopRef={applyLoopReferenceValue} browseBtnId={'data'} URLForGettingSheets='http://localhost:5000/data/getDatasheets' URLForGettingHeadings='http://localhost:5000/data/datasheets/getHeadings' URLForGettingNoofRaws='http://localhost:5000/data/datasheets/getNoofRaws' reqDetailsforDB={['dataPageNames','dataPageName','getHeadings']}></Mapper>
           </div>
       );
@@ -283,7 +284,7 @@ const PopUpInputField =(props) => {
           </div>
         )    
       }    
-    }else if(launcherDetails!==null && launcherDetails!==undefined && launcherDetails.type==='Data Driven'){
+    }else if(launcherDetails!==null &&  launcherDetails.type==='Data Driven'){
       return(
         <div className="form-group">
             <label>{props.title}</label>

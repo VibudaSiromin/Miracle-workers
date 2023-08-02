@@ -476,7 +476,7 @@ export const AppSidebarNav = () => {
   //////////////////////////
 
 
-  const pagesDeleteHandler=() => {
+  const pagesDeleteHandler=(event) => {
      //'to' is an array of characters 
       const {to}=URLSection;
       //secondChar is used to identify the type of section
@@ -511,11 +511,14 @@ export const AppSidebarNav = () => {
         if(testPageNames.length===1){
           navigate('/home');
         }else{
+          console.log('brown',currentNavIndex);
           const nextNavName=testPageNames[currentNavIndex+1];
+          nextNavName.slice(0, -1);
           if(nextNavName){
             navigate(`/testJunction/testManual/${nextNavName}`)
           }else{
             const prevNavName=testPageNames[currentNavIndex-1];
+            prevNavName.slice(0,-1);
             navigate(`/testJunction/testManual/${prevNavName}`)
             console.log('GGG',prevNavName);
           }

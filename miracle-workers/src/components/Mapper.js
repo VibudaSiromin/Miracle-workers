@@ -325,7 +325,9 @@ const Mapper = (props) => {
 
 
   useEffect(()=>{
+    console.log('MAN');
     if(props.usage==="Data Driven"){
+      //http://localhost:5000/data/datasheets/getHeadings
       axios.get(props.URLForGettingHeadings, {
         params: {
           dataPageName: props.dataSheetName
@@ -344,7 +346,7 @@ const Mapper = (props) => {
               console.log(error);
            })
     }
-  },[])
+  },[props.usage])
 
 
 
@@ -421,6 +423,7 @@ const Mapper = (props) => {
     )
     
   }else if(props.usage==='Data Driven' && optionsInDDMode.length!==0){
+    console.log('DD!!');
     return(
       <div className="form-group">
             <label>{props.title}</label>

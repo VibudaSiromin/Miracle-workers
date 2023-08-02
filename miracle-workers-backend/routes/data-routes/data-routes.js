@@ -9,7 +9,8 @@ const dataControllers=require('../../controllers/data-controllers/data');
 //route for adding heading to selected data page
 router.post('/dataJunction/data/:dname/addHeading',dataControllers.addHeadingsToData);
 router.post('/dataJunction/dataExcel/:dname/addHeading',dataControllers.addHeadingsToData);
-
+//route for getting excel file name
+//router.post('/dataJunction/dataExcel/getExcelFileName',dataControllers)
 
 //route for removing heading from selected data page
 router.post('/dataJunction/data/:dname/removeHeading',dataControllers.removeHeading);

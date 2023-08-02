@@ -223,6 +223,11 @@ const FileUploader = (props) => {
     	 inputRef.current.click();
   	 };
 
+//file type error handler
+	 const fileTypeErrorHandler =(event,modalId) => {
+		
+	 } 
+
 // Enable or disable the 'ADD' & 'COLUMN' buttons
 	 	 
 
@@ -245,10 +250,10 @@ const FileUploader = (props) => {
 								</div>
 								<div className="file-holder-icons-container">
 									<div ClassName="file-holder-icons">
-										<TfiReload color="white" size="25px" onClick={handleReload}></TfiReload>
+										{/* <TfiReload color="white" size="25px" onClick={handleReload}></TfiReload> */}
 									</div>
 									<div ClassName="file-holder-icons">
-										<MdDelete color="white" size="25px" onClick={handleFiledeletion}></MdDelete>
+										{/* <MdDelete color="white" size="25px" onClick={handleFiledeletion}></MdDelete> */}
 									</div>
 									
 									
@@ -268,10 +273,10 @@ const FileUploader = (props) => {
 			</div>
 			<MessageBox ref={modalRefA} modalFooterfuncOne={fileDeletion} id='deleteModal'></MessageBox>
 			<MessageBox ref={modalRefB} modalFooterfuncOne={fileReload} id='reloadModal'></MessageBox>
-			<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={''} id='fileTypeError'></MessageBox>						
+			<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={fileTypeErrorHandler} id='fileTypeError'></MessageBox>						
 			</>
 			
-		);
+		); 
 	 }else{
 		return(
 			<>
