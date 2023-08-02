@@ -38,8 +38,8 @@ function ModalDialog(props,ref) {
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
-  const [isCmdEmpty,setIsCmdEmpty] = useState(false);
-  const [isInstEmpty,setIsInstEmpty] = useState(false);
+  const [isCmdEmpty,setIsCmdEmpty] = useState(true);
+  const [isInstEmpty,setIsInstEmpty] = useState(true);
   const [modalOneDetails, dispatchModalOne] = useReducer(reducer, modalOneDataSet2);
   
   console.log('btn status',props.btnStatus);
@@ -189,6 +189,7 @@ function ModalDialog(props,ref) {
   const TerminateModalOne = () => {
     setIsCmdEmpty(false);
     setIsInstEmpty(false);
+    dispatchModalOne({type:"CLEAR"})
     return setToggleOneModal(false);
   };
   const initModalTwo = () => {
