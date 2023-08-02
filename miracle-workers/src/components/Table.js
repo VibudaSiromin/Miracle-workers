@@ -12,6 +12,7 @@ import IndexContext from '../contexts/indexContext'
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
+import HashLoader from "react-spinners/HashLoader";
 
 
 const Table = (props) => {
@@ -35,6 +36,9 @@ const Table = (props) => {
   const [rowsPerPage,setRowsPerPage]=useState(5);
   const {indexOfSection}=useContext(IndexContext);
   const [isMount,setIsMount]=useState(false);
+  const [loading,setLoading]=useState(false);
+
+  
 
   useEffect(() => {
     if(props.initialData!==undefined && isMount){
@@ -200,6 +204,7 @@ const Table = (props) => {
 
       if(currentURL==='/testJunction/testManual/'+tname){
         console.log('air cover');
+        setLoading(true);
         axios
         .post('http://localhost:5000/testJunction/testManual/'+tname,{
           editedTestData:newTableData,
@@ -207,9 +212,15 @@ const Table = (props) => {
         })
         .then((res)=>{
           console.log(res);
+          setTimeout(()=>{
+           setLoading(false)
+          },5000)
         })
         .catch((err)=>{
           console.log(err);
+          setTimeout(()=>{
+           setLoading(false)
+          },5000)
         })
       }
       const url='http://localhost:5000/locators/'+tname
@@ -771,9 +782,17 @@ console.log('hello world!!!!!');
               <MdNavigateNext onClick={next} style={nextIconStyle} size="30px"></MdNavigateNext>
             </div>
       </div>
-      {/* <Button onClick={jsonHandler}>
-              Generate JSON
-      </Button>      */}
+      {loading && 
+       <div className="overlay">
+            <HashLoader
+            color={'#4070A4'}
+            loading={loading}
+            size={150}
+            aria-label="Loading Spinner"
+            data-testid="loader"
+          />
+       </div>
+      }
     </div>
   );
 };

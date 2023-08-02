@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect,useReducer} from "react";
 import { Modal, Button } from "react-bootstrap";
 import PopUpInputField from "./PopUpInputField";
 import PopUpSelection from "./PopUpSelection";
@@ -9,6 +9,29 @@ import { forwardRef,useImperativeHandle,useState } from "react";
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
 
+const reducer = (state, action) => {
+  switch (action.type) {
+    case 'CLEAR':
+      return {...state,group:"",instruction:"",command:""}
+    case 'CHANGE_GROUP':
+      return {...state, group: action.payload}
+    case 'CHANGE_INSTRUCTION':
+      return {...state, instruction: action.payload}
+    case 'CHANGE_COMMAND':
+      return {...state, command: action.payload}
+    case 'RE_RENDER' :
+      return {...state}
+    default:
+      return {...state}
+  }
+}
+
+const modalOneDataSet2 = {
+  group:"",
+  instruction:"",
+  command:""
+}
+
 function ModalDialog(props,ref) {
   const [toggleOneModal, setToggleOneModal]  = React.useState(false);
   const [toggleTwoModal, setToggleTwoModal]  = React.useState(false);
@@ -16,6 +39,8 @@ function ModalDialog(props,ref) {
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState({});
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [isCmdEmpty,setIsCmdEmpty] = useState(false);
+  const [isInstEmpty,setIsInstEmpty] = useState(false);
+  const [modalOneDetails, dispatchModalOne] = useReducer(reducer, modalOneDataSet2);
   
   console.log('btn status',props.btnStatus);
 
@@ -31,19 +56,6 @@ function ModalDialog(props,ref) {
   const generalPurposeInputData={};
 
   const dispatch = useDispatch();
-
-  // const getDataPages = () => {
-  //   axios
-  //   .get('http://localhost:5000/dataJunction/dataExcel/getExcelFileName')
-  //   .then((res)=>{
-  //   })
-  //   .catch((err) => {
-  //     console.log(err);
-  //   });
-
-  // }
-
-
 
 
   const inputHandler = (name, value) => {
@@ -133,6 +145,7 @@ function ModalDialog(props,ref) {
              generalPurpose={props.generalPurpose}
              onDataChange={inputHandler}
              isCmdEmpty={isCmdEmpty}
+             isInstEmpty={isInstEmpty}
              ></PopUpSelection>
          );
       }
@@ -158,6 +171,7 @@ function ModalDialog(props,ref) {
                generalPurpose={props.generalPurpose}
                onDataChange2={inputHandler2}
                isCmdEmpty={isCmdEmpty}
+               isInstEmpty={isInstEmpty}
                ></PopUpSelection>
             );
           }
@@ -174,6 +188,7 @@ function ModalDialog(props,ref) {
   };
   const TerminateModalOne = () => {
     setIsCmdEmpty(false);
+    setIsInstEmpty(false);
     return setToggleOneModal(false);
   };
   const initModalTwo = () => {
@@ -185,26 +200,41 @@ function ModalDialog(props,ref) {
     return setToggleTwoModal(false);
   };
 
+
+  //////////////////////////////
+  
+
+
+
+
+  //////////////////////////////
+
+
+
   const NextStep = () => {
     if(props.generalPurpose===false){
       console.log('jet',testStepsData);
       setModalOneDataSet(testStepsData);
 
-      if('command' in testStepsData){
-        if(testStepsData.command==="" || testStepsData.command===null || testStepsData.command===undefined){
-          setIsCmdEmpty(true)
-        }else{
-          setIsCmdEmpty(false);
-          TerminateModalOne();
-          if (props.enableChainPopUps) {
-            setTimeout(() => {
-              setToggleTwoModal(true);
-            }, 400);
-          }
-        }
-      }else{
-        setIsCmdEmpty(true)
+      //////***************** */
+      if('group' in testStepsData){
+        dispatchModalOne({type:"CHANGE_GROUP",payload:testStepsData.group})
       }
+      if('instruction' in testStepsData){
+        dispatchModalOne({type:"CHANGE_INSTRUCTION",payload:testStepsData.instruction})
+      }
+      if('command' in testStepsData){
+        dispatchModalOne({type:"CHANGE_COMMAND",payload:testStepsData.command})
+      }
+      if(modalOneDetails.instruction==="" || modalOneDetails.command===""){
+        dispatchModalOne({type:"RE_RENDER"})
+      }
+        
+      console.log('super mario',modalOneDetails);
+      //dispatchModalOne({type:"RE_RENDER"})
+      
+      //////***************** */
+    
     }
     if(props.generalPurpose===true){
       console.log('Next step',generalPurposeInputData);
@@ -219,6 +249,33 @@ function ModalDialog(props,ref) {
     }
    
   };
+
+  useEffect(()=>{
+    console.log('tree');
+    if(modalOneDetails.instruction===""){
+      setIsInstEmpty(true)
+    }else{
+      setIsInstEmpty(false);
+    }
+    if(modalOneDetails.command===""){
+      setIsCmdEmpty(true)
+    }else{
+      setIsCmdEmpty(false);
+    }
+
+  },[modalOneDetails]);
+
+  useEffect(()=>{
+    console.log('farm');
+    if(modalOneDetails.instruction!=="" && modalOneDetails.command!==""){
+      TerminateModalOne();
+      if (props.enableChainPopUps) {
+        setTimeout(() => {
+          setToggleTwoModal(true);
+        }, 400);
+      }
+    }
+  },[isCmdEmpty,isInstEmpty])
 
   const ApplyBtnValue = () => {
     if (props.enableChainPopUps) {
@@ -256,10 +313,13 @@ function ModalDialog(props,ref) {
     event.preventDefault();
     if(props.enableChainPopUps===true){
     props.saveNewData(modalTwoDataSet);
+    dispatchModalOne({type:"CLEAR"})
     TerminateModalOne();
     }
 
   };
+
+
 
   const renderAddButton = () => {
     if (props.addBtnId==='testMBtn') {

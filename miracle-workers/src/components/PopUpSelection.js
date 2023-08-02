@@ -67,6 +67,17 @@ const PopUpSelection = (props) => {
                     {props.isCmdEmpty && <small className="text-danger">command field can not be empty</small>}                  
             </div>
         );
+    }else if(props.title==='instruction'){
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+                    {props.isInstEmpty && <small className="text-danger">Instruction field can not be empty</small>}                  
+            </div>
+        );
     }else{
         return(
             <div className="form-group">
@@ -78,6 +89,8 @@ const PopUpSelection = (props) => {
             </div>
         );
     }
+
+    
  
 }
 

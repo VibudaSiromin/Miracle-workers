@@ -18,3 +18,23 @@
 .mb-4, .my-4{
     margin-bottom: 0rem !important;
 }
+
+.d-md-flex{
+    display: flex;
+    justify-content:space-evenly;
+}
+.d-md-flex img{
+    width: 50px;
+    height: 50px;
+}
+.d-md-flex h2{
+    align-self: center;
+}
+
+.d-md-flex p {
+    font-size: 8px;
+}
+.home-container img{
+    width: 600px;
+    height: 500px;
+}
