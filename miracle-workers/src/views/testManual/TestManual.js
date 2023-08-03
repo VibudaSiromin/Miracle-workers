@@ -38,8 +38,15 @@ const TestManual = () => {
     //   ]
 
     return(
-        <>
+        <>  
+        <div className="launcher-title">
+            <h1><b>Launcher</b></h1>
+        </div>
             <Launcher/>
+        <hr className="horizontal-ruler"/>
+        <div className="test-sheet-title">
+            <h1><b>Test Sheet</b></h1>
+        </div>    
             <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="testSuites" addBtnId={'testMBtn'}></Table>
         </>
  
