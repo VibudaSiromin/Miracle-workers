@@ -45,7 +45,6 @@
     "redux": "^4.2.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.59.3",
-    "saver": "^0.1.1",
     "simplebar-react": "^2.4.3",
     "source-map-loader": "^3.0.2",
     "styled-components": "^5.3.6",
