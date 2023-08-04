@@ -387,10 +387,12 @@ const JSONGenerator = () => {
             if(attachDataSheets.length!==0){
                 const dataPages={};             
                 for(let i=0;i<attachDataSheets.length;i++){
+                    console.log('bird box',attachDataSheets);
                     const index = dataSection.findIndex(data=>data[0]===attachDataSheets[i]);
+                    console.log('gumpert',dataSection[index]);
                     const selectedSheetNameWithdata=dataSection[index];
                     const tempObj={};
-                    if(attachDataSheets[i].charAt(attachDataSheets[i].length-1)==="M"){
+                     if(attachDataSheets[i].charAt(attachDataSheets[i].length-1)==="M"){
                         for(let j=2;j<selectedSheetNameWithdata.length;j++){
                             tempObj[j-1]=selectedSheetNameWithdata[j];
                         }
@@ -398,7 +400,7 @@ const JSONGenerator = () => {
                         for(let j=3;j<selectedSheetNameWithdata.length;j++){
                             tempObj[j-1]=selectedSheetNameWithdata[j];
                         }
-                    }
+                     }
                     dataPages[attachDataSheets[i]]=tempObj;
                 }
 
