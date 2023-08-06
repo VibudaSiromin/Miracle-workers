@@ -26,6 +26,8 @@ const PopUpInputField =(props) => {
 
     const {lname,tname,cname,dname} =useParams();
 
+    console.log('django',props.isDataEmpty);
+
     console.log('mySheet',props.dataSheetName);
     console.log('myCmd',props.command);
     console.log('myType',props.testType);
@@ -209,6 +211,7 @@ const PopUpInputField =(props) => {
               <label>{props.title}</label>
               <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={fieldValue}></input>
               <small className="text-danger">bye</small>
+              {props.isDataEmpty && <small className="text-danger">data field can not be empty</small>}
               <Mapper usage={'iteration-data'}  assignLoopRef={applyLoopReferenceValue} browseBtnId={'data'} URLForGettingSheets='http://localhost:5000/data/getDatasheets' URLForGettingHeadings='http://localhost:5000/data/datasheets/getHeadings' URLForGettingNoofRaws='http://localhost:5000/data/datasheets/getNoofRaws' reqDetailsforDB={['dataPageNames','dataPageName','getHeadings']}></Mapper>
           </div>
       );
@@ -217,6 +220,7 @@ const PopUpInputField =(props) => {
           <div className="form-group">
             <label>{props.title}</label>
             <select name="var-list" id="var-list" className="form-select" aria-label="Default select example" onChange={(event) => applyDataValueFromSelector(event.target.value)}>{list}</select>
+            {props.isDataEmpty && <small className="text-danger">data field can not be empty</small>}
           </div>
         )
       }else if(reportNormal){
@@ -224,6 +228,7 @@ const PopUpInputField =(props) => {
           <div className="form-group">
           <label>{props.title}</label>
           <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler}></input>
+          {props.isDataEmpty && <small className="text-danger">data field can not be empty</small>}
         </div>
         )
       }else if(props.command==="Report.Info"){ 
@@ -249,6 +254,7 @@ const PopUpInputField =(props) => {
           <div className="form-group">
             <label>{props.title}</label>
             <select name="loop-list" id="loop-list" className="form-select" aria-label="Default select example" onChange={(event)=>applyWhileEndValuesFromSelector(event.target.value)}>{whileEndLoopValue}</select>
+            {props.isDataEmpty && <small className="text-danger">data field can not be empty</small>}
           </div>
         )
 
@@ -280,6 +286,7 @@ const PopUpInputField =(props) => {
           <div className="form-group">
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={fieldValue}></input>
+            {props.isDataEmpty && <small className="text-danger">data field can not be empty</small>}
             <Mapper usage={'basicDataSection'}  selectedHeading={applyDataFieldValue} browseBtnId={'data'} URLForGettingSheets='http://localhost:5000/data/getDatasheets' URLForGettingHeadings='http://localhost:5000/data/datasheets/getHeadings' URLForGettingNoofRaws='http://localhost:5000/data/datasheets/getNoofRaws' reqDetailsforDB={['dataPageNames','dataPageName','getHeadings']}></Mapper>
           </div>
         )    
@@ -288,6 +295,7 @@ const PopUpInputField =(props) => {
       return(
         <div className="form-group">
             <label>{props.title}</label>
+            {props.isDataEmpty && <small className="text-danger">data field can not be empty</small>}
             <Mapper usage={'Data Driven'}  setSelectorValues={applyDataValueFromSelector} browseBtnId={'data'} dataSheetName={launcherDetails.dataSheet} URLForGettingHeadings='http://localhost:5000/data/datasheets/getHeadings'  reqDetailsforDB={['locatorsPageNames','locatorPageName','getHeadings']}></Mapper>
         </div>
     );
@@ -298,6 +306,7 @@ const PopUpInputField =(props) => {
         <div className="form-group">
             <label>{props.title}</label>
             <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler} value={fieldValue}></input>
+            {props.isLocatorEmpty && <small className="text-danger">locator field can not be empty</small>}
             <Button id="locatorDirectBtn" className="btn-sm" onClick={initLocTypeModal}>Types</Button>
             {/* <Mapper usage={'basic'}  selectedHeading={applyDataFieldValue} browseBtnId={'locator'} URLForGettingSheets='http://localhost:5000/locators' URLForGettingHeadings='http://localhost:5000/locators/getHeadings' URLForGettingNoofRaws='http://localhost:5000/locators/getNoofRaws' reqDetailsforDB={['locatorsPageNames','locatorPageName','getHeadings']}></Mapper> */}
         </div>
@@ -334,6 +343,16 @@ const PopUpInputField =(props) => {
             </Modal> 
           </>
     );
+    }else if(props.title==='branchSelection'){
+      console.log('butterFly Effect');
+      return(
+        <div className="form-group">
+            <label>{props.title}</label>
+            <input type={props.inputType} className="form-control" name={props.title}  onChange={inputHandler}></input>
+            {props.isBranchSelection && <small className="text-danger">Branch selection field can not be empty</small>}
+        </div>
+    );
+
     }else{
       return(
         <div className="form-group">

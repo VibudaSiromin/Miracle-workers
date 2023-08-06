@@ -1,5 +1,6 @@
 import { propTypes } from "react-bootstrap/esm/Image";
 import './PopUpSelection.css';
+import commandArray from "../assets/commands";
 
 const PopUpSelection = (props) => {
     const instructionSet=['#recovery','#skip','#screen'];
@@ -16,9 +17,9 @@ const PopUpSelection = (props) => {
               }
               console.log(options);
         }else if(props.title==='command'){
-            for (let i = 0; i<commandSet.length; i++) {
+            for (let i = 0; i<commandArray.length; i++) {
                 options.push(
-                    <option value={commandSet[i]}/>
+                    <option value={commandArray[i][0]}/>
                 );
               }
               console.log(options);

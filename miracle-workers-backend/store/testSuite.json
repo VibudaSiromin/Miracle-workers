@@ -1,11 +1,1 @@
-[
-  [
-    "loginM",
-    { "command": "Browser.Open" },
-    { "command": "Component.Load", "locator": "authentication|login" },
-    { "command": "Browser.Close" },
-    { "command": "Report.Info" },
-    { "command": "Branch.BasedOnData" }
-  ],
-  ["test02M"]
-]
+[["loginM",{"command":"Browser.Open"},{"command":"Component.Load","locator":"authentication|login"},{"command":"Browser.Close"},{"command":"Report.Info"},{"command":"Branch.BasedOnData"},{"instruction":"#recovery","command":"Branch.BasedOnData","data":"#data.userM.head02.1","swapResult":"Yes","action":"Log info on error"},{"command":"Branch.BasedOnData","instruction":"#screen","data":"#data.data05E.employee.1","branchSelection":"myBranch","comment":"myComment"},{"instruction":"#screen","command":"Branch.BasedOnData"},{"instruction":"#recovery","command":"Branch.BasedOnData"},{"instruction":"#recovery","command":"Branch.BasedOnData"},{"instruction":"#recovery","command":"Branch.BasedOnData"},{"instruction":"#recovery","command":"Branch.BasedOnData"},{"instruction":"#recovery","command":"Branch.BasedOnValue"},{"command":"Branch.BasedOnData"},{"command":"Branch.BasedOnData","instruction":"#recovery"},{},{},{"instruction":"#recovery","command":"Branch.BasedOnValue","branchSelection":"cdc","data":"#data.userM.head02.1"},{"command":"Branch.BasedOnData","instruction":"#recovery","branchSelection":"vsv","data":"#data.userM.head02.1"},{"command":"Branch.OnElementText","instruction":"#skip","branchSelection":"cdc","data":"#data.userM.head02.2","locator":"cdcd"},{"command":"Branch.OnElementValue","instruction":"#recovery","locator":"#linktext.gg","branchSelection":"cdc","data":"#data.userM.head02.3"},{"instruction":"#skip","command":"Browser.ExecuteScript","data":"#data.data05E.employee.2","locator":"#css.loc2"},{"instruction":"#skip","command":"Checkbox.Uncheck","locator":"#linktext.loc","action":"Stop test on error"},{"command":"Browser.Switch","instruction":"#skip","swapResult":"Yes","action":"Log info on error","data":"#data.data03M.name.2"},{"instruction":"#recovery","command":"GoTo.LineNumber","swapResult":"Yes","branchSelection":"vsv"},{"command":"Browser.Alerts.Cancel","instruction":"#recovery","swapResult":"Yes","action":"Stop test on failure","comment":"cd"}],["test02M"]]

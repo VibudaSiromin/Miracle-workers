@@ -204,7 +204,7 @@ const Table = (props) => {
 
       if(currentURL==='/testJunction/testManual/'+tname){
         console.log('air cover');
-        setLoading(true);
+        //setLoading(true);
         axios
         .post('http://localhost:5000/testJunction/testManual/'+tname,{
           editedTestData:newTableData,
@@ -212,15 +212,15 @@ const Table = (props) => {
         })
         .then((res)=>{
           console.log(res);
-          setTimeout(()=>{
-           setLoading(false)
-          },5000)
+          // setTimeout(()=>{
+          //  setLoading(false)
+          // },5000)
         })
         .catch((err)=>{
           console.log(err);
-          setTimeout(()=>{
-           setLoading(false)
-          },5000)
+          // setTimeout(()=>{
+          //  setLoading(false)
+          // },5000)
         })
       }
       const url='http://localhost:5000/locators/'+tname

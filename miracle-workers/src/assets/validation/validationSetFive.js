@@ -1,0 +1,2 @@
+export const validationSetFive = ['Browser.Navigate.ToURL','Browser.Switch','Browser.Validate.Title','Browser.Validate.URL','Clipboard.ChangeValue','Clipboard.InsertValue','Report.Error','Report.Fail','Report.Info','Report.Success','Settings.Set','System.GetFromClipboard','System.KeyCombo','System.KeyPress','System.SendToClipboard','System.Type','Wait.Pause','Wait.Until.TitleContains','Wait.Until.TitleIs','While.Count','While.DataExists','While.End'];
+
