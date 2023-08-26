@@ -3,7 +3,6 @@ import Mapper from "./Mapper";
 import { connect } from 'react-redux';
 import axios from "axios";
 import { useParams } from "react-router-dom";
-//import { Button } from "@coreui/coreui";
 import { Button,Modal } from "react-bootstrap";
 
 const PopUpInputField =(props) => {

@@ -146,7 +146,7 @@ const modalTwoDataSetValSix = {
 const valSixReducer = (state, action) => {//validationSetThree
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, data:''};
+      return { ...state, branchSelection:''};
     case 'CHANGE_BRANCH_SELECTION':
       return { ...state, branchSelection: action.payload };
     case 'RE_RENDER':
@@ -175,13 +175,15 @@ function ModalDialog(props, ref) {
   const [validationFive,dispatchValidationFive] = useReducer(valFiveReducer,modalTwoDataSetValFive);
   const [validationSix,dispatchValidationSix] = useReducer(valSixReducer,modalTwoDataSetValSix);
   const [commandBasedFields, setCommandBasedFields] = useState([[], '']);
-  const [isMount,setIsMount] = useState(false);
+  const [isMountOne,setIsMountOne] = useState(false);
   const [isMountTwo,setIsMountTwo] = useState(false);
   const [isMountThree,setIsMountThree] = useState(false);
   const [isMountFour,setIsMountFour] = useState(false);
   const [isMountFive,setIsMountFive] = useState(false);
   const [isMountSix,setIsMountSix] = useState(false);
-  const [isMountSeven,setIsMountSeven] = useState(false)
+  const [isMountSeven,setIsMountSeven] = useState(false);
+  const [stateOne,setStateOne] = useState(false);
+  const [stateTwo,setStateTwo] = useState(false);
   console.log('btn status', props.btnStatus);
 
   const { lname, tname, cname, dname } = useParams();
@@ -328,7 +330,7 @@ function ModalDialog(props, ref) {
         break;
     }
 
-    console.log(testStepsData2);
+    
   };
 
   const inputHandler3 = (name, value) => {
@@ -419,36 +421,50 @@ function ModalDialog(props, ref) {
 
   fieldLoop();
   const initModalOne = () => {
+    setIsCmdEmpty(false);
+    setIsInstEmpty(false);
     return setToggleOneModal(true);
   };
   const TerminateModalOne = () => {
+    dispatchModalOne({ type: 'CLEAR' });
+    return setToggleOneModal(false);
+  };
+  const initModalTwo = () => {
     setIsCmdEmpty(false);
     setIsInstEmpty(false);
     setIsDataEmpty(false);
     setIsBranchSelection(false);
     setIsLocatorEmpty(false);
-    dispatchModalOne({ type: 'CLEAR' });
-    return setToggleOneModal(false);
-  };
-  const initModalTwo = () => {
     return setToggleTwoModal(true);
   };
   const TerminateModalTwo = () => {
     console.log(testStepsData2);
+    dispatchValidationOne({
+      type:'CLEAR'
+    });
+    dispatchValidationTwo({
+      type:'CLEAR'
+    });
+    dispatchValidationThree({
+      type:'CLEAR'
+    });
+    dispatchValidationFour({
+      type:'CLEAR'
+    });
+    dispatchValidationFive({
+      type:'CLEAR'
+    });
+    dispatchValidationSix({
+      type:'CLEAR'
+    });
     //setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
     return setToggleTwoModal(false);
   };
 
-  //////////////////////////////
-
-  //////////////////////////////
-
   const NextStep = () => {
     if (props.generalPurpose === false) {
-      console.log('jet', testStepsData);
       setModalOneDataSet(testStepsData);
 
-      //////***************** */
       if ('group' in testStepsData) {
         dispatchModalOne({
           type: 'CHANGE_GROUP',
@@ -474,25 +490,23 @@ function ModalDialog(props, ref) {
         dispatchModalOne({ type: 'RE_RENDER' });
       }
 
-      console.log('super mario', modalOneDetails);
-      //dispatchModalOne({type:"RE_RENDER"})
-
-      //////***************** */
     }
     if (props.generalPurpose === true) {
       console.log('Next step', generalPurposeInputData);
       setModalOneGeneralDataSet(generalPurposeInputData);
 
       TerminateModalOne();
-      if (props.enableChainPopUps) {
+      if (props.enableChainPopUps) {   
         setTimeout(() => {
-          setToggleTwoModal(true);
+          initModalTwo();
         }, 400);
       }
     }
   };
 
   useEffect(() => {
+    console.log('jet fire',modalOneDetails.instruction);
+    console.log('jet fire 2',modalOneDetails.command);
     if(isMountTwo){
       if (modalOneDetails.instruction === '') {
         setIsInstEmpty(true);
@@ -508,6 +522,7 @@ function ModalDialog(props, ref) {
       setIsMountTwo(true);
     }
    
+    setStateOne(!stateOne);
   }, [modalOneDetails]);
 
   useEffect(() => {
@@ -520,7 +535,7 @@ function ModalDialog(props, ref) {
         }, 400);
       }
     }
-  }, [isCmdEmpty, isInstEmpty]);
+  }, [stateOne]);
 
   const ApplyBtnValue = () => {
     if (props.enableChainPopUps) {
@@ -557,11 +572,11 @@ function ModalDialog(props, ref) {
     console.log(modalOneDataSet,'sailor2');
     event.preventDefault();
     if (props.enableChainPopUps === true) {
-      setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
-      ////////////////////////////////////////
       console.log(testStepsData2,'MAC');
+      setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
+      ////////////////////////////////////////     
       if(validationSetOne.includes(modalOneDataSet.command)){
-        console.log('fight');
+        console.log('fight11111',testStepsData2);
         if ('data' in testStepsData2) {
           dispatchValidationOne({
             type: 'CHANGE_DATA',
@@ -575,7 +590,7 @@ function ModalDialog(props, ref) {
           });
         }
         if (!('data' in testStepsData2) && !('branchSelection' in testStepsData2)) {
-          //dispatchModalOne({ type: 'RE_RENDER' });
+          console.log('MORA!!!',validationOne.data);
           if(validationOne.data===''){
             setIsDataEmpty(true)
           }
@@ -684,19 +699,12 @@ function ModalDialog(props, ref) {
           dispatchModalOne({ type: 'CLEAR' });
           TerminateModalTwo();
       }
-
-
-      /////////////////////////////////////////
-      // props.saveNewData(modalTwoDataSet);
-      // dispatchModalOne({ type: 'CLEAR' });
-      // TerminateModalOne();
-     
     }
   };
 
   useEffect(() => {
     console.log(validationOne.data,'fire');
-    if(isMount){
+    if(isMountOne){
       if (validationOne.data === '') {
         setIsDataEmpty(true);
       } else {
@@ -708,8 +716,10 @@ function ModalDialog(props, ref) {
         setIsBranchSelection(false);
       }
     }else{
-      setIsMount(true)
+      setIsMountOne(true)
     }
+
+    setStateTwo(!stateTwo);
   }, [validationOne]);
 
 
@@ -734,6 +744,7 @@ function ModalDialog(props, ref) {
     }else{
       setIsMountThree(true)
     }
+    setStateTwo(!stateTwo);
   }, [validationTwo]);
 
   useEffect(() => {
@@ -752,6 +763,7 @@ function ModalDialog(props, ref) {
     }else{
       setIsMountFour(true)
     }
+    setStateTwo(!stateTwo);
   }, [validationThree]);
 
   useEffect(() => {
@@ -764,6 +776,7 @@ function ModalDialog(props, ref) {
     }else{
       setIsMountFive(true)
     }
+    setStateTwo(!stateTwo);
   }, [validationFour]);
 
   useEffect(() => {
@@ -776,6 +789,7 @@ function ModalDialog(props, ref) {
     }else{
       setIsMountSix(true)
     }
+    setStateTwo(!stateTwo);
   }, [validationFive]);
 
   useEffect(() => {
@@ -788,6 +802,7 @@ function ModalDialog(props, ref) {
     }else{
       setIsMountSeven(true)
     }
+    setStateTwo(!stateTwo);
   }, [validationSix]);
 
   useEffect(() => {
@@ -835,7 +850,7 @@ function ModalDialog(props, ref) {
       }
     }
    
-  }, [isDataEmpty,isBranchSelection,isLocatorEmpty]);
+  }, [stateTwo]);
 
 
   const renderAddButton = () => {
@@ -864,10 +879,6 @@ function ModalDialog(props, ref) {
   return (
     <>
       {renderAddButton()}
-      {/* <Button variant="success" onClick={initModalOne} id={props.addBtnId}>
-        <MdTableRows></MdTableRows>
-        {props.buttonValue}
-      </Button> */}
       <form onSubmit={submitHandlerOne} id={props.formID[0]}>
         <Modal show={toggleOneModal} tabIndex="-1">
           <Modal.Header closeButton onClick={TerminateModalOne}>

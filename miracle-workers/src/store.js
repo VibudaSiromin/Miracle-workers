@@ -19,6 +19,25 @@ const initialTestSheetState = {
   initialLauncherModalVisibilityState:false,
 }
 
+const editModalOneData = {
+  group:'',
+  instruction:'',
+  command:''
+}
+
+
+
+const editModalTwoData = {
+  locator:'',
+  locatorParameter:'',
+  data:'',
+  swapResult:'',
+  branchSelection:'',
+  action:'',
+  comment:'',
+  status:false
+}
+
 const initialTestPageNameState = {
   testPageName:'King'
 }
@@ -35,6 +54,10 @@ const testAddBtnStatus = {
   status:false
 }
 
+const initEditModalOne = {
+  initEditModal:false
+}
+
 const commandState = {
   command:'cmd1'
 }
@@ -45,6 +68,20 @@ const typeState = {
 
 const dataSheetState = {
   dataSheet:'sheet'
+}
+
+export const setEditModalOneData = (modalOneDataSet) => {
+  return{
+    type:'SET_EDIT_MODAL_ONE_DATA',
+    payload:modalOneDataSet
+  }
+}
+
+export const setEditModalTwoData = (modalTwoDataSet) => {
+  return{
+    type:'SET_EDIT_MODAL_TWO_DATA',
+    payload:modalTwoDataSet
+  }
 }
 
 export const setTestAddBtnStatus = (status) => {
@@ -106,8 +143,6 @@ const renameState = {
   initiateRenameModal:false// modal used to rename the pagenames
 }
 
-
-
 const changeStateReducer = (state = initialSideBarState, { type, ...rest }) => {
 
   switch (type) {
@@ -136,6 +171,47 @@ const addDataSheetNameReducer = (state = initialDataSheetState, action) => {
       };
     default:
       return state;
+  }
+}
+
+const getEditModalOneDataReducer = (state = editModalOneData,action) => {
+  switch(action.type){
+    case "SET_EDIT_MODAL_ONE_DATA":
+    return{
+      ...state,
+      group:action.payload.group,
+      instruction:action.payload.instruction,
+      command:action.payload.command
+    }
+    default:
+      return state
+  }
+}
+
+// 'locator',
+// 'locatorParameter',
+// 'data',
+// 'swapResult',
+// 'branchSelection',
+// 'action',
+// 'comment',
+
+const getEditModalTwoDataReducer = (state = editModalTwoData,action) => {
+  switch(action.type){
+    case "SET_EDIT_MODAL_TWO_DATA":
+    return{
+      ...state,
+      locator:action.payload.locator,
+      locatorParameter:action.payload.locatorParameter,
+      data:action.payload.data,
+      swapResult:action.payload.swapResult,
+      branchSelection:action.payload.branchSelection,
+      action:action.payload.action,
+      comment:action.payload.comment,
+      status:!state.status
+    }
+    default:
+      return state
   }
 }
 
@@ -271,6 +347,18 @@ const renameModalReducer = (state = renameState, action) => {
   }
 }
 
+const initiateEditModalReducer = (state = initEditModalOne, action) => {
+  switch(action.type){
+    case "INITIATE_EDIT_MODAL":
+      return{
+        ...state,
+        initEditModal:!state.initEditModal
+      };
+      default:
+        return state;
+  }
+}
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
     addDataSheetName:addDataSheetNameReducer,
@@ -283,7 +371,10 @@ const rootReducer = combineReducers({
     getTestType:getTestTypeReducer,
     getDataSheetName:getDataSheetNameReducer,
     getDataSheetAtNameAssigner:getDataSheetAtNameAssignerReducer,
-    getTestAddBtnStatus:getTestAddBtnStatusReducer
+    getTestAddBtnStatus:getTestAddBtnStatusReducer,
+    getEditModalOneData:getEditModalOneDataReducer,
+    initiateEditModal:initiateEditModalReducer,
+    getEditModalTwoData:getEditModalTwoDataReducer
 })
 
 const store = createStore(rootReducer)

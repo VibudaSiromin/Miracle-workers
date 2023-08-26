@@ -4,13 +4,17 @@ import { propTypes } from "react-bootstrap/esm/Image";
 import EditModalDialog from "./EditPopUpWindow";
 import {MdModeEdit,MdDeleteForever,MdArrowDropUp,MdArrowDropDown} from 'react-icons/md';
 import './Raw.css';
+import { useDispatch } from "react-redux";
 
 const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPurpose,enableChainPopUps}) => {
 
+  const dispatch = useDispatch();
   const tableDataArray=[];
 
   const modalRef=useRef();
   const editButtonHandler = () => {
+    console.log('jammm');
+    //dispatch({type:'INITIATE_EDIT_MODAL'});
     modalRef.current.log();
   };
 

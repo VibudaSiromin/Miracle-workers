@@ -1,6 +1,7 @@
 import { propTypes } from "react-bootstrap/esm/Image";
 import {useState,useEffect} from "react";
 import './PopUpSelection.css';
+import commandArray from "../assets/commands";
 
 const PopUpSelection = (props) => {
     const instructionSet=['#recovery','#skip','#screen'];
@@ -11,6 +12,10 @@ const PopUpSelection = (props) => {
     const [fieldName,setFieldName]=useState(props.title);
     const [fieldValue,setFieldValue]=useState(props.editTestStep);
     const [changeState,setChangeState]=useState(false);
+
+    console.log('pigeon',props.isCmdEmpty);
+    console.log('pigeon2',props.isInstEmpty)
+
     //console.log(options);
     const InsertDataToSelection = () => {
         if(props.title==='instruction'){
@@ -18,13 +23,12 @@ const PopUpSelection = (props) => {
                 options.push(
                     <option value={instructionSet[i]}/>
                 );
-                console.log("Bye");
               }
               console.log(options);
         }else if(props.title==='command'){
-            for (let i = 0; i<commandSet.length; i++) {
+            for (let i = 0; i<commandArray.length; i++) {
                 options.push(
-                    <option value={commandSet[i]}/>
+                    <option value={commandArray[i][0]}/>
                 );
                 
               }
@@ -74,15 +78,50 @@ const PopUpSelection = (props) => {
         }
       }
 
-    return(
-        <div className="form-group">
-            <label for={props.id} className="form-label">{props.title}</label>
-                <input type="text" list={props.title} className="form-control" name={props.title} value={fieldValue} onChange={inputHandler} />            
-                <datalist id={props.title}>
-                    {options}
-                </datalist>
-        </div>
-    );
+
+      if(props.title==='command'){
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} value={fieldValue} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+                    {props.isCmdEmpty && <small className="text-danger">command field can not be empty</small>}                  
+            </div>
+        );
+    }else if(props.title==='instruction'){
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} value={fieldValue} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+                    {props.isInstEmpty && <small className="text-danger">Instruction field can not be empty</small>}                  
+            </div>
+        );
+    }else{
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} value={fieldValue} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+            </div>
+        );
+    }
+
+    // return(
+    //     <div className="form-group">
+    //         <label for={props.id} className="form-label">{props.title}</label>
+    //             <input type="text" list={props.title} className="form-control" name={props.title} value={fieldValue} onChange={inputHandler} />            
+    //             <datalist id={props.title}>
+    //                 {options}
+    //             </datalist>
+    //     </div>
+    // );
 }
 
 export default PopUpSelection;
