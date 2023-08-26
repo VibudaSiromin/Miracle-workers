@@ -129,6 +129,12 @@ const renameTestPageNameInLauncher =async (req,res,next) =>{
     const data = await fs.promises.readFile(launcherFilePath);
     launcherSection = JSON.parse(data);
     launcherSection[pageIndex][0]=newTestPageName+"M";
+    if(launcherSection[pageIndex].length===2){
+      if('sheetName' in launcherSection[pageIndex][1]){
+        console.log('viper',newTestPageName);
+        launcherSection[pageIndex][1]['sheetName']=newTestPageName;
+      }
+    }
     const newTestSection=JSON.stringify(launcherSection);
     try{
       await fs.promises.writeFile(launcherFilePath,newTestSection);

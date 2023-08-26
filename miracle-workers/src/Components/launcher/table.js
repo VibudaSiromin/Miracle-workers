@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { setTestType,setDataSheet,setTestAddBtnStatus } from "../../store";
+import { setTestType,setDataSheet,setTestAddBtnStatus,setTestPageName } from "../../store";
 import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 
@@ -23,6 +23,7 @@ const TableLauncher = (props) => {
   const [data, setData] = useState({});
   const [isLauncherMount,setIsLauncherMount] = useState(false);
   const [isMount,setIsMount] = useState(false);
+  const [isMountTwo,setIsMountTwo] = useState(false);
   const [isDataDriven,setIsDataDriven] = useState(false);
 
   const {tname}=useParams();
@@ -146,6 +147,7 @@ const TableLauncher = (props) => {
   // };
 
   const getDataFromStore =async () => {
+    console.log('banana2',tname);
     try{
       const response= await axios.get(
         `http://localhost:5000/launcher/getLauncherContent`,
@@ -157,6 +159,7 @@ const TableLauncher = (props) => {
       )
       const launcherDetails=response.data.getLauncherDetails;
       setData(launcherDetails);
+      dispatch(setTestPageName(launcherDetails.sheetName));
       console.log('arial',launcherDetails);
       if(launcherDetails===undefined){
         dispatch(setTestAddBtnStatus(false));
@@ -180,11 +183,58 @@ const TableLauncher = (props) => {
     
   }
 
+  const rerenderLauncherSection = async () => {
+    const renamedTestPageName = props.renamedTestPageName;
+    console.log('T34',renamedTestPageName);
+    try{
+      const response= await axios.get(
+        `http://localhost:5000/launcher/getLauncherContent`,
+        {
+          params:{
+                   testPageName:renamedTestPageName+"M"
+                 }
+        }
+      )
+      const launcherDetails=response.data.getLauncherDetails;
+      setData(launcherDetails);
+      dispatch(setTestPageName(launcherDetails.sheetName));
+      console.log('arial',launcherDetails);
+      if(launcherDetails===undefined){
+        dispatch(setTestAddBtnStatus(false));
+      }else{
+        dispatch(setTestAddBtnStatus(true));
+      }
+      
+    }catch(err){
+      if(err.response){
+        console.log(err.response.data);
+        console.log(err.response.status);
+        console.log(err.response.headers);
+      }else if(err.request){
+        // The client never received a response, and the request was never left
+        console.log(err.request);
+      }else{
+        // Anything else
+        console.log('Error', err.message);
+      }
+    }
+  }
 
+  const rerenderingStatusOfLauncherSection = useSelector((state)=>state.rerenderingLauncherSection.launcherSectionStatus);
 
   useEffect(()=>{
+    
     getDataFromStore();
   },[tname])
+
+  useEffect(()=>{
+    if(isMountTwo){
+      console.log('banana',rerenderingStatusOfLauncherSection);
+      rerenderLauncherSection();
+    }else{
+      setIsMountTwo(true);
+    }
+  },[rerenderingStatusOfLauncherSection])
 
   const onCancel = () => {
     reset();
@@ -300,6 +350,7 @@ const TableLauncher = (props) => {
 const mapStateToProps = (state) => {
   return{
     testPageName: state.getTestSheetName.testPageName,
+    renamedTestPageName:state.getRenamedPageName.renamedPageName
   }
 };
 

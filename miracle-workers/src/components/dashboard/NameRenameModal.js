@@ -2,9 +2,9 @@ import React,{forwardRef} from "react";
 import { useState,useEffect,useImperativeHandle,useRef } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { setRenamedPageName } from "../../store";
+import { setRenamedPageName, setTestPageName } from "../../store";
 import { connect } from "react-redux";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import axios from "axios";
 import MessageBox from "../MessageBox";
 import { object } from "prop-types";
@@ -21,6 +21,7 @@ const NameRenameModal = (props,ref) => {
     const [showErrMsgOne,setShowErrMsgOne] = useState(false);
 
     const modalRefRenaming=useRef();
+    const dispatch = useDispatch();
 
     useEffect(()=>{
         if(Object.keys(props.currentURLSection).length!==0){
@@ -105,12 +106,13 @@ const NameRenameModal = (props,ref) => {
             .then((res)=>{
               renameTestPageNameInLauncher();
               props.updatePageNames('test');
+              dispatch(setRenamedPageName(fieldValue));
+              dispatch({type:'RE_RENDER_LAUNCHER_SECTION'});
             })
             .catch((err)=>{
               console.log(err);
             })
-            ////////////////////////////////////
-
+            
           }else{
             for(let i=0;i<availableTestPageNames.length;i++){
               if(fieldValue===availableTestPageNames[i].slice(0,-1)){ 
@@ -126,7 +128,9 @@ const NameRenameModal = (props,ref) => {
             })
             .then((res)=>{
               renameTestPageNameInLauncher();
-              props.updatePageNames('test')
+              props.updatePageNames('test');
+              dispatch(setRenamedPageName(fieldValue));
+              dispatch({type:'RE_RENDER_LAUNCHER_SECTION'});
             })
             .catch((err)=>{
               console.log(err);
@@ -369,7 +373,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps =(dispatch)=> {
   return {
-    setRenamedPageName:(renamedPageName)=>dispatch(setRenamedPageName(renamedPageName))
+    setRenamedPageName:(renamedPageName)=>dispatch(setRenamedPageName(renamedPageName)),
+    setTestPageName:(renamedPageName)=>dispatch(setTestPageName(renamedPageName))
   }
   // forwardRef: true
 };

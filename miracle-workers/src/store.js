@@ -38,6 +38,10 @@ const editModalTwoData = {
   status:false
 }
 
+const rerenderingLauncherSection = {
+  launcherSectionStatus:false
+}
+
 const initialTestPageNameState = {
   testPageName:'King'
 }
@@ -334,6 +338,17 @@ const nameAssignerReducer = (state = nameAssignerState, action) => {
   }
 }
 
+const rerenderingLauncherSectionReducer = (state = rerenderingLauncherSection, action ) => {
+  switch(action.type){
+    case "RE_RENDER_LAUNCHER_SECTION":
+      return{
+        ...state,
+        launcherSectionStatus:!state.launcherSectionStatus
+      };
+      default:
+        return state;
+  }
+}
 
 const renameModalReducer = (state = renameState, action) => {
   switch(action.type){
@@ -374,7 +389,8 @@ const rootReducer = combineReducers({
     getTestAddBtnStatus:getTestAddBtnStatusReducer,
     getEditModalOneData:getEditModalOneDataReducer,
     initiateEditModal:initiateEditModalReducer,
-    getEditModalTwoData:getEditModalTwoDataReducer
+    getEditModalTwoData:getEditModalTwoDataReducer,
+    rerenderingLauncherSection:rerenderingLauncherSectionReducer
 })
 
 const store = createStore(rootReducer)
