@@ -373,6 +373,8 @@ const changeLoadFormJsonData = (state = loadFormJsonCount, action) => {
         ...state,
         jsonCount: state.jsonCount + 1,
       };
+    default:
+      return state;
   }
 };
 

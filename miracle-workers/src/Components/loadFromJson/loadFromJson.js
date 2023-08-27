@@ -1,7 +1,7 @@
-import React, { useState, useCallback } from "react";
-import ReactJson from "react-json-view";
-import { useDropzone } from "react-dropzone";
-import axios from "axios";
+import React, { useState, useCallback } from 'react';
+import ReactJson from 'react-json-view';
+import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 
 const JsonUpload = () => {
@@ -29,8 +29,8 @@ const JsonUpload = () => {
     const components = [];
     const testSuite = [];
 
-    const fileName = jsonObject.fileName.replace(/\s/g, "");
-    jsonObject["tests"].forEach((tests) => {
+    const fileName = jsonObject.fileName.replace(/\s/g, '');
+    jsonObject['tests'].forEach((tests) => {
       launcher = [
         [
           `${fileName}M`,
@@ -45,8 +45,8 @@ const JsonUpload = () => {
         ],
       ];
 
-      tests["groups"].forEach((groups) => {
-        groups["steps"].forEach((step) => {
+      tests['groups'].forEach((groups) => {
+        groups['steps'].forEach((step) => {
           const value = {
             group: step.group,
             instruction: step.instruction,
@@ -81,13 +81,13 @@ const JsonUpload = () => {
 
   const handleJsonUpload = (payload) => {
     try {
-      const url = `http://localhost:8000/json/upload`;
+      const url = `http://localhost:5000/json/upload`;
 
       axios
         .post(url, { ...payload })
         .then((res) => {
           dispatch({ type: 'LOAD_FROM_JSON' });
-          console.log("uploaded");
+          console.log('uploaded');
         })
         .catch((err) => {
           console.log(err);
@@ -112,7 +112,7 @@ const JsonUpload = () => {
         <>
           <ReactJson
             src={jsonObject}
-            style={{ height: "524px", overflow: "auto", background: "#fff" }}
+            style={{ height: '524px', overflow: 'auto', background: '#fff' }}
           />
           <button type="button" onClick={loadJsonData}>
             Load Json Data
