@@ -43,7 +43,8 @@ const Data = React.lazy(() => import('./views/data/Data'))
 const DataExcel = React.lazy(() => import('./views/dataExcel/DataExcel'))
 //data junction
 const DataJunction=React.lazy(() => import('./views/dataJunction/DataJunction'))
-//locator 
+//home 
+const Home1=React.lazy(() => import('./views/home/Home'));
 //locator
 const Locator=React.lazy(() => import('./views/locator/Locator'))
 //component
@@ -74,6 +75,7 @@ const loadFormJson=React.lazy(() => import('./components/loadFromJson/loadFromJs
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
+  { path: '/home', name: 'Home', element: Home1 },//added for dev purposes only
   { path: '/charts', name: 'Charts', element: Charts },
   { path: '/forms', name: 'Forms', element: FormControl, exact: true },
   { path: '/forms/form-control', name: 'Form Control', element: FormControl },

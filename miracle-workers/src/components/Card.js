@@ -38,10 +38,10 @@ const Card = (props) => {
     const sectionPathHandler = () => {
         if(props.sectionName==="data"){
             if(props.cardTitle==="Excel"){
-                navigate('/dataJunction/dataExcel');
+                navigate('/dataJunction/dataExcel/'+props.dataPageName);
                 dispatch({ type: 'MY_FUNCTION_CALLED_EXCEL' });
             }else if(props.cardTitle==="Manually"){
-                navigate('/dataJunction/data');
+                navigate('/dataJunction/data/'+props.dataPageName);
                 dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
             }
         }else if(props.sectionName==="test"){
@@ -106,7 +106,8 @@ const Card = (props) => {
 
 const mapStateToProps = (state) => {
     return{
-        testPageName: state.getTestSheetName.testPageName
+        testPageName: state.getTestSheetName.testPageName,
+        dataPageName: state.getDataSheetAtNameAssigner.dataPageName
     }
   };
 

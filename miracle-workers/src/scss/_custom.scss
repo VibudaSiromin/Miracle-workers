@@ -1,6 +1,8 @@
 // Here you can add other styles
 .header{
-    background: linear-gradient(90deg, #4B79A1 -2.09%, #283E51 88.08%);
+    background: linear-gradient(180deg, #516183 0%, #000000 100%);
+    margin-bottom: 0rem !important;
+    border-bottom: none ;
 }
 .body{
     background: linear-gradient(90deg, #4B79A1 -2.09%, #283E51 88.08%); 
@@ -12,4 +14,61 @@
 }
 .header .container-fluid .header-toggler{
     color:white;
+}
+
+.mb-4, .my-4{
+    margin-bottom: 0rem !important;
+}
+
+.d-md-flex{
+    display: flex;
+    justify-content:space-evenly;
+}
+.d-md-flex img{
+    width: 50px;
+    height: 50px;
+}
+.d-md-flex h2{
+    align-self: center;
+}
+
+.d-md-flex p {
+    font-size: 8px;
+}
+.home-container{
+    margin-top: 25px;
+}
+.home-container img{
+    width: 600px;
+    height: 500px;
+}
+.btn-container{
+    display: flex;
+    justify-content:center;
+}
+.sub-container-one {
+    display: flex;
+}
+.sub-container-one h1{
+    color:white;
+}
+.sub-container-one p{
+    font-size: 20px;
+    color:#68E1FD;
+    padding: 0 50px;
+}
+.breaker{
+    height: 50px;
+}
+.launcher-title{
+    //text-align: start;
+    color:white;
+}
+.test-sheet-title{
+    //text-align: start;
+    color:white;
+}
+.horizontal-ruler{
+    height: 5px;
+    color: red;
 }

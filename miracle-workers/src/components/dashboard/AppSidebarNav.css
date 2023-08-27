@@ -1,18 +1,19 @@
-.Component{
+/* .Component{
     display: flex;
     flex-direction:row;
     align-items: center;
-}
+} */
 
 .single-component{
     width:230px;
 }
-.add-btn{
+/* .add-btn{
     padding: 10px;
 }
 .add-btn:hover{
     background-color: rgba(255, 255, 255, 0.1);
-}
+} */
+
 
 
 .delete{

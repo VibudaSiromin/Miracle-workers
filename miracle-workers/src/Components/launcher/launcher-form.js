@@ -1,6 +1,11 @@
 import React from "react";
+import { connect } from "react-redux";
+import { useState } from "react";
 
-const LauncherForm = ({ register, errors }) => {
+const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
+
+  const [isDataDriven,setIsDataDriven] = useState(false);
+
   const browsrLists = [
     "Chrome",
     "Firefox",
@@ -8,13 +13,32 @@ const LauncherForm = ({ register, errors }) => {
     "Internet Explore",
   ];
 
+  console.log('bard',testPageName);
+
+  const getTestTypeHandler = (value) => {
+    testTypeHandler(value);
+    if(value==='Data Driven'){
+      setIsDataDriven(true);
+    }else{
+      setIsDataDriven(false);
+    }
+  }
+
+
   return (
     <>
       <div className="form-group">
-        <label>Name</label>
-        <input className="form-control" {...register("name")} />
-        <small className="text-danger">{errors.name?.message}</small>
+        <label>Sheet Name</label>
+        <input className="form-control" /*{...register("sheetName")}*/ value={testPageName}/>
+        {/* <small className="text-danger">{errors.sheetName?.message}</small> */}
       </div>
+
+      <div className="form-group">
+        <label>Test Case</label>
+        <input className="form-control" {...register("testCase")} />
+        <small className="text-danger">{errors.testCase?.message}</small>
+      </div>
+
       <div className="form-group">
         <label>Browser</label>
 
@@ -43,13 +67,15 @@ const LauncherForm = ({ register, errors }) => {
         <select
           class="form-select"
           aria-label="Default select example"
-          {...register("test_type")}
+          {...register("type")}
+
+          onChange={(e)=>getTestTypeHandler(e.target.value)}
         >
           <option></option>
           <option value="Sequential">Sequential</option>
           <option value="Data Driven">Data Driven</option>
         </select>
-        <small className="text-danger">{errors.test_type?.message}</small>
+        <small className="text-danger">{errors.type?.message}</small>
       </div>
       <div className="form-group">
         <label>Status</label>
@@ -64,10 +90,10 @@ const LauncherForm = ({ register, errors }) => {
         </select>
         <small className="text-danger">{errors.status?.message}</small>
       </div>
-      <div className="form-group">
-        <label>Data Sheet</label>
-        <input className="form-control" {...register("data_sheet")} />
-        <small className="text-danger">{errors.data_sheet?.message}</small>
+      <div className="form-group">      
+          <label>Data Sheet</label>
+          <input className="form-control" {...register("dataSheet")} />
+          <small className="text-danger">{errors.dataSheet?.message}</small>     
       </div>
       <div className="form-group">
         <label>Comment</label>
@@ -77,4 +103,9 @@ const LauncherForm = ({ register, errors }) => {
   );
 };
 
-export default LauncherForm;
+//export default LauncherForm;
+
+
+
+export default LauncherForm
+//export default connect(mapStateToProps)(LauncherForm);

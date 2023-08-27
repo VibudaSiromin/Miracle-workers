@@ -1,9 +1,9 @@
 import { propTypes } from "react-bootstrap/esm/Image";
 import './PopUpSelection.css';
+import commandArray from "../assets/commands";
 
 const PopUpSelection = (props) => {
     const instructionSet=['#recovery','#skip','#screen'];
-    const commandSet=['Branch.BasedOnData','Branch.BasedOnData','Branch.OnElementAttribute','Branch.OnElementText','Branch.OnElementValue'];
     const swapResultSet=['Yes','No'];
     const actionSet=['Stop test on error','Stop test on failure','Stop test on error or failure','Log info on error','Log info on failure','Log info on error or failure'];
     let options=[];
@@ -16,9 +16,9 @@ const PopUpSelection = (props) => {
               }
               console.log(options);
         }else if(props.title==='command'){
-            for (let i = 0; i<commandSet.length; i++) {
+            for (let i = 0; i<commandArray.length; i++) {
                 options.push(
-                    <option value={commandSet[i]}/>
+                    <option value={commandArray[i][0]}/>
                 );
               }
               console.log(options);
@@ -56,15 +56,43 @@ const PopUpSelection = (props) => {
         }
       }
 
-    return(
-        <div className="form-group">
-            <label for={props.id} className="form-label">{props.title}</label>
-                <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
-                <datalist id={props.title}>
-                    {options}
-                </datalist>
-        </div>
-    );
+    if(props.title==='command'){
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+                    {props.isCmdEmpty && <small className="text-danger">command field can not be empty</small>}                  
+            </div>
+        );
+    }else if(props.title==='instruction'){
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+                    {props.isInstEmpty && <small className="text-danger">Instruction field can not be empty</small>}                  
+            </div>
+        );
+    }else{
+        return(
+            <div className="form-group">
+                <label for={props.id} className="form-label">{props.title}</label>
+                    <input type="text" list={props.title} className="form-control" name={props.title} onChange={inputHandler} />            
+                    <datalist id={props.title}>
+                        {options}
+                    </datalist>
+            </div>
+        );
+    }
+
+    
+ 
 }
 
+//export default connect(mapStateToProps)(Card);
 export default PopUpSelection;

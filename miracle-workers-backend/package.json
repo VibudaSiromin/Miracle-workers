@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "nodemon --ignore store app.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "async": "^3.2.4",
     "body-parser": "^1.20.1",
+    "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-validator": "^6.14.3",
     "mongoose": "^6.9.1",

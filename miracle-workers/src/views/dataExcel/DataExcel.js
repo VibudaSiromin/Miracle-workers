@@ -5,6 +5,8 @@ import FileUploader from '../../components/FileUploader';
 const DataExcel = (props) => {
   const [fileHeaders,setFileHeaders]=useState([]);
   const [fileData,setFileData]=useState([]);
+  const [fileName,setFileName]=useState('');
+  //const [btnStatus,setBtnStatus] = useState();
 
   const fileHeadersHandler = (Headers) => {
     const excelHeaders=[...fileHeaders,...Headers]
@@ -39,6 +41,11 @@ const DataExcel = (props) => {
     setFileHeaders(emptyFileHeaders)
   }
 
+  const excelFileNameHandler = (fileName) => {
+    console.log('lambo',fileName);
+    setFileName(fileName);
+  }
+
 
 return(
         <>
@@ -49,9 +56,10 @@ return(
             reloadFileHeaders={reloadFileHeadersHandler} 
             deleteFileData={fileDataDeleteHandler}
             deleteFileHeaders={fileHeaderdeleteHandler}
+            getExcelFileName={excelFileNameHandler}
             >
           </FileUploader>
-          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData} callingFrom="data"></Heading>
+          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData} initialExcelFileName={fileName} callingFrom="data" addBtnId={'dataEBtn'}></Heading>
         </>
         
 );

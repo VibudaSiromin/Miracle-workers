@@ -42,7 +42,7 @@ const MessageBox = forwardRef((props,ref)=>{
       centered
       id={props.id}
     >
-      <Modal.Header closeButton>
+      <Modal.Header >
         <Modal.Title id="contained-modal-title-vcenter">
           Warning!
         </Modal.Title>

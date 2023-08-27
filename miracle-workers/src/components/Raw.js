@@ -4,13 +4,17 @@ import { propTypes } from "react-bootstrap/esm/Image";
 import EditModalDialog from "./EditPopUpWindow";
 import {MdModeEdit,MdDeleteForever,MdArrowDropUp,MdArrowDropDown} from 'react-icons/md';
 import './Raw.css';
+import { useDispatch } from "react-redux";
 
 const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPurpose,enableChainPopUps}) => {
 
+  const dispatch = useDispatch();
   const tableDataArray=[];
 
   const modalRef=useRef();
   const editButtonHandler = () => {
+    console.log('jammm');
+    //dispatch({type:'INITIATE_EDIT_MODAL'});
     modalRef.current.log();
   };
 
@@ -19,22 +23,27 @@ const Raw = ({ testStep, rawIndex, onDelete, onEdit,onArrowClick,title,generalPu
   }
 
   const moveUpDownHandler=(upOrDown) => {
+
+
+
     if(upOrDown===0){
       // console.log("move up",rawIndex);
-      onArrowClick(upOrDown,rawIndex);
+       onArrowClick(upOrDown,rawIndex);
 
     }else{
       // console.log("move down",rawIndex);
-      onArrowClick(upOrDown,rawIndex);
+       onArrowClick(upOrDown,rawIndex);
     }
   }
+
+  
 
   //const arrayConvertor=Object.values(testStep);//convert testStep object to an array
 
   for(let i=0;i<title.length;i++){
     console.log('your test step:',testStep);
     let key=title[i];
-    if(testStep[key]===undefined || testStep[key]===" "){
+    if(testStep[key]===undefined || testStep[key]===''){
       tableDataArray.push(
         <td>{"null"}</td>
       )

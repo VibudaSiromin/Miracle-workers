@@ -20,7 +20,7 @@ const TestJson = () => {
     return(
         <>
             <Launcher/>
-            <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="testSuites"></Table>
+            <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="testSuites" addBtnId={'testJBtn'}></Table>
         </>
  
     )

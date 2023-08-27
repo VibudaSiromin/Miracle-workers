@@ -1,0 +1,187 @@
+[
+  [
+    "loginM",
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnValue",
+      "branchSelection": "cdc",
+      "data": "#data.userM.head02.1"
+    },
+    {
+      "command": "Branch.BasedOnData",
+      "instruction": "#recovery",
+      "branchSelection": "vsv",
+      "data": "#data.userM.head02.1"
+    },
+    {
+      "command": "Branch.OnElementText",
+      "instruction": "#skip",
+      "branchSelection": "cdc",
+      "data": "#data.userM.head02.2",
+      "locator": "cdcd"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Browser.ExecuteScript",
+      "locator": "#loc.tc_001.btn_login",
+      "data": "#data.data05E.employee.2",
+      "comment": "normandy"
+    },
+    {
+      "instruction": "#screen",
+      "command": "Branch.BasedOnData",
+      "locator": "#loc.tc_001.btn_login",
+      "data": "#data.data07E.company.1",
+      "action": "Stop test on error"
+    },
+    {
+      "command": "Browser.Switch",
+      "instruction": "#skip",
+      "swapResult": "Yes",
+      "action": "Log info on error",
+      "data": "#data.data03M.name.2"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "GoTo.LineNumber",
+      "swapResult": "Yes",
+      "branchSelection": "vsv"
+    },
+    {
+      "instruction": "#skip",
+      "command": "Browser.Alerts.Cancel",
+      "swapResult": "Yes",
+      "action": "Stop test on error or failure",
+      "comment": "fsvfv"
+    },
+    { "command": "Branch.BasedOnData", "branchSelection": "cdc", "data": "fv" },
+    {
+      "command": "Clipboard.CopyAttribute",
+      "instruction": "#skip",
+      "data": "cdcd",
+      "locator": "cdcd"
+    },
+    {
+      "command": "Branch.OnElementAttribute",
+      "instruction": "#recovery",
+      "locator": "cdcd",
+      "data": "cdcd",
+      "branchSelection": "cdc"
+    },
+    {
+      "instruction": "#skip",
+      "command": "Checkbox.Check",
+      "locator": "vsfvfv"
+    },
+    { "command": "Clipboard.PasteToExcel", "instruction": "#recovery" },
+    {
+      "command": "Branch.BasedOnData",
+      "instruction": "#recovery",
+      "data": "cdcd",
+      "branchSelection": "cdc"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "cdcd",
+      "branchSelection": "vsv"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "cdcd",
+      "branchSelection": "vsv"
+    },
+    {
+      "command": "Branch.BasedOnData",
+      "data": "cdcd",
+      "branchSelection": "vsv"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "cdcd",
+      "branchSelection": "cdc"
+    },
+    {
+      "command": "Branch.BasedOnData",
+      "instruction": "#recovery",
+      "data": "cdcd",
+      "branchSelection": "2222222"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "cdcd",
+      "branchSelection": "vsv"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "#data.data03M.name.1",
+      "branchSelection": "cdc"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "#data.data03M.name.1",
+      "branchSelection": "branch123"
+    },
+    {
+      "command": "Branch.BasedOnData",
+      "instruction": "#recovery",
+      "data": "#data.data03M.name.1",
+      "branchSelection": "vsv"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "branchSelection": "vsv",
+      "data": "cdcd"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.BasedOnData",
+      "data": "#data.data05E.company.2",
+      "branchSelection": "cdc"
+    },
+    {
+      "command": "Branch.BasedOnData",
+      "instruction": "#recovery",
+      "data": "#data.data05E.company.2",
+      "branchSelection": "vsv"
+    },
+    {
+      "command": "Branch.BasedOnData",
+      "instruction": "#recovery",
+      "data": "#data.data07E.company.1",
+      "branchSelection": "cdc"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Branch.OnElementAttribute",
+      "locator": "#id.loc",
+      "data": "#data.userM.head02.2",
+      "branchSelection": "vsv"
+    },
+    {
+      "command": "Dropdown.Select.ByValue",
+      "instruction": "#skip",
+      "locator": "#css.er",
+      "data": "cdcd"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "GoTo.LineNumber",
+      "branchSelection": "myBranch"
+    },
+    {
+      "instruction": "#recovery",
+      "command": "Wait.Until.ElementIsClickable",
+      "locator": "#loc.tc_001.btn_login",
+      "comment": "myComment"
+    }
+  ],
+  ["test09M"],
+  ["test02M"]
+]
