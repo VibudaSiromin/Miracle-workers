@@ -2,11 +2,13 @@ import React from 'react'
 import JSONGenerator from '../../components/JSONGenerator';
 import devImg from '../../assets/images/developer.png'
 import {Button } from "react-bootstrap";
+import Alert from '../../components/Alert';
 
 const home = () => {
     
   return (
     <>
+      <Alert />
       <div className="home-container">
         <div className="sub-container-one">
           <div>

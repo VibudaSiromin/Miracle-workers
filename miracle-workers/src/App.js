@@ -42,7 +42,7 @@ function App() {
     <div className="App">
       <IndexContextProvider>
        <BrowserRouter>
-        <Suspense fallback={loading}>
+        <Suspense fallback={loading}>     
           <Routes>
             <Route exact path="/login" name="Login Page" element={<Login />} />
             <Route exact path="/register" name="Register Page" element={<Register />} />
@@ -50,7 +50,7 @@ function App() {
             <Route exact path="/500" name="Page 500" element={<Page500 />} />
             <Route exact path="/dataJuction" name="Data section Path" element={<DataJunction />} />
             <Route path="*" name="Home" element={<DefaultLayout />} />
-          </Routes>
+          </Routes>         
         </Suspense>
       </BrowserRouter>
       {/* <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table> */}

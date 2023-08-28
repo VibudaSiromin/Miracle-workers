@@ -1,10 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { useState } from "react";
+import { useState,useEffect } from "react";
+import axios from "axios";
 
-const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
+const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
 
-  const [isDataDriven,setIsDataDriven] = useState(false);
+  const [isDataDriven, setIsDataDriven] = useState(false);
+  const [dataPageNames,setDataPageNames] = useState([]);
+  const [isMount,setIsMount] = useState(false);
+  const [dataSheetOptions,setDataSheetOptions] = useState([]);
 
   const browsrLists = [
     "Chrome",
@@ -13,23 +17,54 @@ const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
     "Internet Explore",
   ];
 
-  console.log('bard',testPageName);
+  console.log('bard', testPageName);
 
   const getTestTypeHandler = (value) => {
     testTypeHandler(value);
-    if(value==='Data Driven'){
+    if (value === 'Data Driven') {
       setIsDataDriven(true);
-    }else{
+    } else {
       setIsDataDriven(false);
     }
   }
+
+  useEffect(()=>{
+    axios
+    .get('http://localhost:5000')
+    .then((res)=>{
+      setDataPageNames(res.data.dataPageNames);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
+  },[])
+
+
+
+  useEffect(()=>{
+    if(isMount){
+     const selectOptionsArray=dataPageNames.map((dataPage)=>{
+        return(
+          <option value={dataPage}>{dataPage}</option>
+        )
+      })
+
+      setDataSheetOptions(selectOptionsArray);
+
+    }else{
+      setIsMount(true);
+    }
+
+  },[dataPageNames])
+
 
 
   return (
     <>
       <div className="form-group">
         <label>Sheet Name</label>
-        <input className="form-control" /*{...register("sheetName")}*/ value={testPageName}/>
+        <input className="form-control" /*{...register("sheetName")}*/ value={testPageName} />
         {/* <small className="text-danger">{errors.sheetName?.message}</small> */}
       </div>
 
@@ -42,7 +77,7 @@ const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
       <div className="form-group">
         <label>Browser</label>
 
-        {browsrLists.map((value,index) => {
+        {browsrLists.map((value, index) => {
           return (
             <div class="form-check" key={index}>
               <input
@@ -69,7 +104,7 @@ const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
           aria-label="Default select example"
           {...register("type")}
 
-          onChange={(e)=>getTestTypeHandler(e.target.value)}
+          onChange={(e) => getTestTypeHandler(e.target.value)}
         >
           <option></option>
           <option value="Sequential">Sequential</option>
@@ -90,10 +125,22 @@ const LauncherForm = ({ register, errors ,testPageName,testTypeHandler}) => {
         </select>
         <small className="text-danger">{errors.status?.message}</small>
       </div>
-      <div className="form-group">      
-          <label>Data Sheet</label>
-          <input className="form-control" {...register("dataSheet")} />
-          <small className="text-danger">{errors.dataSheet?.message}</small>     
+      <div className="form-group">
+        <label>Data Sheet</label>
+        <select
+          class="form-select"
+          aria-label="Default select example"
+          {...register("dataSheet")}
+        >
+          <option></option>
+          {dataSheetOptions}
+        </select>
+        <small className="text-danger">{errors.dataSheet?.message}</small>
+
+
+        {/* <label>Data Sheet</label>
+        <input className="form-control" {...register("dataSheet")} />
+        <small className="text-danger">{errors.dataSheet?.message}</small> */}
       </div>
       <div className="form-group">
         <label>Comment</label>

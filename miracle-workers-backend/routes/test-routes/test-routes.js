@@ -24,5 +24,7 @@ router.patch('/testJunction/renamePageName',testControllers.renameTestPageName);
 router.get('/testSuite/getAllTestData',testControllers.getAllTestData);
 //'/testJunction/testManual/test02'
 router.get('/testPages',testControllers.getTestPageNames);
+//get referedDataPages name
+router.get('/testSuite/getReferedDataPages',testControllers.getReferedDataPages)
 
 module.exports=router;

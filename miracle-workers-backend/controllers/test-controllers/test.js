@@ -282,6 +282,9 @@ const getTestPageNames= async (req, res, next)=>{
     }
   }
 
+  const getReferedDataPages = async(req,res,next) => {
+    
+  }
 
   ////////This is the test section//////////////
 
@@ -295,3 +298,4 @@ const getTestPageNames= async (req, res, next)=>{
   exports.getAllTestData=getAllTestData;
   exports.getLoopName=getLoopName;
   exports.getAllLoopNames=getAllLoopNames;
+  exports.getReferedDataPages=getReferedDataPages;

@@ -63,11 +63,7 @@ const TableLauncher = (props) => {
       browser: yup.string().required("Browser is required"),
       type: yup.string().required("Test Type is required"),
       status: yup.string().required("Status is required"),
-      dataSheet: yup.string().when('type',{
-        is:'Data Driven',
-        then:(schema) => schema.required("Data sheet is required"),
-        otherwise:(schema) => schema.notRequired()
-      })
+      dataSheet: yup.string().required("Data sheet is required")
       //dataSheet: yup.string().required("Data sheet is required"),
     })
     .required();
@@ -186,6 +182,7 @@ const TableLauncher = (props) => {
   const rerenderLauncherSection = async () => {
     const renamedTestPageName = props.renamedTestPageName;
     console.log('T34',renamedTestPageName);
+    
     try{
       const response= await axios.get(
         `http://localhost:5000/launcher/getLauncherContent`,

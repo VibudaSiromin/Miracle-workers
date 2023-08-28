@@ -65,6 +65,8 @@ const YesNo=React.lazy(() => import('./views/settings/yesNo'))
 const Status=React.lazy(() => import('./views/settings/status'))
 //settings-testTypes
 const TestTypes=React.lazy(() => import('./views/settings/testTypes'))
+//alert message
+const AlertMsg=React.lazy(() => import('./components/Alert'))
 
 const routes = [
   { path: '/', exact: true, name: 'Home' },
@@ -100,6 +102,7 @@ const routes = [
   { path: '/settings/yes-no', name:'Browsers', element:YesNo},
   { path: '/settings/test-types', name:'Browsers', element:TestTypes},
   { path: '/settings/status', name:'Browsers', element:Status},
+  { path: '*', name:'AlertMsg', element:AlertMsg},
 ]
 
 export default routes

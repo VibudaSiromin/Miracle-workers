@@ -16,7 +16,7 @@ const createLauncher = async (req, res, next) => {
 
 const getLauncherContent = async(req,res,next) => {
   const testPageName=req.query.testPageName;
-  console.log('demon',testPageName);
+  console.log('demon2222',testPageName);
   let launcherSection;
   try{
     const data = await fs.promises.readFile(launcherFilePath);
@@ -188,6 +188,28 @@ const createLauncherPage = async(req,res,next) => {
 
 }
 
+const getReferedDataPages = async(req,res,next) => {
+  let launcherSection;
+  let dataPages;
+  try{
+    const data=await fs.promises.readFile(launcherFilePath);
+    launcherSection = JSON.parse(data);
+    dataPages=launcherSection.map((launcherPage)=>{
+      if('dataSheet' in launcherPage[1]){
+        return(
+          launcherPage[1]['dataSheet']
+        )
+      }else{
+        return null
+      }
+    })
+    console.log('DMC!!!!!!!!!!!',dataPages);
+    res.status(200).json({referedDataPages:dataPages});
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
+}
 
 exports.createLauncher = createLauncher;
 exports.editTestPage=editTestPage;
@@ -196,3 +218,4 @@ exports.deleteTestPageInLauncher=deleteTestPageInLauncher;
 exports.renameTestPageNameInLauncher=renameTestPageNameInLauncher;
 exports.getAllLauncherData=getAllLauncherData;
 exports.createLauncherPage=createLauncherPage;
+exports.getReferedDataPages=getReferedDataPages;

@@ -46,6 +46,10 @@ const initialTestPageNameState = {
   testPageName:'King'
 }
 
+const alertVisibilityStatus = {
+  alertVisibility:false
+}
+
 const initialDataPageNameState = {
   dataPageName:''
 }
@@ -85,6 +89,13 @@ export const setEditModalTwoData = (modalTwoDataSet) => {
   return{
     type:'SET_EDIT_MODAL_TWO_DATA',
     payload:modalTwoDataSet
+  }
+}
+
+export const setAlertVisibity = (visibityStatus) => {
+  return{
+    type:'SET_ALERT_VISIBITY',
+    payload:visibityStatus
   }
 }
 
@@ -326,6 +337,18 @@ const getTestAddBtnStatusReducer = (state = testAddBtnStatus ,action) => {
   }
 }
 
+const getAlertVisibityStatusReducer = (state = alertVisibilityStatus,action) => {
+  switch(action.type){
+    case  'SET_ALERT_VISIBITY':
+      return{
+        ...state,
+        alertVisibility:action.payload
+      }
+      default:
+        return state;
+  }
+}
+
 const nameAssignerReducer = (state = nameAssignerState, action) => {
   switch(action.type){
     case "INITIATE_NAME_ASSIGNER":
@@ -390,7 +413,8 @@ const rootReducer = combineReducers({
     getEditModalOneData:getEditModalOneDataReducer,
     initiateEditModal:initiateEditModalReducer,
     getEditModalTwoData:getEditModalTwoDataReducer,
-    rerenderingLauncherSection:rerenderingLauncherSectionReducer
+    rerenderingLauncherSection:rerenderingLauncherSectionReducer,
+    getAlertVisibityStatus:getAlertVisibityStatusReducer
 })
 
 const store = createStore(rootReducer)
