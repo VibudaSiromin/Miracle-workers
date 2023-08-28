@@ -3,12 +3,13 @@ import { connect } from "react-redux";
 import { useState,useEffect } from "react";
 import axios from "axios";
 
-const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
+const LauncherForm = ({ register, errors, testPageName, testTypeHandler ,dataPageOptions}) => {
 
   const [isDataDriven, setIsDataDriven] = useState(false);
-  const [dataPageNames,setDataPageNames] = useState([]);
+  //const [dataPageNames,setDataPageNames] = useState([]);
   const [isMount,setIsMount] = useState(false);
   const [dataSheetOptions,setDataSheetOptions] = useState([]);
+  const [state,setState]= useState(false);
 
   const browsrLists = [
     "Chrome",
@@ -17,7 +18,9 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
     "Internet Explore",
   ];
 
-  console.log('bard', testPageName);
+  const arr = [<option value="data02">data02</option>,<option value="ITPM">ITPM</option>]
+  //console.log('fireball',dataPageNames);
+  
 
   const getTestTypeHandler = (value) => {
     testTypeHandler(value);
@@ -28,35 +31,23 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
     }
   }
 
-  useEffect(()=>{
-    axios
-    .get('http://localhost:5000')
-    .then((res)=>{
-      setDataPageNames(res.data.dataPageNames);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
 
-  },[])
+  // useEffect(()=>{
+  //   if(isMount){
+  //     if(dataPageNames.length>0){
+  //       const selectOptionsArray=dataPageNames.map((dataPage)=>{
+  //         return(
+  //           <option value={dataPage}>{dataPage}</option>
+  //         )
+  //       }) 
+  //       setDataSheetOptions(selectOptionsArray);
+  //       setState(!state); 
+  //     }    
+  //   }else{
+  //     setIsMount(true);
+  //   }
 
-
-
-  useEffect(()=>{
-    if(isMount){
-     const selectOptionsArray=dataPageNames.map((dataPage)=>{
-        return(
-          <option value={dataPage}>{dataPage}</option>
-        )
-      })
-
-      setDataSheetOptions(selectOptionsArray);
-
-    }else{
-      setIsMount(true);
-    }
-
-  },[dataPageNames])
+  // },[dataPageNames])
 
 
 
@@ -115,7 +106,7 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
       <div className="form-group">
         <label>Status</label>
         <select
-          class="form-select"
+          className="form-select"
           aria-label="Default select example"
           {...register("status")}
         >
@@ -128,19 +119,15 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
       <div className="form-group">
         <label>Data Sheet</label>
         <select
-          class="form-select"
+          className="form-select"
           aria-label="Default select example"
           {...register("dataSheet")}
         >
           <option></option>
-          {dataSheetOptions}
+          {/* {arr} */}
+          {dataPageOptions}
         </select>
         <small className="text-danger">{errors.dataSheet?.message}</small>
-
-
-        {/* <label>Data Sheet</label>
-        <input className="form-control" {...register("dataSheet")} />
-        <small className="text-danger">{errors.dataSheet?.message}</small> */}
       </div>
       <div className="form-group">
         <label>Comment</label>
