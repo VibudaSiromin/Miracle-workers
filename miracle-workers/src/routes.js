@@ -100,7 +100,7 @@ const routes = [
   { path: '/testJunction/testManual/:tname' , name:'TestManual', element:TestManual},  
   { path: '/locator/:lname' , name:'Locator' , element:Locator},
   { path: '/settings' , name:'Settings', element:Settings},
-  { path: '/dashboard' , name:'Settings', element:Dashbaord},
+  // { path: '/dashboard' , name:'Settings', element:Dashbaord},
   { path: '/home' , name:'Settings', element:Home},
   { path: '/loadFormJson' , name:'Settings', element:loadFormJson},
   { path: '/settings/browsers', name:'Browsers', element:Browsers},

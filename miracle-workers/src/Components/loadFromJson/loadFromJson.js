@@ -24,57 +24,67 @@ const JsonUpload = () => {
   //save data
   const loadJsonData = () => {
     const locaters = [];
-    let launcher = {};
+    let launcher = [];
     const data = [];
     const components = [];
     const testSuite = [];
 
     const fileName = jsonObject.fileName.replace(/\s/g, '');
-    jsonObject['tests'].forEach((tests) => {
-      launcher = [
-        [
-          `${fileName}M`,
-          {
-            name: tests.sheetName,
-            browser: tests.browser,
-            test_type: tests.type,
-            status: tests.enabled,
-            data_sheet: tests.dataSheet,
-            comment: tests.comments,
-          },
-        ],
-      ];
+    jsonObject['tests'].forEach((test) => {
+      const testPage=[]
+      launcher.push([
+        `${test.sheetName}M`,
+        {
+          sheetName: test.sheetName,
+          testCase: test.testCase,
+          browser: test.browser,
+          type: test.type,
+          status: test.status,
+          dataSheet: test.dataSheet,
+          comment: test.comment,
+        },
+      ]);
 
-      tests['groups'].forEach((groups) => {
-        groups['steps'].forEach((step) => {
-          const value = {
-            group: step.group,
-            instruction: step.instruction,
-            command: step.command,
-            locator: step.locator,
-            locatorParameter: step.locatorParameter,
-            data: step.data,
-            swapResult: step.swapResult,
-            branchSelection: step.branchSelection,
-            action: step.action,
-            comment: step.comment,
-          };
+      testPage.push( `${test.sheetName}M`)
 
-          testSuite.push(value);
-          data.push(step);
-          locaters.push({ locater: step.locator });
-        });
-      });
+      if (test.groups.length !== 0) {
+        const steps=test.groups[0].steps;
+        testPage.push(...steps)
+      }
+
+
+      testSuite.push(testPage)
+
+      // tests['groups'].forEach((groups) => {
+      //   groups['steps'].forEach((step) => {
+      //     const value = {
+      //       group: step.group,
+      //       instruction: step.instruction,
+      //       command: step.command,
+      //       locator: step.locator,
+      //       locatorParameter: step.locatorParameter,
+      //       data: step.data,
+      //       swapResult: step.swapResult,
+      //       branchSelection: step.branchSelection,
+      //       action: step.action,
+      //       comment: step.comment,
+      //     };
+
+      //     testSuite.push(value);
+      //     data.push(step);
+      //     locaters.push({ locater: step.locator });
+      //   });
+      // });
     });
 
-    testSuite.splice(0, 0, `${fileName}M`);
-    const newData = [testSuite];
+    // testSuite.splice(0, 0, `${fileName}M`);
+    // const newData = [testSuite];
 
     const payload = {
       launcher,
       locaters,
       data,
-      testSuite: newData,
+      testSuite,
     };
     handleJsonUpload(payload);
   };
