@@ -1,0 +1,31 @@
+.outer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.card {
+  height: 30vh;
+  width: 75%;
+  align-items: center;
+  border-radius: 20px;
+}
+
+.card p {
+  font-size: 20px;
+  font-weight: 500;
+  color: #78739e;
+}
+
+.jsonview {
+  height: 50vh;
+}
+
+.loadFromJsonButton {
+  border-radius: 10px;
+  border-color: none;
+  background-color: #78739e;
+  margin-top: 7px;
+}

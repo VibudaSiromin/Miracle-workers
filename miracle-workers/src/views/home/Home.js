@@ -1,13 +1,13 @@
-import React from 'react';
-import JSONGenerator from '../../components/JSONGenerator';
-import devImg from '../../assets/images/developer.png';
-import { Button } from 'react-bootstrap';
-import { useNavigate as UseNavigate } from 'react-router-dom';
+import React from "react";
+import JSONGenerator from "../../components/JSONGenerator";
+import devImg from "../../assets/images/developer.png";
+import { Button } from "react-bootstrap";
+import { useNavigate as UseNavigate } from "react-router-dom";
 
-const home = () => {
+const Home = () => {
   let navigate = UseNavigate();
   const loadFromJson = () => {
-    navigate('/loadFormJson');
+    navigate("/loadFormJson");
   };
   return (
     <>
@@ -39,4 +39,4 @@ const home = () => {
   );
 };
 
-export default home;
+export default Home;
