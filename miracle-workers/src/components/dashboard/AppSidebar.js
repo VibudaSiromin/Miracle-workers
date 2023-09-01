@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import React, { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import {
   CSidebar,
   CSidebarBrand,
   CSidebarNav,
   CSidebarToggler,
-} from '@coreui/react';
-import logo from '../../assets/images/logo3.png';
-import { AppSidebarNav } from './AppSidebarNav';
-import { logoNegative } from '../../assets/brand/logo-negative';
-import { sygnet } from '../../assets/brand/sygnet';
-import SimpleBar from 'simplebar-react';
-import 'simplebar/dist/simplebar.min.css';
+} from "@coreui/react";
+import logo from "../../assets/images/logo3.png";
+import { AppSidebarNav } from "./AppSidebarNav";
+import { logoNegative } from "../../assets/brand/logo-negative";
+import { sygnet } from "../../assets/brand/sygnet";
+import SimpleBar from "simplebar-react";
+import "simplebar/dist/simplebar.min.css";
 
 // sidebar nav config
 // import navigation from '../_nav'
@@ -27,7 +27,7 @@ const AppSidebar = () => {
       unfoldable={unfoldable}
       visible={sidebarShow}
       onVisibleChange={(visible) => {
-        dispatch({ type: 'set', sidebarShow: visible });
+        dispatch({ type: "set", sidebarShow: visible });
       }}
     >
       <CSidebarBrand className="d-none d-md-flex" to="/">
@@ -48,7 +48,7 @@ const AppSidebar = () => {
       <CSidebarToggler
         className="d-none d-lg-flex"
         onClick={() =>
-          dispatch({ type: 'set', sidebarUnfoldable: !unfoldable })
+          dispatch({ type: "set", sidebarUnfoldable: !unfoldable })
         }
       />
     </CSidebar>

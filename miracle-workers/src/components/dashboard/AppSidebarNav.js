@@ -100,15 +100,15 @@ export const AppSidebarNav = () => {
 
   const navigate = useNavigate();
   const [items, setItems] = useState([
-    {
-      component: CNavItem,
-      name: "Dashboard",
-      to: "/dashboard",
-      icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
-      badge: {
-        color: "info",
-      },
-    },
+    // {
+    //   component: CNavItem,
+    //   name: "Dashboard",
+    //   to: "/dashboard",
+    //   icon: <CIcon icon={cilSpeedometer} customClassName="nav-icon" />,
+    //   badge: {
+    //     color: "info",
+    //   },
+    // },
     {
       component: CNavItem,
       name: "Home",
@@ -128,24 +128,24 @@ export const AppSidebarNav = () => {
       icon: <CIcon icon={cilNotes} customClassName="nav-icon" />,
       items: [],
     },
-    {
-      component: CNavGroup,
-      name: "Component",
-      icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
-      items: [],
-    },
+    // {
+    //   component: CNavGroup,
+    //   name: "Component",
+    //   icon: <CIcon icon={cilStar} customClassName="nav-icon" />,
+    //   items: [],
+    // },
     {
       component: CNavGroup,
       name: "Locator",
       icon: <CIcon icon={cilBell} customClassName="nav-icon" />,
       items: [],
     },
-    {
-      component: CNavItem,
-      name: "Setting",
-      to: "/settings",
-      icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
-    },
+    // {
+    //   component: CNavItem,
+    //   name: "Setting",
+    //   to: "/settings",
+    //   icon: <CIcon icon={cilCalculator} customClassName="nav-icon" />,
+    // },
   ]);
 
   useEffect(() => {
@@ -159,7 +159,7 @@ export const AppSidebarNav = () => {
       });
     }
     let newItems = items;
-    newItems[5].items = newArray;
+    newItems[3].items = newArray;
     console.log("space", newItems);
     setItems([...newItems]);
   }, [locatorPageNames]); //when locatorPageName changes this useEffect hook will be triggered
@@ -188,7 +188,7 @@ export const AppSidebarNav = () => {
       }
     }
     let newItems = items;
-    newItems[3].items = newArray;
+    newItems[2].items = newArray;
     console.log("space", newItems);
     setItems([...newItems]);
   }, [dataPageNames]);
@@ -215,7 +215,7 @@ export const AppSidebarNav = () => {
       }
     }
     let newItems = items;
-    newItems[2].items = newArray;
+    newItems[1].items = newArray;
     console.log("space", newItems);
     setItems([...newItems]);
   }, [testPageNames]);
@@ -699,10 +699,6 @@ export const AppSidebarNav = () => {
               {badge.text}
             </CBadge>
           )}
-          <AiFillFileAdd
-            color="#CCD8DD"
-            onClick={(event) => initiateNameAssigner(event, index)}
-          ></AiFillFileAdd>
         </>
       );
     } else {
@@ -728,7 +724,7 @@ export const AppSidebarNav = () => {
     console.log("swiss", component);
     console.log("In navItem", name);
     return (
-      <div>
+      <div className="outline">
         <Component
           {...(rest.to &&
             !rest.items && {
@@ -739,7 +735,7 @@ export const AppSidebarNav = () => {
         >
           {navLink(name, icon, badge, index)}
           {name !== "Dashboard" && name !== "Home" && name !== "Setting" ? (
-            <div style={{ textAlign: "right" }}>
+            <div>
               <MdModeEdit
                 onClick={(event) => alertMsgBoxForRenaming(event, rest, index)}
               ></MdModeEdit>
@@ -761,18 +757,26 @@ export const AppSidebarNav = () => {
     const Component = component;
     console.log("In navGroup", name);
     return (
-      <div className="single-component">
-        <Component
-          idx={String(index)}
-          key={index}
-          toggler={navLink(name, icon, badge, index)}
-          visible={location.pathname.startsWith(to)}
-          {...rest}
-        >
-          {item.items?.map((item, index) =>
-            item.items ? navGroup(item, index) : navItem(item, index)
-          )}
-        </Component>
+      <div className="Component">
+        <div className="single-component">
+          <Component
+            idx={String(index)}
+            key={index}
+            toggler={navLink(name, icon, badge, index)}
+            visible={location.pathname.startsWith(to)}
+            {...rest}
+          >
+            {item.items?.map((item, index) =>
+              item.items ? navGroup(item, index) : navItem(item, index)
+            )}
+          </Component>
+        </div>
+        <div className="add-btn">
+          <AiFillFileAdd
+            color="#CCD8DD"
+            onClick={(event) => initiateNameAssigner(event, index)}
+          ></AiFillFileAdd>
+        </div>
       </div>
     );
   };
