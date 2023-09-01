@@ -355,7 +355,7 @@ const PopUpInputField = (props) => {
     return (
       <div className="form-group">
         <label>{props.title}</label>
-        <input type={props.inputType} className="form-control" name={props.title} onChange={inputHandler}></input>
+        <input type={props.inputType} className="form-control" name={props.title} onChange={inputHandler} value={fieldValue}></input>
         {props.isBranchSelection && <small className="text-danger">Branch selection field can not be empty</small>}
       </div>
     );

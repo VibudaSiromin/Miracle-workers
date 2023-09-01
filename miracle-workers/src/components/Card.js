@@ -71,6 +71,7 @@ const Card = (props) => {
     //     }
     // }
 
+    
     // const testSectionPathHandler = () => {
     //     if(props.cardTitle==="JSON"){
     //         navigate('/testJunction/testJson');

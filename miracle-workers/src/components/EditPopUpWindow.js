@@ -600,8 +600,8 @@ const EditModalDialog = forwardRef((props,ref)=> {
     }
   };
 
-  const submitHandlerTwo = () => {
-    //event.preventDefault();
+  const submitHandlerTwo = (event) => {
+    event.preventDefault();
     console.log(testStepsData2,'titan');
     console.log(modalOneDataSet,'titan2');
     // dispatch(setEditModalTwoData(testStepsData2));
@@ -618,7 +618,7 @@ const EditModalDialog = forwardRef((props,ref)=> {
       if(validationSetOne.includes(modalOneDataSet.command)){
         console.log('fight');
         if ('data' in testStepsData2) {
-          dispatchValidationOne({
+          dispatchValidationOne({ 
             type: 'CHANGE_DATA',
             payload: testStepsData2.data,
           });
@@ -853,7 +853,9 @@ const EditModalDialog = forwardRef((props,ref)=> {
     if(validationSetOne.includes(modalOneDataSet.command)){
       console.log('vital',modalOneDataSet);
       if (validationOne.data !== '' && validationOne.data !== undefined && validationOne.branchSelection !== '' && validationOne.branchSelection !== undefined) {
-        console.log('thunder');
+        if('locator' in modalTwoDataSet){
+          modalTwoDataSet['locator'] = '';
+        }
         props.onEdit(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
@@ -867,25 +869,45 @@ const EditModalDialog = forwardRef((props,ref)=> {
       }
     }else if(validationSetThree.includes(modalOneDataSet.command)){
       if (validationThree.data !== '' && validationThree.data !== undefined && validationThree.locator !== '' && validationThree.locator !== undefined) {
-        console.log('thunder');
+        if('branchSelection' in modalTwoDataSet){
+          modalTwoDataSet['branchSelection'] = '';
+        }
         props.onEdit(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
     }else if(validationSetFour.includes(modalOneDataSet.command)){
       if(validationFour.locator !== '' && validationFour.locator !== undefined){
+        if('data' in modalTwoDataSet){
+          modalTwoDataSet['data'] = '';
+        }
+        if('branchSelection' in modalTwoDataSet){
+          modalTwoDataSet['branchSelection'] = '';
+        }
         props.onEdit(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
     }else if(validationSetFive.includes(modalOneDataSet.command)){
       if(validationFive.data !== '' && validationFive.data !== undefined){
+        if('locator' in modalTwoDataSet){
+          modalTwoDataSet['locator'] = '';
+        }
+        if('branchSelection' in modalTwoDataSet){
+          modalTwoDataSet['branchSelection'] = '';
+        }
         props.onEdit(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
     }else if(validationSetSix.includes(modalOneDataSet.command)){
       if(validationSix.branchSelection !== '' && validationSix.branchSelection !== undefined){
+        if('locator' in modalTwoDataSet){
+          modalTwoDataSet['locator'] = '';
+        } 
+        if('data' in modalTwoDataSet){
+          modalTwoDataSet['data'] = '';
+        }
         props.onEdit(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();

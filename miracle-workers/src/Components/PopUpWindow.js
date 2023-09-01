@@ -184,10 +184,8 @@ function ModalDialog(props, ref) {
   const [isMountSeven,setIsMountSeven] = useState(false);
   const [stateOne,setStateOne] = useState(false);
   const [stateTwo,setStateTwo] = useState(false);
-  console.log('btn status', props.btnStatus);
-
-  const { lname, tname, cname, dname } = useParams();
-
+  const [isColumnNameEmpty,setIsColumnNameEmpty] = useState(false);
+  
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
@@ -367,6 +365,7 @@ function ModalDialog(props, ref) {
             title={props.title[i]}
             inputType="text"
             generalPurpose={props.generalPurpose}
+            isColumnNameEmpty={isColumnNameEmpty}
             onDataChange={inputHandler3}
           ></PopUpInputField>
         );
@@ -423,6 +422,7 @@ function ModalDialog(props, ref) {
   const initModalOne = () => {
     setIsCmdEmpty(false);
     setIsInstEmpty(false);
+    setIsColumnNameEmpty(false);
     return setToggleOneModal(true);
   };
   const TerminateModalOne = () => {
@@ -435,6 +435,7 @@ function ModalDialog(props, ref) {
     setIsDataEmpty(false);
     setIsBranchSelection(false);
     setIsLocatorEmpty(false);
+    setIsColumnNameEmpty(false);
     return setToggleTwoModal(true);
   };
   const TerminateModalTwo = () => {
@@ -494,8 +495,13 @@ function ModalDialog(props, ref) {
     if (props.generalPurpose === true) {
       console.log('Next step', generalPurposeInputData);
       setModalOneGeneralDataSet(generalPurposeInputData);
-
-      TerminateModalOne();
+      // if('Column Name' in generalPurposeInputData){
+      //   setIsColumnNameEmpty(false);
+      //   props.saveNewHeadingData(modalOneGeneralDataSet);
+      //   TerminateModalOne();
+      // }else{
+      //   setIsColumnNameEmpty(true);
+      // }
       if (props.enableChainPopUps) {   
         setTimeout(() => {
           initModalTwo();
@@ -551,20 +557,28 @@ function ModalDialog(props, ref) {
     event.preventDefault();
     if (props.enableChainPopUps === false) {
       if (props.generalPurpose === false) {
+        console.log('fairChild');
         props.saveNewData(modalOneDataSet);
+        TerminateModalOne();
       }
       if (props.generalPurpose === true) {
         if (props.purpose === 'fillData') {
           console.log('fillData AX1', modalOneGeneralDataSet);
           props.saveNewGeneralData(modalOneGeneralDataSet); // calling from heading component
+          TerminateModalOne();
         }
         if (props.purpose === 'addHeading') {
           console.log('triple H', modalOneGeneralDataSet);
-          props.saveNewHeadingData(modalOneGeneralDataSet);
+          if('Column Name' in modalOneGeneralDataSet){
+            setIsColumnNameEmpty(false);
+            props.saveNewHeadingData(modalOneGeneralDataSet);
+            TerminateModalOne();
+          }else{
+            setIsColumnNameEmpty(true);
+          }
+          
         }
-      }
-
-      TerminateModalOne();
+      }  
     }
   };
 
