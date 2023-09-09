@@ -20,5 +20,7 @@ router.post('/launcher', launcherControllers.createLauncher);
 router.delete('/launcher/deleteTestPageName', launcherControllers.deleteTestPageInLauncher);
 //route for renaming test page name in launcher
 router.patch('/launcher/renamePageName',launcherControllers.renameTestPageNameInLauncher);
+//delete all data
+//router.delete('/section/delete',launcherControllers.deleteData);
 
 module.exports = router;

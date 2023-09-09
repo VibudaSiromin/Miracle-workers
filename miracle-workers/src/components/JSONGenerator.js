@@ -1,86 +1,103 @@
-import {Button } from "react-bootstrap";
+import { Button } from "react-bootstrap";
 import axios from "axios";
-import { useState,useEffect } from "react";
-import {v4 as uuidv4} from 'uuid';
+import { useState, useEffect } from "react";
+import { v4 as uuidv4 } from 'uuid';
 import { saveAs } from 'file-saver';
 import { Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
+import { useSelector,useDispatch } from "react-redux";
 
 const JSONGenerator = () => {
-    const [launcherDetails,setlauncherDetails] = useState();
-    const [testData,setTestData] = useState();
-    const [isMountOne,setIsMountOne] = useState(false);
-    const [isMountTwo,setIsMountTwo] = useState(false);
-    const [isMountThree,setIsMountThree] = useState(false);
-    const [isMountFour,setIsMountFour] = useState(false);
-    const [isMountFive,setIsMountFive] = useState(false)
-    const [testSuiteHeadings,setTestSuiteHeadings] = useState([]);
+    const [launcherDetails, setlauncherDetails] = useState();
+    const [testData, setTestData] = useState();
+    const [isMountOne, setIsMountOne] = useState(false);
+    const [isMountTwo, setIsMountTwo] = useState(false);
+    const [isMountThree, setIsMountThree] = useState(false);
+    const [isMountFour, setIsMountFour] = useState(false);
+    const [isMountFive, setIsMountFive] = useState(false);
+    const [isMountSix, setIsMountSix] = useState(false);
+    const [testSuiteHeadings, setTestSuiteHeadings] = useState([]);
     const [isModalShow, setIsModalShow] = useState(false);
-    const [fileName,setFileName] = useState('');
-    const [finalOutPut,setFinalOutPut] = useState();
-    const [dataSection,setDataSection] = useState();
-    const [attachDataSheets,setAttachDataSheets] = useState([]);
-    const [loopsDetailsStartCmd,setLoopsDetailsStartCmd] = useState([]);
-    const [loopsDetailsEndCmd,setLoopsDetailsEndCmd] = useState([]);
-    const [locatorSection,setLocatorSection] = useState();
+    const [fileName, setFileName] = useState('');
+    const [finalOutPut, setFinalOutPut] = useState();
+    const [dataSection, setDataSection] = useState();
+    const [attachDataSheets, setAttachDataSheets] = useState([]);
+    const [loopsDetailsStartCmd, setLoopsDetailsStartCmd] = useState([]);
+    const [loopsDetailsEndCmd, setLoopsDetailsEndCmd] = useState([]);
+    const [locatorSection, setLocatorSection] = useState();
+    const [isDataCleaningProc, setIsDataCleaningProc] = useState(false);
     //const modalRefJSONFileName=useRef();
+
+    const dispatch = useDispatch();
 
     const generateFinalJSON = () => {
         gettingLauncherDetails();
     }
-    const gettingLauncherDetails =async () => {
+    //state.addTestSheetName.functionCalledManual
+    const JSONGeneratorInitStatus = useSelector((state) => state.initiateJSONGenerator.initJSONGenerator);
+
+    useEffect(() => {
+        if (isMountSix) {
+            gettingLauncherDetails();
+            setIsDataCleaningProc(true);
+        } else {
+            setIsMountSix(true);
+        }
+
+    }, [JSONGeneratorInitStatus]);
+
+    const gettingLauncherDetails = async () => {
 
         axios
-        .get('http://localhost:5000/launcher/getAllLauncherData')
-        .then((response)=>{
-            console.log('tiger111',response.data.allLauncherData);
-            const launcher=response.data.allLauncherData;
-            const newLauncher=launcher.map((launcherPage)=>{
-                const launcherObj=launcherPage[1];
-                launcherObj['groups']=[{}];
-                launcherObj['startTime']=null;
-                launcherObj['endTime']=null;
-                // launcherObj['status']=null;
-                launcherObj['testSettings']={}
-                launcherPage[1]=launcherObj;
+            .get('http://localhost:5000/launcher/getAllLauncherData')
+            .then((response) => {
+                console.log('tiger111', response.data.allLauncherData);
+                const launcher = response.data.allLauncherData;
+                const newLauncher = launcher.map((launcherPage) => {
+                    const launcherObj = launcherPage[1];
+                    launcherObj['groups'] = [{}];
+                    launcherObj['startTime'] = null;
+                    launcherObj['endTime'] = null;
+                    // launcherObj['status']=null;
+                    launcherObj['testSettings'] = {}
+                    launcherPage[1] = launcherObj;
 
-                return launcherPage;
-            });
-            console.log('lion',newLauncher);
-            setlauncherDetails([...newLauncher]);
-        })
-        .catch((err)=>{
-            console.log(err)
-        }) 
+                    return launcherPage;
+                });
+                console.log('lion', newLauncher);
+                setlauncherDetails([...newLauncher]);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
-    useEffect(()=>{
-        if(isMountOne){
+    useEffect(() => {
+        if (isMountOne) {
             gettingTestSuiteDetails();
-        }else{
+        } else {
             setIsMountOne(true);
         }
-    },[launcherDetails])
+    }, [launcherDetails])
 
-    useEffect(()=>{
-        if(isMountFour){
+    useEffect(() => {
+        if (isMountFour) {
             getAllDataFromDataSection();
-        }else{
+        } else {
             setIsMountFour(true);
         }
-    },[testSuiteHeadings]);
+    }, [testSuiteHeadings]);
 
-    const gettingTestSuiteDetails = async() => {
-        try{
+    const gettingTestSuiteDetails = async () => {
+        try {
             const response = await axios.get(
                 `http://localhost:5000/testSuite/getAllTestData`
             )
             setTestData(response.data.allTestData);
             // const testData = response.data.allTestData;
             // console.log('ship',testData);
-        }catch(err){
+        } catch (err) {
             if (err.response) {
                 // The client was given an error response (5xx, 4xx)
                 console.log(err.response.data);
@@ -95,24 +112,24 @@ const JSONGenerator = () => {
             }
         }
     }
-    useEffect(()=>{
-        if(isMountTwo){
+    useEffect(() => {
+        if (isMountTwo) {
             getTestSuiteHeadings();
-        }else{
+        } else {
             setIsMountTwo(true);
         }
-    },[testData])
+    }, [testData])
 
-    const getTestSuiteHeadings = async() => {
-        console.log('solor',testData);
-        try{
+    const getTestSuiteHeadings = async () => {
+        console.log('solor', testData);
+        try {
             const response = await axios.get(
                 `http://localhost:5000/testJunction/testManual/:tname/getHeading`
             )
-            const testHeadings=response.data.getTestHeadings;
+            const testHeadings = response.data.getTestHeadings;
             setTestSuiteHeadings(testHeadings);
 
-        }catch(err){
+        } catch (err) {
             if (err.response) {
                 console.log(err.response.data);
                 console.log(err.response.status);
@@ -127,324 +144,324 @@ const JSONGenerator = () => {
 
     const getAllDataFromDataSection = () => {
         axios
-        .get('http://localhost:5000/data/getAllData')
-        .then((res)=>{
-            setDataSection(res.data.dataSection);
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
-            
+            .get('http://localhost:5000/data/getAllData')
+            .then((res) => {
+                setDataSection(res.data.dataSection);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+
     }
 
-    useEffect(()=>{
-        if(isMountFive){
+    useEffect(() => {
+        if (isMountFive) {
             getAllDataFromLocatorSection();
-        }else{
+        } else {
             setIsMountFive(true);
         }
-    },[dataSection])
+    }, [dataSection])
 
 
     const getAllDataFromLocatorSection = () => {
-         axios
-        .get('http://localhost:5000/locator/getAllData')
-        .then((res)=>{
-            console.log('hash',res.data.locatorSection);
-            setLocatorSection(res.data.locatorSection);
-        })
-        .catch((err)=>{
-            console.log(err)
-        })
+        axios
+            .get('http://localhost:5000/locator/getAllData')
+            .then((res) => {
+                console.log('hash', res.data.locatorSection);
+                setLocatorSection(res.data.locatorSection);
+            })
+            .catch((err) => {
+                console.log(err)
+            })
 
     }
-    useEffect(()=>{
-        if(isMountThree){
+    useEffect(() => {
+        if (isMountThree) {
             appendingTestdataWithLauncher();
-        }else{
+        } else {
             setIsMountThree(true);
         }
-    },[locatorSection])
+    }, [locatorSection])
 
     const appendingTestdataWithLauncher = () => {
 
-            let testsKeyArr = [];  //a key of outter object (array)
-            console.log('frank',launcherDetails);
-            for(let i=0;i<launcherDetails.length;i++){
+        let testsKeyArr = [];  //a key of outter object (array)
+        console.log('frank', launcherDetails);
+        for (let i = 0; i < launcherDetails.length; i++) {
 
-                console.log("status",launcherDetails[i][1]);
-                if(launcherDetails[i][1].status==="Enabled"){
+            console.log("status", launcherDetails[i][1]);
+            if (launcherDetails[i][1].status === "Enabled") {
 
-                    if(launcherDetails[i][1].type==="Sequential"){
-                        if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
-                            let testSheet=testData[i];
-                            let newTestSheet=[];
-                            const commonLocatorId = uuidv4();
-                            for(let j=1;j<testSheet.length;j++){//selecting a test step
-                                let testStep=testSheet[j];
-                                console.log('my test step',testStep);
-                                const newTestStep={};
-                                for(let k=0;k<testSuiteHeadings.length;k++){
-                                    const key=testSuiteHeadings[k];
-                                    if(testStep.hasOwnProperty(key)){                           
-                                        console.log('myValue',testStep[key]);
-                                        //identify loop name and relevant data page name 
-                                        if(testStep[key]==='While.DataExists'){
-                                            const dataValue = testStep['data'];
-                                            const dataValueParts = dataValue.split('|');
-                                            const dataPageName = dataValueParts[0].split(':')[1];
-                                            const loopName = dataValueParts[1].split(':')[1];
-                                            const start_step =  commonLocatorId+"."+(j+1);
-                                            const existingLoopDetails = loopsDetailsStartCmd;
-                                            const loopDetailsObj = {};
-                                            loopDetailsObj['loopName'] = loopName;
-                                            loopDetailsObj['start_step'] = start_step;
-                                            loopDetailsObj['dataPageName'] = dataPageName;
-                                            existingLoopDetails.push(loopDetailsObj);
-                                            setLoopsDetailsStartCmd(existingLoopDetails);
-                                            if(attachDataSheets.length===0){
-                                                const arr=attachDataSheets;
+                if (launcherDetails[i][1].type === "Sequential") {
+                    if (launcherDetails[i][0] === testData[i][0]) {//selecting a test sheet
+                        let testSheet = testData[i];
+                        let newTestSheet = [];
+                        const commonLocatorId = uuidv4();
+                        for (let j = 1; j < testSheet.length; j++) {//selecting a test step
+                            let testStep = testSheet[j];
+                            console.log('my test step', testStep);
+                            const newTestStep = {};
+                            for (let k = 0; k < testSuiteHeadings.length; k++) {
+                                const key = testSuiteHeadings[k];
+                                if (testStep.hasOwnProperty(key)) {
+                                    console.log('myValue', testStep[key]);
+                                    //identify loop name and relevant data page name 
+                                    if (testStep[key] === 'While.DataExists') {
+                                        const dataValue = testStep['data'];
+                                        const dataValueParts = dataValue.split('|');
+                                        const dataPageName = dataValueParts[0].split(':')[1];
+                                        const loopName = dataValueParts[1].split(':')[1];
+                                        const start_step = commonLocatorId + "." + (j + 1);
+                                        const existingLoopDetails = loopsDetailsStartCmd;
+                                        const loopDetailsObj = {};
+                                        loopDetailsObj['loopName'] = loopName;
+                                        loopDetailsObj['start_step'] = start_step;
+                                        loopDetailsObj['dataPageName'] = dataPageName;
+                                        existingLoopDetails.push(loopDetailsObj);
+                                        setLoopsDetailsStartCmd(existingLoopDetails);
+                                        if (attachDataSheets.length === 0) {
+                                            const arr = attachDataSheets;
+                                            arr.push(dataPageName);
+                                            setAttachDataSheets(arr);
+                                        } else {
+                                            if (!attachDataSheets.includes(dataPageName)) {
+                                                const arr = attachDataSheets;
                                                 arr.push(dataPageName);
                                                 setAttachDataSheets(arr);
-                                            }else{
-                                                if(!attachDataSheets.includes(dataPageName)){
-                                                    const arr=attachDataSheets;
-                                                    arr.push(dataPageName);
-                                                    setAttachDataSheets(arr);
-                                                }
-                                            }
-                                            if(loopsDetailsStartCmd.length!==0 && loopsDetailsEndCmd.length!==0){
-                                                for(let i = 0;i<loopsDetailsEndCmd.length;i++){
-                                                    if(loopsDetailsEndCmd[i]['loopName']===loopName){
-                                                        newTestStep['data']=testStep['data']+'|'+'end_step'+loopsDetailsEndCmd[i]['end_step']
-                                                    }
-                                                }
-
-                                            }
-                                            
-                                        }
-                                        if(testStep[key]==='While.End'){
-                                            const dataValue = testStep['data'];
-                                            const loopName = dataValue.split(':')[1];
-                                            const end_step =  commonLocatorId+"."+(j+1);
-                                            const existingLoopDetails = loopsDetailsEndCmd;
-                                            const loopDetailsObj = {};
-                                            loopDetailsObj['loopName'] = loopName;
-                                            loopDetailsObj['end_step'] = end_step;
-                                            existingLoopDetails.push(loopDetailsObj);
-                                            setLoopsDetailsEndCmd(existingLoopDetails);
-
-                                            if(loopsDetailsStartCmd.length!==0 && loopsDetailsEndCmd.length!==0){
-                                                for(let i = 0;i<loopsDetailsStartCmd.length;i++){
-                                                    if(loopsDetailsStartCmd[i]['loopName']===loopName){
-                                                        newTestStep['data']=testStep['data']+'|'+'start_step'+loopsDetailsStartCmd[i]['start_step'];
-                                                        console.log('bean',newTestStep['data']);
-                                                        continue;
-                                                    }
-                                                }
-                                                
                                             }
                                         }
-                                        if(key==="data"){
-                                            console.log('hellooooo',testStep[key])
-                                            //if(testStep[key].charAt(0)==="#"){// identify data values which strats with '#'
-                                                if(testStep[key].split('.')[0]==='#data'){// identify data values which connects with the data section
-                                                    const refParts=testStep[key].split('.');
-                                                    const dataPage=refParts[1];
-                                                    const heading=refParts[2];
-                                                    const rawNo=refParts[3];
-                                                    console.log('creed',dataSection,dataPage);
-
-                                                    const index = dataSection.findIndex(data=>data[0]===dataPage);
-                                                    const selectedPageWithValues=dataSection[index];
-                                                    if(dataPage.charAt(dataPage.length-1)==="M"){
-                                                         console.log('wall',rawNo)
-                                                         const selectedDataObject=selectedPageWithValues[parseInt(rawNo)+1];
-                                                         console.log('wall',selectedDataObject);
-                                                         const actualDataValue=selectedDataObject[heading];
-                                                         newTestStep[key]=actualDataValue;
-                                                    }
-                                                }else if(testStep['command']!=='While.End' && testStep['command']!=='While.DataExists'){
-                                                    newTestStep[key]=testStep[key]
+                                        if (loopsDetailsStartCmd.length !== 0 && loopsDetailsEndCmd.length !== 0) {
+                                            for (let i = 0; i < loopsDetailsEndCmd.length; i++) {
+                                                if (loopsDetailsEndCmd[i]['loopName'] === loopName) {
+                                                    newTestStep['data'] = testStep['data'] + '|' + 'end_step' + loopsDetailsEndCmd[i]['end_step']
                                                 }
-                                        }else if(key==='locator'){
-                                            if(testStep[key].split('.')[0]==='#loc'){
-                                                const refParts=testStep[key].split('.');
-                                                const LocatorPage=refParts[1];
-                                                const locatorName=refParts[2];
-                                                const index = locatorSection.findIndex(locator=>locator[0]===LocatorPage);
-                                                const selectedPageWithValues=locatorSection[index];
-                                                    for(let i=1;i<selectedPageWithValues.length;i++){
-                                                        const locatorObj=selectedPageWithValues[i];
-                                                        if(locatorObj['Locator Name']===locatorName){
-                                                            newTestStep[key] = locatorObj['Locator Value']; 
-                                                        }
-                                                    }
-                                                    
-                                            }else{
-                                                newTestStep[key] = testStep[key];
                                             }
-                                        }else{
-                                            newTestStep[key]=testStep[key];
-                                        }              
-                                    }else{
-                                        console.log('myValue2');
-                                        newTestStep[key]="";
+
+                                        }
+
                                     }
+                                    if (testStep[key] === 'While.End') {
+                                        const dataValue = testStep['data'];
+                                        const loopName = dataValue.split(':')[1];
+                                        const end_step = commonLocatorId + "." + (j + 1);
+                                        const existingLoopDetails = loopsDetailsEndCmd;
+                                        const loopDetailsObj = {};
+                                        loopDetailsObj['loopName'] = loopName;
+                                        loopDetailsObj['end_step'] = end_step;
+                                        existingLoopDetails.push(loopDetailsObj);
+                                        setLoopsDetailsEndCmd(existingLoopDetails);
+
+                                        if (loopsDetailsStartCmd.length !== 0 && loopsDetailsEndCmd.length !== 0) {
+                                            for (let i = 0; i < loopsDetailsStartCmd.length; i++) {
+                                                if (loopsDetailsStartCmd[i]['loopName'] === loopName) {
+                                                    newTestStep['data'] = testStep['data'] + '|' + 'start_step' + loopsDetailsStartCmd[i]['start_step'];
+                                                    console.log('bean', newTestStep['data']);
+                                                    continue;
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                    if (key === "data") {
+                                        console.log('hellooooo', testStep[key])
+                                        //if(testStep[key].charAt(0)==="#"){// identify data values which strats with '#'
+                                        if (testStep[key].split('.')[0] === '#data') {// identify data values which connects with the data section
+                                            const refParts = testStep[key].split('.');
+                                            const dataPage = refParts[1];
+                                            const heading = refParts[2];
+                                            const rawNo = refParts[3];
+                                            console.log('creed', dataSection, dataPage);
+
+                                            const index = dataSection.findIndex(data => data[0] === dataPage);
+                                            const selectedPageWithValues = dataSection[index];
+                                            if (dataPage.charAt(dataPage.length - 1) === "M") {
+                                                console.log('wall', rawNo)
+                                                const selectedDataObject = selectedPageWithValues[parseInt(rawNo) + 1];
+                                                console.log('wall', selectedDataObject);
+                                                const actualDataValue = selectedDataObject[heading];
+                                                newTestStep[key] = actualDataValue;
+                                            }
+                                        } else if (testStep['command'] !== 'While.End' && testStep['command'] !== 'While.DataExists') {
+                                            newTestStep[key] = testStep[key]
+                                        }
+                                    } else if (key === 'locator') {
+                                        if (testStep[key].split('.')[0] === '#loc') {
+                                            const refParts = testStep[key].split('.');
+                                            const LocatorPage = refParts[1];
+                                            const locatorName = refParts[2];
+                                            const index = locatorSection.findIndex(locator => locator[0] === LocatorPage);
+                                            const selectedPageWithValues = locatorSection[index];
+                                            for (let i = 1; i < selectedPageWithValues.length; i++) {
+                                                const locatorObj = selectedPageWithValues[i];
+                                                if (locatorObj['Locator Name'] === locatorName) {
+                                                    newTestStep[key] = locatorObj['Locator Value'];
+                                                }
+                                            }
+
+                                        } else {
+                                            newTestStep[key] = testStep[key];
+                                        }
+                                    } else {
+                                        newTestStep[key] = testStep[key];
+                                    }
+                                } else {
+                                    console.log('myValue2');
+                                    newTestStep[key] = "";
                                 }
-                                newTestStep['stepId']=uuidv4();
-                                newTestStep['uniqueLocator'] = commonLocatorId+"."+(j+1);
-                                newTestSheet.push(newTestStep);
                             }
-                            const tempLauncherDetails=launcherDetails;
-                            tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
-                            //launcherDetails['groups'][0]['steps']=newTestSheet;
-                            testsKeyArr.push(tempLauncherDetails[i][1]);
-                             console.log('zone',newTestSheet);
-                        } 
+                            newTestStep['stepId'] = uuidv4();
+                            newTestStep['uniqueLocator'] = commonLocatorId + "." + (j + 1);
+                            newTestSheet.push(newTestStep);
+                        }
+                        const tempLauncherDetails = launcherDetails;
+                        tempLauncherDetails[i][1]['groups'][0]['steps'] = newTestSheet;
+                        //launcherDetails['groups'][0]['steps']=newTestSheet;
+                        testsKeyArr.push(tempLauncherDetails[i][1]);
+                        console.log('zone', newTestSheet);
+                    }
 
-                    }else if(launcherDetails[i][1].type==="Data Driven"){
-                        ///////////////////////////////////////////
-                        if(launcherDetails[i][0]===testData[i][0]){//selecting a test sheet
-                            let testSheet=testData[i];
-                            let newTestSheet=[];
-                            const commonLocatorId = uuidv4();
-                            for(let j=1;j<testSheet.length;j++){//selecting a test step
-                                let testStep=testSheet[j];
-                                console.log('my test step',testStep);
-                                const newTestStep={};
-                                for(let k=0;k<testSuiteHeadings.length;k++){
-                                    const key=testSuiteHeadings[k];
-                                    if(testStep.hasOwnProperty(key)){                           
-                                        console.log('myValue',testStep[key]);
+                } else if (launcherDetails[i][1].type === "Data Driven") {
+                    ///////////////////////////////////////////
+                    if (launcherDetails[i][0] === testData[i][0]) {//selecting a test sheet
+                        let testSheet = testData[i];
+                        let newTestSheet = [];
+                        const commonLocatorId = uuidv4();
+                        for (let j = 1; j < testSheet.length; j++) {//selecting a test step
+                            let testStep = testSheet[j];
+                            console.log('my test step', testStep);
+                            const newTestStep = {};
+                            for (let k = 0; k < testSuiteHeadings.length; k++) {
+                                const key = testSuiteHeadings[k];
+                                if (testStep.hasOwnProperty(key)) {
+                                    console.log('myValue', testStep[key]);
 
-                                        //////////////////////////////////
-                                        console.log('hellooooo',testStep[key])
-                                        if(testStep[key].charAt(0)==="#"){// identify data values which strats with '#'
-                                            if(testStep[key].split('.')[0]==='#data'){// identify data values which connects with the data section
-                                                const refParts=testStep[key].split('.');
-                                                const dataPage=refParts[1];
-                                                if(attachDataSheets.length===0){
-                                                    const arr=attachDataSheets;
+                                    //////////////////////////////////
+                                    console.log('hellooooo', testStep[key])
+                                    if (testStep[key].charAt(0) === "#") {// identify data values which strats with '#'
+                                        if (testStep[key].split('.')[0] === '#data') {// identify data values which connects with the data section
+                                            const refParts = testStep[key].split('.');
+                                            const dataPage = refParts[1];
+                                            if (attachDataSheets.length === 0) {
+                                                const arr = attachDataSheets;
+                                                arr.push(dataPage);
+                                                setAttachDataSheets(arr);
+                                            } else {
+                                                if (!attachDataSheets.includes(dataPage)) {
+                                                    const arr = attachDataSheets;
                                                     arr.push(dataPage);
                                                     setAttachDataSheets(arr);
-                                                }else{
-                                                    if(!attachDataSheets.includes(dataPage)){
-                                                        const arr=attachDataSheets;
-                                                        arr.push(dataPage);
-                                                        setAttachDataSheets(arr);
-                                                    }
                                                 }
-                                                newTestStep[key]=testStep[key];                                            
-                                            }else if(testStep[key].split('.')[0]==='#loc'){
-                                                 const refParts=testStep[key].split('.');
-                                                 const LocatorPage=refParts[1];
-                                                 const locatorName=refParts[2];
-                                                 const index = locatorSection.findIndex(locator=>locator[0]===LocatorPage);
-                                                 console.log('jam',index);
-                                                 const selectedPageWithValues=locatorSection[index];
-                                                    for(let i=1;i<selectedPageWithValues.length;i++){
-                                                        const locatorObj=selectedPageWithValues[i];
-                                                        
-                                                        if(locatorObj['Locator Name']===locatorName){
-                                                            console.log('flyyy',locatorObj['Locator Value']);
-                                                            newTestStep[key] = locatorObj['Locator Value']; 
-                                                        }
-                                                    }
-                                            }else{
-                                                newTestStep[key]=testStep[key];
                                             }
-                                        }else{
-                                            newTestStep[key]=testStep[key];
+                                            newTestStep[key] = testStep[key];
+                                        } else if (testStep[key].split('.')[0] === '#loc') {
+                                            const refParts = testStep[key].split('.');
+                                            const LocatorPage = refParts[1];
+                                            const locatorName = refParts[2];
+                                            const index = locatorSection.findIndex(locator => locator[0] === LocatorPage);
+                                            console.log('jam', index);
+                                            const selectedPageWithValues = locatorSection[index];
+                                            for (let i = 1; i < selectedPageWithValues.length; i++) {
+                                                const locatorObj = selectedPageWithValues[i];
+
+                                                if (locatorObj['Locator Name'] === locatorName) {
+                                                    console.log('flyyy', locatorObj['Locator Value']);
+                                                    newTestStep[key] = locatorObj['Locator Value'];
+                                                }
+                                            }
+                                        } else {
+                                            newTestStep[key] = testStep[key];
                                         }
-                  
-                                    }else{
-                                        console.log('myValue2');
-                                        newTestStep[key]="";
+                                    } else {
+                                        newTestStep[key] = testStep[key];
                                     }
+
+                                } else {
+                                    console.log('myValue2');
+                                    newTestStep[key] = "";
                                 }
-                                newTestStep['stepId']=uuidv4();
-                                newTestStep['uniqueLocator'] = commonLocatorId+"."+(j+1);
-                                newTestSheet.push(newTestStep);
                             }
-                            const tempLauncherDetails=launcherDetails;
-                            tempLauncherDetails[i][1]['groups'][0]['steps']=newTestSheet;
-                            //launcherDetails['groups'][0]['steps']=newTestSheet;
-                            testsKeyArr.push(tempLauncherDetails[i][1]);
-                             console.log('zone',newTestSheet);
-                        } 
-
-                        ///////////////////////////////////////////
+                            newTestStep['stepId'] = uuidv4();
+                            newTestStep['uniqueLocator'] = commonLocatorId + "." + (j + 1);
+                            newTestSheet.push(newTestStep);
+                        }
+                        const tempLauncherDetails = launcherDetails;
+                        tempLauncherDetails[i][1]['groups'][0]['steps'] = newTestSheet;
+                        //launcherDetails['groups'][0]['steps']=newTestSheet;
+                        testsKeyArr.push(tempLauncherDetails[i][1]);
+                        console.log('zone', newTestSheet);
                     }
-                }else{
-                    const tempLauncherDetails=launcherDetails;
-                    tempLauncherDetails[i][1]['groups']=[];
-                    testsKeyArr.push(tempLauncherDetails[i][1]);
-                }       
-            }
-            console.log('land',loopsDetailsEndCmd);
-            console.log('lord',loopsDetailsStartCmd)
 
-            if(attachDataSheets.length!==0){
-                const dataPages={};             
-                for(let i=0;i<attachDataSheets.length;i++){
-                    console.log('bird box',attachDataSheets);
-                    const index = dataSection.findIndex(data=>data[0]===attachDataSheets[i]);
-                    console.log('gumpert',dataSection[index]);
-                    const selectedSheetNameWithdata=dataSection[index];
-                    const tempObj={};
-                     if(attachDataSheets[i].charAt(attachDataSheets[i].length-1)==="M"){
-                        for(let j=2;j<selectedSheetNameWithdata.length;j++){
-                            tempObj[j-1]=selectedSheetNameWithdata[j];
-                        }
-                    }else if(attachDataSheets[i].charAt(attachDataSheets[i].length-1)==="E"){
-                        for(let j=3;j<selectedSheetNameWithdata.length;j++){
-                            tempObj[j-1]=selectedSheetNameWithdata[j];
-                        }
-                     }
-                    dataPages[attachDataSheets[i]]=tempObj;
+                    ///////////////////////////////////////////
                 }
-
-                console.log('yoga',dataPages)
-                const finalJSONOutput = {
-                    suiteId : uuidv4(),
-                    fileName : "",
-                    tests : testsKeyArr,
-                    activeTestCount : 1,
-                    status : null,
-                    startTime : null,
-                    endTime : null,
-                    filePath : "",
-                    reportPath : null,
-                    dataPages:dataPages
-    
-                };
-                setFinalOutPut(finalJSONOutput);
-    
-                initModal();
-
-            }else{
-                const finalJSONOutput = {
-                    suiteId : uuidv4(),
-                    fileName : "",
-                    tests : testsKeyArr,
-                    activeTestCount : 1,
-                    status : null,
-                    startTime : null,
-                    endTime : null,
-                    filePath : "",
-                    reportPath : null
-    
-                };
-                setFinalOutPut(finalJSONOutput);
-    
-                initModal();
+            } else {
+                const tempLauncherDetails = launcherDetails;
+                tempLauncherDetails[i][1]['groups'] = [];
+                testsKeyArr.push(tempLauncherDetails[i][1]);
             }
+        }
+        console.log('land', loopsDetailsEndCmd);
+        console.log('lord', loopsDetailsStartCmd)
+
+        if (attachDataSheets.length !== 0) {
+            const dataPages = {};
+            for (let i = 0; i < attachDataSheets.length; i++) {
+                console.log('bird box', attachDataSheets);
+                const index = dataSection.findIndex(data => data[0] === attachDataSheets[i]);
+                console.log('gumpert', dataSection[index]);
+                const selectedSheetNameWithdata = dataSection[index];
+                const tempObj = {};
+                if (attachDataSheets[i].charAt(attachDataSheets[i].length - 1) === "M") {
+                    for (let j = 2; j < selectedSheetNameWithdata.length; j++) {
+                        tempObj[j - 1] = selectedSheetNameWithdata[j];
+                    }
+                } else if (attachDataSheets[i].charAt(attachDataSheets[i].length - 1) === "E") {
+                    for (let j = 3; j < selectedSheetNameWithdata.length; j++) {
+                        tempObj[j - 1] = selectedSheetNameWithdata[j];
+                    }
+                }
+                dataPages[attachDataSheets[i]] = tempObj;
+            }
+
+            console.log('yoga', dataPages)
+            const finalJSONOutput = {
+                suiteId: uuidv4(),
+                fileName: "",
+                tests: testsKeyArr,
+                activeTestCount: 1,
+                status: null,
+                startTime: null,
+                endTime: null,
+                filePath: "",
+                reportPath: null,
+                dataPages: dataPages
+
+            };
+            setFinalOutPut(finalJSONOutput);
+
+            initModal();
+
+        } else {
+            const finalJSONOutput = {
+                suiteId: uuidv4(),
+                fileName: "",
+                tests: testsKeyArr,
+                activeTestCount: 1,
+                status: null,
+                startTime: null,
+                endTime: null,
+                filePath: "",
+                reportPath: null
+
+            };
+            setFinalOutPut(finalJSONOutput);
+
+            initModal();
+        }
     }
     const nameSchema = yup.object(
         {
-            name:yup.string().required("File name is required!")
-        }     
+            name: yup.string().required("File name is required!")
+        }
     ).required();
 
     const {
@@ -452,13 +469,13 @@ const JSONGenerator = () => {
         handleSubmit,
         formState: { errors },
         reset,
-      } = useForm({
+    } = useForm({
         resolver: yupResolver(nameSchema),
         defaultValues: {
-          name: ""
+            name: ""
         },
-      });
-    
+    });
+
     const initModal = () => {
         setIsModalShow(true);
     }
@@ -474,34 +491,48 @@ const JSONGenerator = () => {
     }
 
     const downloadJSONFile = () => {
-        
+
         setIsModalShow(false);
-        const JSONfileName=fileName;
-        finalOutPut["fileName"]=JSONfileName;
+        const JSONfileName = fileName;
+        finalOutPut["fileName"] = JSONfileName;
         // Convert data object to JSON string
-        const jsonData = JSON.stringify(finalOutPut,null,1);
+        const jsonData = JSON.stringify(finalOutPut, null, 1);
         const blob = new Blob([jsonData], { type: 'application/json;charset=utf-8' });
-        saveAs(blob,JSONfileName+'.json');
+        saveAs(blob, JSONfileName + '.json');
         reset();
+
+        if (isDataCleaningProc) {
+            axios
+                .delete('http://localhost:5000/section/delete')
+                .then((res) => {
+                    console.log('vista');
+                    setIsDataCleaningProc(false);
+                    dispatch({type:'RENDERING_NAV_BAR'});
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setIsDataCleaningProc(false);
+                })
+        }
     }
-    return(
+    return (
         <>
             <Button variant="danger" class="btn btn-info" onClick={generateFinalJSON}>Generate JSON</Button>
             <form onSubmit={handleSubmit(downloadJSONFile)} id='fileNameModal' register={register} errors={errors}>
                 <Modal show={isModalShow} tabIndex="-1">
-                        <Modal.Header closeButton onClick={terminateModal}>
-                            <Modal.Title>Enter a File Name</Modal.Title>
-                        </Modal.Header>
-                        <Modal.Body>
-                            <label>Enter a file name for saving JSON data :</label>
-                            <input type="text"  {...register('name')} onChange={handleFileName} className="form-control"/>
-                            <small className="text-danger">{errors.name?.message}</small>
-                        </Modal.Body>
-                        <Modal.Footer>
-                            <Button variant="dark" form='fileNameModal' type="submit">
-                                Ok
-                            </Button>
-                        </Modal.Footer>
+                    <Modal.Header closeButton onClick={terminateModal}>
+                        <Modal.Title>Enter a File Name</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <label>Enter a file name for saving JSON data :</label>
+                        <input type="text"  {...register('name')} onChange={handleFileName} className="form-control" />
+                        <small className="text-danger">{errors.name?.message}</small>
+                    </Modal.Body>
+                    <Modal.Footer>
+                        <Button variant="dark" form='fileNameModal' type="submit">
+                            Ok
+                        </Button>
+                    </Modal.Footer>
                 </Modal>
             </form>
         </>

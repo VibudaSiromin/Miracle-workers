@@ -198,7 +198,6 @@ function ModalDialog(props, ref) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log('aaaaaaaa');
     let matchedBinaryValue;
     for (let i = 0; i < commandArray.length; i++) {
       if (commandArray[i][0] === modalOneDataSet['command']) {
@@ -208,7 +207,8 @@ function ModalDialog(props, ref) {
           commandArray[i][3].toString();
       }
     }
-    console.log('hloo', matchedBinaryValue);
+
+    //decide the suitable input fields in second modal
     switch (matchedBinaryValue) {
       case '000':
         setCommandBasedFields([['swapResult', 'action', 'comment'], '000']);
@@ -331,12 +331,12 @@ function ModalDialog(props, ref) {
     
   };
 
+  //to handle data coming from other sections eg- data , locator
   const inputHandler3 = (name, value) => {
-    console.log('inputHandler3: ' + name, value);
     generalPurposeInputData[name] = value;
-    console.log('inputHandler3:', props.purpose);
   };
 
+  //use to render input fields individually
   const fieldLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
       if (
@@ -383,6 +383,7 @@ function ModalDialog(props, ref) {
       }
     }
 
+    //use to render fields in second modal
     if (props.enableChainPopUps) {
       for (let i = 0; i < commandBasedFields[0].length; i++) {
         if (
@@ -429,6 +430,8 @@ function ModalDialog(props, ref) {
     dispatchModalOne({ type: 'CLEAR' });
     return setToggleOneModal(false);
   };
+
+  //initiate first modal 
   const initModalTwo = () => {
     setIsCmdEmpty(false);
     setIsInstEmpty(false);
@@ -438,6 +441,7 @@ function ModalDialog(props, ref) {
     setIsColumnNameEmpty(false);
     return setToggleTwoModal(true);
   };
+  //close modal two
   const TerminateModalTwo = () => {
     console.log(testStepsData2);
     dispatchValidationOne({
@@ -462,6 +466,7 @@ function ModalDialog(props, ref) {
     return setToggleTwoModal(false);
   };
 
+  //when chainPopups enable.This button will appear
   const NextStep = () => {
     if (props.generalPurpose === false) {
       setModalOneDataSet(testStepsData);

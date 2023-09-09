@@ -196,7 +196,7 @@ const NameAssignModal = (props,ref) => {
           </form>
         </Modal>
       
-      <MessageBox ref={modalRefC} modalFooterfuncOne={initModalOne} id='pageNameDuplicateModal'></MessageBox>
+      <MessageBox ref={modalRefC} modalFooterfuncOne={initModalOne} id='pageNameDuplicateModal' modalTitle={'New Project'} icon={''} btnValues={['save&create','create']} isTwobtn={true}></MessageBox>
       </div>
 
     )

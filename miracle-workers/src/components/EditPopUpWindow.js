@@ -710,7 +710,7 @@ const EditModalDialog = forwardRef((props,ref)=> {
         if ('data' in testStepsData2) {
           dispatchValidationFive({
             type: 'CHANGE_DATA',
-            payload: testStepsData2.locator,
+            payload: testStepsData2.data,
           });
         }
         if (!('data' in testStepsData2)) {
@@ -889,6 +889,7 @@ const EditModalDialog = forwardRef((props,ref)=> {
         TerminateModalTwo();
       }
     }else if(validationSetFive.includes(modalOneDataSet.command)){
+      console.log('ACE2222222',validationFive.data);
       if(validationFive.data !== '' && validationFive.data !== undefined){
         if('locator' in modalTwoDataSet){
           modalTwoDataSet['locator'] = '';

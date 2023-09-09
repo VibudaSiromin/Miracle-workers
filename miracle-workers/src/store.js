@@ -62,8 +62,16 @@ const testAddBtnStatus = {
   status:false
 }
 
+const rendeingNavBarStatus = {
+  status:false
+}
+
 const initEditModalOne = {
   initEditModal:false
+}
+
+const initJSONGenerator = {
+  initJSONGeneratorStatus:false
 }
 
 const commandState = {
@@ -397,6 +405,30 @@ const initiateEditModalReducer = (state = initEditModalOne, action) => {
   }
 }
 
+const initiateJSONGeneratorReducer = (state = initJSONGenerator, action) => {
+  switch(action.type){
+    case "INITIATE_JSON_GENERATOR":
+      return{
+        ...state,
+        initJSONGenerator:!state.initJSONGenerator
+      };
+      default:
+        return state;
+  }
+}
+
+const renderingNavBarReducer = (state = rendeingNavBarStatus, action) => {
+  switch(action.type){
+    case "RENDERING_NAV_BAR":
+      return{
+        ...state,
+        status:!state.status
+      };
+      default:
+        return state;
+  }
+}
+
 const rootReducer = combineReducers({
     changeState:changeStateReducer,
     addDataSheetName:addDataSheetNameReducer,
@@ -414,7 +446,9 @@ const rootReducer = combineReducers({
     initiateEditModal:initiateEditModalReducer,
     getEditModalTwoData:getEditModalTwoDataReducer,
     rerenderingLauncherSection:rerenderingLauncherSectionReducer,
-    getAlertVisibityStatus:getAlertVisibityStatusReducer
+    getAlertVisibityStatus:getAlertVisibityStatusReducer,
+    initiateJSONGenerator:initiateJSONGeneratorReducer,
+    renderingNavBar:renderingNavBarReducer
 })
 
 const store = createStore(rootReducer)

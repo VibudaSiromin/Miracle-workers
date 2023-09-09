@@ -47,7 +47,7 @@ export const AppSidebarNav = () => {
   const [URLSection, setURLSection] = useState({});
   const [indexOfRenamePage, setIndexOfRenamePage] = useState();
   const [currentNavIndex, setCurrentNavIndex] = useState();
-  const [visible, setVisible] = useState(false);
+  const [navBar,setNavBar] = useState(false);
   const dispatch = useDispatch();
 
   const modalRefD = useRef();
@@ -95,12 +95,15 @@ export const AppSidebarNav = () => {
 
   }
 
+   //rendering nav bar
+   const navBarStatus = useSelector((state)=>state.renderingNavBar.status);
+
   useEffect(() => {
     console.log('Normandy');
     getLocatorPages();
     getDataPages();
     getTestPages();
-  }, []);
+  }, [navBarStatus]);
 
   console.log("Hoooo", locatorPageNames)
 
@@ -415,8 +418,7 @@ export const AppSidebarNav = () => {
     }
   }
 
-  //const myFunctionCalled = useSelector((state) => state.addDataSheetName.myFunctionCalled);
-  //console.log('KDK',myFunctionCalled);
+ 
 
   //for data section
 
@@ -448,7 +450,9 @@ export const AppSidebarNav = () => {
   console.log('Nismo', runningConditionForManualTest);
 
 
-
+  // useEffect(()=>{
+  //   setNavBar(!navBar);
+  // },[navBarStatus])
 
 
   useEffect(() => {
@@ -507,23 +511,24 @@ export const AppSidebarNav = () => {
           getTestPages();
           deleteTestFileNameInLauncher();
 
+          console.log('wheelJack', testPageNames);
           if (testPageNames.length === 1) {
             navigate('/home');
           } else {
-            console.log('brown', currentNavIndex);
-            const nextNavName = testPageNames[currentNavIndex + 1];
-            nextNavName.slice(0, -1);
-            if (nextNavName) {
-              navigate(`/testJunction/testManual/${nextNavName}`)
-            } else {
+
+            if ((currentNavIndex + 1) >= testPageNames.length) {
               const prevNavName = testPageNames[currentNavIndex - 1];
-              prevNavName.slice(0, -1);
-              navigate(`/testJunction/testManual/${prevNavName}`)
+              console.log('race2', prevNavName);
+              const pageName = prevNavName.slice(0, -1);
+              navigate(`/testJunction/testManual/${pageName}`)
               console.log('GGG', prevNavName);
+            } else {
+              const nextNavName = testPageNames[currentNavIndex + 1];
+              console.log('race1', nextNavName);
+              const pageName = nextNavName.slice(0, -1);
+              navigate(`/testJunction/testManual/${pageName}`)
             }
           }
-
-
         })
         .catch((err) => {
           console.log(err);
@@ -554,18 +559,41 @@ export const AppSidebarNav = () => {
               .then((res) => {
                 console.log(res);
                 getDataPages();
-
+                console.log('lamp', dataPageNames);
                 if (dataPageNames.length === 1) {
                   navigate('/home');
                 } else {
-                  const nextNavName = dataPageNames[currentNavIndex + 1];
-                  if (nextNavName) {
-                    navigate(`/dataJunction/dataExcel/${nextNavName}`)
-                  } else {
+                  /////////////////////////
+                  if ((currentNavIndex + 1) >= dataPageNames.length) {
                     const prevNavName = dataPageNames[currentNavIndex - 1];
-                    navigate(`/dataJunction/dataExcel/${prevNavName}`)
-                    console.log('GGG', prevNavName);
+                    const lastCharacter = prevNavName[prevNavName.length - 1];
+                    if (lastCharacter === "M") {
+                      const pageName = prevNavName.slice(0, -1);
+                      navigate(`/dataJunction/data/${pageName}`)
+                    } else if (lastCharacter === "E") {
+                      const pageName = prevNavName.slice(0, -1);
+                      navigate(`/dataJunction/dataExcel/${pageName}`)
+                    }
+                  } else {
+                    const nextNavName = dataPageNames[currentNavIndex + 1];
+                    const lastCharacter = nextNavName[nextNavName.length - 1];
+                    if (lastCharacter === "M") {
+                      const pageName = nextNavName.slice(0, -1);
+                      navigate(`/dataJunction/data/${pageName}`)
+                    } else if (lastCharacter === "E") {
+                      const pageName = nextNavName.slice(0, -1);
+                      navigate(`/dataJunction/dataExcel/${pageName}`)
+                    }
                   }
+                  /////////////////////////
+                  // const nextNavName = dataPageNames[currentNavIndex + 1];
+                  // if (nextNavName) {
+                  //   navigate(`/dataJunction/dataExcel/${nextNavName}`)
+                  // } else {
+                  //   const prevNavName = dataPageNames[currentNavIndex - 1];
+                  //   navigate(`/dataJunction/dataExcel/${prevNavName}`)
+                  //   console.log('GGG', prevNavName);
+                  // }
                 }
               })
               .catch((err) => {
@@ -806,8 +834,8 @@ export const AppSidebarNav = () => {
           items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
       </React.Fragment>
       <NameAssignModal /*ref={modalRef}*/ indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
-      <MessageBox ref={modalRefRename} modalFooterfuncOne={pagesRenameHandler} id='pageNameRenameModal'></MessageBox>
-      <MessageBox ref={modalRefD} modalFooterfuncOne={pagesDeleteHandler} id='pageNameDeleteModal'></MessageBox>
+      <MessageBox ref={modalRefRename} modalFooterfuncOne={pagesRenameHandler} id='pageNameRenameModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes','No']} isTwobtn={true}></MessageBox>
+      <MessageBox ref={modalRefD} modalFooterfuncOne={pagesDeleteHandler} id='pageNameDeleteModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes','No']} isTwobtn={true}></MessageBox>
       <NameRenameModal indexOfSection={indexOfSection} updatePageNames={reloadPageNames} currentURLSection={URLSection} renamePageIndex={indexOfRenamePage}></NameRenameModal>
     </>
   )

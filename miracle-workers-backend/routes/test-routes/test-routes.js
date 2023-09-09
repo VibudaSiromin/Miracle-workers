@@ -25,6 +25,8 @@ router.get('/testSuite/getAllTestData',testControllers.getAllTestData);
 //'/testJunction/testManual/test02'
 router.get('/testPages',testControllers.getTestPageNames);
 //get referedDataPages name
-router.get('/testSuite/getReferedDataPages',testControllers.getReferedDataPages)
+router.get('/testSuite/getReferedDataPages',testControllers.getReferedDataPages);
+//delete all data
+router.delete('/section/delete',testControllers.deleteData);
 
 module.exports=router;

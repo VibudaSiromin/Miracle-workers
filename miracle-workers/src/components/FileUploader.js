@@ -271,9 +271,9 @@ const FileUploader = (props) => {
 				</div>
 				</div>
 			</div>
-			<MessageBox ref={modalRefA} modalFooterfuncOne={fileDeletion} id='deleteModal'></MessageBox>
-			<MessageBox ref={modalRefB} modalFooterfuncOne={fileReload} id='reloadModal'></MessageBox>
-			<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={fileTypeErrorHandler} id='fileTypeError'></MessageBox>						
+			<MessageBox ref={modalRefA} modalFooterfuncOne={fileDeletion} id='deleteModal' modalTitle={'New Project'} icon={''} btnValues={['save&create','create']} isTwobtn={true}></MessageBox>
+			<MessageBox ref={modalRefB} modalFooterfuncOne={fileReload} id='reloadModal' modalTitle={'New Project'} icon={''} btnValues={['save&create','create']} isTwobtn={true}></MessageBox>
+			<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={fileTypeErrorHandler} id='fileTypeErrorOne' modalTitle={'New Project'} icon={''} btnValues={['OK']} isTwobtn={false}></MessageBox>						
 			</>
 			
 		); 
@@ -301,7 +301,7 @@ const FileUploader = (props) => {
 				</div> */}
 				</div>
 			</div>
-			<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={''} id='fileTypeError'></MessageBox>
+			<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={fileTypeErrorHandler} id='fileTypeErrorTwo' modalTitle={'Warning!'} icon={''} btnValues={['OK']} isTwobtn={false}></MessageBox>
 			</>
 		);
 

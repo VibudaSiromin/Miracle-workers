@@ -195,12 +195,14 @@ const getReferedDataPages = async(req,res,next) => {
     const data=await fs.promises.readFile(launcherFilePath);
     launcherSection = JSON.parse(data);
     dataPages=launcherSection.map((launcherPage)=>{
-      if('dataSheet' in launcherPage[1]){
-        return(
-          launcherPage[1]['dataSheet']
-        )
-      }else{
-        return null
+      if(launcherPage.length>1){
+        if('dataSheet' in launcherPage[1]){
+          return(
+            launcherPage[1]['dataSheet']
+          )
+        }else{
+          return null
+        }
       }
     })
     console.log('DMC!!!!!!!!!!!',dataPages);
@@ -211,6 +213,19 @@ const getReferedDataPages = async(req,res,next) => {
   }
 }
 
+const deleteData = async(req,res,next) => {
+  let launcherSection=[];
+  const newLauncher=JSON.stringify(launcherSection);
+  try{
+    await fs.promises.writeFile(launcherFilePath,newLauncher);
+    res.status(200).json({message:'Cleaned launcher section'});
+  }catch(err){
+    console.log(err);
+    res.status(500).json({message:'Error occurred when cleaning launcher section'});
+    return;
+  }    
+}
+
 exports.createLauncher = createLauncher;
 exports.editTestPage=editTestPage;
 exports.getLauncherContent=getLauncherContent;
@@ -219,3 +234,4 @@ exports.renameTestPageNameInLauncher=renameTestPageNameInLauncher;
 exports.getAllLauncherData=getAllLauncherData;
 exports.createLauncherPage=createLauncherPage;
 exports.getReferedDataPages=getReferedDataPages;
+exports.deleteData=deleteData;

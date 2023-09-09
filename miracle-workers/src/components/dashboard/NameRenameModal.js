@@ -356,7 +356,7 @@ const NameRenameModal = (props,ref) => {
           </Modal.Footer>
           </form>
         </Modal>
-      <MessageBox ref={modalRefRenaming} modalFooterfuncOne={initRenamingModal} id='pageNameDuplicateModal'></MessageBox>
+      <MessageBox ref={modalRefRenaming} modalFooterfuncOne={initRenamingModal} id='pageNameDuplicateModal' modalTitle={'Warning!'} icon={''} btnValues={['Ok','Cancel']} isTwobtn={true}></MessageBox>
       </div>
 
     )

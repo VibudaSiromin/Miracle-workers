@@ -3,10 +3,11 @@ const fs = require('fs');
 const path = require('path');
 
 const testFilePath=path.join(__dirname,'../../store/testSuite.json');
-const dataFilePathForLauncher=path.join(__dirname,'../../store/launcher.json');
+const launcherFilePath=path.join(__dirname,'../../store/launcher.json');
+const dataFilePath=path.join(__dirname,'../../store/data.json');
+const locatorFilePath=path.join(__dirname,'../../store/locator.json');
 
 const getTestPageNames= async (req, res, next)=>{
-    console.log('running getPageName for test');
     let testFile;
     try{
       const data = await fs.promises.readFile(testFilePath);
@@ -286,6 +287,28 @@ const getTestPageNames= async (req, res, next)=>{
     
   }
 
+  const deleteData = async(req,res,next) => {
+    let testSection=[];
+    let launcherSection=[];
+    let dataSection=[];
+    let locatorSection=[];
+    const newTest=JSON.stringify(testSection);
+    const newLauncher = JSON.stringify(launcherSection);
+    const newData = JSON.stringify(dataSection);
+    const newLocator=JSON.stringify(locatorSection);
+    try{
+      await fs.promises.writeFile(testFilePath,newTest);
+      await fs.promises.writeFile(launcherFilePath,newLauncher);
+      await fs.promises.writeFile(dataFilePath,newData);
+      await fs.promises.writeFile(locatorFilePath,newLocator);
+      res.status(200).json({message:'Cleaned all sections'});
+    }catch(err){
+      console.log(err);
+      res.status(500).json({message:'Error occurred when cleaning sections'});
+      return;
+    }    
+  }
+
   ////////This is the test section//////////////
 
   exports.getTestPageNames=getTestPageNames;
@@ -299,3 +322,4 @@ const getTestPageNames= async (req, res, next)=>{
   exports.getLoopName=getLoopName;
   exports.getAllLoopNames=getAllLoopNames;
   exports.getReferedDataPages=getReferedDataPages;
+  exports.deleteData=deleteData;

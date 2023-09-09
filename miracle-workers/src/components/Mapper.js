@@ -262,7 +262,7 @@ const Mapper = (props) => {
 
   const addDataReferenceForLoop = (event) => {
       event.preventDefault();
-      event.stopPropagation()
+      event.stopPropagation();
       if(inputLoopName!==null && inputLoopName!==''){
         terminateLoopModal();
         props.assignLoopRef(props.browseBtnId,selectedSheet,inputLoopName);
@@ -303,9 +303,6 @@ const Mapper = (props) => {
     setSelectedSheet(event.target.value);
     setShowLoopModal(true);
   }
-
-
-  console.log('SON',document.getElementsByClassName("myUL"));
 
    const secondListPosition = {top:0}
 
