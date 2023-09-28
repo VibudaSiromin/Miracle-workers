@@ -189,8 +189,11 @@ const createLauncherPage = async(req,res,next) => {
 }
 
 const getReferedDataPages = async(req,res,next) => {
+  const selectedDataPage = req.query.dataPageName;
+  console.log('snake', selectedDataPage);
   let launcherSection;
   let dataPages;
+  let referredTestPages;
   try{
     const data=await fs.promises.readFile(launcherFilePath);
     launcherSection = JSON.parse(data);
@@ -205,8 +208,20 @@ const getReferedDataPages = async(req,res,next) => {
         }
       }
     })
-    console.log('DMC!!!!!!!!!!!',dataPages);
-    res.status(200).json({referedDataPages:dataPages});
+    referredTestPages=launcherSection.map((launcherPage)=>{
+      if(launcherPage.length>1){
+        if(launcherPage[1]['dataSheet'].slice(0,-1) === selectedDataPage){
+          return(
+            launcherPage[1]['sheetName']
+          )
+        }else{
+          return null
+        }
+      }
+    })
+
+    console.log('DMC!!!!!!!!!!!',selectedDataPage);
+    res.status(200).json({referedDataPages:dataPages,referredTestPages:referredTestPages});
   }catch(err){
     console.log(err)
     res.status(500).json({ message: 'Error reading launcher section' });

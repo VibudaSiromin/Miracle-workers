@@ -113,6 +113,7 @@ const getTestPageNames= async (req, res, next)=>{
     const newTestContent=req.body.editedTestData;
     const type=req.body.type;
   
+    console.log('NOAHHHHHHHHHHHHHHHHHHHHHHHHHHHHH');
     console.log("testPageName: ",testPageName);
     console.log("Type: ",type);
     console.log("data content: ",newTestContent);
@@ -125,6 +126,7 @@ const getTestPageNames= async (req, res, next)=>{
       let index;
       let newTestPage;
       if(type==="Manual"){
+        console.log('MSIIIIIIIIIIIIIII');
         index = testSection.findIndex(test=>test[0]===testPageName+"M");
         newTestPage=[testPageName+"M",...newTestContent];
       }else if(type==="Json"){

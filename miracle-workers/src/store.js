@@ -50,6 +50,10 @@ const alertVisibilityStatus = {
   alertVisibility:false
 }
 
+const referredTestSheetName = {
+  testSheetName:''
+}
+
 const initialDataPageNameState = {
   dataPageName:''
 }
@@ -104,6 +108,13 @@ export const setAlertVisibity = (visibityStatus) => {
   return{
     type:'SET_ALERT_VISIBITY',
     payload:visibityStatus
+  }
+}
+
+export const setReferredTestPageName = (testPageName) => {
+  return{
+    type:'SET_REFERRED_TEST_PAGE_NAME',
+    payload:testPageName
   }
 }
 
@@ -357,6 +368,18 @@ const getAlertVisibityStatusReducer = (state = alertVisibilityStatus,action) => 
   }
 }
 
+const getReferredTestSheetNameReducer = (state = referredTestSheetName, action) => {
+  switch(action.type){
+    case 'SET_REFERRED_TEST_PAGE_NAME':
+      return{
+        ...state,
+        testSheetName:action.payload
+      };
+      default:
+        return state;
+  }
+}
+
 const nameAssignerReducer = (state = nameAssignerState, action) => {
   switch(action.type){
     case "INITIATE_NAME_ASSIGNER":
@@ -448,7 +471,8 @@ const rootReducer = combineReducers({
     rerenderingLauncherSection:rerenderingLauncherSectionReducer,
     getAlertVisibityStatus:getAlertVisibityStatusReducer,
     initiateJSONGenerator:initiateJSONGeneratorReducer,
-    renderingNavBar:renderingNavBarReducer
+    renderingNavBar:renderingNavBarReducer,
+    getReferredTestSheetName:getReferredTestSheetNameReducer
 })
 
 const store = createStore(rootReducer)

@@ -325,7 +325,7 @@ const TableLauncher = (props) => {
             <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
               Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
             </td>
-            <td style={{textAlign:'center' }} rowSpan={3} >
+            <td style={{textAlign:'center'}} rowSpan={3} >
               <IconButton aria-label="Example" onClick={() => showModal()}>
                 <CreateIcon sx={{ color:"04D9FF", fontSize: "40px" }} />
               </IconButton>

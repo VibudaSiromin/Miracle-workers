@@ -27,6 +27,7 @@ const JSONGenerator = () => {
     const [loopsDetailsStartCmd, setLoopsDetailsStartCmd] = useState([]);
     const [loopsDetailsEndCmd, setLoopsDetailsEndCmd] = useState([]);
     const [locatorSection, setLocatorSection] = useState();
+    const [attachLocatorSheets,setAttachLocatorSheets] = useState([]);
     const [isDataCleaningProc, setIsDataCleaningProc] = useState(false);
     //const modalRefJSONFileName=useRef();
 
@@ -399,10 +400,36 @@ const JSONGenerator = () => {
                 testsKeyArr.push(tempLauncherDetails[i][1]);
             }
         }
-        console.log('land', loopsDetailsEndCmd);
-        console.log('lord', loopsDetailsStartCmd)
+        console.log('land', locatorSection);
+        //console.log('lord', loopsDetailsStartCmd);
 
-        if (attachDataSheets.length !== 0) {
+        const datasheets=[];
+        for(let i=0;i<dataSection.length;i++){
+            datasheets.push(dataSection[i][0])
+        }
+        console.log('moon',datasheets);
+        setAttachDataSheets(datasheets);
+
+        //attaching data pages into the JSON output
+
+        const finalJSONOutput = {
+            suiteId: uuidv4(),
+            fileName: "",
+            tests: testsKeyArr,
+            activeTestCount: 1,
+            status: null,
+            startTime: null,
+            endTime: null,
+            filePath: "",
+            reportPath: null,
+
+        };
+
+        setFinalOutPut(finalJSONOutput); 
+
+
+        if (attachDataSheets.length !== 0) { 
+            console.log('007',attachDataSheets.length);
             const dataPages = {};
             for (let i = 0; i < attachDataSheets.length; i++) {
                 console.log('bird box', attachDataSheets);
@@ -411,52 +438,62 @@ const JSONGenerator = () => {
                 const selectedSheetNameWithdata = dataSection[index];
                 const tempObj = {};
                 if (attachDataSheets[i].charAt(attachDataSheets[i].length - 1) === "M") {
+                    console.log('hound1');
                     for (let j = 2; j < selectedSheetNameWithdata.length; j++) {
                         tempObj[j - 1] = selectedSheetNameWithdata[j];
                     }
                 } else if (attachDataSheets[i].charAt(attachDataSheets[i].length - 1) === "E") {
+                    console.log('hound2');
                     for (let j = 3; j < selectedSheetNameWithdata.length; j++) {
-                        tempObj[j - 1] = selectedSheetNameWithdata[j];
+                        tempObj[j - 2] = selectedSheetNameWithdata[j];
                     }
                 }
                 dataPages[attachDataSheets[i]] = tempObj;
             }
+            console.log('yoga', dataPages);
 
-            console.log('yoga', dataPages)
-            const finalJSONOutput = {
-                suiteId: uuidv4(),
-                fileName: "",
-                tests: testsKeyArr,
-                activeTestCount: 1,
-                status: null,
-                startTime: null,
-                endTime: null,
-                filePath: "",
-                reportPath: null,
-                dataPages: dataPages
-
-            };
+            finalJSONOutput.dataPages=dataPages;
             setFinalOutPut(finalJSONOutput);
+            //initModal();
 
-            initModal();
+        } 
 
-        } else {
-            const finalJSONOutput = {
-                suiteId: uuidv4(),
-                fileName: "",
-                tests: testsKeyArr,
-                activeTestCount: 1,
-                status: null,
-                startTime: null,
-                endTime: null,
-                filePath: "",
-                reportPath: null
-
-            };
-            setFinalOutPut(finalJSONOutput);
-
-            initModal();
+        const locatorsheets=[];
+        for(let i=0;i<locatorSection.length;i++){
+            locatorsheets.push(locatorSection[i][0])
         }
+        console.log('moon2',locatorsheets);
+        setAttachLocatorSheets(locatorsheets);
+
+        ///////////////////////////////////////////////
+        if (attachLocatorSheets.length !== 0) {
+            console.log('zone123',attachLocatorSheets.length);
+            const locatorPages = {};
+            for (let i = 0; i < attachLocatorSheets.length; i++) {
+                const index = locatorSection.findIndex(data => data[0] === attachLocatorSheets[i]);
+                console.log('gumpert', locatorSection[index]);
+                const selectedSheetNameWithdata = locatorSection[index];
+                console.log('hawk',selectedSheetNameWithdata);
+                const tempObj = {};
+                for (let j = 1; j < selectedSheetNameWithdata.length; j++) { 
+                    tempObj[j] = selectedSheetNameWithdata[j];
+                }
+                locatorPages[attachLocatorSheets[i]] = tempObj;
+            }
+
+            console.log('yoga2222', finalOutPut);
+            finalJSONOutput.locatorPages=locatorPages;
+            // const locatorKeyValue = {locatorPages:locatorPages}
+            // console.log('yoga3333',locatorKeyValue);
+            // //const finalJSONOutput ={...finalOutPut,...locatorKeyValue}
+            // finalOutPut.locatorPages = locatorPages;
+            //setFinalOutPut(finalOutPut);
+
+            //initModal();
+
+        } 
+
+        initModal();
     }
     const nameSchema = yup.object(
         {
@@ -501,19 +538,19 @@ const JSONGenerator = () => {
         saveAs(blob, JSONfileName + '.json');
         reset();
 
-        if (isDataCleaningProc) {
-            axios
-                .delete('http://localhost:5000/section/delete')
-                .then((res) => {
-                    console.log('vista');
-                    setIsDataCleaningProc(false);
-                    dispatch({type:'RENDERING_NAV_BAR'});
-                })
-                .catch((err) => {
-                    console.log(err);
-                    setIsDataCleaningProc(false);
-                })
-        }
+        // if (isDataCleaningProc) {
+        //     axios
+        //         .delete('http://localhost:5000/section/delete')
+        //         .then((res) => {
+        //             console.log('vista');
+        //             setIsDataCleaningProc(false);
+        //             dispatch({type:'RENDERING_NAV_BAR'});
+        //         })
+        //         .catch((err) => {
+        //             console.log(err);
+        //             setIsDataCleaningProc(false);
+        //         })
+        // }
     }
     return (
         <>

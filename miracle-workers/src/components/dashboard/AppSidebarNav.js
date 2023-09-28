@@ -10,7 +10,7 @@ import { CBadge, CNavLink, CAlert } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
-import { setAlertVisibity } from '../../store';
+import { setAlertVisibity,setReferredTestPageName } from '../../store';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -535,11 +535,18 @@ export const AppSidebarNav = () => {
         })
 
     } else if (secondChar === 'd') {
+      console.log('eagle',pageName);
       axios
-        .get('http://localhost:5000/launcher/getReferedDataPages')
+        .get('http://localhost:5000/launcher/getReferedDataPages',{
+          params:{
+            dataPageName:pageName
+          }
+        })
         .then((res) => {
           //setReferedDataPagesByLauncher(res.data.referedDataPages);
           const referedDataPages = res.data.referedDataPages;
+          const referredTestPages = res.data.referredTestPages;
+          console.log('snowMan',referredTestPages);
           const dataPages = referedDataPages.map((dataPage) => {
             return (
               dataPage.slice(0, -1)
@@ -547,6 +554,7 @@ export const AppSidebarNav = () => {
           })
           if (dataPages.includes(pageName)) {
             dispatch(setAlertVisibity(true));
+            dispatch(setReferredTestPageName(referredTestPages));
             console.log('batttt', referedDataPages);
             console.log('batttt222', pageName)
           } else {
