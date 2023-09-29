@@ -1,11 +1,14 @@
 import React from 'react'
 import JSONGenerator from '../../components/JSONGenerator';
 import devImg from '../../assets/images/developer.png'
+import img2 from '../../assets/images/react.jpg';
+import img3 from '../../assets/images/vue.jpg';
 import { Button } from "react-bootstrap";
 import Alert from '../../components/Alert';
 import MessageBox from '../../components/MessageBox';
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { CCarousel, CCarouselItem, CImage, CCarouselCaption } from '@coreui/react'
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -22,6 +25,7 @@ const Home = () => {
   return (
     <>
       <Alert />
+      
       <div className="home-container">
         <div className="sub-container-one">
           <div>
@@ -43,6 +47,19 @@ const Home = () => {
           <JSONGenerator></JSONGenerator>
           <Button>Load JSON</Button>
         </div>
+        {/* <a href="#JSONForge">
+          <Button type="button" className="btn btn-dark">Let's Dive</Button>
+        </a>
+        <div >
+          <div>
+            <h1>JSON FORGE</h1>
+          </div>
+          <div id="JSONForge" data-coreui-spy="scroll" data-coreui-target="#JSONForge" data-coreui-offset="0" class="scrollspy-example" tabindex="0">
+            <Button type="button" className="btn btn-dark" onClick={newProjectMessenger}>New Project</Button>
+            <JSONGenerator></JSONGenerator>
+            <Button>Load JSON</Button>
+          </div>
+        </div> */}
         <MessageBox ref={modalRefNewProject} modalFooterfuncOne={savingSystemData} id='newProjectMessenger' modalTitle={'New Project'} icon={''} btnValues={['save & create', 'cancel']} isTwobtn={true}></MessageBox>
       </div>
 

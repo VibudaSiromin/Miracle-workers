@@ -10,7 +10,7 @@ import { CBadge, CNavLink, CAlert } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import IndexContext from '../../contexts/indexContext';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
-import { setAlertVisibity,setReferredTestPageName } from '../../store';
+import { setAlertVisibity, setReferredTestPageName } from '../../store';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -47,11 +47,11 @@ export const AppSidebarNav = () => {
   const [URLSection, setURLSection] = useState({});
   const [indexOfRenamePage, setIndexOfRenamePage] = useState();
   const [currentNavIndex, setCurrentNavIndex] = useState();
-  const [navBar,setNavBar] = useState(false);
+  const [navBar, setNavBar] = useState(false);
   const dispatch = useDispatch();
 
   const location = useLocation();
-  const currentURL=location.pathname;
+  const currentURL = location.pathname;
   const modalRefD = useRef();
   const modalRefRename = useRef();
 
@@ -97,8 +97,8 @@ export const AppSidebarNav = () => {
 
   }
 
-   //rendering nav bar
-   const navBarStatus = useSelector((state)=>state.renderingNavBar.status);
+  //rendering nav bar
+  const navBarStatus = useSelector((state) => state.renderingNavBar.status);
 
   useEffect(() => {
     console.log('Normandy');
@@ -172,7 +172,7 @@ export const AppSidebarNav = () => {
       })
     }
 
-    if(locatorPageNames.length===0){
+    if (locatorPageNames.length === 0) {
       newArray.push({
         component: CNavItem,
         name: 'No sheets available',
@@ -211,7 +211,7 @@ export const AppSidebarNav = () => {
       }
     }
 
-    if(dataPageNames.length===0){
+    if (dataPageNames.length === 0) {
       newArray.push({
         component: CNavItem,
         name: 'No sheets available',
@@ -247,7 +247,7 @@ export const AppSidebarNav = () => {
         })
       }
     }
-    if(testPageNames.length===0){
+    if (testPageNames.length === 0) {
       newArray.push({
         component: CNavItem,
         name: 'No sheets available',
@@ -270,8 +270,22 @@ export const AppSidebarNav = () => {
       //add new pageName to test suite
       if (indexOfSection === 2) {
         if (item.name === 'Test Suite') {
-          navigate('/testJunction');
+          //navigate('/testJunction');
           setTestPageName(fieldValue);
+          navigate('/testJunction/testManual/' + fieldValue);
+          setTimeout(() => {
+            dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
+          }, 1000);
+          // if (props.sectionName === "test") {
+          //   console.log('Clicked on test');
+          //   if (props.cardTitle === "JSON") {
+          //     console.log('Clicked on Json');
+          //     navigate('/testJunction/testJson');
+          //     dispatch({ type: 'FUNCTION_CALLED_JSON' });
+          //   } else if (props.cardTitle === "Manually") {
+          //     console.log('Clicked on manual', props.testPageName);
+          //   }
+          // }
           // item.items.push({
           //   component: CNavItem,
           //   name: fieldValue,
@@ -446,7 +460,7 @@ export const AppSidebarNav = () => {
     }
   }
 
- 
+
 
   //for data section
 
@@ -563,18 +577,18 @@ export const AppSidebarNav = () => {
         })
 
     } else if (secondChar === 'd') {
-      console.log('eagle',pageName);
+      console.log('eagle', pageName);
       axios
-        .get('http://localhost:5000/launcher/getReferedDataPages',{
-          params:{
-            dataPageName:pageName
+        .get('http://localhost:5000/launcher/getReferedDataPages', {
+          params: {
+            dataPageName: pageName
           }
         })
         .then((res) => {
           //setReferedDataPagesByLauncher(res.data.referedDataPages);
           const referedDataPages = res.data.referedDataPages;
           const referredTestPages = res.data.referredTestPages;
-          console.log('snowMan',referredTestPages);
+          console.log('snowMan', referredTestPages);
           const dataPages = referedDataPages.map((dataPage) => {
             return (
               dataPage.slice(0, -1)
@@ -788,21 +802,21 @@ export const AppSidebarNav = () => {
           <AiFillFileAdd color="#CCD8DD" onClick={(event) => initiateNameAssigner(event, index)}></AiFillFileAdd>
         </>
       )
-    }else if(name === 'No sheets available'){
-      return(
+    } else if (name === 'No sheets available') {
+      return (
         <>
-        <small className="text-muted">
-          {name && name}
-        </small>      
+          <small className="text-muted">
+            {name && name}
+          </small>
         </>
       )
 
     } else {
-      if(name === 'Home' || name === 'Setting' || name === 'Dashboard'){
+      if (name === 'Home' || name === 'Setting' || name === 'Dashboard') {
         return (
           <>
             {icon && icon}
-              {name && name}
+            {name && name}
             {badge && (
               <CBadge color={badge.color} className="ms-auto">
                 {badge.text}
@@ -811,13 +825,13 @@ export const AppSidebarNav = () => {
             {/* <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner()}></AiFillFileAdd> */}
           </>
         )
-      }else{
+      } else {
         return (
           <>
             {icon && icon}
             <small >
               {name && name}
-            </small> 
+            </small>
             {badge && (
               <CBadge color={badge.color} className="ms-auto">
                 {badge.text}
@@ -827,7 +841,7 @@ export const AppSidebarNav = () => {
           </>
         )
       }
-      
+
     }
 
   }
@@ -897,8 +911,8 @@ export const AppSidebarNav = () => {
           items.map((item, index) => (item.items ? navGroup(item, index) : navItem(item, index)))}
       </React.Fragment>
       <NameAssignModal /*ref={modalRef}*/ indexOfSection={indexOfSection} newPageName={pageNameHandler}></NameAssignModal>
-      <MessageBox ref={modalRefRename} modalFooterfuncOne={pagesRenameHandler} id='pageNameRenameModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes','No']} isTwobtn={true}></MessageBox>
-      <MessageBox ref={modalRefD} modalFooterfuncOne={pagesDeleteHandler} id='pageNameDeleteModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes','No']} isTwobtn={true}></MessageBox>
+      <MessageBox ref={modalRefRename} modalFooterfuncOne={pagesRenameHandler} id='pageNameRenameModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes', 'No']} isTwobtn={true}></MessageBox>
+      <MessageBox ref={modalRefD} modalFooterfuncOne={pagesDeleteHandler} id='pageNameDeleteModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes', 'No']} isTwobtn={true}></MessageBox>
       <NameRenameModal indexOfSection={indexOfSection} updatePageNames={reloadPageNames} currentURLSection={URLSection} renamePageIndex={indexOfRenamePage}></NameRenameModal>
     </>
   )
