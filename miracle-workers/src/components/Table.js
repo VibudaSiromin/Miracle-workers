@@ -625,6 +625,7 @@ const Table = (props) => {
         if(currentURL==='/dataJunction/data/'+dname){
           dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
           dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+          settestSteps(dataAfterArrowClick);
           axios
           .post('http://localhost:5000/dataJunction/data/'+dname,{
             editedData:dataAfterArrowClick,//************ */
@@ -640,6 +641,7 @@ const Table = (props) => {
         }else if(currentURL==='/dataJunction/dataExcel/',dname){
           dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
           dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+          settestSteps(dataAfterArrowClick);
           axios
           .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
             editedData:dataAfterArrowClick,//************ */

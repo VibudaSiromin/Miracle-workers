@@ -50,6 +50,8 @@ export const AppSidebarNav = () => {
   const [navBar,setNavBar] = useState(false);
   const dispatch = useDispatch();
 
+  const location = useLocation();
+  const currentURL=location.pathname;
   const modalRefD = useRef();
   const modalRefRename = useRef();
 
@@ -169,6 +171,15 @@ export const AppSidebarNav = () => {
         to: '/locator/' + locatorPageNames[i],
       })
     }
+
+    if(locatorPageNames.length===0){
+      newArray.push({
+        component: CNavItem,
+        name: 'No sheets available',
+        to: currentURL
+      })
+    }
+
     let newItems = items;
     newItems[5].items = newArray;
     console.log("space", newItems)
@@ -199,6 +210,15 @@ export const AppSidebarNav = () => {
         })
       }
     }
+
+    if(dataPageNames.length===0){
+      newArray.push({
+        component: CNavItem,
+        name: 'No sheets available',
+        to: currentURL
+      })
+    }
+
     let newItems = items;
     newItems[3].items = newArray;
     console.log("space", newItems)
@@ -227,6 +247,14 @@ export const AppSidebarNav = () => {
         })
       }
     }
+    if(testPageNames.length===0){
+      newArray.push({
+        component: CNavItem,
+        name: 'No sheets available',
+        to: currentURL
+      })
+    }
+
     let newItems = items;
     newItems[2].items = newArray;
     console.log("space", newItems)
@@ -742,7 +770,7 @@ export const AppSidebarNav = () => {
     //modalRef.current.log();//initialize child component modal(NameAssignModal) from parent modal(AppSidebarNav)
   }
 
-  const location = useLocation();
+  //const location = useLocation();
   const navLink = (name, icon, badge, index) => {
     console.log('sell', name);
     console.log('In navLink', name);
@@ -760,19 +788,46 @@ export const AppSidebarNav = () => {
           <AiFillFileAdd color="#CCD8DD" onClick={(event) => initiateNameAssigner(event, index)}></AiFillFileAdd>
         </>
       )
-    } else {
-      return (
+    }else if(name === 'No sheets available'){
+      return(
         <>
-          {icon && icon}
+        <small className="text-muted">
           {name && name}
-          {badge && (
-            <CBadge color={badge.color} className="ms-auto">
-              {badge.text}
-            </CBadge>
-          )}
-          {/* <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner()}></AiFillFileAdd> */}
+        </small>      
         </>
       )
+
+    } else {
+      if(name === 'Home' || name === 'Setting' || name === 'Dashboard'){
+        return (
+          <>
+            {icon && icon}
+              {name && name}
+            {badge && (
+              <CBadge color={badge.color} className="ms-auto">
+                {badge.text}
+              </CBadge>
+            )}
+            {/* <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner()}></AiFillFileAdd> */}
+          </>
+        )
+      }else{
+        return (
+          <>
+            {icon && icon}
+            <small >
+              {name && name}
+            </small> 
+            {badge && (
+              <CBadge color={badge.color} className="ms-auto">
+                {badge.text}
+              </CBadge>
+            )}
+            {/* <AiFillFileAdd color="#CCD8DD" onClick={()=>initiateNameAssigner()}></AiFillFileAdd> */}
+          </>
+        )
+      }
+      
     }
 
   }
@@ -793,7 +848,7 @@ export const AppSidebarNav = () => {
         {...rest}
       >
         {navLink(name, icon, badge, index)}
-        {(name !== "Dashboard") && (name !== "Home") && (name !== "Setting") ? <div><MdModeEdit onClick={(event) => alertMsgBoxForRenaming(event, rest, index)}></MdModeEdit><MdDeleteForever id="myIcon" /*className="delete"*/ onClick={(event) => alertMsgBoxForDeleting(event, rest, index)} /></div> : null}
+        {(name !== "Dashboard") && (name !== "Home") && (name !== "Setting") && (name !== "No sheets available") ? <div><MdModeEdit onClick={(event) => alertMsgBoxForRenaming(event, rest, index)}></MdModeEdit><MdDeleteForever id="myIcon" /*className="delete"*/ onClick={(event) => alertMsgBoxForDeleting(event, rest, index)} /></div> : null}
       </Component>
     )
   }
@@ -801,7 +856,7 @@ export const AppSidebarNav = () => {
   const navGroup = (item, index) => {
     const { component, name, badge, icon, to, ...rest } = item
     const Component = component
-    console.log('In navGroup', name)
+    console.log('In navGroup', component)
     return (
       <div className="single-component">
         <Component

@@ -403,16 +403,9 @@ const JSONGenerator = () => {
         console.log('land', locatorSection);
         //console.log('lord', loopsDetailsStartCmd);
 
-        const datasheets=[];
-        for(let i=0;i<dataSection.length;i++){
-            datasheets.push(dataSection[i][0])
-        }
-        console.log('moon',datasheets);
-        setAttachDataSheets(datasheets);
+           //attaching data pages into the JSON output
 
-        //attaching data pages into the JSON output
-
-        const finalJSONOutput = {
+           const finalJSONOutput = {
             suiteId: uuidv4(),
             fileName: "",
             tests: testsKeyArr,
@@ -425,30 +418,41 @@ const JSONGenerator = () => {
 
         };
 
-        setFinalOutPut(finalJSONOutput); 
+        setFinalOutPut(finalJSONOutput);
+
+        const datasheets=[];
+        for(let i=0;i<dataSection.length;i++){
+            datasheets.push(dataSection[i][0])
+        }
+        console.log('moon',datasheets);
+        //setAttachDataSheets(datasheets);
+
+      
+
+        console.log('007BOND',dataSection);
 
 
-        if (attachDataSheets.length !== 0) { 
-            console.log('007',attachDataSheets.length);
+        if (datasheets.length !== 0) { 
+            console.log('007',datasheets.length);
             const dataPages = {};
-            for (let i = 0; i < attachDataSheets.length; i++) {
-                console.log('bird box', attachDataSheets);
-                const index = dataSection.findIndex(data => data[0] === attachDataSheets[i]);
+            for (let i = 0; i < datasheets.length; i++) {
+                console.log('bird box', datasheets);
+                const index = dataSection.findIndex(data => data[0] === datasheets[i]);
                 console.log('gumpert', dataSection[index]);
                 const selectedSheetNameWithdata = dataSection[index];
                 const tempObj = {};
-                if (attachDataSheets[i].charAt(attachDataSheets[i].length - 1) === "M") {
+                if (datasheets[i].charAt(datasheets[i].length - 1) === "M") {
                     console.log('hound1');
                     for (let j = 2; j < selectedSheetNameWithdata.length; j++) {
                         tempObj[j - 1] = selectedSheetNameWithdata[j];
                     }
-                } else if (attachDataSheets[i].charAt(attachDataSheets[i].length - 1) === "E") {
+                } else if (datasheets[i].charAt(datasheets[i].length - 1) === "E") {
                     console.log('hound2');
                     for (let j = 3; j < selectedSheetNameWithdata.length; j++) {
                         tempObj[j - 2] = selectedSheetNameWithdata[j];
                     }
                 }
-                dataPages[attachDataSheets[i]] = tempObj;
+                dataPages[datasheets[i]] = tempObj;
             }
             console.log('yoga', dataPages);
 
@@ -463,14 +467,14 @@ const JSONGenerator = () => {
             locatorsheets.push(locatorSection[i][0])
         }
         console.log('moon2',locatorsheets);
-        setAttachLocatorSheets(locatorsheets);
+        //setAttachLocatorSheets(locatorsheets);
 
         ///////////////////////////////////////////////
-        if (attachLocatorSheets.length !== 0) {
-            console.log('zone123',attachLocatorSheets.length);
+        if (locatorsheets.length !== 0) {
+            console.log('zone123',locatorsheets.length);
             const locatorPages = {};
-            for (let i = 0; i < attachLocatorSheets.length; i++) {
-                const index = locatorSection.findIndex(data => data[0] === attachLocatorSheets[i]);
+            for (let i = 0; i < locatorsheets.length; i++) {
+                const index = locatorSection.findIndex(data => data[0] === locatorsheets[i]);
                 console.log('gumpert', locatorSection[index]);
                 const selectedSheetNameWithdata = locatorSection[index];
                 console.log('hawk',selectedSheetNameWithdata);
@@ -478,11 +482,11 @@ const JSONGenerator = () => {
                 for (let j = 1; j < selectedSheetNameWithdata.length; j++) { 
                     tempObj[j] = selectedSheetNameWithdata[j];
                 }
-                locatorPages[attachLocatorSheets[i]] = tempObj;
+                locatorPages[locatorsheets[i]] = tempObj;
             }
-
-            console.log('yoga2222', finalOutPut);
-            finalJSONOutput.locatorPages=locatorPages;
+            const finalOutPut = finalJSONOutput;
+            finalOutPut.locatorPages=locatorPages;
+            setFinalOutPut(finalOutPut);
             // const locatorKeyValue = {locatorPages:locatorPages}
             // console.log('yoga3333',locatorKeyValue);
             // //const finalJSONOutput ={...finalOutPut,...locatorKeyValue}
@@ -538,19 +542,19 @@ const JSONGenerator = () => {
         saveAs(blob, JSONfileName + '.json');
         reset();
 
-        // if (isDataCleaningProc) {
-        //     axios
-        //         .delete('http://localhost:5000/section/delete')
-        //         .then((res) => {
-        //             console.log('vista');
-        //             setIsDataCleaningProc(false);
-        //             dispatch({type:'RENDERING_NAV_BAR'});
-        //         })
-        //         .catch((err) => {
-        //             console.log(err);
-        //             setIsDataCleaningProc(false);
-        //         })
-        // }
+        if (isDataCleaningProc) {
+            axios
+                .delete('http://localhost:5000/section/delete')
+                .then((res) => {
+                    console.log('vista');
+                    setIsDataCleaningProc(false);
+                    dispatch({type:'RENDERING_NAV_BAR'});
+                })
+                .catch((err) => {
+                    console.log(err);
+                    setIsDataCleaningProc(false);
+                })
+        }
     }
     return (
         <>

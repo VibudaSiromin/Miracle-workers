@@ -17,6 +17,9 @@ const Data = (props) => {
     return (
         <>
             <Alert />
+            <div className="table-title">
+                <h1><b>Data</b></h1>
+            </div>
             <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true} initialHeading={[]} callingFrom="data" addBtnId={'dataMBtn'}></Heading>
         </>
     )

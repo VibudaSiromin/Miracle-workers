@@ -51,6 +51,9 @@ const DataExcel = (props) => {
   return (
     <>
       <Alert />
+      <div className="table-title">
+        <h1><b>Data Excel</b></h1>
+      </div>
       <FileUploader
         getFileHeaders={fileHeadersHandler}
         getFileData={fileDataHandler}

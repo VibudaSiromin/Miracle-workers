@@ -29,7 +29,7 @@ const TestManual = (props) => {
     return (
         <>
             <Alert/>
-            <div className="launcher-title">
+            <div className="table-title">
                 <h1><b>Launcher</b></h1>
             </div>
             <Launcher />
