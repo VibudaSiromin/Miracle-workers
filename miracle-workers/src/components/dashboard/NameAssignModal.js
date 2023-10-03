@@ -210,7 +210,6 @@ const NameAssignModal = (props, ref) => {
           </Modal.Footer>
         </form>
       </Modal>
-
       <MessageBox
         ref={modalRefC}
         modalFooterfuncOne={initModalOne}

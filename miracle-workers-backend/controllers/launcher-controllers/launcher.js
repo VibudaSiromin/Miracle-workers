@@ -16,7 +16,7 @@ const createLauncher = async (req, res, next) => {
 
 const getLauncherContent = async(req,res,next) => {
   const testPageName=req.query.testPageName;
-  console.log('demon',testPageName);
+  console.log('demon2222',testPageName);
   let launcherSection;
   try{
     const data = await fs.promises.readFile(launcherFilePath);
@@ -188,6 +188,58 @@ const createLauncherPage = async(req,res,next) => {
 
 }
 
+const getReferedDataPages = async(req,res,next) => {
+  const selectedDataPage = req.query.dataPageName;
+  console.log('snake', selectedDataPage);
+  let launcherSection;
+  let dataPages;
+  let referredTestPages;
+  try{
+    const data=await fs.promises.readFile(launcherFilePath);
+    launcherSection = JSON.parse(data);
+    dataPages=launcherSection.map((launcherPage)=>{
+      if(launcherPage.length>1){
+        if('dataSheet' in launcherPage[1]){
+          return(
+            launcherPage[1]['dataSheet']
+          )
+        }else{
+          return null
+        }
+      }
+    })
+    referredTestPages=launcherSection.map((launcherPage)=>{
+      if(launcherPage.length>1){
+        if(launcherPage[1]['dataSheet'].slice(0,-1) === selectedDataPage){
+          return(
+            launcherPage[1]['sheetName']
+          )
+        }else{
+          return null
+        }
+      }
+    })
+
+    console.log('DMC!!!!!!!!!!!',selectedDataPage);
+    res.status(200).json({referedDataPages:dataPages,referredTestPages:referredTestPages});
+  }catch(err){
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
+}
+
+const deleteData = async(req,res,next) => {
+  let launcherSection=[];
+  const newLauncher=JSON.stringify(launcherSection);
+  try{
+    await fs.promises.writeFile(launcherFilePath,newLauncher);
+    res.status(200).json({message:'Cleaned launcher section'});
+  }catch(err){
+    console.log(err);
+    res.status(500).json({message:'Error occurred when cleaning launcher section'});
+    return;
+  }    
+}
 
 exports.createLauncher = createLauncher;
 exports.editTestPage=editTestPage;
@@ -196,3 +248,5 @@ exports.deleteTestPageInLauncher=deleteTestPageInLauncher;
 exports.renameTestPageNameInLauncher=renameTestPageNameInLauncher;
 exports.getAllLauncherData=getAllLauncherData;
 exports.createLauncherPage=createLauncherPage;
+exports.getReferedDataPages=getReferedDataPages;
+exports.deleteData=deleteData;

@@ -10,6 +10,8 @@ router.post('/testJunction/testManual/:tname/editLauncher',launcherControllers.e
 router.post('/launcher/createLauncherPage',launcherControllers.createLauncherPage);
 //router.get('/testJunction/testManual/:tname/getLauncherContent',launcherControllers.getLauncherContent);
 router.get('/launcher/getLauncherContent',launcherControllers.getLauncherContent);
+//route for getting refered data pages
+router.get('/launcher/getReferedDataPages',launcherControllers.getReferedDataPages);
 //route for getting all launcher data
 router.get('/launcher/getAllLauncherData',launcherControllers.getAllLauncherData);
 //route for launcher page
@@ -18,5 +20,7 @@ router.post('/launcher', launcherControllers.createLauncher);
 router.delete('/launcher/deleteTestPageName', launcherControllers.deleteTestPageInLauncher);
 //route for renaming test page name in launcher
 router.patch('/launcher/renamePageName',launcherControllers.renameTestPageNameInLauncher);
+//delete all data
+//router.delete('/section/delete',launcherControllers.deleteData);
 
 module.exports = router;

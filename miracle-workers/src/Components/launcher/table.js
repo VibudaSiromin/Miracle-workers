@@ -25,6 +25,7 @@ const TableLauncher = (props) => {
   const [isMount,setIsMount] = useState(false);
   const [isMountTwo,setIsMountTwo] = useState(false);
   const [isDataDriven,setIsDataDriven] = useState(false);
+  const [dataPageOptions,setDataPageOptions] = useState([]);
 
   const {tname}=useParams();
   const location=useLocation();
@@ -57,20 +58,27 @@ const TableLauncher = (props) => {
   }
 
   const schema = yup
-    .object({
+    .object().shape({
       // sheetName: yup.string().required("Name is required"),
       testCase: yup.string().required("Test Case is required"),
       browser: yup.string().required("Browser is required"),
       type: yup.string().required("Test Type is required"),
       status: yup.string().required("Status is required"),
-      dataSheet: yup.string().when('type',{
-        is:'Data Driven',
-        then:(schema) => schema.required("Data sheet is required"),
-        otherwise:(schema) => schema.notRequired()
-      })
+      dataSheet: yup.string().required("Data sheet is required")
       //dataSheet: yup.string().required("Data sheet is required"),
     })
-    .required();
+    
+
+    // const schema = yup.object().shape({
+    //   selectionField: yup.string().required('Selection is required.'),
+    //   textField: yup
+    //     .string()
+    //     .when('selectionField', {
+    //       is: 'A', // when the value of 'selectionField' is 'A'
+    //       then: yup.string().required('Text is required when selection is A.'), // make 'textField' required
+    //       otherwise: yup.string().notRequired() // not required for other values
+    //     }),
+    // });
 
   const {
     register,
@@ -123,28 +131,23 @@ const TableLauncher = (props) => {
 
   }
 
-  // const getDataFromStore = () => {
-  //   axios
-  //   .get('http://localhost:5000/testJunction/testManual/'+tname+'/getLauncherContent',{
-  //     params:{
-  //       testPageName:tname+"M"
-  //     }
-  //   })
-  //   .then((res)=>{
-  //     console.log(res);
-  //     const launcherDetails=res.data.getLauncherDetails;
-  //     setData(launcherDetails);
-  //   })
-  //   .catch((err)=>{
-  //     console.log(err)
-  //   })
-  // }
+  const getAvailableDataPageNames = () => {
+    axios
+    .get('http://localhost:5000')
+    .then((res)=>{
+      const dataPageNames=res.data.dataPageNames;
+      const selectOptionsArray=dataPageNames.map((dataPage)=>{
+        return(
+          <option value={dataPage}>{dataPage}</option>
+        )
+      }) 
+      setDataPageOptions(selectOptionsArray);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
-  // const getData = async () => {
-  //   const response = await axios.get(
-  //     `https://famous-quotes4.p.rapidapi.com/random`
-  //   );
-  // };
 
   const getDataFromStore =async () => {
     console.log('banana2',tname);
@@ -186,6 +189,7 @@ const TableLauncher = (props) => {
   const rerenderLauncherSection = async () => {
     const renamedTestPageName = props.renamedTestPageName;
     console.log('T34',renamedTestPageName);
+    
     try{
       const response= await axios.get(
         `http://localhost:5000/launcher/getLauncherContent`,
@@ -223,7 +227,7 @@ const TableLauncher = (props) => {
   const rerenderingStatusOfLauncherSection = useSelector((state)=>state.rerenderingLauncherSection.launcherSectionStatus);
 
   useEffect(()=>{
-    
+    getAvailableDataPageNames();
     getDataFromStore();
   },[tname])
 
@@ -242,7 +246,9 @@ const TableLauncher = (props) => {
   };
 
   const showModal = () => {
+    console.log('RPG',data);
     if (data) {
+      getAvailableDataPageNames();
       reset(data);
     }
     setIsShowModal(true);
@@ -293,8 +299,9 @@ const TableLauncher = (props) => {
         onCancel={onCancel}
         onSubmit={handleSubmit(onSubmit)}
         saveButtonText="Feed"
+        
       >
-        <LauncherForm register={register} errors={errors} testPageName={props.testPageName} testTypeHandler={testTypeHandler}/>
+        <LauncherForm register={register} errors={errors} testPageName={props.testPageName} testTypeHandler={testTypeHandler} dataPageOptions={dataPageOptions}/>
       </ModalComponent>
       <Table
         striped
@@ -318,7 +325,7 @@ const TableLauncher = (props) => {
             <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
               Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
             </td>
-            <td style={{textAlign:'center' }} rowSpan={3} >
+            <td style={{textAlign:'center'}} rowSpan={3} >
               <IconButton aria-label="Example" onClick={() => showModal()}>
                 <CreateIcon sx={{ color:"04D9FF", fontSize: "40px" }} />
               </IconButton>

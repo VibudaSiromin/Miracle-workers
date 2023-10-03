@@ -1,6 +1,6 @@
 import React from "react";
 import Raw from "./Raw";
-import { useEffect,useState,useContext } from "react";
+import { useEffect,useState,useContext,useRef } from "react";
 import ModalDialog from "./PopUpWindow";
 import './Table.css'
 import { Button } from "react-bootstrap";
@@ -13,6 +13,7 @@ import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import HashLoader from "react-spinners/HashLoader";
+import MessageBox from "./MessageBox";
 
 
 const Table = (props) => {
@@ -37,8 +38,10 @@ const Table = (props) => {
   const {indexOfSection}=useContext(IndexContext);
   const [isMount,setIsMount]=useState(false);
   const [loading,setLoading]=useState(false);
+  const [headingIndex,setHeadingIndex] = useState();
 
   
+  const modalRefHeadingDropper = useRef();
 
   useEffect(() => {
     if(props.initialData!==undefined && isMount){
@@ -523,16 +526,16 @@ const Table = (props) => {
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-        // axios
-        // .post(url,{
-        //   editedLocator:dataAfterArrowClick
-        // })
-        // .then((res)=>{
-        //   settestSteps(dataAfterArrowClick);
-        // })
-        // .catch((err) => {
-        //   console.log(err);
-        // });
+        axios
+        .post(url,{
+          editedLocator:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
 
       if(props.callingFrom==='data'){
@@ -542,77 +545,59 @@ const Table = (props) => {
         dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
 
         //////////////////////////////////
-        const currentURL=location.pathname;//get current URL
+      const currentURL=location.pathname;//get current URL
       if(currentURL==='/dataJunction/data/'+dname){
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post('http://localhost:5000/dataJunction/data/'+dname,{
+          editedData:dataAfterArrowClick,//************ */
+          type:"Mannual"
+        })
+        .then((res)=>{
 
-        // try{
-        //   const response= await axios.post(
-        //     `http://localhost:5000/dataJunction/data/`+dname,
-        //     {
-        //       editedData:dataAfterArrowClick,//************ */
-        //       type:"Mannual",
-        //       dname:dname
-        //     }
-        //   )
-        // }catch(err){
-
-        //   if (err.response) {
-        //     // The client was given an error response (5xx, 4xx)
-        //     console.log(err.response.data);
-        //     console.log(err.response.status);
-        //     console.log(err.response.headers);
-        // } else if (err.request) {
-        //     // The client never received a response, and the request was never left
-        //     console.log(err.request);
-        // } else {
-        //     // Anything else
-        //     console.log('Error', err.message);
-        // }
-        // }
-
-
-        // axios
-        // .post('http://localhost:5000/dataJunction/data/'+dname,{
-        //   editedData:applyEditedData,//************ */
-        //   type:"Mannual"
-        // })
-        // .then((res)=>{
-
-        // })
-        // .catch((err)=>{
-        //   console.log(err);
-        // })
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
         
       }else if(currentURL==='/dataJunction/dataExcel/',dname){
-        // axios
-        // .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
-        //   editedData:applyEditedData,//************ */
-        //   type:"Excel"
-        // })
-        // .then((res)=>{
+         dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        axios
+        .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+          editedData:dataAfterArrowClick,//************ */
+          type:"Excel"
+        })
+        .then((res)=>{
 
-        // })
-        // .catch((err)=>{
-        //   console.log(err);
-        // })
+        })
+        .catch((err)=>{
+          console.log(err);
+        })
       } 
         //////////////////////////////////
-
-        // axios
-        // .post(url,{
-        //   editedData:dataAfterArrowClick,
-        //   type:"Mannual"
-        // })
-        // .then((res)=>{
-        //   settestSteps(dataAfterArrowClick);
-        // })
-        // .catch((err) => {
-        //   console.log(err);
-        // });
       }
-       dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
-       dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
-       settestSteps(dataAfterArrowClick);
+      if(props.callingFrom==='testSuites'){
+        dataAfterArrowClick[rawIndex-1]=presentData[rawIndex];
+        dataAfterArrowClick[rawIndex]=presentData[rawIndex-1];
+        const url='http://localhost:5000/testJunction/testManual/'+tname
+        settestSteps(dataAfterArrowClick);
+        axios
+        .post(url,{
+          editedTestData:dataAfterArrowClick,
+          type:"Manual"
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+
+      }
+       
+      settestSteps(dataAfterArrowClick);
     }
     if(upOrDown===1 && rawIndex!==(numOfRaws-1)){
       console.log('balla');
@@ -621,52 +606,96 @@ const Table = (props) => {
         const url='http://localhost:5000/locators/'+lname
         dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
         dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
-        // axios
-        // .post(url,{
-        //   editedLocator:dataAfterArrowClick
-        // })
-        // .then((res)=>{
-        //   settestSteps(dataAfterArrowClick);
-        // })
-        // .catch((err) => {
-        //   console.log(err);
-        // });
+        settestSteps(dataAfterArrowClick);
+        axios
+        .post(url,{
+          editedLocator:dataAfterArrowClick
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
 
       if(props.callingFrom==='data'){
+    
+        const currentURL=location.pathname;//get current URL
+        if(currentURL==='/dataJunction/data/'+dname){
+          dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
+          dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+          settestSteps(dataAfterArrowClick);
+          axios
+          .post('http://localhost:5000/dataJunction/data/'+dname,{
+            editedData:dataAfterArrowClick,//************ */
+            type:"Mannual"
+          })
+          .then((res)=>{
+  
+          })
+          .catch((err)=>{
+            console.log(err);
+          })
+          
+        }else if(currentURL==='/dataJunction/dataExcel/',dname){
+          dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
+          dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
+          settestSteps(dataAfterArrowClick);
+          axios
+          .post('http://localhost:5000/dataJunction/dataExcel/'+dname,{
+            editedData:dataAfterArrowClick,//************ */
+            type:"Excel"
+          })
+          .then((res)=>{
+  
+          })
+          .catch((err)=>{
+            console.log(err);
+          })
+        } 
+      }
+      if(props.callingFrom==='testSuites'){
         console.log('jet2');
-        const url='http://localhost:5000/data/'+dname
+        const url='http://localhost:5000/testJunction/testManual/'+tname
         dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
         dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
-        // axios
-        // .post(url,{
-        //   editedData:dataAfterArrowClick,
-        //   type:"Mannual"
-        // })
-        // .then((res)=>{
-        //   settestSteps(dataAfterArrowClick);
-        // })
-        // .catch((err) => {
-        //   console.log(err);
-        // });
+        settestSteps(dataAfterArrowClick);
+        axios
+        .post(url,{
+          editedTestData:dataAfterArrowClick,
+          type:"Manual"
+        })
+        .then((res)=>{
+          settestSteps(dataAfterArrowClick);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       }
       
       // dataAfterArrowClick[rawIndex]=presentData[rawIndex+1];
       // dataAfterArrowClick[rawIndex+1]=presentData[rawIndex];
-      // settestSteps(dataAfterArrowClick);
+      //settestSteps(dataAfterArrowClick);
     }   
   }
 
-  const removeHeading = (headingIndex) => {
+  const headingDropModalInitializer = (headingIndex) => {
+    const selectedHeading = props.title[headingIndex];
+    setHeadingIndex(headingIndex);
+    modalRefHeadingDropper.current.log('Do you want to drop ' + "'" + selectedHeading + "' heading" + '?');
+  }
+
+  const removeHeading = () => {
     const selectedHeading=props.title[headingIndex];
     let editedTestSteps=[];
     for(let i=0;i<testSteps.length;i++){
       const testStep=testSteps[i];
-      delete testStep[selectedHeading];//the 'delete' keyword is used to remove a property from an object.
-      editedTestSteps.push(testStep);
+       delete testStep[selectedHeading];//the 'delete' keyword is used to remove a property from an object.
+       editedTestSteps.push(testStep);
     }
 
-    props.dropHeading(headingIndex);
+    props.headingDeleteHandler(headingIndex);
     settestSteps(editedTestSteps);
   }
 
@@ -704,7 +733,7 @@ const Table = (props) => {
     tableFields.push(<th colSpan={3}>{"Action"}</th>)
     if(props.removeHeading===true){
       props.title.map((heading,headingIndex)=>{
-        tableFields.push(<th>{heading}<MdClose onClick={()=>removeHeading(headingIndex)}></MdClose></th>);
+        tableFields.push(<th>{heading}<MdClose onClick={()=>headingDropModalInitializer(headingIndex)}></MdClose></th>);
       });
     }else{
       for(let i=0;i<props.title.length;i++){
@@ -733,6 +762,7 @@ const nextIconStyle = {
 console.log('hello world!!!!!');
 
   return (
+    <>
     <div className="App">
       <div>
         <ModalDialog
@@ -794,6 +824,8 @@ console.log('hello world!!!!!');
        </div>
       }
     </div>
+    <MessageBox ref={modalRefHeadingDropper} modalFooterfuncOne={removeHeading} id='headingDeleteModal' modalTitle={'Warning!'} icon={''} btnValues={['Yes', 'No']} isTwobtn={true} />
+    </>
   );
 };
 

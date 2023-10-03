@@ -44,7 +44,7 @@ const MessageBox = forwardRef((props,ref)=>{
     >
       <Modal.Header >
         <Modal.Title id="contained-modal-title-vcenter">
-          Warning!
+          {props.modalTitle}
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
@@ -56,8 +56,8 @@ const MessageBox = forwardRef((props,ref)=>{
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={()=>{modalFooterFunctionOne(props.id)}}>Yes</Button>
-        <Button onClick={terminateModal}>No</Button>
+        <Button onClick={()=>{modalFooterFunctionOne(props.id)}}>{props.btnValues[0]}</Button>
+        {props.isTwobtn && <Button onClick={terminateModal}>{props.btnValues[1]}</Button>}   
       </Modal.Footer>
     </Modal>
   );

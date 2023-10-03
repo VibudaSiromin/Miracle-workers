@@ -1,38 +1,38 @@
-import React, { useEffect, useReducer } from "react";
-import { Modal, Button } from "react-bootstrap";
-import PopUpInputField from "./PopUpInputField";
-import PopUpSelection from "./PopUpSelection";
-import { MdTableRows } from "react-icons/md";
-import { setCommand } from "../store";
-import { useDispatch } from "react-redux";
-import { forwardRef, useImperativeHandle, useState } from "react";
-import { connect } from "react-redux";
-import { useParams } from "react-router-dom";
-import commandArray from "../assets/commands";
-import { validationSetOne } from "../assets/validation/validationSetOne";
-import { validationSetTwo } from "../assets/validation/validationSetTwo";
-import { validationSetThree } from "../assets/validation/validationSetThree";
-import { validationSetFour } from "../assets/validation/validationSetFour";
-import { validationSetFive } from "../assets/validation/validationSetFive";
-import { validationSetSix } from "../assets/validation/validationSetSix";
+import React, { useEffect, useReducer } from 'react';
+import { Modal, Button } from 'react-bootstrap';
+import PopUpInputField from './PopUpInputField';
+import PopUpSelection from './PopUpSelection';
+import { MdTableRows } from 'react-icons/md';
+import { setCommand } from '../store';
+import { useDispatch } from 'react-redux';
+import { forwardRef, useImperativeHandle, useState } from 'react';
+import { connect } from 'react-redux';
+import { useParams } from 'react-router-dom';
+import commandArray from '../assets/commands';
+import { validationSetOne } from '../assets/validation/validationSetOne';
+import { validationSetTwo } from '../assets/validation/validationSetTwo';
+import { validationSetThree } from '../assets/validation/validationSetThree';
+import { validationSetFour } from '../assets/validation/validationSetFour';
+import { validationSetFive } from '../assets/validation/validationSetFive';
+import { validationSetSix } from '../assets/validation/validationSetSix';
 
 const modalOneDataSet2 = {
-  group: "",
-  instruction: "",
-  command: "",
+  group: '',
+  instruction: '',
+  command: '',
 };
 
 const reducer = (state, action) => {
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, group: "", instruction: "", command: "" };
-    case "CHANGE_GROUP":
+    case 'CLEAR':
+      return { ...state, group: '', instruction: '', command: '' };
+    case 'CHANGE_GROUP':
       return { ...state, group: action.payload };
-    case "CHANGE_INSTRUCTION":
+    case 'CHANGE_INSTRUCTION':
       return { ...state, instruction: action.payload };
-    case "CHANGE_COMMAND":
+    case 'CHANGE_COMMAND':
       return { ...state, command: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
@@ -40,65 +40,65 @@ const reducer = (state, action) => {
 };
 
 const modalTwoDataSetValOne = {
-  data: "",
-  branchSelection: "",
-};
+  data:'',
+  branchSelection:''
+}
 
-const valOneReducer = (state, action) => {
-  //validationSetOne
+const valOneReducer = (state, action) => {//validationSetOne
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, data: "", branchSelection: "" };
-    case "CHANGE_DATA":
+    case 'CLEAR':
+      return { ...state, data: '', branchSelection: ''};
+    case 'CHANGE_DATA':
       return { ...state, data: action.payload };
-    case "CHANGE_BRANCH_SELECTION":
+    case 'CHANGE_BRANCH_SELECTION':
       return { ...state, branchSelection: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
   }
 };
+
+
 
 const modalTwoDataSetValTwo = {
-  locator: "",
-  data: "",
-  branchSelection: "",
-};
+  locator:'',
+  data:'',
+  branchSelection:''
+}
 
-const valTwoReducer = (state, action) => {
-  //validationSetTwo
+const valTwoReducer = (state, action) => {//validationSetTwo
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, locator: "", data: "", branchSelection: "" };
-    case "CHANGE_LOCATOR":
+    case 'CLEAR':
+      return { ...state, locator:'',data: '', branchSelection: ''};
+    case 'CHANGE_LOCATOR':
       return { ...state, locator: action.payload };
-    case "CHANGE_DATA":
+    case 'CHANGE_DATA':
       return { ...state, data: action.payload };
-    case "CHANGE_BRANCH_SELECTION":
+    case 'CHANGE_BRANCH_SELECTION':
       return { ...state, branchSelection: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
   }
 };
 
-const modalTwoDataSetValThree = {
-  locator: "",
-  data: "",
-};
 
-const valThreeReducer = (state, action) => {
-  //validationSetThree
+const modalTwoDataSetValThree = {
+  locator:'',
+  data:'',
+}
+
+const valThreeReducer = (state, action) => {//validationSetThree
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, locator: "", data: "" };
-    case "CHANGE_LOCATOR":
+    case 'CLEAR':
+      return { ...state, locator:'',data: ''};
+    case 'CHANGE_LOCATOR':
       return { ...state, locator: action.payload };
-    case "CHANGE_DATA":
+    case 'CHANGE_DATA':
       return { ...state, data: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
@@ -106,17 +106,16 @@ const valThreeReducer = (state, action) => {
 };
 
 const modalTwoDataSetValFour = {
-  locator: "",
-};
+  locator:''
+}
 
-const valFourReducer = (state, action) => {
-  //validationSetThree
+const valFourReducer = (state, action) => {//validationSetThree
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, locator: "" };
-    case "CHANGE_LOCATOR":
+    case 'CLEAR':
+      return { ...state, locator:''};
+    case 'CHANGE_LOCATOR':
       return { ...state, locator: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
@@ -124,17 +123,16 @@ const valFourReducer = (state, action) => {
 };
 
 const modalTwoDataSetValFive = {
-  data: "",
-};
+  data:''
+}
 
-const valFiveReducer = (state, action) => {
-  //validationSetThree
+const valFiveReducer = (state, action) => {//validationSetThree
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, data: "" };
-    case "CHANGE_DATA":
+    case 'CLEAR':
+      return { ...state, data:''};
+    case 'CHANGE_DATA':
       return { ...state, data: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
@@ -142,17 +140,16 @@ const valFiveReducer = (state, action) => {
 };
 
 const modalTwoDataSetValSix = {
-  branchSelection: "",
-};
+  branchSelection:''
+}
 
-const valSixReducer = (state, action) => {
-  //validationSetThree
+const valSixReducer = (state, action) => {//validationSetThree
   switch (action.type) {
-    case "CLEAR":
-      return { ...state, branchSelection: "" };
-    case "CHANGE_BRANCH_SELECTION":
+    case 'CLEAR':
+      return { ...state, branchSelection:''};
+    case 'CHANGE_BRANCH_SELECTION':
       return { ...state, branchSelection: action.payload };
-    case "RE_RENDER":
+    case 'RE_RENDER':
       return { ...state };
     default:
       return { ...state };
@@ -164,56 +161,31 @@ function ModalDialog(props, ref) {
   const [toggleTwoModal, setToggleTwoModal] = React.useState(false);
   const [modalOneDataSet, setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet, setModalTwoDataSet] = React.useState({});
-  const [modalOneGeneralDataSet, setModalOneGeneralDataSet] = React.useState(
-    {}
-  );
+  const [modalOneGeneralDataSet, setModalOneGeneralDataSet] = React.useState({});
   const [isCmdEmpty, setIsCmdEmpty] = useState(false);
   const [isInstEmpty, setIsInstEmpty] = useState(false);
   const [isDataEmpty, setIsDataEmpty] = useState(false);
-  const [isLocatorEmpty, setIsLocatorEmpty] = useState(false);
-  const [isBranchSelection, setIsBranchSelection] = useState(false);
-  const [modalOneDetails, dispatchModalOne] = useReducer(
-    reducer,
-    modalOneDataSet2
-  );
-  const [validationOne, dispatchValidationOne] = useReducer(
-    valOneReducer,
-    modalTwoDataSetValOne
-  );
-  const [validationTwo, dispatchValidationTwo] = useReducer(
-    valTwoReducer,
-    modalTwoDataSetValTwo
-  );
-  const [validationThree, dispatchValidationThree] = useReducer(
-    valThreeReducer,
-    modalTwoDataSetValThree
-  );
-  const [validationFour, dispatchValidationFour] = useReducer(
-    valFourReducer,
-    modalTwoDataSetValFour
-  );
-  const [validationFive, dispatchValidationFive] = useReducer(
-    valFiveReducer,
-    modalTwoDataSetValFive
-  );
-  const [validationSix, dispatchValidationSix] = useReducer(
-    valSixReducer,
-    modalTwoDataSetValSix
-  );
-  const [commandBasedFields, setCommandBasedFields] = useState([[], ""]);
-  const [isMountOne, setIsMountOne] = useState(false);
-  const [isMountTwo, setIsMountTwo] = useState(false);
-  const [isMountThree, setIsMountThree] = useState(false);
-  const [isMountFour, setIsMountFour] = useState(false);
-  const [isMountFive, setIsMountFive] = useState(false);
-  const [isMountSix, setIsMountSix] = useState(false);
-  const [isMountSeven, setIsMountSeven] = useState(false);
-  const [stateOne, setStateOne] = useState(false);
-  const [stateTwo, setStateTwo] = useState(false);
-  console.log("btn status", props.btnStatus);
-
-  const { lname, tname, cname, dname } = useParams();
-
+  const [isLocatorEmpty,setIsLocatorEmpty] = useState(false);
+  const [isBranchSelection,setIsBranchSelection] = useState(false);
+  const [modalOneDetails, dispatchModalOne] = useReducer(reducer,modalOneDataSet2);
+  const [validationOne,dispatchValidationOne] = useReducer(valOneReducer,modalTwoDataSetValOne);
+  const [validationTwo,dispatchValidationTwo] = useReducer(valTwoReducer,modalTwoDataSetValTwo);
+  const [validationThree,dispatchValidationThree] = useReducer(valThreeReducer,modalTwoDataSetValThree);
+  const [validationFour,dispatchValidationFour] = useReducer(valFourReducer,modalTwoDataSetValFour);
+  const [validationFive,dispatchValidationFive] = useReducer(valFiveReducer,modalTwoDataSetValFive);
+  const [validationSix,dispatchValidationSix] = useReducer(valSixReducer,modalTwoDataSetValSix);
+  const [commandBasedFields, setCommandBasedFields] = useState([[], '']);
+  const [isMountOne,setIsMountOne] = useState(false);
+  const [isMountTwo,setIsMountTwo] = useState(false);
+  const [isMountThree,setIsMountThree] = useState(false);
+  const [isMountFour,setIsMountFour] = useState(false);
+  const [isMountFive,setIsMountFive] = useState(false);
+  const [isMountSix,setIsMountSix] = useState(false);
+  const [isMountSeven,setIsMountSeven] = useState(false);
+  const [stateOne,setStateOne] = useState(false);
+  const [stateTwo,setStateTwo] = useState(false);
+  const [isColumnNameEmpty,setIsColumnNameEmpty] = useState(false);
+  
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
@@ -226,104 +198,102 @@ function ModalDialog(props, ref) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    console.log("aaaaaaaa");
     let matchedBinaryValue;
     for (let i = 0; i < commandArray.length; i++) {
-      if (commandArray[i][0] === modalOneDataSet["command"]) {
+      if (commandArray[i][0] === modalOneDataSet['command']) {
         matchedBinaryValue =
           commandArray[i][1].toString() +
           commandArray[i][2].toString() +
           commandArray[i][3].toString();
       }
     }
-    console.log("hloo", matchedBinaryValue);
+
+    //decide the suitable input fields in second modal
     switch (matchedBinaryValue) {
-      case "000":
-        setCommandBasedFields([["swapResult", "action", "comment"], "000"]);
+      case '000':
+        setCommandBasedFields([['swapResult', 'action', 'comment'], '000']);
         break;
-      case "001":
+      case '001':
         setCommandBasedFields([
-          ["swapResult", "branchSelection", "action", "comment"],
-          "001",
+          ['swapResult', 'branchSelection', 'action', 'comment'],
+          '001',
         ]);
         break;
-      case "010":
+      case '010':
         setCommandBasedFields([
-          ["data", "swapResult", "action", "comment"],
-          "010",
+          ['data', 'swapResult', 'action', 'comment'],
+          '010',
         ]);
         break;
-      case "011":
+      case '011':
         setCommandBasedFields([
-          ["data", "swapResult", "branchSelection", "action", "comment"],
-          "011",
+          ['data', 'swapResult', 'branchSelection', 'action', 'comment'],
+          '011',
         ]);
         break;
-      case "100":
+      case '100':
         setCommandBasedFields([
-          ["locator", "locatorParameter", "swapResult", "action", "comment"],
-          "100",
+          ['locator', 'locatorParameter', 'swapResult', 'action', 'comment'],
+          '100',
         ]);
         break;
-      case "101":
+      case '101':
         setCommandBasedFields([
           [
-            "locator",
-            "locatorParameter",
-            "swapResult",
-            "branchSelection",
-            "action",
-            "comment",
+            'locator',
+            'locatorParameter',
+            'swapResult',
+            'branchSelection',
+            'action',
+            'comment',
           ],
-          "101",
+          '101',
         ]);
         break;
-      case "110":
+      case '110':
         setCommandBasedFields([
           [
-            "locator",
-            "locatorParameter",
-            "data",
-            "swapResult",
-            "action",
-            "comment",
+            'locator',
+            'locatorParameter',
+            'data',
+            'swapResult',
+            'action',
+            'comment',
           ],
-          "110",
+          '110',
         ]);
         break;
-      case "111":
+      case '111':
         setCommandBasedFields([
           [
-            "locator",
-            "locatorParameter",
-            "data",
-            "swapResult",
-            "branchSelection",
-            "action",
-            "comment",
+            'locator',
+            'locatorParameter',
+            'data',
+            'swapResult',
+            'branchSelection',
+            'action',
+            'comment',
           ],
-          "111",
+          '111',
         ]);
         break;
 
       default:
-        setCommandBasedFields([[], ""]);
+        setCommandBasedFields([[], '']);
     }
-  }, [modalOneDataSet["command"]]);
-
-  console.log(modalOneDataSet["command"]);
+  }, [modalOneDataSet['command']]);
 
   const inputHandler = (name, value) => {
     console.log(name, value);
     switch (name) {
-      case "group":
+      case 'group':
         testStepsData[name] = value;
         break;
-      case "instruction":
+      case 'instruction':
         testStepsData[name] = value;
         break;
-      case "command":
-        console.log("DMC", value);
+      case 'command':
+        console.log('DMC', value);
         dispatch(setCommand(value));
         testStepsData[name] = value;
         break;
@@ -335,43 +305,45 @@ function ModalDialog(props, ref) {
   const inputHandler2 = (name, value) => {
     console.log(name, value);
     switch (name) {
-      case "locator":
+      case 'locator':
         testStepsData2[name] = value;
         break;
-      case "locatorParameter":
+      case 'locatorParameter':
         testStepsData2[name] = value;
         break;
-      case "data":
+      case 'data':
         testStepsData2[name] = value;
         break;
-      case "swapResult":
+      case 'swapResult':
         testStepsData2[name] = value;
         break;
-      case "branchSelection":
+      case 'branchSelection':
         testStepsData2[name] = value;
         break;
-      case "action":
+      case 'action':
         testStepsData2[name] = value;
         break;
-      case "comment":
+      case 'comment':
         testStepsData2[name] = value;
         break;
     }
+
+    
   };
 
+  //to handle data coming from other sections eg- data , locator
   const inputHandler3 = (name, value) => {
-    console.log("inputHandler3: " + name, value);
     generalPurposeInputData[name] = value;
-    console.log("inputHandler3:", props.purpose);
   };
 
+  //use to render input fields individually
   const fieldLoop = () => {
     for (let i = 0; i < props.noFields[0]; i++) {
       if (
-        props.title[i] !== "instruction" &&
-        props.title[i] !== "command" &&
-        props.title[i] !== "swapResult" &&
-        props.title[i] !== "action" &&
+        props.title[i] !== 'instruction' &&
+        props.title[i] !== 'command' &&
+        props.title[i] !== 'swapResult' &&
+        props.title[i] !== 'action' &&
         props.generalPurpose === false
       ) {
         inputFieldArrayModalOne.push(
@@ -385,14 +357,15 @@ function ModalDialog(props, ref) {
         );
       } else if (props.generalPurpose === true) {
         //section for all general purpose data inputs such as data section,login,locator section ect...
-        console.log("jazz ", props.title);
-        console.log("jazz weke");
+        console.log('jazz ', props.title);
+        console.log('jazz weke');
         inputFieldArrayModalOne.push(
           <PopUpInputField
             id={i}
             title={props.title[i]}
             inputType="text"
             generalPurpose={props.generalPurpose}
+            isColumnNameEmpty={isColumnNameEmpty}
             onDataChange={inputHandler3}
           ></PopUpInputField>
         );
@@ -410,13 +383,14 @@ function ModalDialog(props, ref) {
       }
     }
 
+    //use to render fields in second modal
     if (props.enableChainPopUps) {
       for (let i = 0; i < commandBasedFields[0].length; i++) {
         if (
-          commandBasedFields[0][i] !== "instruction" &&
-          commandBasedFields[0][i] !== "command" &&
-          commandBasedFields[0][i] !== "swapResult" &&
-          commandBasedFields[0][i] !== "action"
+          commandBasedFields[0][i] !== 'instruction' &&
+          commandBasedFields[0][i] !== 'command' &&
+          commandBasedFields[0][i] !== 'swapResult' &&
+          commandBasedFields[0][i] !== 'action'
         ) {
           inputFieldArrayModalTwo.push(
             <PopUpInputField
@@ -442,85 +416,98 @@ function ModalDialog(props, ref) {
         }
       }
     }
+
   };
 
   fieldLoop();
   const initModalOne = () => {
     setIsCmdEmpty(false);
     setIsInstEmpty(false);
+    setIsColumnNameEmpty(false);
     return setToggleOneModal(true);
   };
   const TerminateModalOne = () => {
-    dispatchModalOne({ type: "CLEAR" });
+    dispatchModalOne({ type: 'CLEAR' });
     return setToggleOneModal(false);
   };
+
+  //initiate first modal 
   const initModalTwo = () => {
     setIsCmdEmpty(false);
     setIsInstEmpty(false);
     setIsDataEmpty(false);
     setIsBranchSelection(false);
     setIsLocatorEmpty(false);
+    setIsColumnNameEmpty(false);
     return setToggleTwoModal(true);
   };
+  //close modal two
   const TerminateModalTwo = () => {
     console.log(testStepsData2);
     dispatchValidationOne({
-      type: "CLEAR",
+      type:'CLEAR'
     });
     dispatchValidationTwo({
-      type: "CLEAR",
+      type:'CLEAR'
     });
     dispatchValidationThree({
-      type: "CLEAR",
+      type:'CLEAR'
     });
     dispatchValidationFour({
-      type: "CLEAR",
+      type:'CLEAR'
     });
     dispatchValidationFive({
-      type: "CLEAR",
+      type:'CLEAR'
     });
     dispatchValidationSix({
-      type: "CLEAR",
+      type:'CLEAR'
     });
     //setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
     return setToggleTwoModal(false);
   };
 
+  //when chainPopups enable.This button will appear
   const NextStep = () => {
     if (props.generalPurpose === false) {
       setModalOneDataSet(testStepsData);
 
-      if ("group" in testStepsData) {
+      if ('group' in testStepsData) {
         dispatchModalOne({
-          type: "CHANGE_GROUP",
+          type: 'CHANGE_GROUP',
           payload: testStepsData.group,
         });
       }
-      if ("instruction" in testStepsData) {
+      if ('instruction' in testStepsData) {
         dispatchModalOne({
-          type: "CHANGE_INSTRUCTION",
+          type: 'CHANGE_INSTRUCTION',
           payload: testStepsData.instruction,
         });
       }
-      if ("command" in testStepsData) {
+      if ('command' in testStepsData) {
         dispatchModalOne({
-          type: "CHANGE_COMMAND",
+          type: 'CHANGE_COMMAND',
           payload: testStepsData.command,
         });
       }
       if (
-        modalOneDetails.instruction === "" ||
-        modalOneDetails.command === ""
+        modalOneDetails.instruction === '' ||
+        modalOneDetails.command === ''
       ) {
-        dispatchModalOne({ type: "RE_RENDER" });
+        dispatchModalOne({ type: 'RE_RENDER' });
       }
+
     }
     if (props.generalPurpose === true) {
-      console.log("Next step", generalPurposeInputData);
+      console.log('Next step', generalPurposeInputData);
       setModalOneGeneralDataSet(generalPurposeInputData);
-
-      TerminateModalOne();
-      if (props.enableChainPopUps) {
+      // if('Column Name' in generalPurposeInputData){
+      //   setIsColumnNameEmpty(false);
+      //   props.saveNewHeadingData(modalOneGeneralDataSet);
+      //   TerminateModalOne();
+      // }else{
+      //   setIsColumnNameEmpty(true);
+      // }
+      if (props.enableChainPopUps) {   
         setTimeout(() => {
           initModalTwo();
         }, 400);
@@ -529,29 +516,29 @@ function ModalDialog(props, ref) {
   };
 
   useEffect(() => {
-    console.log("jet fire", modalOneDetails.instruction);
-    console.log("jet fire 2", modalOneDetails.command);
-    if (isMountTwo) {
-      if (modalOneDetails.instruction === "") {
+    console.log('jet fire',modalOneDetails.instruction);
+    console.log('jet fire 2',modalOneDetails.command);
+    if(isMountTwo){
+      if (modalOneDetails.instruction === '') {
         setIsInstEmpty(true);
       } else {
         setIsInstEmpty(false);
       }
-      if (modalOneDetails.command === "") {
+      if (modalOneDetails.command === '') {
         setIsCmdEmpty(true);
       } else {
         setIsCmdEmpty(false);
       }
-    } else {
+    }else{
       setIsMountTwo(true);
     }
-
+   
     setStateOne(!stateOne);
   }, [modalOneDetails]);
 
   useEffect(() => {
-    console.log("farm");
-    if (modalOneDetails.instruction !== "" && modalOneDetails.command !== "") {
+    console.log('farm');
+    if (modalOneDetails.instruction !== '' && modalOneDetails.command !== '') {
       TerminateModalOne();
       if (props.enableChainPopUps) {
         setTimeout(() => {
@@ -563,328 +550,330 @@ function ModalDialog(props, ref) {
 
   const ApplyBtnValue = () => {
     if (props.enableChainPopUps) {
-      btnValue = "Next";
+      btnValue = 'Next';
     } else {
-      btnValue = "Finish";
+      btnValue = 'Finish';
     }
   };
   ApplyBtnValue();
 
   const submitHandlerOne = (event) => {
-    console.log("sailor");
+    console.log('sailor');
     event.preventDefault();
     if (props.enableChainPopUps === false) {
       if (props.generalPurpose === false) {
+        console.log('fairChild');
         props.saveNewData(modalOneDataSet);
+        TerminateModalOne();
       }
       if (props.generalPurpose === true) {
-        if (props.purpose === "fillData") {
-          console.log("fillData AX1", modalOneGeneralDataSet);
+        if (props.purpose === 'fillData') {
+          console.log('fillData AX1', modalOneGeneralDataSet);
           props.saveNewGeneralData(modalOneGeneralDataSet); // calling from heading component
+          TerminateModalOne();
         }
-        if (props.purpose === "addHeading") {
-          console.log("triple H", modalOneGeneralDataSet);
-          props.saveNewHeadingData(modalOneGeneralDataSet);
+        if (props.purpose === 'addHeading') {
+          console.log('triple H', modalOneGeneralDataSet);
+          if('Column Name' in modalOneGeneralDataSet){
+            setIsColumnNameEmpty(false);
+            props.saveNewHeadingData(modalOneGeneralDataSet);
+            TerminateModalOne();
+          }else{
+            setIsColumnNameEmpty(true);
+          }
+          
         }
-      }
-
-      TerminateModalOne();
+      }  
     }
   };
 
   const submitHandlerTwo = (event) => {
-    console.log(modalOneDataSet, "sailor2");
+    console.log(modalOneDataSet,'sailor2');
     event.preventDefault();
     if (props.enableChainPopUps === true) {
-      console.log(testStepsData2, "MAC");
+      console.log(testStepsData2,'MAC');
       setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
-      ////////////////////////////////////////
-      if (validationSetOne.includes(modalOneDataSet.command)) {
-        console.log("fight11111", testStepsData2);
-        if ("data" in testStepsData2) {
+      ////////////////////////////////////////     
+      if(validationSetOne.includes(modalOneDataSet.command)){
+        console.log('fight11111',testStepsData2);
+        if ('data' in testStepsData2) {
           dispatchValidationOne({
-            type: "CHANGE_DATA",
+            type: 'CHANGE_DATA',
             payload: testStepsData2.data,
           });
         }
-        if ("branchSelection" in testStepsData2) {
+        if ('branchSelection' in testStepsData2) {
           dispatchValidationOne({
-            type: "CHANGE_BRANCH_SELECTION",
+            type: 'CHANGE_BRANCH_SELECTION',
             payload: testStepsData2.branchSelection,
           });
         }
-        if (
-          !("data" in testStepsData2) &&
-          !("branchSelection" in testStepsData2)
-        ) {
-          console.log("MORA!!!", validationOne.data);
-          if (validationOne.data === "") {
-            setIsDataEmpty(true);
+        if (!('data' in testStepsData2) && !('branchSelection' in testStepsData2)) {
+          console.log('MORA!!!',validationOne.data);
+          if(validationOne.data===''){
+            setIsDataEmpty(true)
           }
-          if (validationOne.branchSelection === "") {
+          if(validationOne.branchSelection===''){
             setIsBranchSelection(true);
           }
         }
-      } else if (validationSetTwo.includes(modalOneDataSet.command)) {
-        console.log("vest");
-        if ("data" in testStepsData2) {
+      }
+      else if(validationSetTwo.includes(modalOneDataSet.command)){
+        console.log('vest')
+        if ('data' in testStepsData2) {
           dispatchValidationTwo({
-            type: "CHANGE_DATA",
+            type: 'CHANGE_DATA',
             payload: testStepsData2.data,
           });
         }
-        if ("branchSelection" in testStepsData2) {
+        if ('branchSelection' in testStepsData2) {
           dispatchValidationTwo({
-            type: "CHANGE_BRANCH_SELECTION",
+            type: 'CHANGE_BRANCH_SELECTION',
             payload: testStepsData2.branchSelection,
           });
         }
-        if ("locator" in testStepsData2) {
+        if ('locator' in testStepsData2) {
           dispatchValidationTwo({
-            type: "CHANGE_LOCATOR",
+            type: 'CHANGE_LOCATOR',
             payload: testStepsData2.locator,
           });
         }
-        if (
-          !("data" in testStepsData2) &&
-          !("branchSelection" in testStepsData2) &&
-          !("locator" in testStepsData2)
-        ) {
+        if (!('data' in testStepsData2) && !('branchSelection' in testStepsData2) && !('locator' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if (validationTwo.data === "") {
-            setIsDataEmpty(true);
+          if(validationTwo.data===''){
+            setIsDataEmpty(true)
           }
-          if (validationTwo.branchSelection === "") {
+          if(validationTwo.branchSelection===''){
             setIsBranchSelection(true);
           }
-          if (validationTwo.locator === "") {
-            setIsLocatorEmpty(true);
+          if(validationTwo.locator===''){
+            setIsLocatorEmpty(true)
           }
         }
-      } else if (validationSetThree.includes(modalOneDataSet.command)) {
-        if ("data" in testStepsData2) {
+      }else if(validationSetThree.includes(modalOneDataSet.command)){
+        if ('data' in testStepsData2) {
           dispatchValidationThree({
-            type: "CHANGE_DATA",
+            type: 'CHANGE_DATA',
             payload: testStepsData2.data,
           });
         }
-        if ("locator" in testStepsData2) {
+        if ('locator' in testStepsData2) {
           dispatchValidationThree({
-            type: "CHANGE_LOCATOR",
+            type: 'CHANGE_LOCATOR',
             payload: testStepsData2.locator,
           });
         }
-        if (!("data" in testStepsData2) && !("locator" in testStepsData2)) {
+        if (!('data' in testStepsData2) && !('locator' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if (validationThree.data === "") {
-            setIsDataEmpty(true);
+          if(validationThree.data===''){
+            setIsDataEmpty(true)
           }
-          if (validationThree.locator === "") {
+          if(validationThree.locator===''){
             setIsLocatorEmpty(true);
           }
         }
-      } else if (validationSetFour.includes(modalOneDataSet.command)) {
-        if ("locator" in testStepsData2) {
+      }else if(validationSetFour.includes(modalOneDataSet.command)){
+        if ('locator' in testStepsData2) {
           dispatchValidationFour({
-            type: "CHANGE_LOCATOR",
+            type: 'CHANGE_LOCATOR',
             payload: testStepsData2.locator,
           });
         }
-        if (!("locator" in testStepsData2)) {
+        if (!('locator' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if (validationFour.locator === "") {
+          if(validationFour.locator===''){
             setIsLocatorEmpty(true);
           }
         }
-      } else if (validationSetFive.includes(modalOneDataSet.command)) {
-        if ("data" in testStepsData2) {
+      }else if(validationSetFive.includes(modalOneDataSet.command)){
+        if ('data' in testStepsData2) {
           dispatchValidationFive({
-            type: "CHANGE_DATA",
+            type: 'CHANGE_DATA',
             payload: testStepsData2.locator,
           });
         }
-        if (!("data" in testStepsData2)) {
+        if (!('data' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if (validationFive.data === "") {
+          if(validationFive.data===''){
             setIsDataEmpty(true);
           }
         }
-      } else if (validationSetSix.includes(modalOneDataSet.command)) {
-        if ("branchSelection" in testStepsData2) {
+      }else if(validationSetSix.includes(modalOneDataSet.command)){
+        if ('branchSelection' in testStepsData2) {
           dispatchValidationSix({
-            type: "CHANGE_BRANCH_SELECTION",
+            type: 'CHANGE_BRANCH_SELECTION',
             payload: testStepsData2.branchSelection,
           });
         }
-        if (!("branchSelection" in testStepsData2)) {
+        if (!('branchSelection' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if (validationSix.branchSelection === "") {
+          if(validationSix.branchSelection===''){
             setIsBranchSelection(true);
           }
         }
-      } else {
-        console.log("canter");
-        props.saveNewData(Object.assign(modalOneDataSet, testStepsData2));
-        dispatchModalOne({ type: "CLEAR" });
-        TerminateModalTwo();
+      }
+      else{
+          console.log('canter')
+          props.saveNewData(Object.assign(modalOneDataSet, testStepsData2));
+          dispatchModalOne({ type: 'CLEAR' });
+          TerminateModalTwo();
       }
     }
   };
 
   useEffect(() => {
-    console.log(validationOne.data, "fire");
-    if (isMountOne) {
-      if (validationOne.data === "") {
+    console.log(validationOne.data,'fire');
+    if(isMountOne){
+      if (validationOne.data === '') {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-      if (validationOne.branchSelection === "") {
+      if (validationOne.branchSelection === '') {
         setIsBranchSelection(true);
       } else {
         setIsBranchSelection(false);
       }
-    } else {
-      setIsMountOne(true);
+    }else{
+      setIsMountOne(true)
     }
 
     setStateTwo(!stateTwo);
   }, [validationOne]);
 
+
   useEffect(() => {
-    console.log(validationTwo, "water");
-    if (isMountThree) {
-      if (validationTwo.data === "") {
+    console.log(validationTwo,'water');
+    if(isMountThree){
+      if (validationTwo.data === '') {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-      if (validationTwo.locator === "") {
+      if(validationTwo.locator === ''){
         setIsLocatorEmpty(true);
-      } else {
+      }else{
         setIsLocatorEmpty(false);
       }
-      if (validationTwo.branchSelection === "") {
+      if (validationTwo.branchSelection === '') {
         setIsBranchSelection(true);
       } else {
         setIsBranchSelection(false);
       }
-    } else {
-      setIsMountThree(true);
+    }else{
+      setIsMountThree(true)
     }
     setStateTwo(!stateTwo);
   }, [validationTwo]);
 
   useEffect(() => {
-    console.log(validationOne.data, "fire");
-    if (isMountFour) {
-      if (validationThree.data === "") {
+    console.log(validationOne.data,'fire');
+    if(isMountFour){
+      if (validationThree.data === '') {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-      if (validationThree.locator === "") {
+      if (validationThree.locator === '') {
         setIsLocatorEmpty(true);
       } else {
         setIsLocatorEmpty(false);
       }
-    } else {
-      setIsMountFour(true);
+    }else{
+      setIsMountFour(true)
     }
     setStateTwo(!stateTwo);
   }, [validationThree]);
 
   useEffect(() => {
-    if (isMountFive) {
-      if (validationFour.locator === "") {
+    if(isMountFive){
+      if (validationFour.locator === '') {
         setIsLocatorEmpty(true);
       } else {
         setIsLocatorEmpty(false);
       }
-    } else {
-      setIsMountFive(true);
+    }else{
+      setIsMountFive(true)
     }
     setStateTwo(!stateTwo);
   }, [validationFour]);
 
   useEffect(() => {
-    if (isMountSix) {
-      if (validationFive.data === "") {
+    if(isMountSix){
+      if (validationFive.data === '') {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-    } else {
-      setIsMountSix(true);
+    }else{
+      setIsMountSix(true)
     }
     setStateTwo(!stateTwo);
   }, [validationFive]);
 
   useEffect(() => {
-    if (isMountSeven) {
-      if (validationSix.branchSelection === "") {
+    if(isMountSeven){
+      if (validationSix.branchSelection === '') {
         setIsBranchSelection(true);
       } else {
         setIsBranchSelection(false);
       }
-    } else {
-      setIsMountSeven(true);
+    }else{
+      setIsMountSeven(true)
     }
     setStateTwo(!stateTwo);
   }, [validationSix]);
 
   useEffect(() => {
-    console.log("tap");
+    console.log('tap');
 
-    if (validationSetOne.includes(modalOneDataSet.command)) {
-      console.log("vital", modalOneDataSet);
-      if (validationOne.data !== "" && validationOne.branchSelection !== "") {
-        console.log("thunder");
+    if(validationSetOne.includes(modalOneDataSet.command)){
+      console.log('vital',modalOneDataSet);
+      if (validationOne.data !== '' && validationOne.branchSelection !== '') {
+        console.log('thunder');
         props.saveNewData(modalTwoDataSet);
-        dispatchModalOne({ type: "CLEAR" });
+        dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    } else if (validationSetTwo.includes(modalOneDataSet.command)) {
-      if (
-        validationTwo.data !== "" &&
-        validationTwo.branchSelection !== "" &&
-        validationTwo.locator !== ""
-      ) {
-        console.log("thunder");
+    }else if(validationSetTwo.includes(modalOneDataSet.command)){
+      if (validationTwo.data !== '' && validationTwo.branchSelection !== '' && validationTwo.locator !=='') {
+        console.log('thunder');
         props.saveNewData(modalTwoDataSet);
-        dispatchModalOne({ type: "CLEAR" });
+        dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    } else if (validationSetThree.includes(modalOneDataSet.command)) {
-      if (validationThree.data !== "" && validationThree.locator !== "") {
-        console.log("thunder");
+    }else if(validationSetThree.includes(modalOneDataSet.command)){
+      if (validationThree.data !== '' && validationThree.locator !== '') {
+        console.log('thunder');
         props.saveNewData(modalTwoDataSet);
-        dispatchModalOne({ type: "CLEAR" });
+        dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    } else if (validationSetFour.includes(modalOneDataSet.command)) {
-      if (validationFour.locator !== "") {
+    }else if(validationSetFour.includes(modalOneDataSet.command)){
+      if(validationFour.locator !== ''){
         props.saveNewData(modalTwoDataSet);
-        dispatchModalOne({ type: "CLEAR" });
+        dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    } else if (validationSetFive.includes(modalOneDataSet.command)) {
-      if (validationFive.data !== "") {
+    }else if(validationSetFive.includes(modalOneDataSet.command)){
+      if(validationFive.data !== ''){
         props.saveNewData(modalTwoDataSet);
-        dispatchModalOne({ type: "CLEAR" });
+        dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    } else if (validationSetSix.includes(modalOneDataSet.command)) {
-      if (validationSix.branchSelection !== "") {
+    }else if(validationSetSix.includes(modalOneDataSet.command)){
+      if(validationSix.branchSelection !== ''){
         props.saveNewData(modalTwoDataSet);
-        dispatchModalOne({ type: "CLEAR" });
+        dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
     }
+   
   }, [stateTwo]);
 
+
   const renderAddButton = () => {
-    if (props.addBtnId === "testMBtn") {
+    if (props.addBtnId === 'testMBtn') {
       return (
         <Button
           variant="success"
@@ -941,7 +930,11 @@ function ModalDialog(props, ref) {
             <Button variant="danger" onClick={TerminateModalTwo}>
               Close
             </Button>
-            <Button form={props.formID[1]} type="submit" variant="dark">
+            <Button
+              form={props.formID[1]}
+              type="submit"
+              variant="dark"
+            >
               Finish
             </Button>
           </Modal.Footer>

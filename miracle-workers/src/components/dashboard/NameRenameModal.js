@@ -1,3 +1,4 @@
+
 import React,{forwardRef} from "react";
 import { useState,useEffect,useImperativeHandle,useRef } from "react";
 import Button from 'react-bootstrap/Button';
@@ -356,7 +357,7 @@ const NameRenameModal = (props,ref) => {
           </Modal.Footer>
           </form>
         </Modal>
-      <MessageBox ref={modalRefRenaming} modalFooterfuncOne={initRenamingModal} id='pageNameDuplicateModal'></MessageBox>
+      <MessageBox ref={modalRefRenaming} modalFooterfuncOne={initRenamingModal} id='pageNameDuplicateModal' modalTitle={'Warning!'} icon={''} btnValues={['Ok','Cancel']} isTwobtn={true}></MessageBox>
       </div>
 
     )

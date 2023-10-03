@@ -44,21 +44,23 @@ const Card = (props) => {
                 navigate('/dataJunction/data/'+props.dataPageName);
                 dispatch({ type: 'MY_FUNCTION_CALLED_MANUAL' });
             }
-        }else if(props.sectionName==="test"){
-            console.log('Clicked on test');
-            if(props.cardTitle==="JSON"){
-                console.log('Clicked on Json');
-                navigate('/testJunction/testJson');
-                dispatch({ type: 'FUNCTION_CALLED_JSON' });
-            }else if(props.cardTitle==="Manually"){
-                console.log('Clicked on manual',props.testPageName);
-                navigate('/testJunction/testManual/'+props.testPageName);
-                setTimeout(()=>{
-                    dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
-                },1000);
-                
-            }
         }
+        
+        // else if(props.sectionName==="test"){
+        //     console.log('Clicked on test');
+        //     if(props.cardTitle==="JSON"){
+        //         console.log('Clicked on Json');
+        //         navigate('/testJunction/testJson');
+        //         dispatch({ type: 'FUNCTION_CALLED_JSON' });
+        //     }else if(props.cardTitle==="Manually"){
+        //         console.log('Clicked on manual',props.testPageName);
+        //         navigate('/testJunction/testManual/'+props.testPageName);
+        //         setTimeout(()=>{
+        //             dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
+        //         },1000);
+                
+        //     }
+        // }
     }
 
     // const dataSectionPathHandler = () => {
@@ -71,6 +73,7 @@ const Card = (props) => {
     //     }
     // }
 
+    
     // const testSectionPathHandler = () => {
     //     if(props.cardTitle==="JSON"){
     //         navigate('/testJunction/testJson');

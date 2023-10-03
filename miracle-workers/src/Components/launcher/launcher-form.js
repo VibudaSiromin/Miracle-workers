@@ -1,27 +1,59 @@
-import React from "react";
-import { connect } from "react-redux";
-import { useState } from "react";
+import React from 'react';
+import { connect } from 'react-redux';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
+const LauncherForm = ({
+  register,
+  errors,
+  testPageName,
+  testTypeHandler,
+  dataPageOptions,
+}) => {
   const [isDataDriven, setIsDataDriven] = useState(false);
+  //const [dataPageNames,setDataPageNames] = useState([]);
+  const [isMount, setIsMount] = useState(false);
+  const [dataSheetOptions, setDataSheetOptions] = useState([]);
+  const [state, setState] = useState(false);
 
   const browsrLists = [
-    "Chrome",
-    "Firefox",
-    "Microsoft Edge",
-    "Internet Explore",
+    'Chrome',
+    'Firefox',
+    'Microsoft Edge',
+    'Internet Explore',
   ];
 
-  console.log("bard", testPageName);
+  const arr = [
+    <option value="data02">data02</option>,
+    <option value="ITPM">ITPM</option>,
+  ];
+  //console.log('fireball',dataPageNames);
 
   const getTestTypeHandler = (value) => {
     testTypeHandler(value);
-    if (value === "Data Driven") {
+    if (value === 'Data Driven') {
       setIsDataDriven(true);
     } else {
       setIsDataDriven(false);
     }
   };
+
+  // useEffect(()=>{
+  //   if(isMount){
+  //     if(dataPageNames.length>0){
+  //       const selectOptionsArray=dataPageNames.map((dataPage)=>{
+  //         return(
+  //           <option value={dataPage}>{dataPage}</option>
+  //         )
+  //       })
+  //       setDataSheetOptions(selectOptionsArray);
+  //       setState(!state);
+  //     }
+  //   }else{
+  //     setIsMount(true);
+  //   }
+
+  // },[dataPageNames])
 
   return (
     <>
@@ -36,7 +68,7 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
 
       <div className="form-group">
         <label>Test Case</label>
-        <input className="form-control" {...register("testCase")} />
+        <input className="form-control" {...register('testCase')} />
         <small className="text-danger">{errors.testCase?.message}</small>
       </div>
 
@@ -52,7 +84,7 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
                 name={value}
                 id={value}
                 value={value}
-                {...register("browser")}
+                {...register('browser')}
               />
               <label class="form-check-label" for={value}>
                 {value}
@@ -68,7 +100,7 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
         <select
           class="form-select"
           aria-label="Default select example"
-          {...register("type")}
+          {...register('type')}
           onChange={(e) => getTestTypeHandler(e.target.value)}
         >
           <option value="Sequential">Sequential</option>
@@ -79,9 +111,9 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
       <div className="form-group">
         <label>Status</label>
         <select
-          class="form-select"
+          className="form-select"
           aria-label="Default select example"
-          {...register("status")}
+          {...register('status')}
         >
           <option></option>
           <option value="Enabled">Enabled</option>
@@ -91,12 +123,20 @@ const LauncherForm = ({ register, errors, testPageName, testTypeHandler }) => {
       </div>
       <div className="form-group">
         <label>Data Sheet</label>
-        <input className="form-control" {...register("dataSheet")} />
+        <select
+          className="form-select"
+          aria-label="Default select example"
+          {...register('dataSheet')}
+        >
+          <option></option>
+          {/* {arr} */}
+          {dataPageOptions}
+        </select>
         <small className="text-danger">{errors.dataSheet?.message}</small>
       </div>
       <div className="form-group">
         <label>Comment</label>
-        <input className="form-control" {...register("comment")} />
+        <input className="form-control" {...register('comment')} />
       </div>
     </>
   );
