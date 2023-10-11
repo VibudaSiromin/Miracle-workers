@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from "react";
-import ReactJson from "react-json-view";
-import { useDropzone } from "react-dropzone";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import "./loadFromJson.css";
-import { LuFileJson } from "react-icons/lu";
-import Button from "@mui/material/Button";
-import Swal from "sweetalert2";
+import React, { useState, useCallback } from 'react';
+import ReactJson from 'react-json-view';
+import { useDropzone } from 'react-dropzone';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import './loadFromJson.css';
+import { LuFileJson } from 'react-icons/lu';
+import Button from '@mui/material/Button';
+import Swal from 'sweetalert2';
 
 const JsonUpload = () => {
   const [jsonObject, setJsonObject] = useState({});
@@ -27,14 +27,13 @@ const JsonUpload = () => {
 
   //save data
   const loadJsonData = () => {
-    const locaters = [];
+    const locators = [];
     let launcher = [];
     const data = [];
-    const components = [];
     const testSuite = [];
 
-    const fileName = jsonObject.fileName.replace(/\s/g, "");
-    jsonObject["tests"].forEach((test) => {
+    const fileName = jsonObject.fileName.replace(/\s/g, '');
+    jsonObject['tests'].forEach((test) => {
       const testPage = [];
       launcher.push([
         `${test.sheetName}M`,
@@ -80,12 +79,12 @@ const JsonUpload = () => {
       // });
     });
 
-    // testSuite.splice(0, 0, `${fileName}M`);
-    // const newData = [testSuite];
+    data.push(jsonObject['dataPages']);
+    locators.push(jsonObject['locatorPages']);
 
     const payload = {
       launcher,
-      locaters,
+      locators,
       data,
       testSuite,
     };
@@ -95,28 +94,29 @@ const JsonUpload = () => {
   const handleJsonUpload = (payload) => {
     try {
       const url = `http://localhost:5000/json/upload`;
-
       axios
         .post(url, { ...payload })
         .then((res) => {
-          dispatch({ type: "LOAD_FROM_JSON" });
-          console.log("uploaded");
+          console.log('uploaded');
+          dispatch({ type: 'LOAD_FROM_JSON' });
+          console.log('uploaded');
           Swal.fire({
-            icon: "success",
-            title: "Great...",
-            text: "Loaded from JSON",
+            icon: 'success',
+            title: 'Great...',
+            text: 'Loaded from JSON',
           });
+          // window.location.reload();
         })
         .catch((err) => {
           Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: "Failed to Load",
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Failed to Load',
           });
           console.log(err);
         });
     } catch (error) {
-      console.log(error);
+      console.log(error, 'yyyy');
     }
   };
 
@@ -124,7 +124,7 @@ const JsonUpload = () => {
     <>
       <div className="outer">
         <div {...getRootProps()} className="card">
-          <LuFileJson size="100px" style={{ marginTop: "10px" }} />
+          <LuFileJson size="100px" style={{ marginTop: '10px' }} />
           <input {...getInputProps()} />
           <div>
             {isDragActive ? (
@@ -144,17 +144,17 @@ const JsonUpload = () => {
           <ReactJson
             src={jsonObject}
             style={{
-              height: "48vh",
-              overflow: "auto",
-              background: "#c5c9eb",
-              borderRadius: "5px",
+              height: '48vh',
+              overflow: 'auto',
+              background: '#c5c9eb',
+              borderRadius: '5px',
             }}
           />
           <Button
             variant="contained"
             onClick={loadJsonData}
             color="info"
-            style={{ marginTop: "1.1vh" }}
+            style={{ marginTop: '1.1vh' }}
           >
             Load Json Data
           </Button>

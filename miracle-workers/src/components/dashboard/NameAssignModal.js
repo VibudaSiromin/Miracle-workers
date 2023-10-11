@@ -20,13 +20,15 @@ const NameAssignModal = (props, ref) => {
   const modalRefC = useRef();
 
   let sectionName;
-  if (props.indexOfSection === 2) {
+  if (props.indexOfSection === 1) {
     sectionName = 'Test Suite';
-  } else if (props.indexOfSection === 3) {
+  } else if (props.indexOfSection === 2) {
     sectionName = 'Data';
-  } else if (props.indexOfSection === 4) {
-    sectionName = 'Component';
-  } else if (props.indexOfSection === 5) {
+  }
+  // else if (props.indexOfSection === 4) {
+  //   sectionName = 'Component';
+  // }
+  else if (props.indexOfSection === 3) {
     sectionName = 'Locator';
   }
 
@@ -68,7 +70,7 @@ const NameAssignModal = (props, ref) => {
     reset();
 
     //check whether any page duplications
-    if (props.indexOfSection === 2) {
+    if (props.indexOfSection === 1) {
       axios
         .get('http://localhost:5000/testPages')
         .then((res) => {
@@ -93,7 +95,7 @@ const NameAssignModal = (props, ref) => {
         .catch((err) => {
           console.log(err);
         });
-    } else if (props.indexOfSection === 3) {
+    } else if (props.indexOfSection === 2) {
       axios
         .get('http://localhost:5000/data/getDatasheets')
         .then((res) => {
@@ -119,34 +121,35 @@ const NameAssignModal = (props, ref) => {
         });
 
       //sectionName='Data';
-    } else if (props.indexOfSection === 4) {
-      axios
-        .get('http://localhost:5000/data/getDatasheets')
-        .then((res) => {
-          const availableDataPageNames = res.data.dataPageNames;
-          console.log('Jaguar', availableDataPageNames);
-          for (let i = 0; i < availableDataPageNames.length; i++) {
-            if (fieldValue === availableDataPageNames[i].slice(0, -1)) {
-              console.log('duplicate');
-              modalRefC.current.log(
-                "'" +
-                  fieldValue +
-                  "'" +
-                  ' page name already exists.Please enter a unique name.'
-              );
-              return;
-            }
-          }
-          props.newPageName(fieldValue);
-          props.setTestPageName(fieldValue);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      //sectionName='Component';
-    } else if (props.indexOfSection === 5) {
+    }
+    //  else if (props.indexOfSection === 4) {
+    //   axios
+    //     .get('http://localhost:5000/data/getDatasheets')
+    //     .then((res) => {
+    //       const availableDataPageNames = res.data.dataPageNames;
+    //       console.log('Jaguar', availableDataPageNames);
+    //       for (let i = 0; i < availableDataPageNames.length; i++) {
+    //         if (fieldValue === availableDataPageNames[i].slice(0, -1)) {
+    //           console.log('duplicate');
+    //           modalRefC.current.log(
+    //             "'" +
+    //               fieldValue +
+    //               "'" +
+    //               ' page name already exists.Please enter a unique name.'
+    //           );
+    //           return;
+    //         }
+    //       }
+    //       props.newPageName(fieldValue);
+    //       props.setTestPageName(fieldValue);
+    //     })
+    //     .catch((err) => {
+    //       console.log(err);
+    //     });
+    //   //sectionName='Component';
+    // }
+    else if (props.indexOfSection === 3) {
       //sectionName='Locator';
-
       axios
         .get('http://localhost:5000/locators')
         .then((res) => {

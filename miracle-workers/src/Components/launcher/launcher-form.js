@@ -115,7 +115,6 @@ const LauncherForm = ({
           aria-label="Default select example"
           {...register('status')}
         >
-          <option></option>
           <option value="Enabled">Enabled</option>
           <option value="Disabled">Disabled</option>
         </select>
@@ -128,8 +127,6 @@ const LauncherForm = ({
           aria-label="Default select example"
           {...register('dataSheet')}
         >
-          <option></option>
-          {/* {arr} */}
           {dataPageOptions}
         </select>
         <small className="text-danger">{errors.dataSheet?.message}</small>
