@@ -234,14 +234,16 @@ export const AppSidebarNav = () => {
   }, [testPageNames]);
 
   const pageNameHandler = (fieldValue) => {
-    console.log('dragon');
+    console.log('dragon',fieldValue);
 
     const modifiedItems = items.map((item) => {
       //add new pageName to test suite
       if (indexOfSection === 1) {
+       
         if (item.name === 'Test Suite') {
           //navigate('/testJunction');
           setTestPageName(fieldValue);
+          console.log('petronas'); 
           navigate('/testJunction/testManual/' + fieldValue);
           setTimeout(() => {
             dispatch({ type: 'FUNCTION_CALLED_MANUAL' });

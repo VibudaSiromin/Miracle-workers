@@ -23,7 +23,7 @@ const TestManual = (props) => {
 
     useEffect(() => {
         getTestSuiteHeadings();
-    }, [tname])
+    }, [tname]) 
 
 
     return (

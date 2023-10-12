@@ -13,12 +13,13 @@ const AlertBox = (props) => {
     console.log('macTevish',alertVisibityStatus);
 
     useEffect(() => {
-        console.log('romio');
         setVisible(props.visibityStatus);
     }, [alertVisibityStatus]);
 
     const testPageName = props.referredTestPageName;
+    //const nullFreeTestPageNames = testPageName.filter(item => item !== null);;
     let alertMsg;
+    console.log('romio',testPageName);
     if(testPageName.length>1){
         alertMsg = "Selected data sheet is refered by "+"'"+testPageName+"'"+" test sheets in the test suite section.Delete opertion has been terminated!";
     }else{

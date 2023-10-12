@@ -34,6 +34,7 @@ const JSONGenerator = () => {
     const dispatch = useDispatch();
 
     const generateFinalJSON = () => {
+        console.log('hamas1');
         gettingLauncherDetails();
     }
     //state.addTestSheetName.functionCalledManual
@@ -50,7 +51,7 @@ const JSONGenerator = () => {
     }, [JSONGeneratorInitStatus]);
 
     const gettingLauncherDetails = async () => {
-
+        console.log('hamas2');
         axios
             .get('http://localhost:5000/launcher/getAllLauncherData')
             .then((response) => {
@@ -91,6 +92,7 @@ const JSONGenerator = () => {
     }, [testSuiteHeadings]);
 
     const gettingTestSuiteDetails = async () => {
+        console.log('hamas3');
         try {
             const response = await axios.get(
                 `http://localhost:5000/testSuite/getAllTestData`
