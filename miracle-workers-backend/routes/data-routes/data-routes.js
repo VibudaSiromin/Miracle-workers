@@ -28,6 +28,9 @@ router.get('/data/getAllData',dataControllers.getAllData);
 
 //route for editing data page
 router.post('/dataJunction/data/:dname', dataControllers.editDataPage);
+//route for inserting Excel content
+
+router.post('/dataExcel/dataPageContent', dataControllers.dataPageContent);
 
 router.post('/dataJunction/dataExcel/:dname',dataControllers.editDataPage);
 
