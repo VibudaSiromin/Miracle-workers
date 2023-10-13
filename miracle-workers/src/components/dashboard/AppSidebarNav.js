@@ -234,17 +234,17 @@ export const AppSidebarNav = () => {
   }, [testPageNames]);
 
   const pageNameHandler = (fieldValue) => {
-    console.log('dragon',fieldValue);
+    console.log('dragon', fieldValue);
 
     const modifiedItems = items.map((item) => {
       //add new pageName to test suite
       if (indexOfSection === 1) {
-       
+
         if (item.name === 'Test Suite') {
           //navigate('/testJunction');
           setTestPageName(fieldValue);
           console.log('petronas');
-          navigate('/testJunction/testManual/' + fieldValue); 
+          navigate('/testJunction/testManual/' + fieldValue);
           setTimeout(() => {
             dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
           }, 1000);
@@ -311,7 +311,7 @@ export const AppSidebarNav = () => {
             .post('http://localhost:5000/locators', { pageName: fieldValue })
             .then((res) => {
               getLocatorPages();
-              navigate('/locator/'+ fieldValue);
+              navigate('/locator/' + fieldValue);
             })
             .catch((err) => {
               console.log(err);
@@ -654,32 +654,52 @@ export const AppSidebarNav = () => {
       //   console.log(err);
       // })
     } else if (secondChar === 'l') {
+
       axios
-        .delete('http://localhost:5000/locators/deleteLocator', {
+        .get('http://localhost:5000/testSuite/getReferedLocatorPages', {
           params: {
             locatorPageName: pageName,
           },
         })
         .then((res) => {
-          console.log(res);
-          getLocatorPages();
-
-          if (locatorPageNames.length === 1) {
-            navigate('/home');
+          const testPages = res.data.testPages;
+          if (testPages.length > 0) {
+            dispatch(setAlertVisibity(true));
+            dispatch(setReferredTestPageName(testPages));
           } else {
-            const nextNavName = locatorPageNames[currentNavIndex + 1];
-            if (nextNavName) {
-              navigate(`/locator/${nextNavName}`);
-            } else {
-              const prevNavName = locatorPageNames[currentNavIndex - 1];
-              navigate(`/locator/${prevNavName}`);
-              console.log('GGG', prevNavName);
-            }
+            axios
+              .delete('http://localhost:5000/locators/deleteLocator', {
+                params: {
+                  locatorPageName: pageName,
+                },
+              })
+              .then((res) => {
+                console.log(res);
+                getLocatorPages();
+
+                if (locatorPageNames.length === 1) {
+                  navigate('/home');
+                } else {
+                  const nextNavName = locatorPageNames[currentNavIndex + 1];
+                  if (nextNavName) {
+                    navigate(`/locator/${nextNavName}`);
+                  } else {
+                    const prevNavName = locatorPageNames[currentNavIndex - 1];
+                    navigate(`/locator/${prevNavName}`);
+                    console.log('GGG', prevNavName);
+                  }
+                }
+              })
+              .catch((err) => {
+                console.log(err);
+              });
           }
         })
         .catch((err) => {
-          console.log(err);
-        });
+
+        })
+
+
     }
 
     const deleteTestFileNameInLauncher = () => {
@@ -829,16 +849,16 @@ export const AppSidebarNav = () => {
       <Component
         {...(rest.to &&
           !rest.items && {
-            component: NavLink,
-          })}
+          component: NavLink,
+        })}
         key={index}
         {...rest}
       >
         {navLink(name, icon, badge, index)}
         {name !== 'Dashboard' &&
-        name !== 'Home' &&
-        name !== 'Setting' &&
-        name !== 'No sheets available' ? (
+          name !== 'Home' &&
+          name !== 'Setting' &&
+          name !== 'No sheets available' ? (
           <div style={{ marginLeft: 'auto', marginRight: '20px' }}>
             <MdModeEdit
               onClick={(event) => alertMsgBoxForRenaming(event, rest, index)}
