@@ -99,10 +99,15 @@ const getTestPageNames= async (req, res, next)=>{
       }
       //const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
       const selectedTestPage=testSection[index];
-      selectedTestPage.splice(0,1);
-      const testRecords=selectedTestPage;
-      console.log('parrot',testRecords);
-      res.status(200).json({getTestRecords:testRecords})
+      console.log("shark*****************",testSection[index]);
+      if(selectedTestPage===undefined){
+        const testRecords=[];
+        res.status(200).json({getTestRecords:testRecords})
+      }else{
+        selectedTestPage.splice(0,1);
+        const testRecords=selectedTestPage;
+        res.status(200).json({getTestRecords:testRecords})
+      }
     }catch(err){
         res.status(500).json({ message: 'Error reading test section' })
     }

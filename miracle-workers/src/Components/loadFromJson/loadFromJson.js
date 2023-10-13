@@ -98,7 +98,7 @@ const JsonUpload = () => {
         .post(url, { ...payload })
         .then((res) => {
           console.log('uploaded');
-          dispatch({ type: 'LOAD_FROM_JSON' });
+          dispatch({ type: 'RENDERING_NAV_BAR' });
           console.log('uploaded');
           Swal.fire({
             icon: 'success',

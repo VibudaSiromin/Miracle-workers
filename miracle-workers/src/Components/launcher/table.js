@@ -202,7 +202,7 @@ const TableLauncher = (props) => {
       const launcherDetails=response.data.getLauncherDetails;
       setData(launcherDetails);
       dispatch(setTestPageName(launcherDetails.sheetName));
-      console.log('arial',launcherDetails);
+      console.log('arial22',launcherDetails);
       if(launcherDetails===undefined){
         dispatch(setTestAddBtnStatus(false));
       }else{

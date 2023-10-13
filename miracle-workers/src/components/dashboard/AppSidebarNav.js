@@ -47,7 +47,7 @@ export const AppSidebarNav = () => {
   const [indexOfRenamePage, setIndexOfRenamePage] = useState();
   const [currentNavIndex, setCurrentNavIndex] = useState();
   const [navBar, setNavBar] = useState(false);
-  const [loadCount, setLoadCount] = useState(1);
+  //const [loadCount, setLoadCount] = useState(1);
   const dispatch = useDispatch();
 
   const location = useLocation();
@@ -243,8 +243,8 @@ export const AppSidebarNav = () => {
         if (item.name === 'Test Suite') {
           //navigate('/testJunction');
           setTestPageName(fieldValue);
-          console.log('petronas'); 
-          navigate('/testJunction/testManual/' + fieldValue);
+          console.log('petronas');
+          navigate('/testJunction/testManual/' + fieldValue); 
           setTimeout(() => {
             dispatch({ type: 'FUNCTION_CALLED_MANUAL' });
           }, 1000);
@@ -311,6 +311,7 @@ export const AppSidebarNav = () => {
             .post('http://localhost:5000/locators', { pageName: fieldValue })
             .then((res) => {
               getLocatorPages();
+              navigate('/locator/'+ fieldValue);
             })
             .catch((err) => {
               console.log(err);
@@ -487,11 +488,6 @@ export const AppSidebarNav = () => {
   );
   console.log('Nismo', runningConditionForManualTest);
 
-  // useEffect(()=>{
-  //   setNavBar(!navBar);
-  // },[navBarStatus])
-  const jsonCount = useSelector((state) => state.loadFormJsonData.jsonCount);
-
   useEffect(() => {
     if (runningConditionForExcel) {
       addDataSheetBasedOnExcel();
@@ -516,10 +512,6 @@ export const AppSidebarNav = () => {
     }
   }, [calledFromManualTest]);
 
-  useEffect(() => {
-    setLoadCount(loadCount + 1);
-  }, [jsonCount]);
-  console.log(loadCount);
   //////////////////////////
 
   const pagesDeleteHandler = (event) => {

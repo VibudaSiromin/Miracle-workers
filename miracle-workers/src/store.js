@@ -88,10 +88,6 @@ const dataSheetState = {
   dataSheet: 'sheet',
 };
 
-const loadFormJsonCount = {
-  jsonCount: 0,
-};
-
 export const setEditModalOneData = (modalOneDataSet) => {
   return {
     type: 'SET_EDIT_MODAL_ONE_DATA',
@@ -462,17 +458,6 @@ const renderingNavBarReducer = (state = rendeingNavBarStatus, action) => {
   }
 };
 
-const changeLoadFormJsonData = (state = loadFormJsonCount, action) => {
-  switch (action.type) {
-    case 'LOAD_FROM_JSON':
-      return {
-        ...state,
-        jsonCount: state.jsonCount + 1,
-      };
-    default:
-      return state;
-  }
-};
 
 const rootReducer = combineReducers({
   changeState: changeStateReducer,
@@ -495,7 +480,6 @@ const rootReducer = combineReducers({
   initiateJSONGenerator: initiateJSONGeneratorReducer,
   renderingNavBar: renderingNavBarReducer,
   getReferredTestSheetName: getReferredTestSheetNameReducer,
-  loadFormJsonData: changeLoadFormJsonData,
 });
 
 const store = createStore(rootReducer);

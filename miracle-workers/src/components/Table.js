@@ -149,6 +149,7 @@ const Table = (props) => {
   const getTestByPage=() => {
     const currentURL=location.pathname
     if(currentURL==='/testJunction/testManual/'+tname){
+      console.log("ocean",tname);
       axios
       .get('http://localhost:5000/testJunction/testManual/'+tname,{
         params:{

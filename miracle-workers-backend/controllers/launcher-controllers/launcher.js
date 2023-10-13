@@ -28,9 +28,33 @@ const getLauncherContent = async(req,res,next) => {
     }else if(testPageName.charAt(testPageName.length-1)==="J"){
        index = launcherSection.findIndex(launcher=>launcher[0]===testPageName);
     }
-    //const index = dataSection.findIndex(data=>data[0]===dataPageName+"M");
-    const launcherDetails=launcherSection[index][1]; 
-    res.status(200).json({getLauncherDetails:launcherDetails})
+    if(launcherSection[index]===undefined){
+      const launcherDetails={
+        sheetName:"",
+        testCase:"",
+        browser:"",
+        type:"",
+        status:"",
+        dataSheet:"",
+        comment:"" 
+      }
+       res.status(200).json({getLauncherDetails:launcherDetails})
+    }else if(launcherSection[index].length>1){
+      const launcherDetails=launcherSection[index][1]; 
+      res.status(200).json({getLauncherDetails:launcherDetails})
+    }else{
+      const launcherDetails={
+      sheetName:"",
+      testCase:"",
+      browser:"",
+      type:"",
+      status:"",
+      dataSheet:"",
+      comment:""
+    }
+     res.status(200).json({getLauncherDetails:launcherDetails})
+    }
+    
     // if(launcherSection[index].length>2){
     //   const dataRecords=launcherSection[index];
     //   dataRecords.splice(0,2);
