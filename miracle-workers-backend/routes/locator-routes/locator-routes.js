@@ -1,18 +1,18 @@
-const express=require('express');
-const router=express.Router();
+const express = require('express');
+const router = express.Router();
 
-const locatorControllers=require('../../controllers/locator-controllers/locator');
+const locatorControllers = require('../../controllers/locator-controllers/locator');
 
 //route for getting headings
-router.get('/locators/getHeadings',locatorControllers.getHeadings);
+router.get('/locators/getHeadings', locatorControllers.getHeadings);
 //route for getting locator names 
-router.get('/locators/getLocatorNames',locatorControllers.getLocatorNames);
+router.get('/locators/getLocatorNames', locatorControllers.getLocatorNames);
 //route for getting locators By Page
-router.get('/locators/:lname',locatorControllers.getLocatorByPage);
+router.get('/locators/:lname', locatorControllers.getLocatorByPage);
 //route for getting no of raws
-router.get('/locators/getNoofRaws',locatorControllers.getNoofRaws);
+router.get('/locators/getNoofRaws', locatorControllers.getNoofRaws);
 //route for get all data
-router.get('/locator/getAllData',locatorControllers.getAllLocatorData);
+router.get('/locator/getAllData', locatorControllers.getAllLocatorData);
 
 //route for creating locator page
 router.post('/locators', locatorControllers.createLocatorByPage);
@@ -25,9 +25,9 @@ router.post('/locators/:lname', locatorControllers.editLocatorPage);
 
 router.delete('/locators/deleteLocator', locatorControllers.deleteLocatorPage);
 
-router.patch('/locators/renamePageName',locatorControllers.ranameLocatorPageName);
+router.patch('/locators/renamePageName', locatorControllers.ranameLocatorPageName);
 
 //route for getting pages
-router.get('/locators',locatorControllers.getPageNames);
+router.get('/locators', locatorControllers.getPageNames);
 
 module.exports = router;
