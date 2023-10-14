@@ -57,30 +57,61 @@ const JsonUpload = () => {
 
       testSuite.push(testPage);
 
-      // tests['groups'].forEach((groups) => {
-      //   groups['steps'].forEach((step) => {
-      //     const value = {
-      //       group: step.group,
-      //       instruction: step.instruction,
-      //       command: step.command,
-      //       locator: step.locator,
-      //       locatorParameter: step.locatorParameter,
-      //       data: step.data,
-      //       swapResult: step.swapResult,
-      //       branchSelection: step.branchSelection,
-      //       action: step.action,
-      //       comment: step.comment,
-      //     };
-
-      //     testSuite.push(value);
-      //     data.push(step);
-      //     locaters.push({ locater: step.locator });
-      //   });
-      // });
     });
 
-    data.push(jsonObject['dataPages']);
-    locators.push(jsonObject['locatorPages']);
+    if (!("locatorPages" in jsonObject)) {
+      locators.push([]);
+    } else {
+      locators.push(Object.entries(jsonObject['locatorPages']).map(([page, locators]) => (locators.length !== 0 ? [
+        page,
+        ...Object.entries(locators).map(([key, item]) => ({
+          "Locator Name": item["Locator Name"],
+          "Locator Value": item["Locator Value"]
+        }))
+      ] : [page]))
+      )
+    }
+
+    function getObjectWithMaxKeyValuePairs(obj) {
+      let maxCount = 0;
+      let maxObjectKey = null;
+
+      for (const key in obj) {
+        const currentCount = Object.keys(obj[key]).length;
+        if (currentCount > maxCount) {
+          maxCount = currentCount;
+          maxObjectKey = key;
+        }
+      }
+
+      return maxObjectKey;
+    }
+
+    function convertData(jsonObject) {
+      const outputData = [];
+
+      for (const key in jsonObject.dataPages) {
+        console.log(key)
+
+        let keyHasMaxFields = getObjectWithMaxKeyValuePairs(jsonObject.dataPages[key])
+        if (keyHasMaxFields === null) {
+          const innerData = [key];
+          outputData.push(innerData);
+
+        } else {
+          const innerData = [key, Object.keys(jsonObject.dataPages[key][keyHasMaxFields]), ...Object.values(jsonObject.dataPages[key])];
+          outputData.push(innerData);
+        }
+
+      }
+      return outputData;
+    }
+
+    if (!("dataPages" in jsonObject)) {
+      data.push([]);
+    } else {
+      data.push(convertData(jsonObject));
+    }
 
     const payload = {
       launcher,

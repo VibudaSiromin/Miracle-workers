@@ -127,6 +127,7 @@ const LauncherForm = ({
           aria-label="Default select example"
           {...register('dataSheet')}
         >
+          <option></option>
           {dataPageOptions}
         </select>
         <small className="text-danger">{errors.dataSheet?.message}</small>
