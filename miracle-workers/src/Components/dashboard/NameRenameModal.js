@@ -2,7 +2,7 @@ import React, { forwardRef } from 'react';
 import { useState, useEffect, useImperativeHandle, useRef } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
-import { setRenamedPageName, setTestPageName } from '../../store';
+import { setRenamedPageName, setTestPageName, setAlertVisibity, setReferredTestPageName, setOperationType } from '../../store';
 import { connect } from 'react-redux';
 import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -112,9 +112,9 @@ const NameRenameModal = (props, ref) => {
                   console.log('duplicate');
                   modalRefRenaming.current.log(
                     "'" +
-                      fieldValue +
-                      "'" +
-                      ' page name already exists.Please enter a unique name.'
+                    fieldValue +
+                    "'" +
+                    ' page name already exists.Please enter a unique name.'
                   );
                   return;
                 }
@@ -144,99 +144,150 @@ const NameRenameModal = (props, ref) => {
         const URLSection = to.split('/');
         console.log('cop', URLSection);
         if (URLSection[2] === 'dataExcel') {
+
           axios
-            .get('http://localhost:5000/data/getDatasheets')
+            .get('http://localhost:5000/testSuite/getReferedDataPages', {
+              params: {
+                dataPageName: pageNameBeforeRenaming,
+              }
+            })
             .then((res) => {
-              const availableDataPageNames = res.data.dataPageNames;
-              console.log('Jaguar222', pageNameBeforeRenaming);
-              if (fieldValue === pageNameBeforeRenaming) {
-                axios
-                  .patch('http://localhost:5000/dataJunction/renamePageName', {
-                    newDataPageName: fieldValue + 'E',
-                    pageIndex: props.renamePageIndex,
-                  })
-                  .then((res) => {
-                    props.updatePageNames('data');
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+              const testPages = res.data.referredTestPages;
+
+              const newTestPages = testPages.filter((value, index, self) => {
+                return self.indexOf(value) === index && value !== null;
+              });
+
+              if (newTestPages.length > 0) {
+                dispatch(setAlertVisibity(true));
+                dispatch(setReferredTestPageName(newTestPages));
+                dispatch(setOperationType('rename'));
               } else {
-                for (let i = 0; i < availableDataPageNames.length; i++) {
-                  if (fieldValue === availableDataPageNames[i].slice(0, -1)) {
-                    console.log('duplicate');
-                    modalRefRenaming.current.log(
-                      "'" +
-                        fieldValue +
-                        "'" +
-                        ' page name already exists.Please enter a unique name.'
-                    );
-                    return;
-                  }
-                }
                 axios
-                  .patch('http://localhost:5000/dataJunction/renamePageName', {
-                    newDataPageName: fieldValue + 'E',
-                    pageIndex: props.renamePageIndex,
-                  })
+                  .get('http://localhost:5000/data/getDatasheets')
                   .then((res) => {
-                    props.updatePageNames('data');
+                    const availableDataPageNames = res.data.dataPageNames;
+                    console.log('Jaguar222', pageNameBeforeRenaming);
+                    if (fieldValue === pageNameBeforeRenaming) {
+                      axios
+                        .patch('http://localhost:5000/dataJunction/renamePageName', {
+                          newDataPageName: fieldValue + 'E',
+                          pageIndex: props.renamePageIndex,
+                        })
+                        .then((res) => {
+                          props.updatePageNames('data');
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    } else {
+                      for (let i = 0; i < availableDataPageNames.length; i++) {
+                        if (fieldValue === availableDataPageNames[i].slice(0, -1)) {
+                          console.log('duplicate');
+                          modalRefRenaming.current.log(
+                            "'" +
+                            fieldValue +
+                            "'" +
+                            ' page name already exists.Please enter a unique name.'
+                          );
+                          return;
+                        }
+                      }
+                      axios
+                        .patch('http://localhost:5000/dataJunction/renamePageName', {
+                          newDataPageName: fieldValue + 'E',
+                          pageIndex: props.renamePageIndex,
+                        })
+                        .then((res) => {
+                          props.updatePageNames('data');
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }
                   })
                   .catch((err) => {
                     console.log(err);
                   });
               }
+            }).catch((err) => {
+              console.log(err)
             })
-            .catch((err) => {
-              console.log(err);
-            });
         } else if (URLSection[2] === 'data') {
+
           axios
-            .get('http://localhost:5000/data/getDatasheets')
+            .get('http://localhost:5000/testSuite/getReferedDataPages', {
+              params: {
+                dataPageName: pageNameBeforeRenaming,
+              }
+            })
             .then((res) => {
-              const availableDataPageNames = res.data.dataPageNames;
-              console.log('Jaguar222', pageNameBeforeRenaming);
-              if (fieldValue === pageNameBeforeRenaming) {
-                axios
-                  .patch('http://localhost:5000/dataJunction/renamePageName', {
-                    newDataPageName: fieldValue + 'M',
-                    pageIndex: props.renamePageIndex,
-                  })
-                  .then((res) => {
-                    props.updatePageNames('data');
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+              const testPages = res.data.referredTestPages;
+
+              const newTestPages = testPages.filter((value, index, self) => {
+                return self.indexOf(value) === index && value !== null;
+              });
+
+              if (newTestPages.length > 0) {
+                dispatch(setAlertVisibity(true));
+                dispatch(setReferredTestPageName(newTestPages));
+                dispatch(setOperationType('rename'));
               } else {
-                for (let i = 0; i < availableDataPageNames.length; i++) {
-                  if (fieldValue === availableDataPageNames[i].slice(0, -1)) {
-                    console.log('duplicate');
-                    modalRefRenaming.current.log(
-                      "'" +
-                        fieldValue +
-                        "'" +
-                        ' page name already exists.Please enter a unique name.'
-                    );
-                    return;
-                  }
-                }
+
                 axios
-                  .patch('http://localhost:5000/dataJunction/renamePageName', {
-                    newDataPageName: fieldValue + 'M',
-                    pageIndex: props.renamePageIndex,
-                  })
+                  .get('http://localhost:5000/data/getDatasheets')
                   .then((res) => {
-                    props.updatePageNames('data');
+                    const availableDataPageNames = res.data.dataPageNames;
+                    console.log('Jaguar222', pageNameBeforeRenaming);
+                    if (fieldValue === pageNameBeforeRenaming) {
+                      axios
+                        .patch('http://localhost:5000/dataJunction/renamePageName', {
+                          newDataPageName: fieldValue + 'M',
+                          pageIndex: props.renamePageIndex,
+                        })
+                        .then((res) => {
+                          props.updatePageNames('data');
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    } else {
+                      for (let i = 0; i < availableDataPageNames.length; i++) {
+                        if (fieldValue === availableDataPageNames[i].slice(0, -1)) {
+                          console.log('duplicate');
+                          modalRefRenaming.current.log(
+                            "'" +
+                            fieldValue +
+                            "'" +
+                            ' page name already exists.Please enter a unique name.'
+                          );
+                          return;
+                        }
+                      }
+                      axios
+                        .patch('http://localhost:5000/dataJunction/renamePageName', {
+                          newDataPageName: fieldValue + 'M',
+                          pageIndex: props.renamePageIndex,
+                        })
+                        .then((res) => {
+                          props.updatePageNames('data');
+                        })
+                        .catch((err) => {
+                          console.log(err);
+                        });
+                    }
                   })
                   .catch((err) => {
                     console.log(err);
                   });
               }
+
             })
             .catch((err) => {
-              console.log(err);
-            });
+              console.log(err)
+            })
+
+
         }
       }
       // else if (props.indexOfSection === 4) {
@@ -269,51 +320,75 @@ const NameRenameModal = (props, ref) => {
       else if (props.indexOfSection === 3) {
         //sectionName='Locator';
         axios
-          .get('http://localhost:5000/locators')
+          .get('http://localhost:5000/testSuite/getReferedLocatorPages', {
+            params: {
+              locatorPageName: pageNameBeforeRenaming,
+            },
+          })
           .then((res) => {
-            const availableLocatorPageNames = res.data.locatorsPageNames;
-            console.log('Jaguar222', pageNameBeforeRenaming);
-            if (fieldValue === pageNameBeforeRenaming) {
-              axios
-                .patch('http://localhost:5000/locators/renamePageName', {
-                  newLocatorPageName: fieldValue,
-                  pageIndex: props.renamePageIndex,
-                })
-                .then((res) => {
-                  props.updatePageNames('locator');
-                })
-                .catch((err) => {
-                  console.log(err);
-                });
+            const testPages = res.data.testPages;
+            console.log('Ronnn', testPages);
+            if (testPages.length > 0) {
+              dispatch(setAlertVisibity(true));
+              dispatch(setReferredTestPageName(testPages));
+              dispatch(setOperationType('rename'));
             } else {
-              for (let i = 0; i < availableLocatorPageNames.length; i++) {
-                if (fieldValue === availableLocatorPageNames[i].slice(0, -1)) {
-                  console.log('duplicate');
-                  modalRefRenaming.current.log(
-                    "'" +
-                      fieldValue +
-                      "'" +
-                      ' page name already exists.Please enter a unique name.'
-                  );
-                  return;
-                }
-              }
+              ////////////////////////////////
               axios
-                .patch('http://localhost:5000/locators/renamePageName', {
-                  newLocatorPageName: fieldValue,
-                  pageIndex: props.renamePageIndex,
-                })
+                .get('http://localhost:5000/locators')
                 .then((res) => {
-                  props.updatePageNames('locator');
+                  const availableLocatorPageNames = res.data.locatorsPageNames;
+                  console.log('Jaguar222', pageNameBeforeRenaming);
+                  if (fieldValue === pageNameBeforeRenaming) {
+                    axios
+                      .patch('http://localhost:5000/locators/renamePageName', {
+                        newLocatorPageName: fieldValue,
+                        pageIndex: props.renamePageIndex,
+                      })
+                      .then((res) => {
+                        props.updatePageNames('locator');
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+                  } else {
+                    for (let i = 0; i < availableLocatorPageNames.length; i++) {
+                      console.log('ronnn3', availableLocatorPageNames);
+                      console.log('ronnn4', fieldValue);
+                      if (fieldValue === availableLocatorPageNames[i]) {
+                        console.log('duplicate');
+                        modalRefRenaming.current.log(
+                          "'" +
+                          fieldValue +
+                          "'" +
+                          ' page name already exists.Please enter a unique name.'
+                        );
+                        return;
+                      }
+                    }
+                    axios
+                      .patch('http://localhost:5000/locators/renamePageName', {
+                        newLocatorPageName: fieldValue,
+                        pageIndex: props.renamePageIndex,
+                      })
+                      .then((res) => {
+                        props.updatePageNames('locator');
+                      })
+                      .catch((err) => {
+                        console.log(err);
+                      });
+
+                  }
                 })
                 .catch((err) => {
                   console.log(err);
                 });
+
             }
           })
           .catch((err) => {
             console.log(err);
-          });
+          })
       }
       setfieldValue(null);
       setShowErrMsgOne(false);
@@ -330,7 +405,7 @@ const NameRenameModal = (props, ref) => {
         newTestPageName: fieldValue,
         pageIndex: props.renamePageIndex,
       })
-      .then((res) => {})
+      .then((res) => { })
       .catch((err) => {
         console.log(err);
       });

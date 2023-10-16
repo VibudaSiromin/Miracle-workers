@@ -5,9 +5,11 @@ import { BsFillFileEarmarkExcelFill } from 'react-icons/bs';
 import MessageBox from './MessageBox';
 import * as XLSX from 'xlsx'
 import { useParams } from "react-router-dom";
-import { useDispatch } from 'react-redux';
+import { connect } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import './FileUploader.css';
+import Swal from 'sweetalert2';
 
 const FileUploader = (props) => {
 
@@ -18,6 +20,7 @@ const FileUploader = (props) => {
 	const [deleteMsgStatus, setDeleteMsgStatus] = useState(false);
 	const [reloadMsgStatus, setReloadMsgStatus] = useState(false);
 	const [excelFileName, setExcelFileName] = useState('');
+	const [isMount, setIsMount] = useState(false);
 	const { lname, tname, cname, dname } = useParams();
 	//const [isMount,setIsMount] = useParams(false);
 
@@ -102,47 +105,82 @@ const FileUploader = (props) => {
 					// props.getFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
 					// props.getExcelFileName(excelFile.name);
 
-					const sheetObjectArray = Object.values(excelWorkBook.Sheets);
-					const sheetNames = excelWorkBook.SheetNames;
-					let counter = 0;
-					console.log("OPEL", sheetNames);
-					let dataSection = sheetObjectArray.map((sheetObject) => {
-						const jsonData = XLSX.utils.sheet_to_json(sheetObject, { header: 1 });
-						const dataSheetName = sheetNames[counter] + "E";
-						const headersPerSheets = jsonData[0];
-						const rowObject = XLSX.utils.sheet_to_json(sheetObject, { header: undefined });
 
-						if (counter === 0) {
-							counter++;
-							return [dataSheetName, headersPerSheets, ...rowObject];
-						} else {
-							counter++;
-							return [dataSheetName, headersPerSheets, [excelFile.name], ...rowObject];
-						}
-					})
-						;
-					console.log('BUCKET2', dataSection[0][1]);
-					console.log('BUCKET3', dataSection)
 
-					//providing data and information of first data sheet to Data(excel).js
-					props.getFileHeaders(dataSection[0][1]);//headers of excel table headers is an array
-					props.getFileData(dataSection[0].slice(2));//parse file data as an array of objects(JSON type) to Data(excel).js
-					props.getExcelFileName(excelFile.name);
-
-					//store the data of rest of the sheets if exists
-					if (dataSection.length > 1) {
-						axios
-							.post('http://localhost:5000/dataExcel/dataPageContent', {
-
-								dataPageContent: dataSection.slice(1)
+					axios
+						.get('http://localhost:5000/data/getDatasheets')
+						.then((res) => {
+							const availableDataPageNames = res.data.dataPageNames;
+							const dataPageNames = availableDataPageNames.map((pageName) => {
+								return pageName.slice(0, -1);
 							})
-							.then((res) => {
-								dispatch({ type: 'RENDERING_NAV_BAR' });
-							})
-							.catch((err) => {
-								console.log(err);
-							})
-					}
+							const excelSheetNames = excelWorkBook.SheetNames;
+
+							const commonSheetNames = excelSheetNames.filter(element => dataPageNames.includes(element));
+							console.log('dollll', commonSheetNames)
+							if (commonSheetNames.length > 0) {
+								Swal.fire({
+									icon: 'error',
+									title: 'OOPs...',
+									text: 'Duplicate sheets detected in Excel Work Book.Please Rename' + '"' + commonSheetNames + '"',
+								});
+								setFile(null);
+								//setExcelFileName('');
+							} else {
+								Swal.fire({
+									icon: 'success',
+									title: 'Great...',
+									text: 'Excel sheets successfully uploaded!',
+								});
+								const sheetObjectArray = Object.values(excelWorkBook.Sheets);
+								const sheetNames = excelWorkBook.SheetNames;
+								let counter = 0;
+								console.log("OPEL", sheetNames);
+								let dataSection = sheetObjectArray.map((sheetObject) => {
+									const jsonData = XLSX.utils.sheet_to_json(sheetObject, { header: 1 });
+									const dataSheetName = sheetNames[counter] + "E";
+									const headersPerSheets = jsonData[0];
+									const rowObject = XLSX.utils.sheet_to_json(sheetObject, { header: undefined });
+
+									if (counter === 0) {
+										counter++;
+										return [dataSheetName, headersPerSheets, ...rowObject];
+									} else {
+										counter++;
+										return [dataSheetName, headersPerSheets, [excelFile.name], ...rowObject];
+									}
+								})
+									;
+								console.log('BUCKET2', dataSection[0][1]);
+								console.log('BUCKET3', dataSection)
+
+								//providing data and information of first data sheet to Data(excel).js
+								props.getFileHeaders(dataSection[0][1]);//headers of excel table headers is an array
+								props.getFileData(dataSection[0].slice(2));//parse file data as an array of objects(JSON type) to Data(excel).js
+								props.getExcelFileName(excelFile.name);
+
+								//store the data of rest of the sheets if exists
+								if (dataSection.length > 1) {
+									setTimeout(() => {
+										axios
+											.post('http://localhost:5000/dataExcel/dataPageContent', {
+
+												dataPageContent: dataSection.slice(1)
+											})
+											.then((res) => {
+												dispatch({ type: 'RENDERING_NAV_BAR' });
+											})
+											.catch((err) => {
+												console.log(err);
+											})
+									}, 1000)
+								}
+							}
+						})
+						.catch((err) => {
+							console.log(err);
+						})
+
 				}
 				excelReader.readAsBinaryString(excelFile);//when this function is invoked.It will immediatly call above excelReader.onload function.
 
@@ -197,47 +235,80 @@ const FileUploader = (props) => {
 					// props.getExcelFileName(excelFile.name);
 					// console.log('BMW ', rowObject);
 
-					const sheetObjectArray = Object.values(excelWorkBook.Sheets);
-					const sheetNames = excelWorkBook.SheetNames;
-					let counter = 0;
-					console.log("OPEL", sheetNames);
-					let dataSection = sheetObjectArray.map((sheetObject) => {
-						const jsonData = XLSX.utils.sheet_to_json(sheetObject, { header: 1 });
-						const dataSheetName = sheetNames[counter] + "E";
-						const headersPerSheets = jsonData[0];
-						const rowObject = XLSX.utils.sheet_to_json(sheetObject, { header: undefined });
-
-						if (counter === 0) {
-							counter++;
-							return [dataSheetName, headersPerSheets, ...rowObject];
-						} else {
-							counter++;
-							return [dataSheetName, headersPerSheets, [excelFile.name], ...rowObject];
-						}
-					})
-						;
-					console.log('BUCKET2', dataSection[0][1]);
-					console.log('BUCKET3', dataSection)
-
-					//providing data and information of first data sheet to Data(excel).js
-					props.getFileHeaders(dataSection[0][1]);//headers of excel table headers is an array
-					props.getFileData(dataSection[0].slice(2));//parse file data as an array of objects(JSON type) to Data(excel).js
-					props.getExcelFileName(excelFile.name);
-
-					//store the data of rest of the sheets if exists
-					if (dataSection.length > 1) {
-						axios
-							.post('http://localhost:5000/dataExcel/dataPageContent', {
-
-								dataPageContent: dataSection.slice(1)
+					axios
+						.get('http://localhost:5000/data/getDatasheets')
+						.then((res) => {
+							const availableDataPageNames = res.data.dataPageNames;
+							const dataPageNames = availableDataPageNames.map((pageName) => {
+								return pageName.slice(0, -1);
 							})
-							.then((res) => {
-								dispatch({ type: 'RENDERING_NAV_BAR' });
-							})
-							.catch((err) => {
-								console.log(err);
-							})
-					}
+							const excelSheetNames = excelWorkBook.SheetNames;
+
+							const commonSheetNames = excelSheetNames.filter(element => dataPageNames.includes(element));
+							console.log('dollll', commonSheetNames)
+							if (commonSheetNames.length > 0) {
+								Swal.fire({
+									icon: 'error',
+									title: 'OOPs...',
+									text: 'Duplicate sheets detected in Excel Work Book.Please ename ' + '"' + commonSheetNames + '"',
+								});
+								setFile(null);
+								//setExcelFileName('');
+							} else {
+								Swal.fire({
+									icon: 'success',
+									title: 'Great...',
+									text: 'Excel sheets successfully uploaded!',
+								});
+								const sheetObjectArray = Object.values(excelWorkBook.Sheets);
+								const sheetNames = excelWorkBook.SheetNames;
+								let counter = 0;
+								console.log("OPEL", sheetNames);
+								let dataSection = sheetObjectArray.map((sheetObject) => {
+									const jsonData = XLSX.utils.sheet_to_json(sheetObject, { header: 1 });
+									const dataSheetName = sheetNames[counter] + "E";
+									const headersPerSheets = jsonData[0];
+									const rowObject = XLSX.utils.sheet_to_json(sheetObject, { header: undefined });
+
+									if (counter === 0) {
+										counter++;
+										return [dataSheetName, headersPerSheets, ...rowObject];
+									} else {
+										counter++;
+										return [dataSheetName, headersPerSheets, [excelFile.name], ...rowObject];
+									}
+								})
+									;
+								console.log('BUCKET2', dataSection[0][1]);
+								console.log('BUCKET3', dataSection)
+
+								//providing data and information of first data sheet to Data(excel).js
+								props.getFileHeaders(dataSection[0][1]);//headers of excel table headers is an array
+								props.getFileData(dataSection[0].slice(2));//parse file data as an array of objects(JSON type) to Data(excel).js
+								props.getExcelFileName(excelFile.name);
+
+								//store the data of rest of the sheets if exists
+								if (dataSection.length > 1) {
+									setTimeout(() => {
+										axios
+											.post('http://localhost:5000/dataExcel/dataPageContent', {
+
+												dataPageContent: dataSection.slice(1)
+											})
+											.then((res) => {
+												dispatch({ type: 'RENDERING_NAV_BAR' });
+											})
+											.catch((err) => {
+												console.log(err);
+											})
+									}, 1000)
+
+								}
+							}
+						})
+						.catch((err) => {
+							console.log(err);
+						})
 				}
 
 				excelReader.readAsBinaryString(excelFile);//when this function is invoked.It will immediatly call above excelReader.onload function.
@@ -252,10 +323,22 @@ const FileUploader = (props) => {
 		}
 	};
 
-	const handleFiledeletion = () => {
-		modalRefA.current.log('Do you want to delete ' + file.name + ' ?')
+	const secondPortionTriggeringStatus = useSelector((state) => state.excelWorkBook.secondPortionTriggeringStatus);
 
-	}
+	useEffect(() => {
+		if (isMount) {
+
+		} else {
+			setIsMount(true);
+		}
+
+	}, [secondPortionTriggeringStatus])
+
+
+	// const handleFiledeletion = () => {
+	// 	modalRefA.current.log('Do you want to delete ' + file.name + ' ?')
+
+	// }
 
 	const fileDeletion = () => {
 		setFile(null);
@@ -270,32 +353,32 @@ const FileUploader = (props) => {
 
 	}
 
-	const fileReload = () => {
-		const excelReader = new FileReader();
+	// const fileReload = () => {
+	// 	const excelReader = new FileReader();
 
-		excelReader.onload = (event) => {
-			//parse data
-			const bstr = event.target.result;
-			//creating Excel work book
-			const excelWorkBook = XLSX.read(bstr, { type: 'binary' }); //need to provide two parameters.1st data,2nd type(object)
-			//selecting first work sheet name
-			const excelSheetName = excelWorkBook.SheetNames[0];
-			//get data from the selected sheet name
-			const excelWorkSheetData = excelWorkBook.Sheets[excelSheetName];
-			//convert sheet data to JSON format
-			const jsonData = XLSX.utils.sheet_to_json(excelWorkSheetData, { header: 1 });
-			console.log('Atlas ', jsonData)
-			const headers = jsonData[0];//headers of excel table
-			props.reloadFileHeaders(headers);//parse header array to Data(excel).js
-			console.log('SPC ', headers);
-			// excelWorkBook.SheetNames.
-			const rowObject = XLSX.utils.sheet_to_json(excelWorkSheetData, { header: undefined });
-			props.reloadFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
-			console.log('BMW ', rowObject);
-		}
+	// 	excelReader.onload = (event) => {
+	// 		//parse data
+	// 		const bstr = event.target.result;
+	// 		//creating Excel work book
+	// 		const excelWorkBook = XLSX.read(bstr, { type: 'binary' }); //need to provide two parameters.1st data,2nd type(object)
+	// 		//selecting first work sheet name
+	// 		const excelSheetName = excelWorkBook.SheetNames[0];
+	// 		//get data from the selected sheet name
+	// 		const excelWorkSheetData = excelWorkBook.Sheets[excelSheetName];
+	// 		//convert sheet data to JSON format
+	// 		const jsonData = XLSX.utils.sheet_to_json(excelWorkSheetData, { header: 1 });
+	// 		console.log('Atlas ', jsonData)
+	// 		const headers = jsonData[0];//headers of excel table
+	// 		props.reloadFileHeaders(headers);//parse header array to Data(excel).js
+	// 		console.log('SPC ', headers);
+	// 		// excelWorkBook.SheetNames.
+	// 		const rowObject = XLSX.utils.sheet_to_json(excelWorkSheetData, { header: undefined });
+	// 		props.reloadFileData(rowObject);//parse file data as an array of objects(JSON type) to Data(excel).js
+	// 		console.log('BMW ', rowObject);
+	// 	}
 
-		excelReader.readAsBinaryString(file);//when this function is invoked.It will immediatly call above excelReader.onload function.
-	}
+	// 	excelReader.readAsBinaryString(file);//when this function is invoked.It will immediatly call above excelReader.onload function.
+	// }
 
 
 	// triggers the input when the button is clicked
@@ -310,7 +393,8 @@ const FileUploader = (props) => {
 
 	// Enable or disable the 'ADD' & 'COLUMN' buttons
 
-
+	console.log('graruss', file, excelFileName);
+	//
 	if (file || excelFileName) {
 		// console.log('sharp ',file.name);
 		return (
@@ -352,7 +436,7 @@ const FileUploader = (props) => {
 					</div>
 				</div>
 				<MessageBox ref={modalRefA} modalFooterfuncOne={fileDeletion} id='deleteModal' modalTitle={'New Project'} icon={''} btnValues={['save&create', 'create']} isTwobtn={true}></MessageBox>
-				<MessageBox ref={modalRefB} modalFooterfuncOne={fileReload} id='reloadModal' modalTitle={'New Project'} icon={''} btnValues={['save&create', 'create']} isTwobtn={true}></MessageBox>
+				{/* <MessageBox ref={modalRefB} modalFooterfuncOne={fileReload} id='reloadModal' modalTitle={'New Project'} icon={''} btnValues={['save&create', 'create']} isTwobtn={true}></MessageBox> */}
 				<MessageBox ref={modalRefFileTypeError} modalFooterfuncOne={fileTypeErrorHandler} id='fileTypeErrorOne' modalTitle={'New Project'} icon={''} btnValues={['OK']} isTwobtn={false}></MessageBox>
 			</>
 
@@ -390,4 +474,12 @@ const FileUploader = (props) => {
 
 }
 
-export default FileUploader;
+
+const mapStateToProps = (state) => {
+	return {
+		secondPortionTriggering: state.excelWorkBook.secondPortionTriggeringStatus,
+	}
+};
+
+//export default FileUploader;
+export default connect(mapStateToProps)(FileUploader);

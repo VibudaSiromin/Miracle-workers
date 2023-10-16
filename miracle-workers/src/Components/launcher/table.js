@@ -13,7 +13,7 @@ import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-import { setTestType,setDataSheet,setTestAddBtnStatus,setTestPageName } from "../../store";
+import { setTestType, setDataSheet, setTestAddBtnStatus, setTestPageName } from "../../store";
 import { useDispatch } from "react-redux";
 import { connect } from "react-redux";
 
@@ -21,21 +21,21 @@ import { connect } from "react-redux";
 const TableLauncher = (props) => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [data, setData] = useState({});
-  const [isLauncherMount,setIsLauncherMount] = useState(false);
-  const [isMount,setIsMount] = useState(false);
-  const [isMountTwo,setIsMountTwo] = useState(false);
-  const [isDataDriven,setIsDataDriven] = useState(false);
-  const [dataPageOptions,setDataPageOptions] = useState([]);
+  const [isLauncherMount, setIsLauncherMount] = useState(false);
+  const [isMount, setIsMount] = useState(false);
+  const [isMountTwo, setIsMountTwo] = useState(false);
+  const [isDataDriven, setIsDataDriven] = useState(false);
+  const [dataPageOptions, setDataPageOptions] = useState([]);
 
-  const {tname}=useParams();
-  const location=useLocation();
+  const { tname } = useParams();
+  const location = useLocation();
   const dispatch = useDispatch();
 
-  console.log('drum',props.testPageName);
+  console.log('drum', props.testPageName);
 
-  
-  useEffect(()=>{
-    if(isMount){
+
+  useEffect(() => {
+    if (isMount) {
       //const data=data;
       //Object.keys(data).length===0
       // if(Object.keys(data).length===0){
@@ -43,16 +43,16 @@ const TableLauncher = (props) => {
       // }else{
       //   dispatch(setTestAddBtnStatus(true))
       // }
-    }else{
+    } else {
       setIsMount(true)
     }
-  },[data])
+  }, [data])
 
 
   const testTypeHandler = (testType) => {
-    if(testType==='Data Driven'){
+    if (testType === 'Data Driven') {
       setIsDataDriven(true);
-    }else{
+    } else {
       setIsDataDriven(false);
     }
   }
@@ -67,18 +67,18 @@ const TableLauncher = (props) => {
       dataSheet: yup.string().required("Data sheet is required")
       //dataSheet: yup.string().required("Data sheet is required"),
     })
-    
 
-    // const schema = yup.object().shape({
-    //   selectionField: yup.string().required('Selection is required.'),
-    //   textField: yup
-    //     .string()
-    //     .when('selectionField', {
-    //       is: 'A', // when the value of 'selectionField' is 'A'
-    //       then: yup.string().required('Text is required when selection is A.'), // make 'textField' required
-    //       otherwise: yup.string().notRequired() // not required for other values
-    //     }),
-    // });
+
+  // const schema = yup.object().shape({
+  //   selectionField: yup.string().required('Selection is required.'),
+  //   textField: yup
+  //     .string()
+  //     .when('selectionField', {
+  //       is: 'A', // when the value of 'selectionField' is 'A'
+  //       then: yup.string().required('Text is required when selection is A.'), // make 'textField' required
+  //       otherwise: yup.string().notRequired() // not required for other values
+  //     }),
+  // });
 
   const {
     register,
@@ -89,7 +89,7 @@ const TableLauncher = (props) => {
     resolver: yupResolver(schema),
     defaultValues: {
       sheetName: "",
-      testCase:"",
+      testCase: "",
       browser: "",
       type: "",
       status: "",
@@ -97,9 +97,9 @@ const TableLauncher = (props) => {
     },
   });
   const onSubmit = (data) => {
-    data['sheetName']=props.testPageName;
-    console.log('zambia',data);
-    const testType= data.type;
+    data['sheetName'] = props.testPageName;
+    console.log('zambia', data);
+    const testType = data.type;
     const dataSheet = data.dataSheet;
     dispatch(setTestAddBtnStatus(true));
 
@@ -111,134 +111,138 @@ const TableLauncher = (props) => {
     setIsShowModal(false);
   };
 
-  const saveData=(data) => {
-    const currentURL=location.pathname;
-   
-    if(currentURL==='/testJunction/testManual/'+tname){
+  const saveData = (data) => {
+    const currentURL = location.pathname;
+
+    if (currentURL === '/testJunction/testManual/' + tname) {
       console.log("LMG");
       axios
-      .post('http://localhost:5000/testJunction/testManual/'+tname+'/editLauncher',{
-        editedData:data,
-        type:"Manual"
-      })
-      .then(()=>{
+        .post('http://localhost:5000/testJunction/testManual/' + tname + '/editLauncher', {
+          editedData: data,
+          type: "Manual"
+        })
+        .then(() => {
 
-      })
-      .catch((err)=>{
-        console.log(err);
-      })
+        })
+        .catch((err) => {
+          console.log(err);
+        })
     }
 
   }
 
   const getAvailableDataPageNames = () => {
     axios
-    .get('http://localhost:5000')
-    .then((res)=>{
-      const dataPageNames=res.data.dataPageNames;
-      const selectOptionsArray=dataPageNames.map((dataPage)=>{
-        return(
-          <option value={dataPage}>{dataPage}</option>
-        )
-      }) 
-      setDataPageOptions(selectOptionsArray);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+      .get('http://localhost:5000')
+      .then((res) => {
+        const dataPageNames = res.data.dataPageNames;
+        const selectOptionsArray = dataPageNames.map((dataPage) => {
+          return (
+            <option value={dataPage}>{dataPage}</option>
+          )
+        })
+        setDataPageOptions(selectOptionsArray);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
 
-  const getDataFromStore =async () => {
-    console.log('banana2',tname);
-    try{
-      const response= await axios.get(
+  const getDataFromStore = async () => {
+    console.log('banana2', tname);
+    try {
+      const response = await axios.get(
         `http://localhost:5000/launcher/getLauncherContent`,
         {
-          params:{
-                   testPageName:tname+"M"
-                 }
+          params: {
+            testPageName: tname + "M"
+          }
         }
       )
-      const launcherDetails=response.data.getLauncherDetails;
+      const launcherDetails = response.data.getLauncherDetails;
       setData(launcherDetails);
-      dispatch(setTestPageName(launcherDetails.sheetName));
-      console.log('arial',launcherDetails);
-      if(launcherDetails===undefined){
+      console.log('laswell1', launcherDetails.sheetName);
+      if (launcherDetails.sheetName !== '' && launcherDetails.sheetName !== null && launcherDetails.sheetName !== undefined) {
+        dispatch(setTestPageName(launcherDetails.sheetName));
+      }
+      console.log('arial', launcherDetails);
+      if (launcherDetails === undefined) {
         dispatch(setTestAddBtnStatus(false));
-      }else{
+      } else {
         dispatch(setTestAddBtnStatus(true));
       }
-      
-    }catch(err){
-      if(err.response){
+
+    } catch (err) {
+      if (err.response) {
         console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
-      }else if(err.request){
+      } else if (err.request) {
         // The client never received a response, and the request was never left
         console.log(err.request);
-      }else{
+      } else {
         // Anything else
         console.log('Error', err.message);
       }
     }
-    
+
   }
 
   const rerenderLauncherSection = async () => {
     const renamedTestPageName = props.renamedTestPageName;
-    console.log('T34',renamedTestPageName);
-    
-    try{
-      const response= await axios.get(
+    console.log('T34', renamedTestPageName);
+
+    try {
+      const response = await axios.get(
         `http://localhost:5000/launcher/getLauncherContent`,
         {
-          params:{
-                   testPageName:renamedTestPageName+"M"
-                 }
+          params: {
+            testPageName: renamedTestPageName + "M"
+          }
         }
       )
-      const launcherDetails=response.data.getLauncherDetails;
+      const launcherDetails = response.data.getLauncherDetails;
       setData(launcherDetails);
       dispatch(setTestPageName(launcherDetails.sheetName));
-      console.log('arial22',launcherDetails);
-      if(launcherDetails===undefined){
+      console.log('laswell2', launcherDetails.sheetName);
+      console.log('arial22', launcherDetails);
+      if (launcherDetails === undefined) {
         dispatch(setTestAddBtnStatus(false));
-      }else{
+      } else {
         dispatch(setTestAddBtnStatus(true));
       }
-      
-    }catch(err){
-      if(err.response){
+
+    } catch (err) {
+      if (err.response) {
         console.log(err.response.data);
         console.log(err.response.status);
         console.log(err.response.headers);
-      }else if(err.request){
+      } else if (err.request) {
         // The client never received a response, and the request was never left
         console.log(err.request);
-      }else{
+      } else {
         // Anything else
         console.log('Error', err.message);
       }
     }
   }
 
-  const rerenderingStatusOfLauncherSection = useSelector((state)=>state.rerenderingLauncherSection.launcherSectionStatus);
+  const rerenderingStatusOfLauncherSection = useSelector((state) => state.rerenderingLauncherSection.launcherSectionStatus);
 
-  useEffect(()=>{
+  useEffect(() => {
     getAvailableDataPageNames();
     getDataFromStore();
-  },[tname])
+  }, [tname])
 
-  useEffect(()=>{
-    if(isMountTwo){
-      console.log('banana',rerenderingStatusOfLauncherSection);
+  useEffect(() => {
+    if (isMountTwo) {
+      console.log('banana', rerenderingStatusOfLauncherSection);
       rerenderLauncherSection();
-    }else{
+    } else {
       setIsMountTwo(true);
     }
-  },[rerenderingStatusOfLauncherSection])
+  }, [rerenderingStatusOfLauncherSection])
 
   const onCancel = () => {
     reset();
@@ -246,7 +250,7 @@ const TableLauncher = (props) => {
   };
 
   const showModal = () => {
-    console.log('RPG',data);
+    console.log('RPG', data);
     if (data) {
       getAvailableDataPageNames();
       reset(data);
@@ -255,41 +259,39 @@ const TableLauncher = (props) => {
   };
 
   const showModalInitially = () => {
+    reset(); //check this
     setIsShowModal(true);
   }
 
 
-  // useEffect(()=>{
-  //   is
-  // },[])
-
   const calledFromJsonTest = useSelector((state) => state.addTestSheetName.initialLauncherModalVisibilityState);
-  
+
 
   const calledFromManualTest = useSelector((state) => state.addTestSheetName.initialLauncherModalVisibilityState);
-  console.log("proStreet",calledFromManualTest);
+  console.log("proStreet", calledFromManualTest);
 
-  console.log('galaxy',isLauncherMount);
+  console.log('galaxy', isLauncherMount);
   useEffect(() => {
     console.log('wolf tooth');
-    if(isLauncherMount){
-      showModalInitially(); 
-    }else{
+    if (isLauncherMount) {
+      showModalInitially();
+    } else {
       setIsLauncherMount(true);
     }
-      
+
   }, [calledFromJsonTest]);
 
   useEffect(() => {
     console.log('Wolf warrior');
-    if(isLauncherMount){
-      showModalInitially(); 
+    if (isLauncherMount) {
+      showModalInitially();
       console.log('Wolf');
-    }else{
+    } else {
       setIsLauncherMount(true);
-    } 
+    }
   }, [calledFromManualTest]);
 
+  console.log('Thorrrr', props.testPageName);
 
   return (
     <>
@@ -299,9 +301,9 @@ const TableLauncher = (props) => {
         onCancel={onCancel}
         onSubmit={handleSubmit(onSubmit)}
         saveButtonText="Feed"
-        
+
       >
-        <LauncherForm register={register} errors={errors} testPageName={props.testPageName} testTypeHandler={testTypeHandler} dataPageOptions={dataPageOptions}/>
+        <LauncherForm register={register} errors={errors} testPageName={props.testPageName} testTypeHandler={testTypeHandler} dataPageOptions={dataPageOptions} />
       </ModalComponent>
       <Table
         striped
@@ -311,39 +313,39 @@ const TableLauncher = (props) => {
           borderCollapse: "collapse",
           borderRadius: "5px",
           overflow: "hidden",
-          color:"white"
+          color: "white"
         }}
       >
         <tbody style={{ border: "5px solid #04D9FF" }}>
           <tr>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }}>
               Sheet Name <PlayArrowIcon fontSize="11px" /> {data?.sheetName}
             </td>
-            <td style={{ width: "25%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
+            <td style={{ width: "25%", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }}>
               Test Case<PlayArrowIcon fontSize="11px" /> {data?.testCase}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }}>
               Browser <PlayArrowIcon fontSize="11px" /> {data?.browser}
             </td>
-            <td style={{textAlign:'center'}} rowSpan={3} >
+            <td style={{ textAlign: 'center' }} rowSpan={3} >
               <IconButton aria-label="Example" onClick={() => showModal()}>
-                <CreateIcon sx={{ color:"04D9FF", fontSize: "40px" }} />
+                <CreateIcon sx={{ color: "04D9FF", fontSize: "40px" }} />
               </IconButton>
             </td>
           </tr>
           <tr>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left',color:'white' }}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }}>
               Test Type <PlayArrowIcon fontSize="11px" /> {data?.type}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' ,color:'white'}}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }}>
               Status <PlayArrowIcon fontSize="11px" /> {data?.status}
             </td>
-            <td style={{ width: "35%", color: "black", fontWeight: "bold",textAlign:'left' ,color:'white'}}>
+            <td style={{ width: "35%", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }}>
               Data Sheet <PlayArrowIcon fontSize="11px" /> {data?.dataSheet}
             </td>
           </tr>
           <tr>
-            <td style={{ width: "", color: "black", fontWeight: "bold",textAlign:'left',color:'white'}} colSpan={3}>
+            <td style={{ width: "", color: "black", fontWeight: "bold", textAlign: 'left', color: 'white' }} colSpan={3}>
               Comment <PlayArrowIcon fontSize="11px" /> {data?.comment}
             </td>
           </tr>
@@ -355,9 +357,9 @@ const TableLauncher = (props) => {
 
 
 const mapStateToProps = (state) => {
-  return{
+  return {
     testPageName: state.getTestSheetName.testPageName,
-    renamedTestPageName:state.getRenamedPageName.renamedPageName
+    renamedTestPageName: state.getRenamedPageName.renamedPageName
   }
 };
 

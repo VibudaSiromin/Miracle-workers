@@ -7,7 +7,8 @@ import { Modal } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import Swal from 'sweetalert2';
 
 const JSONGenerator = () => {
     const [launcherDetails, setlauncherDetails] = useState();
@@ -27,7 +28,7 @@ const JSONGenerator = () => {
     const [loopsDetailsStartCmd, setLoopsDetailsStartCmd] = useState([]);
     const [loopsDetailsEndCmd, setLoopsDetailsEndCmd] = useState([]);
     const [locatorSection, setLocatorSection] = useState();
-    const [attachLocatorSheets,setAttachLocatorSheets] = useState([]);
+    const [attachLocatorSheets, setAttachLocatorSheets] = useState([]);
     const [isDataCleaningProc, setIsDataCleaningProc] = useState(false);
     //const modalRefJSONFileName=useRef();
 
@@ -72,10 +73,17 @@ const JSONGenerator = () => {
                 setlauncherDetails([...newLauncher]);
             })
             .catch((err) => {
-                console.log(err)
+                console.log('ezio');
+                console.log(err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Empty test sheets detected.Please remove them & proceed',
+                });
             })
     }
     useEffect(() => {
+        console.log('hamas3');
         if (isMountOne) {
             gettingTestSuiteDetails();
         } else {
@@ -405,9 +413,9 @@ const JSONGenerator = () => {
         console.log('land', locatorSection);
         //console.log('lord', loopsDetailsStartCmd);
 
-           //attaching data pages into the JSON output
+        //attaching data pages into the JSON output
 
-           const finalJSONOutput = {
+        const finalJSONOutput = {
             suiteId: uuidv4(),
             fileName: "",
             tests: testsKeyArr,
@@ -422,20 +430,20 @@ const JSONGenerator = () => {
 
         setFinalOutPut(finalJSONOutput);
 
-        const datasheets=[];
-        for(let i=0;i<dataSection.length;i++){
+        const datasheets = [];
+        for (let i = 0; i < dataSection.length; i++) {
             datasheets.push(dataSection[i][0])
         }
-        console.log('moon',datasheets);
+        console.log('moon', datasheets);
         //setAttachDataSheets(datasheets);
 
-      
-
-        console.log('007BOND',dataSection);
 
 
-        if (datasheets.length !== 0) { 
-            console.log('007',datasheets.length);
+        console.log('007BOND', dataSection);
+
+
+        if (datasheets.length !== 0) {
+            console.log('007', datasheets.length);
             const dataPages = {};
             for (let i = 0; i < datasheets.length; i++) {
                 console.log('bird box', datasheets);
@@ -458,36 +466,36 @@ const JSONGenerator = () => {
             }
             console.log('yoga', dataPages);
 
-            finalJSONOutput.dataPages=dataPages;
+            finalJSONOutput.dataPages = dataPages;
             setFinalOutPut(finalJSONOutput);
             //initModal();
 
-        } 
+        }
 
-        const locatorsheets=[];
-        for(let i=0;i<locatorSection.length;i++){
+        const locatorsheets = [];
+        for (let i = 0; i < locatorSection.length; i++) {
             locatorsheets.push(locatorSection[i][0])
         }
-        console.log('moon2',locatorsheets);
+        console.log('moon2', locatorsheets);
         //setAttachLocatorSheets(locatorsheets);
 
         ///////////////////////////////////////////////
         if (locatorsheets.length !== 0) {
-            console.log('zone123',locatorsheets.length);
+            console.log('zone123', locatorsheets.length);
             const locatorPages = {};
             for (let i = 0; i < locatorsheets.length; i++) {
                 const index = locatorSection.findIndex(data => data[0] === locatorsheets[i]);
                 console.log('gumpert', locatorSection[index]);
                 const selectedSheetNameWithdata = locatorSection[index];
-                console.log('hawk',selectedSheetNameWithdata);
+                console.log('hawk', selectedSheetNameWithdata);
                 const tempObj = {};
-                for (let j = 1; j < selectedSheetNameWithdata.length; j++) { 
+                for (let j = 1; j < selectedSheetNameWithdata.length; j++) {
                     tempObj[j] = selectedSheetNameWithdata[j];
                 }
                 locatorPages[locatorsheets[i]] = tempObj;
             }
             const finalOutPut = finalJSONOutput;
-            finalOutPut.locatorPages=locatorPages;
+            finalOutPut.locatorPages = locatorPages;
             setFinalOutPut(finalOutPut);
             // const locatorKeyValue = {locatorPages:locatorPages}
             // console.log('yoga3333',locatorKeyValue);
@@ -497,7 +505,7 @@ const JSONGenerator = () => {
 
             //initModal();
 
-        } 
+        }
 
         initModal();
     }
@@ -544,13 +552,27 @@ const JSONGenerator = () => {
         saveAs(blob, JSONfileName + '.json');
         reset();
 
+        Swal.fire({
+            icon: 'success',
+            title: 'Great...',
+            text: 'JSON file successfully created!',
+        });
+
         if (isDataCleaningProc) {
             axios
                 .delete('http://localhost:5000/section/delete')
                 .then((res) => {
                     console.log('vista');
                     setIsDataCleaningProc(false);
-                    dispatch({type:'RENDERING_NAV_BAR'});
+                    dispatch({ type: 'RENDERING_NAV_BAR' });
+
+                    Swal.fire({
+                        position: 'top-end',
+                        icon: 'success',
+                        title: 'Your work has been saved',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                 })
                 .catch((err) => {
                     console.log(err);

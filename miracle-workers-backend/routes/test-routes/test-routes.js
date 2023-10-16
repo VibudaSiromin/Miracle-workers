@@ -26,8 +26,9 @@ router.get('/testSuite/getAllTestData', testControllers.getAllTestData);
 router.get('/testPages', testControllers.getTestPageNames);
 //get referedDataPages name
 router.get('/testSuite/getReferedDataPages', testControllers.getReferedDataPages);
-//get referedDataPages name
+//get referedDataPage name
 router.get('/testSuite/getReferedLocatorPages', testControllers.getReferedLocatorPages);
+//get referedTestPage
 //delete all data
 router.delete('/section/delete', testControllers.deleteData);
 

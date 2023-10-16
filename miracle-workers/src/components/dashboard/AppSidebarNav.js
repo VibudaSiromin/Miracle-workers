@@ -10,7 +10,7 @@ import { CBadge, CNavLink, CAlert } from '@coreui/react';
 import CIcon from '@coreui/icons-react';
 import IndexContext from '../../contexts/indexContext';
 import { MdDeleteForever, MdModeEdit } from 'react-icons/md';
-import { setAlertVisibity, setReferredTestPageName } from '../../store';
+import { setAlertVisibity, setReferredTestPageName, setOperationType } from '../../store';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
@@ -576,65 +576,92 @@ export const AppSidebarNav = () => {
           const referedDataPages = res.data.referedDataPages;
           const referredTestPages = res.data.referredTestPages;
           console.log('snowMan', referredTestPages);
-          const dataPages = referedDataPages.map((dataPage) => {
-            return dataPage.slice(0, -1);
-          });
-          if (dataPages.includes(pageName)) {
-            dispatch(setAlertVisibity(true));
-            dispatch(setReferredTestPageName(referredTestPages));
-            console.log('batttt', referedDataPages);
-            console.log('batttt222', pageName);
-          } else {
-            axios
-              .delete('http://localhost:5000/dataJunction/deletePage', {
-                params: {
-                  dataPageName: pageName,
-                },
-              })
-              .then((res) => {
-                console.log(res);
-                getDataPages();
-                console.log('lamp', dataPageNames);
-                if (dataPageNames.length === 1) {
-                  navigate('/home');
-                } else {
-                  /////////////////////////
-                  if (currentNavIndex + 1 >= dataPageNames.length) {
-                    const prevNavName = dataPageNames[currentNavIndex - 1];
-                    const lastCharacter = prevNavName[prevNavName.length - 1];
-                    if (lastCharacter === 'M') {
-                      const pageName = prevNavName.slice(0, -1);
-                      navigate(`/dataJunction/data/${pageName}`);
-                    } else if (lastCharacter === 'E') {
-                      const pageName = prevNavName.slice(0, -1);
-                      navigate(`/dataJunction/dataExcel/${pageName}`);
-                    }
-                  } else {
-                    const nextNavName = dataPageNames[currentNavIndex + 1];
-                    const lastCharacter = nextNavName[nextNavName.length - 1];
-                    if (lastCharacter === 'M') {
-                      const pageName = nextNavName.slice(0, -1);
-                      navigate(`/dataJunction/data/${pageName}`);
-                    } else if (lastCharacter === 'E') {
-                      const pageName = nextNavName.slice(0, -1);
-                      navigate(`/dataJunction/dataExcel/${pageName}`);
-                    }
-                  }
-                  /////////////////////////
-                  // const nextNavName = dataPageNames[currentNavIndex + 1];
-                  // if (nextNavName) {
-                  //   navigate(`/dataJunction/dataExcel/${nextNavName}`)
-                  // } else {
-                  //   const prevNavName = dataPageNames[currentNavIndex - 1];
-                  //   navigate(`/dataJunction/dataExcel/${prevNavName}`)
-                  //   console.log('GGG', prevNavName);
-                  // }
-                }
-              })
-              .catch((err) => {
-                console.log(err);
+
+          ////////////////////////////////////////
+          axios
+            .get('http://localhost:5000/testSuite/getReferedDataPages', {
+              params: {
+                dataPageName: pageName,
+              }
+            })
+            .then((res) => {
+              const dataPages = res.data.referedDataPages;
+              const testPages = res.data.referredTestPages;
+              const totalDataPages = [...referedDataPages, ...dataPages];
+              const totalTestPages = [...referredTestPages, ...testPages];
+
+              const newDataPages = totalDataPages.filter((value, index, self) => {
+                return self.indexOf(value) === index && value !== null;
               });
-          }
+
+              const newTestPages = totalTestPages.filter((value, index, self) => {
+                return self.indexOf(value) === index && value !== null;
+              });
+              console.log('Pillar1', newDataPages);
+              console.log('pillar2', newTestPages);
+
+              if (newDataPages.includes(pageName)) {
+                dispatch(setAlertVisibity(true));
+                dispatch(setReferredTestPageName(newTestPages));
+                dispatch(setOperationType('delete'));
+                console.log('batttt', referedDataPages);
+                console.log('batttt222', pageName);
+              } else {
+                axios
+                  .delete('http://localhost:5000/dataJunction/deletePage', {
+                    params: {
+                      dataPageName: pageName,
+                    },
+                  })
+                  .then((res) => {
+                    console.log(res);
+                    getDataPages();
+                    console.log('lamp', dataPageNames);
+                    if (dataPageNames.length === 1) {
+                      navigate('/home');
+                    } else {
+                      /////////////////////////
+                      if (currentNavIndex + 1 >= dataPageNames.length) {
+                        const prevNavName = dataPageNames[currentNavIndex - 1];
+                        const lastCharacter = prevNavName[prevNavName.length - 1];
+                        if (lastCharacter === 'M') {
+                          const pageName = prevNavName.slice(0, -1);
+                          navigate(`/dataJunction/data/${pageName}`);
+                        } else if (lastCharacter === 'E') {
+                          const pageName = prevNavName.slice(0, -1);
+                          navigate(`/dataJunction/dataExcel/${pageName}`);
+                        }
+                      } else {
+                        const nextNavName = dataPageNames[currentNavIndex + 1];
+                        const lastCharacter = nextNavName[nextNavName.length - 1];
+                        if (lastCharacter === 'M') {
+                          const pageName = nextNavName.slice(0, -1);
+                          navigate(`/dataJunction/data/${pageName}`);
+                        } else if (lastCharacter === 'E') {
+                          const pageName = nextNavName.slice(0, -1);
+                          navigate(`/dataJunction/dataExcel/${pageName}`);
+                        }
+                      }
+                      /////////////////////////
+                      // const nextNavName = dataPageNames[currentNavIndex + 1];
+                      // if (nextNavName) {
+                      //   navigate(`/dataJunction/dataExcel/${nextNavName}`)
+                      // } else {
+                      //   const prevNavName = dataPageNames[currentNavIndex - 1];
+                      //   navigate(`/dataJunction/dataExcel/${prevNavName}`)
+                      //   console.log('GGG', prevNavName);
+                      // }
+                    }
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              }
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+          ///////////////////////////////////////
         })
         .catch((err) => {
           console.log(err);
@@ -666,6 +693,7 @@ export const AppSidebarNav = () => {
           if (testPages.length > 0) {
             dispatch(setAlertVisibity(true));
             dispatch(setReferredTestPageName(testPages));
+            dispatch(setOperationType('delete'));
           } else {
             axios
               .delete('http://localhost:5000/locators/deleteLocator', {
@@ -696,7 +724,7 @@ export const AppSidebarNav = () => {
           }
         })
         .catch((err) => {
-
+          console.log(err);
         })
 
 

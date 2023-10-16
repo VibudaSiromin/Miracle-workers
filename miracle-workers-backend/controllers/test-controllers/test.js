@@ -291,6 +291,32 @@ const getAllLoopNames = async (req, res, next) => {
 }
 
 const getReferedDataPages = async (req, res, next) => {
+  const selectedDataPage = req.query.dataPageName;
+  console.log('snake', selectedDataPage);
+  let testSection;
+  let dataPages = [];
+  let referredTestPages;
+  try {
+    const data = await fs.promises.readFile(testFilePath);
+    testSection = JSON.parse(data);
+    referredTestPages = testSection.map((testSheet) => {
+      for (let i = 1; i < testSheet.length; i++) {
+        console.log("Booommmmmmmmmm", testSheet)
+        if ('data' in testSheet[i] && testSheet[i]['data'].charAt(0) === '#' && testSheet[i]['data'].includes('.')) {
+          const textSegments = testSheet[i]['data'].split(".");
+          dataPages.push(textSegments[1].slice(0, -1));
+          if (textSegments[1].slice(0, -1) === selectedDataPage) {
+            return testSheet[0].slice(0, -1);
+          }
+        }
+      }
+    })
+    console.log('DMC!!!!!!!!!!!', referredTestPages);
+    res.status(200).json({ referedDataPages: dataPages, referredTestPages: referredTestPages });
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ message: 'Error reading launcher section' });
+  }
 
 }
 

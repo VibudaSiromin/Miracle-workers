@@ -88,6 +88,21 @@ const dataSheetState = {
   dataSheet: 'sheet',
 };
 
+const operationType = {
+  optType: 'delete',
+}
+
+const excelWorkBookDataHandler = {
+  secondPortionTriggeringStatus: true
+}
+
+export const setOperationType = (optType) => {
+  return {
+    type: 'SET_OPERATION_TYPE',
+    payload: optType
+  }
+}
+
 export const setEditModalOneData = (modalOneDataSet) => {
   return {
     type: 'SET_EDIT_MODAL_ONE_DATA',
@@ -458,6 +473,31 @@ const renderingNavBarReducer = (state = rendeingNavBarStatus, action) => {
   }
 };
 
+const getOperationTypeReducer = (state = operationType, action) => {
+  switch (action.type) {
+    case 'SET_OPERATION_TYPE':
+      return {
+        ...state,
+        optType: action.payload,
+      };
+    default:
+      return state;
+  }
+}
+
+const excelWorkBookReducer = (state = excelWorkBookDataHandler, action) => {
+  switch (action.type) {
+    case 'INITIATE_SECOND_PORTION':
+      return {
+        ...state,
+        secondPortionTriggeringStatus: !state.secondPortionTriggeringStatus,
+      };
+    default:
+      return state;
+  }
+}
+
+
 
 const rootReducer = combineReducers({
   changeState: changeStateReducer,
@@ -480,6 +520,8 @@ const rootReducer = combineReducers({
   initiateJSONGenerator: initiateJSONGeneratorReducer,
   renderingNavBar: renderingNavBarReducer,
   getReferredTestSheetName: getReferredTestSheetNameReducer,
+  getOperationType: getOperationTypeReducer,
+  excelWorkBook: excelWorkBookReducer
 });
 
 const store = createStore(rootReducer);

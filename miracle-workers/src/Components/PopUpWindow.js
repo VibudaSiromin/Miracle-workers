@@ -40,14 +40,14 @@ const reducer = (state, action) => {
 };
 
 const modalTwoDataSetValOne = {
-  data:'',
-  branchSelection:''
+  data: '',
+  branchSelection: ''
 }
 
 const valOneReducer = (state, action) => {//validationSetOne
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, data: '', branchSelection: ''};
+      return { ...state, data: '', branchSelection: '' };
     case 'CHANGE_DATA':
       return { ...state, data: action.payload };
     case 'CHANGE_BRANCH_SELECTION':
@@ -62,15 +62,15 @@ const valOneReducer = (state, action) => {//validationSetOne
 
 
 const modalTwoDataSetValTwo = {
-  locator:'',
-  data:'',
-  branchSelection:''
+  locator: '',
+  data: '',
+  branchSelection: ''
 }
 
 const valTwoReducer = (state, action) => {//validationSetTwo
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, locator:'',data: '', branchSelection: ''};
+      return { ...state, locator: '', data: '', branchSelection: '' };
     case 'CHANGE_LOCATOR':
       return { ...state, locator: action.payload };
     case 'CHANGE_DATA':
@@ -86,14 +86,14 @@ const valTwoReducer = (state, action) => {//validationSetTwo
 
 
 const modalTwoDataSetValThree = {
-  locator:'',
-  data:'',
+  locator: '',
+  data: '',
 }
 
 const valThreeReducer = (state, action) => {//validationSetThree
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, locator:'',data: ''};
+      return { ...state, locator: '', data: '' };
     case 'CHANGE_LOCATOR':
       return { ...state, locator: action.payload };
     case 'CHANGE_DATA':
@@ -106,13 +106,13 @@ const valThreeReducer = (state, action) => {//validationSetThree
 };
 
 const modalTwoDataSetValFour = {
-  locator:''
+  locator: ''
 }
 
 const valFourReducer = (state, action) => {//validationSetThree
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, locator:''};
+      return { ...state, locator: '' };
     case 'CHANGE_LOCATOR':
       return { ...state, locator: action.payload };
     case 'RE_RENDER':
@@ -123,13 +123,13 @@ const valFourReducer = (state, action) => {//validationSetThree
 };
 
 const modalTwoDataSetValFive = {
-  data:''
+  data: ''
 }
 
 const valFiveReducer = (state, action) => {//validationSetThree
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, data:''};
+      return { ...state, data: '' };
     case 'CHANGE_DATA':
       return { ...state, data: action.payload };
     case 'RE_RENDER':
@@ -140,13 +140,13 @@ const valFiveReducer = (state, action) => {//validationSetThree
 };
 
 const modalTwoDataSetValSix = {
-  branchSelection:''
+  branchSelection: ''
 }
 
 const valSixReducer = (state, action) => {//validationSetThree
   switch (action.type) {
     case 'CLEAR':
-      return { ...state, branchSelection:''};
+      return { ...state, branchSelection: '' };
     case 'CHANGE_BRANCH_SELECTION':
       return { ...state, branchSelection: action.payload };
     case 'RE_RENDER':
@@ -165,27 +165,27 @@ function ModalDialog(props, ref) {
   const [isCmdEmpty, setIsCmdEmpty] = useState(false);
   const [isInstEmpty, setIsInstEmpty] = useState(false);
   const [isDataEmpty, setIsDataEmpty] = useState(false);
-  const [isLocatorEmpty,setIsLocatorEmpty] = useState(false);
-  const [isBranchSelection,setIsBranchSelection] = useState(false);
-  const [modalOneDetails, dispatchModalOne] = useReducer(reducer,modalOneDataSet2);
-  const [validationOne,dispatchValidationOne] = useReducer(valOneReducer,modalTwoDataSetValOne);
-  const [validationTwo,dispatchValidationTwo] = useReducer(valTwoReducer,modalTwoDataSetValTwo);
-  const [validationThree,dispatchValidationThree] = useReducer(valThreeReducer,modalTwoDataSetValThree);
-  const [validationFour,dispatchValidationFour] = useReducer(valFourReducer,modalTwoDataSetValFour);
-  const [validationFive,dispatchValidationFive] = useReducer(valFiveReducer,modalTwoDataSetValFive);
-  const [validationSix,dispatchValidationSix] = useReducer(valSixReducer,modalTwoDataSetValSix);
+  const [isLocatorEmpty, setIsLocatorEmpty] = useState(false);
+  const [isBranchSelection, setIsBranchSelection] = useState(false);
+  const [modalOneDetails, dispatchModalOne] = useReducer(reducer, modalOneDataSet2);
+  const [validationOne, dispatchValidationOne] = useReducer(valOneReducer, modalTwoDataSetValOne);
+  const [validationTwo, dispatchValidationTwo] = useReducer(valTwoReducer, modalTwoDataSetValTwo);
+  const [validationThree, dispatchValidationThree] = useReducer(valThreeReducer, modalTwoDataSetValThree);
+  const [validationFour, dispatchValidationFour] = useReducer(valFourReducer, modalTwoDataSetValFour);
+  const [validationFive, dispatchValidationFive] = useReducer(valFiveReducer, modalTwoDataSetValFive);
+  const [validationSix, dispatchValidationSix] = useReducer(valSixReducer, modalTwoDataSetValSix);
   const [commandBasedFields, setCommandBasedFields] = useState([[], '']);
-  const [isMountOne,setIsMountOne] = useState(false);
-  const [isMountTwo,setIsMountTwo] = useState(false);
-  const [isMountThree,setIsMountThree] = useState(false);
-  const [isMountFour,setIsMountFour] = useState(false);
-  const [isMountFive,setIsMountFive] = useState(false);
-  const [isMountSix,setIsMountSix] = useState(false);
-  const [isMountSeven,setIsMountSeven] = useState(false);
-  const [stateOne,setStateOne] = useState(false);
-  const [stateTwo,setStateTwo] = useState(false);
-  const [isColumnNameEmpty,setIsColumnNameEmpty] = useState(false);
-  
+  const [isMountOne, setIsMountOne] = useState(false);
+  const [isMountTwo, setIsMountTwo] = useState(false);
+  const [isMountThree, setIsMountThree] = useState(false);
+  const [isMountFour, setIsMountFour] = useState(false);
+  const [isMountFive, setIsMountFive] = useState(false);
+  const [isMountSix, setIsMountSix] = useState(false);
+  const [isMountSeven, setIsMountSeven] = useState(false);
+  const [stateOne, setStateOne] = useState(false);
+  const [stateTwo, setStateTwo] = useState(false);
+  const [isColumnNameEmpty, setIsColumnNameEmpty] = useState(false);
+
   let inputFieldArrayModalOne = [];
   let inputFieldArrayModalTwo = [];
   let btnValue;
@@ -328,7 +328,7 @@ function ModalDialog(props, ref) {
         break;
     }
 
-    
+
   };
 
   //to handle data coming from other sections eg- data , locator
@@ -445,22 +445,22 @@ function ModalDialog(props, ref) {
   const TerminateModalTwo = () => {
     console.log(testStepsData2);
     dispatchValidationOne({
-      type:'CLEAR'
+      type: 'CLEAR'
     });
     dispatchValidationTwo({
-      type:'CLEAR'
+      type: 'CLEAR'
     });
     dispatchValidationThree({
-      type:'CLEAR'
+      type: 'CLEAR'
     });
     dispatchValidationFour({
-      type:'CLEAR'
+      type: 'CLEAR'
     });
     dispatchValidationFive({
-      type:'CLEAR'
+      type: 'CLEAR'
     });
     dispatchValidationSix({
-      type:'CLEAR'
+      type: 'CLEAR'
     });
     //setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
     return setToggleTwoModal(false);
@@ -490,7 +490,7 @@ function ModalDialog(props, ref) {
         });
       }
       if (
-        modalOneDetails.instruction === '' ||
+        // modalOneDetails.instruction === '' ||
         modalOneDetails.command === ''
       ) {
         dispatchModalOne({ type: 'RE_RENDER' });
@@ -507,7 +507,7 @@ function ModalDialog(props, ref) {
       // }else{
       //   setIsColumnNameEmpty(true);
       // }
-      if (props.enableChainPopUps) {   
+      if (props.enableChainPopUps) {
         setTimeout(() => {
           initModalTwo();
         }, 400);
@@ -516,29 +516,32 @@ function ModalDialog(props, ref) {
   };
 
   useEffect(() => {
-    console.log('jet fire',modalOneDetails.instruction);
-    console.log('jet fire 2',modalOneDetails.command);
-    if(isMountTwo){
-      if (modalOneDetails.instruction === '') {
-        setIsInstEmpty(true);
-      } else {
-        setIsInstEmpty(false);
-      }
+    console.log('jet fire', modalOneDetails.instruction);
+    console.log('jet fire 2', modalOneDetails.command);
+    if (isMountTwo) {
+      // if (modalOneDetails.instruction === '') {
+      //   setIsInstEmpty(true);
+      // } else {
+      //   setIsInstEmpty(false);
+      // }
       if (modalOneDetails.command === '') {
         setIsCmdEmpty(true);
       } else {
         setIsCmdEmpty(false);
       }
-    }else{
+    } else {
       setIsMountTwo(true);
     }
-   
+
     setStateOne(!stateOne);
   }, [modalOneDetails]);
 
   useEffect(() => {
     console.log('farm');
-    if (modalOneDetails.instruction !== '' && modalOneDetails.command !== '') {
+    if (
+      //modalOneDetails.instruction !== '' && 
+      modalOneDetails.command !== ''
+    ) {
       TerminateModalOne();
       if (props.enableChainPopUps) {
         setTimeout(() => {
@@ -574,28 +577,28 @@ function ModalDialog(props, ref) {
         }
         if (props.purpose === 'addHeading') {
           console.log('triple H', modalOneGeneralDataSet);
-          if('Column Name' in modalOneGeneralDataSet){
+          if ('Column Name' in modalOneGeneralDataSet) {
             setIsColumnNameEmpty(false);
             props.saveNewHeadingData(modalOneGeneralDataSet);
             TerminateModalOne();
-          }else{
+          } else {
             setIsColumnNameEmpty(true);
           }
-          
+
         }
-      }  
+      }
     }
   };
 
   const submitHandlerTwo = (event) => {
-    console.log(modalOneDataSet,'sailor2');
+    console.log(modalOneDataSet, 'sailor2');
     event.preventDefault();
     if (props.enableChainPopUps === true) {
-      console.log(testStepsData2,'MAC');
+      console.log(testStepsData2, 'MAC');
       setModalTwoDataSet(Object.assign(modalOneDataSet, testStepsData2));
       ////////////////////////////////////////     
-      if(validationSetOne.includes(modalOneDataSet.command)){
-        console.log('fight11111',testStepsData2);
+      if (validationSetOne.includes(modalOneDataSet.command)) {
+        console.log('fight11111', testStepsData2);
         if ('data' in testStepsData2) {
           dispatchValidationOne({
             type: 'CHANGE_DATA',
@@ -609,16 +612,16 @@ function ModalDialog(props, ref) {
           });
         }
         if (!('data' in testStepsData2) && !('branchSelection' in testStepsData2)) {
-          console.log('MORA!!!',validationOne.data);
-          if(validationOne.data===''){
+          console.log('MORA!!!', validationOne.data);
+          if (validationOne.data === '') {
             setIsDataEmpty(true)
           }
-          if(validationOne.branchSelection===''){
+          if (validationOne.branchSelection === '') {
             setIsBranchSelection(true);
           }
         }
       }
-      else if(validationSetTwo.includes(modalOneDataSet.command)){
+      else if (validationSetTwo.includes(modalOneDataSet.command)) {
         console.log('vest')
         if ('data' in testStepsData2) {
           dispatchValidationTwo({
@@ -640,17 +643,17 @@ function ModalDialog(props, ref) {
         }
         if (!('data' in testStepsData2) && !('branchSelection' in testStepsData2) && !('locator' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if(validationTwo.data===''){
+          if (validationTwo.data === '') {
             setIsDataEmpty(true)
           }
-          if(validationTwo.branchSelection===''){
+          if (validationTwo.branchSelection === '') {
             setIsBranchSelection(true);
           }
-          if(validationTwo.locator===''){
+          if (validationTwo.locator === '') {
             setIsLocatorEmpty(true)
           }
         }
-      }else if(validationSetThree.includes(modalOneDataSet.command)){
+      } else if (validationSetThree.includes(modalOneDataSet.command)) {
         if ('data' in testStepsData2) {
           dispatchValidationThree({
             type: 'CHANGE_DATA',
@@ -665,14 +668,14 @@ function ModalDialog(props, ref) {
         }
         if (!('data' in testStepsData2) && !('locator' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if(validationThree.data===''){
+          if (validationThree.data === '') {
             setIsDataEmpty(true)
           }
-          if(validationThree.locator===''){
+          if (validationThree.locator === '') {
             setIsLocatorEmpty(true);
           }
         }
-      }else if(validationSetFour.includes(modalOneDataSet.command)){
+      } else if (validationSetFour.includes(modalOneDataSet.command)) {
         if ('locator' in testStepsData2) {
           dispatchValidationFour({
             type: 'CHANGE_LOCATOR',
@@ -681,11 +684,11 @@ function ModalDialog(props, ref) {
         }
         if (!('locator' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if(validationFour.locator===''){
+          if (validationFour.locator === '') {
             setIsLocatorEmpty(true);
           }
         }
-      }else if(validationSetFive.includes(modalOneDataSet.command)){
+      } else if (validationSetFive.includes(modalOneDataSet.command)) {
         if ('data' in testStepsData2) {
           dispatchValidationFive({
             type: 'CHANGE_DATA',
@@ -694,11 +697,11 @@ function ModalDialog(props, ref) {
         }
         if (!('data' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if(validationFive.data===''){
+          if (validationFive.data === '') {
             setIsDataEmpty(true);
           }
         }
-      }else if(validationSetSix.includes(modalOneDataSet.command)){
+      } else if (validationSetSix.includes(modalOneDataSet.command)) {
         if ('branchSelection' in testStepsData2) {
           dispatchValidationSix({
             type: 'CHANGE_BRANCH_SELECTION',
@@ -707,23 +710,23 @@ function ModalDialog(props, ref) {
         }
         if (!('branchSelection' in testStepsData2)) {
           //dispatchModalOne({ type: 'RE_RENDER' });
-          if(validationSix.branchSelection===''){
+          if (validationSix.branchSelection === '') {
             setIsBranchSelection(true);
           }
         }
       }
-      else{
-          console.log('canter')
-          props.saveNewData(Object.assign(modalOneDataSet, testStepsData2));
-          dispatchModalOne({ type: 'CLEAR' });
-          TerminateModalTwo();
+      else {
+        console.log('canter')
+        props.saveNewData(Object.assign(modalOneDataSet, testStepsData2));
+        dispatchModalOne({ type: 'CLEAR' });
+        TerminateModalTwo();
       }
     }
   };
 
   useEffect(() => {
-    console.log(validationOne.data,'fire');
-    if(isMountOne){
+    console.log(validationOne.data, 'fire');
+    if (isMountOne) {
       if (validationOne.data === '') {
         setIsDataEmpty(true);
       } else {
@@ -734,7 +737,7 @@ function ModalDialog(props, ref) {
       } else {
         setIsBranchSelection(false);
       }
-    }else{
+    } else {
       setIsMountOne(true)
     }
 
@@ -743,16 +746,16 @@ function ModalDialog(props, ref) {
 
 
   useEffect(() => {
-    console.log(validationTwo,'water');
-    if(isMountThree){
+    console.log(validationTwo, 'water');
+    if (isMountThree) {
       if (validationTwo.data === '') {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-      if(validationTwo.locator === ''){
+      if (validationTwo.locator === '') {
         setIsLocatorEmpty(true);
-      }else{
+      } else {
         setIsLocatorEmpty(false);
       }
       if (validationTwo.branchSelection === '') {
@@ -760,15 +763,15 @@ function ModalDialog(props, ref) {
       } else {
         setIsBranchSelection(false);
       }
-    }else{
+    } else {
       setIsMountThree(true)
     }
     setStateTwo(!stateTwo);
   }, [validationTwo]);
 
   useEffect(() => {
-    console.log(validationOne.data,'fire');
-    if(isMountFour){
+    console.log(validationOne.data, 'fire');
+    if (isMountFour) {
       if (validationThree.data === '') {
         setIsDataEmpty(true);
       } else {
@@ -779,46 +782,46 @@ function ModalDialog(props, ref) {
       } else {
         setIsLocatorEmpty(false);
       }
-    }else{
+    } else {
       setIsMountFour(true)
     }
     setStateTwo(!stateTwo);
   }, [validationThree]);
 
   useEffect(() => {
-    if(isMountFive){
+    if (isMountFive) {
       if (validationFour.locator === '') {
         setIsLocatorEmpty(true);
       } else {
         setIsLocatorEmpty(false);
       }
-    }else{
+    } else {
       setIsMountFive(true)
     }
     setStateTwo(!stateTwo);
   }, [validationFour]);
 
   useEffect(() => {
-    if(isMountSix){
+    if (isMountSix) {
       if (validationFive.data === '') {
         setIsDataEmpty(true);
       } else {
         setIsDataEmpty(false);
       }
-    }else{
+    } else {
       setIsMountSix(true)
     }
     setStateTwo(!stateTwo);
   }, [validationFive]);
 
   useEffect(() => {
-    if(isMountSeven){
+    if (isMountSeven) {
       if (validationSix.branchSelection === '') {
         setIsBranchSelection(true);
       } else {
         setIsBranchSelection(false);
       }
-    }else{
+    } else {
       setIsMountSeven(true)
     }
     setStateTwo(!stateTwo);
@@ -827,48 +830,48 @@ function ModalDialog(props, ref) {
   useEffect(() => {
     console.log('tap');
 
-    if(validationSetOne.includes(modalOneDataSet.command)){
-      console.log('vital',modalOneDataSet);
+    if (validationSetOne.includes(modalOneDataSet.command)) {
+      console.log('vital', modalOneDataSet);
       if (validationOne.data !== '' && validationOne.branchSelection !== '') {
         console.log('thunder');
         props.saveNewData(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    }else if(validationSetTwo.includes(modalOneDataSet.command)){
-      if (validationTwo.data !== '' && validationTwo.branchSelection !== '' && validationTwo.locator !=='') {
+    } else if (validationSetTwo.includes(modalOneDataSet.command)) {
+      if (validationTwo.data !== '' && validationTwo.branchSelection !== '' && validationTwo.locator !== '') {
         console.log('thunder');
         props.saveNewData(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    }else if(validationSetThree.includes(modalOneDataSet.command)){
+    } else if (validationSetThree.includes(modalOneDataSet.command)) {
       if (validationThree.data !== '' && validationThree.locator !== '') {
         console.log('thunder');
         props.saveNewData(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    }else if(validationSetFour.includes(modalOneDataSet.command)){
-      if(validationFour.locator !== ''){
+    } else if (validationSetFour.includes(modalOneDataSet.command)) {
+      if (validationFour.locator !== '') {
         props.saveNewData(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    }else if(validationSetFive.includes(modalOneDataSet.command)){
-      if(validationFive.data !== ''){
+    } else if (validationSetFive.includes(modalOneDataSet.command)) {
+      if (validationFive.data !== '') {
         props.saveNewData(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
-    }else if(validationSetSix.includes(modalOneDataSet.command)){
-      if(validationSix.branchSelection !== ''){
+    } else if (validationSetSix.includes(modalOneDataSet.command)) {
+      if (validationSix.branchSelection !== '') {
         props.saveNewData(modalTwoDataSet);
         dispatchModalOne({ type: 'CLEAR' });
         TerminateModalTwo();
       }
     }
-   
+
   }, [stateTwo]);
 
 

@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap/Modal';
 import { setTestPageName } from '../../store';
 import { setDataSheetAtNameAssigner } from '../../store';
 import { connect } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import axios from 'axios';
 import MessageBox from '../MessageBox';
 import { useForm } from 'react-hook-form';
@@ -16,7 +16,7 @@ const NameAssignModal = (props, ref) => {
   const [toggleOneModal, setToggleOneModal] = useState(false);
   //const [fieldValue,setfieldValue]=useState('');
   const [isMount, setIsMount] = useState(false);
-
+  const dispatch = useDispatch();
   const modalRefC = useRef();
 
   let sectionName;
@@ -81,9 +81,9 @@ const NameAssignModal = (props, ref) => {
               console.log('duplicate');
               modalRefC.current.log(
                 "'" +
-                  fieldValue +
-                  "'" +
-                  ' page name already exists.Please enter a unique name.'
+                fieldValue +
+                "'" +
+                ' page name already exists.Please enter a unique name.'
               );
               return;
             }
@@ -106,9 +106,9 @@ const NameAssignModal = (props, ref) => {
               console.log('duplicate');
               modalRefC.current.log(
                 "'" +
-                  fieldValue +
-                  "'" +
-                  ' page name already exists.Please enter a unique name.'
+                fieldValue +
+                "'" +
+                ' page name already exists.Please enter a unique name.'
               );
               return;
             }
@@ -160,9 +160,9 @@ const NameAssignModal = (props, ref) => {
               console.log('duplicate');
               modalRefC.current.log(
                 "'" +
-                  fieldValue +
-                  "'" +
-                  ' page name already exists.Please enter a unique name.'
+                fieldValue +
+                "'" +
+                ' page name already exists.Please enter a unique name.'
               );
               return;
             }
