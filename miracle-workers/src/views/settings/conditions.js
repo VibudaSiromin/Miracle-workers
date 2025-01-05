@@ -1,9 +1,9 @@
 import React from 'react'
-import SettingItemPage from '../../components/setting section/SettingItemPage'
+import ConditionPage from '../../components/setting section/conditionPage'
 
 const conditions = () => {
   return (
-    <SettingItemPage settingType="conditions"/>
+    <ConditionPage/>
   )
 }
 

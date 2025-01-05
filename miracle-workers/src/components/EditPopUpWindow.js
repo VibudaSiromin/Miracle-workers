@@ -2,8 +2,8 @@ import React from "react";
 import { Modal, Button } from "react-bootstrap";
 import EditPopUpInputField from "./EditPopUpInputField";
 import EditPopUpSelection from "./EditPopUpSelection";
-import { forwardRef,useImperativeHandle, useEffect,useRef} from "react";
-
+import { forwardRef,useImperativeHandle, useEffect,useRef,useState} from "react";
+import axios from "axios";
 
 function EditModalDialog(props,ref) {
 
@@ -14,6 +14,8 @@ function EditModalDialog(props,ref) {
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
   const [isMountModalOneGeneralDataSet,setIsMountModalOneGeneralDataSet]=React.useState(false);//Use for handle the unexpected behaviour
   const [isMountModalTwoDataSet,setIsmountModalTwoDataSet]=React.useState(false);//Use for handle the unexpected behaviour
+  const [commandBasedFields,setCommandBasedFields]=useState([]);
+  const [commandSet,setCommandSet]=useState([]);
 
   console.log(props.raw);
   console.log("Ghost "+props.showState);
@@ -31,9 +33,12 @@ function EditModalDialog(props,ref) {
     }
   }));
 
+  useEffect(() => {
+    getCommands();
+  }, []);
 
   const inputHandler = (name, value) => {
-    console.log(name, value);
+    console.log("ppppppppp",name, value);
     switch (name) {
       case "group":
         testStepsData[name] = value;
@@ -45,9 +50,65 @@ function EditModalDialog(props,ref) {
         testStepsData[name] = value;
         break;
     }
-  
-    console.log(testStepsData);
+    console.log("pppppppppp",testStepsData);
   };
+
+  const getCommands= () => {
+    axios
+      .get("http://localhost:5000/settings/commands")
+      .then((res) => {
+        setCommandSet(res.data.settingItem); 
+        console.log("gft");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    getCommands();
+  }, []);
+
+  useEffect(() => {
+    console.log("aaaaaaaa",modalOneDataSet)
+    let matchedBinaryValue;
+    for(let i=0;i<commandSet.length;i++){
+      console.log("bbbbbbb")
+      if(commandSet[i].name==modalOneDataSet["command"]){
+        matchedBinaryValue=commandSet[i].binaryValue;        ;
+      }
+    }
+    console.log("hloo",matchedBinaryValue)
+    switch(matchedBinaryValue){
+      case "000":
+        setCommandBasedFields(["swapResult","action","comment"]);
+        break;
+      case "001":
+        setCommandBasedFields(["swapResult","branchSelection","action","comment"]);  
+        break;
+      case "010":
+        setCommandBasedFields(["data","swapResult","action","comment"]);  
+        break;
+      case "011":
+        setCommandBasedFields(["data","swapResult","branchSelection","action","comment"]);  
+        break;
+      case "100":
+        setCommandBasedFields(["locator","locatorParameter","swapResult","action","comment"]);  
+        break;
+      case "101":
+        setCommandBasedFields(["locator","locatorParameter","swapResult","branchSelection","action","comment"]);  
+        break;
+      case "110":
+        setCommandBasedFields(["locator","locatorParameter","data","swapResult","action","comment"]);  
+        break;
+      case "111":
+        setCommandBasedFields(["locator","locatorParameter","data","swapResult","branchSelection","action","comment"]);  
+        break;
+
+      default:
+        setCommandBasedFields([]);
+    }
+  }, [modalOneDataSet["command"]]);
 
   const inputHandler2 = (name, value) => {
     console.log(name, value);
@@ -122,27 +183,24 @@ function EditModalDialog(props,ref) {
       
     }
 
-    
     if (props.enableChainPopUps) {
-      for (let i = 0; i < props.noFields[1]; i++) {
-          if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
+      for (let i = 0; i < commandBasedFields.length; i++) {
+          if(commandBasedFields[i]!=='instruction' && commandBasedFields[i]!=='command' && commandBasedFields[i]!=='swapResult' && commandBasedFields[i]!=='action'){
             inputFieldArrayModalTwo.push(
               <EditPopUpInputField
-                id={props.noFields[0] + i}
-                editTestStep={props.raw[props.title[props.noFields[0] + i]]}
-                title={props.title[props.noFields[0] + i]}
-                generalPurpose={props.generalPurpose}
+                id={3+i}
+                title={commandBasedFields[i]}
                 inputType="text"
+                generalPurpose={props.generalPurpose}
                 onDataChange2={inputHandler2}
               ></EditPopUpInputField>
             );
           }else{
              inputFieldArrayModalTwo.push(
                <EditPopUpSelection
-               id={props.noFields[0] + i}
-               editTestStep={props.raw[props.title[props.noFields[0] + i]]}
+               id={3+i}
+               title={commandBasedFields[i]}
                generalPurpose={props.generalPurpose}
-               title={props.title[props.noFields[0] + i]}
                onDataChange2={inputHandler2}
                ></EditPopUpSelection>
             );
@@ -150,6 +208,34 @@ function EditModalDialog(props,ref) {
    
       }
     }
+    
+    // if (props.enableChainPopUps) {
+    //   for (let i = 0; i < props.noFields[1]; i++) {
+    //       if(props.title[props.noFields[0] + i]!=='instruction' && props.title[props.noFields[0] + i]!=='command' && props.title[props.noFields[0] + i]!=='swapResult' && props.title[props.noFields[0] + i]!=='action'){
+    //         inputFieldArrayModalTwo.push(
+    //           <EditPopUpInputField
+    //             id={props.noFields[0] + i}
+    //             editTestStep={props.raw[props.title[props.noFields[0] + i]]}
+    //             title={props.title[props.noFields[0] + i]}
+    //             generalPurpose={props.generalPurpose}
+    //             inputType="text"
+    //             onDataChange2={inputHandler2}
+    //           ></EditPopUpInputField>
+    //         );
+    //       }else{
+    //          inputFieldArrayModalTwo.push(
+    //            <EditPopUpSelection
+    //            id={props.noFields[0] + i}
+    //            editTestStep={props.raw[props.title[props.noFields[0] + i]]}
+    //            generalPurpose={props.generalPurpose}
+    //            title={props.title[props.noFields[0] + i]}
+    //            onDataChange2={inputHandler2}
+    //            ></EditPopUpSelection>
+    //         );
+    //       }
+   
+    //   }
+    // }
 
   };
   

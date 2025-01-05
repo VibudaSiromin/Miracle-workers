@@ -1,0 +1,10 @@
+table tbody td {
+  border: none !important;
+}
+table thead th {
+  border: none !important;
+}
+
+table thead tr {
+  border: none !important;
+}

@@ -55,7 +55,28 @@ const createdInstruction=async(req,res,next)=>{
 
 }
 
+const editedInstruction=async(req,res,next)=>{
+    const { id, editedValue } = req.body;
+  
+    try {
+      // Find the browser setting by ID
+      const instruction = await Instruction.findById(id);
+  
+      // Update the name property with the new value
+      instruction.name = editedValue;
+  
+      // Save the updated browser setting
+      await instruction.save();
+  
+      res.status(200).json({ message: 'Updated setting item' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating setting item' });
+    }
+}
+
 exports.getAllInstructions=getAllInstructions;
 exports.getInstructionById=getInstructionById;
 exports.deleteInstructionId=deleteInstructionId;
 exports.createdInstruction=createdInstruction;
+exports.editedInstruction=editedInstruction;

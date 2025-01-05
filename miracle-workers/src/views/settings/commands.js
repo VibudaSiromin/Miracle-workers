@@ -1,10 +1,9 @@
 import React from 'react'
-import SettingItemPage from '../../components/setting section/SettingItemPage'
-
+import CommandPage from '../../components/setting section/commandPage';
 
 const commands = () => {
   return (
-    <SettingItemPage settingType="commands"/>
+    <CommandPage/>
   )
 }
 

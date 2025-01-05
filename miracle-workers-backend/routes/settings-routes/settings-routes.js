@@ -64,4 +64,18 @@ router.post('/settings/instructions',instructionControllers.createdInstruction);
 
 router.post('/settings/conditions',conditionControllers.createdCondition);
 
+//routes for edit existing setting item
+
+router.put('/settings/commands/:cid',commandControllers.editedCommand);
+
+router.put('/settings/browsers/:bid',browserControllers.editedBrowser);
+
+// router.post('/settings/test-types',testTypeControllers.editedTestType);
+
+// router.post('/settings/status',statusControllers.editedStatus);
+
+router.put('/settings/instructions/:insid',instructionControllers.editedInstruction);
+
+router.put('/settings/conditions/:conid',conditionControllers.editedCondition);
+
 module.exports = router;

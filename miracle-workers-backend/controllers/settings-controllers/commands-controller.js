@@ -42,21 +42,45 @@ const deleteCommandById=async(req,res,next)=>{
 }
 
 const createdCommand=async(req,res,next)=>{
-    const {newValue}=req.body;
+    const {commandName,binaryValue}=req.body;
     const createdCommand=new Command({
-        name:newValue
+        name:commandName,
+        binaryValue:binaryValue
     });
 
     try{
         await createdCommand.save();
     }catch(err){
         console.log(err);
+        res.status(200).json({message:'Error ocurred'});
     }
     res.status(200).json({message:'Created setting Item'});
 
 }
 
+const editedCommand=async(req,res,next)=>{
+    const { id, binaryValue,newCommand } = req.body;
+  
+    try {
+      // Find the browser setting by ID
+      const command = await Command.findById(id);
+  
+      // Update the name property with the new value
+      command.name = newCommand;
+      command.binaryValue=binaryValue;
+  
+      // Save the updated browser setting
+      await command.save();
+  
+      res.status(200).json({ message: 'Updated setting item' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating setting item' });
+    }
+}
+
 exports.getCommandById=getCommandById;
 exports.getAllCommands=getAllCommands;
 exports.deleteCommandById=deleteCommandById;
-exports.createdCommand=createdCommand
+exports.createdCommand=createdCommand;
+exports.editedCommand=editedCommand;

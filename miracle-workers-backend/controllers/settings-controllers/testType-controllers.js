@@ -56,7 +56,28 @@ const createdTestType=async(req,res,next)=>{
 
 }
 
+const editedTestType=async(req,res,next)=>{
+    const { id, editedValue } = req.body;
+  
+    try {
+      // Find the browser setting by ID
+      const testType = await TestType.findById(id);
+  
+      // Update the name property with the new value
+      testType.name = editedValue;
+  
+      // Save the updated browser setting
+      await testType.save();
+  
+      res.status(200).json({ message: 'Updated setting item' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating setting item' });
+    }
+}
+
 exports.getTestTypeById=getTestTypeById;
 exports.getAllTestTypes=getAllTestTypes;
 exports.deleteTestTypeById=deleteTestTypeById;
 exports.createdTestType=createdTestType;
+exports.editedTestType=editedTestType;

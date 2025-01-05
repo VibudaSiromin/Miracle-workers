@@ -1,10 +1,9 @@
 import React from 'react'
-import SettingItemPage from '../../components/setting section/SettingItemPage'
-
+import InstructionPage from '../../components/setting section/InstructionPage'
 
 const instructions = () => {
   return (
-    <SettingItemPage settingType="instructions"/>
+    <InstructionPage/>
   )
 }
 

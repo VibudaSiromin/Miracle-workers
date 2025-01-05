@@ -1,0 +1,48 @@
+.custom-input-box {
+  background-color: transparent;
+  border: 2px solid #04d9ff;
+  border-radius: 15px;
+  height: 50px;
+  color: white;
+}
+
+.custom-input-box:focus {
+  background-color: transparent;
+  color: white;
+}
+
+.submit-button {
+  border-radius: 10px;
+  background-color: #5987fd;
+  width: 55%;
+  top: 70%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+  margin-top: 25px;
+  text-transform: capitalize;
+  font-weight: 700;
+  font-size: 21px;
+}
+
+.forget-password {
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  text-align: left;
+  margin-top: 10px;
+  text-decoration: underline;
+}
+
+.sign-up {
+  color: white;
+  font-weight: 700;
+}
+
+.spacing-in-form {
+  padding: 10% 6% 3%;
+}
+
+.sign-in{
+  color: white;
+  font-weight: 700;
+}

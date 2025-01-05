@@ -55,7 +55,28 @@ const createdCondition=async(req,res,next)=>{
 
 }
 
+const editedCondition=async(req,res,next)=>{
+    const { id, editedValue } = req.body;
+  
+    try {
+      // Find the browser setting by ID
+      const condition = await Condition.findById(id);
+  
+      // Update the name property with the new value
+      condition.name = editedValue;
+  
+      // Save the updated browser setting
+      await condition.save();
+  
+      res.status(200).json({ message: 'Updated setting item' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating setting item' });
+    }
+}
+
 exports.getAllConditions=getAllConditions;
 exports.getConditionById=getConditionById;
 exports.deleteConditionById=deleteConditionById;
 exports.createdCondition=createdCondition;
+exports.editedCondition=editedCondition;

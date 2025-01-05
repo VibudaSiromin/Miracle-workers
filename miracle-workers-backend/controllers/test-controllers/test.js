@@ -146,6 +146,58 @@ const getTestPageNames= async (req, res, next)=>{
     }
   }
 
+  const deleteTestPage = async(req,res,next) => {
+    const testPageName=req.query.testPageName;
+
+    let testSection;
+    try{
+      const data = await fs.promises.readFile(testFilePath);
+      testSection = JSON.parse(data);
+
+      let index;
+      index = testSection.findIndex(test=>test[0]===testPageName+"M");
+      testSection.splice(index,1);
+      const newTestSection=JSON.stringify(testSection);
+      try{
+        await fs.promises.writeFile(testFilePath,newTestSection);
+        res.status(200).json({message:'Edited test content'});
+      }catch(err){
+        console.log(err);
+        res.status(500).json({message:'Error occurred when creating test content'});
+      }
+    }catch(err){
+      console.log(err)
+      res.status(500).json({ message: 'Error reading test section' });
+    }
+  }
+
+  const renameTestPageName =async (req,res,next) =>{
+    const newTestPageName=req.body.newTestPageName;
+    const pageIndex=req.body.pageIndex;
+    console.log('soda',newTestPageName);
+    console.log('coca',pageIndex);
+    
+
+    let testSection;
+    try{
+      const data = await fs.promises.readFile(testFilePath);
+      testSection = JSON.parse(data);
+      testSection[pageIndex][0]=newTestPageName+"M";
+      const newTestSection=JSON.stringify(testSection);
+      try{
+        await fs.promises.writeFile(testFilePath,newTestSection);
+        res.status(200).json({message:'Edited test content'});
+      }catch(err){
+        console.log(err);
+        res.status(500).json({message:'Error occurred when creating test content'});
+      }
+
+    }catch(err){
+      console.log(err)
+      res.status(500).json({ message: 'Error reading test section' });
+    }
+  }
+
   ////////This is the test section//////////////
 
   exports.getTestPageNames=getTestPageNames;
@@ -153,3 +205,5 @@ const getTestPageNames= async (req, res, next)=>{
   exports.editTestPage=editTestPage;
   exports.getTestPageContent=getTestPageContent;
   exports.getHeadingsFromTest=getHeadingsFromTest;
+  exports.deleteTestPage=deleteTestPage;
+  exports.renameTestPageName=renameTestPageName;
