@@ -1,0 +1,195 @@
+/* .version-01{
+    width:calc(100vw-50px);
+    margin: 0 50px 0 50px;
+    overflow: scroll;
+    height: 400px;
+    border: 5px #04D9FF solid;
+    border-radius: 0px 0px 10px 10px;
+}
+
+.version-01 table thead th{
+    position: sticky; 
+    top: 0; 
+    z-index: 1;
+    background-color: #00BB83;
+    max-width:80px;
+    min-width:80px;
+}
+
+.version-01 table tbody td{
+    z-index: 1;
+    max-width:80;
+    min-width:80px;
+} */
+
+.container-1 {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  color: white;
+  margin: 0 50px 0 50px;
+  background-image: linear-gradient(180deg, #516183 0%, #000000 100%);
+  border-radius: 0 0 20px 20px;
+}
+.container-1 div {
+  padding: 15px 20px 15px 20px;
+}
+
+table {
+  font-family: Arial, Helvetica, sans-serif;
+  color: white;
+  width: 100%;
+}
+
+table td,
+table th {
+  border: 1px solid #ddd;
+  padding: 8px;
+  min-width: 150px;
+}
+
+table td {
+  position: relative;
+  z-index: 1;
+}
+table tr:nth-child(even) {
+  background-color: #516183;
+  border-radius: 10px;
+}
+
+table tr:nth-child(odd) {
+  background-color: #4376ac;
+  border-radius: 10px;
+}
+
+#data-Table {
+  border: none;
+  border-collapse: separate;
+  border-spacing: 0 15px;
+}
+table th {
+  /* padding-top: 12px; */
+  padding-bottom: 12px;
+  text-align: center;
+  background-image: linear-gradient(180deg, #516183 0%, #000000 100%);
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  color: white;
+  height: 75px;
+}
+
+.version-01 {
+  margin: 0 50px 0 50px;
+  overflow: auto;
+  min-height: 400px;
+  border: 5px solid #04d9ff;
+  /* border-radius: 0px 0px 10px 10px; */
+}
+
+table tbody td {
+  border: none;
+}
+table thead th {
+  border: none;
+}
+
+td:first-child {
+  border-radius: 10px 0 0 10px;
+}
+td:last-child {
+  border-radius: 0 10px 10px 0;
+}
+
+th:nth-child(1) {
+  position: sticky;
+  z-index: 4;
+  left: 0;
+  border-right: 5px solid #04d9ff;
+}
+
+td:nth-child(1) {
+  position: sticky;
+  z-index: 2;
+  left: 0;
+}
+
+td:nth-child(2) {
+  position: sticky;
+  z-index: 2;
+  left: 100px;
+}
+
+td:nth-child(3) {
+  position: sticky;
+  z-index: 2;
+  left: 200px;
+  border-right: 5px solid #04d9ff;
+}
+
+table tr:nth-child(odd) td:nth-child(1) {
+  background-color: #4376ac;
+}
+
+table tr:nth-child(odd) td:nth-child(2) {
+  background-color: #4376ac;
+}
+
+table tr:nth-child(odd) td:nth-child(3) {
+  background-color: #4376ac;
+}
+
+table tr:nth-child(even) td:nth-child(1) {
+  background-color: #516183;
+}
+
+table tr:nth-child(even) td:nth-child(2) {
+  background-color: #516183;
+}
+
+table tr:nth-child(even) td:nth-child(3) {
+  background-color: #516183;
+}
+
+th:nth-child(1) {
+  width: 300px;
+  min-width: 300px;
+}
+
+td:nth-child(1),
+td:nth-child(2),
+td:nth-child(3) {
+  width: 100px;
+  min-width: 100px;
+}
+
+/*Add styles for scroll bars*/
+.version-01::-webkit-scrollbar {
+  width: 1vw !important;
+}
+
+.version-01::-webkit-scrollbar-track {
+  background: hsl(189, 100%, 51%) !important;
+}
+
+.version-01::-webkit-scrollbar-thumb {
+  background: hsl(221, 24%, 42%) !important;
+  border: 0.15rem solid hsl(189, 100%, 51%);
+  border-radius: 100vw;
+}
+
+/*No records available message*/
+
+.no-record-msg {
+  min-height: 250px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  opacity: 0.5;
+}
+
+.no-record-msg h2 {
+  padding-top: 15px;
+}

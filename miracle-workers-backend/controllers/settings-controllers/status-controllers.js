@@ -55,7 +55,28 @@ const createdStatus=async(req,res,next)=>{
     res.status(200).json({message:'Created setting Item'});
 }
 
+const editedStatus=async(req,res,next)=>{
+    const { id, editedValue } = req.body;
+  
+    try {
+      // Find the browser setting by ID
+      const status = await Status.findById(id);
+  
+      // Update the name property with the new value
+      status.name = editedValue;
+  
+      // Save the updated browser setting
+      await status.save();
+  
+      res.status(200).json({ message: 'Updated setting item' });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ message: 'Error updating setting item' });
+    }
+}
+
 exports.getStatusById=getStatusById;
 exports.getAllStatus=getAllStatus;
 exports.deleteStatusById=deleteStatusById;
 exports.createdStatus=createdStatus;
+exports.editedStatus=editedStatus;

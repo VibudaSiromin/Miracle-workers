@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 
 const commandSchema=new Schema({
     name:{type:String, required:true},
+    binaryValue:{type:String, required:true}
 });
 
 module.exports=mongoose.model('Command',commandSchema);
