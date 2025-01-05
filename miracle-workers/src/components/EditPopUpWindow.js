@@ -12,7 +12,9 @@ function EditModalDialog(props,ref) {
   const [modalOneDataSet,setModalOneDataSet] = React.useState({});
   const [modalTwoDataSet,setModalTwoDataSet] = React.useState(props.raw);
   const [modalOneGeneralDataSet,setModalOneGeneralDataSet] = React.useState({});
-  
+  const [isMountModalOneGeneralDataSet,setIsMountModalOneGeneralDataSet]=React.useState(false);//Use for handle the unexpected behaviour
+  const [isMountModalTwoDataSet,setIsmountModalTwoDataSet]=React.useState(false);//Use for handle the unexpected behaviour
+
   console.log(props.raw);
   console.log("Ghost "+props.showState);
   let inputFieldArrayModalOne = [];
@@ -215,14 +217,26 @@ function EditModalDialog(props,ref) {
   };
 
   useEffect(()=>{
-    if(props.enableChainPopUps===false && props.generalPurpose===true){
-      props.onEdit(modalOneGeneralDataSet);
+    if(isMountModalOneGeneralDataSet){
+      if(props.enableChainPopUps===false && props.generalPurpose===true){
+        console.log('modalOneGeneralDataSet',modalOneGeneralDataSet);
+        props.onEdit(modalOneGeneralDataSet);
+      }
+    }else{
+      setIsMountModalOneGeneralDataSet(true);
     }
+    
 },[modalOneGeneralDataSet]);
 
   useEffect(()=>{
-    props.onEdit(modalTwoDataSet);
-    console.log(modalTwoDataSet);
+    if(isMountModalTwoDataSet){
+      console.log('modalTwoDataSet',modalTwoDataSet);
+      props.onEdit(modalTwoDataSet);
+      console.log(modalTwoDataSet);
+    }else{
+      setIsmountModalTwoDataSet(true);
+    }
+   
      
 },[modalTwoDataSet]);
 

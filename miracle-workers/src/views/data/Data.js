@@ -15,9 +15,7 @@ const Data = (props) => {
 
     return(
         <>
-        {/* <Button variant="success" onClick={addTitle}>column</Button> */}
-        <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true} initialHeading={[]}></Heading>
-        {/* <Table title={title} generalPurpose={props.generalPurpose} noFields={[title.length]} enableChainPopUps={false}></Table> */}
+        <Heading noFields={[1]} generalPurpose={true} heading={heading} addHeading="addHeading" removeHeading={true} initialHeading={[]} callingFrom="data"></Heading>
         </>
     )
 }

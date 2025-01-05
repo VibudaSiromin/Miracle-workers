@@ -11,8 +11,6 @@ const PopUpInputField = (props) => {
       setFieldName(event.target.getAttribute("name"));
       setChangeState(true);
       console.log(fieldName);
-      console.log('Morrise',fieldName);
-      console.log('Non Fat',props.generalPurpose);
     }
 
     useEffect(()=>{
@@ -32,13 +30,11 @@ const PopUpInputField = (props) => {
     },[fieldValue]);
 
     if(changeState===false){
-      console.log('Giya giya 1');
       if(props.id<=2 && props.generalPurpose===false){
         props.onDataChange(fieldName,fieldValue);
       }else if(props.id>2 && props.generalPurpose===false){
         props.onDataChange2(fieldName,fieldValue);
       }if(props.generalPurpose===true){
-        console.log('fresh Milk:');
         props.onDataChange(fieldName,fieldValue);
       }
     }

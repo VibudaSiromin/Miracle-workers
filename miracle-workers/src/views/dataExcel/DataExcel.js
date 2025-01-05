@@ -51,7 +51,7 @@ return(
             deleteFileHeaders={fileHeaderdeleteHandler}
             >
           </FileUploader>
-          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData}></Heading>
+          <Heading noFields={[1]} generalPurpose={true}  addHeading="addHeading" removeHeading={true} initialHeading={fileHeaders} initialData={fileData} callingFrom="data"></Heading>
         </>
         
 );

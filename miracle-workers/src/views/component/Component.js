@@ -4,7 +4,6 @@ import Table from "../../components/Table";
 const testSuite = () => {
 
     const title=[
-        "group",
         "instruction",
         "command",
         "locator",
@@ -17,7 +16,7 @@ const testSuite = () => {
       ]
 
     return(
-        <Table title={title} noFields={[3, 7]} generalPurpose={false} enableChainPopUps={true}></Table>
+        <Table title={title} noFields={[2, 7]} generalPurpose={false} enableChainPopUps={true} callingFrom="component"></Table>
     )
 }
 
